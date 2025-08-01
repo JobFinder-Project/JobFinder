@@ -87,7 +87,7 @@ class DashboardRedirectView(LoginRequiredMixin, View):
 
 
 class CandidateDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/candidate_dashboard.html'
+    template_name = 'users/candidate/candidate_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -96,7 +96,7 @@ class CandidateDashboardView(LoginRequiredMixin, TemplateView):
 
 
 class EmployerDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = 'users/employer_dashboard.html'
+    template_name = 'users/employer/employer_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
