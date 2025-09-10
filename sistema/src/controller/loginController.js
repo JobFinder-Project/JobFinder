@@ -150,6 +150,19 @@ exports.redefinirSenha = async (req, res) => {
     }
 }
 
+// Realiza o logout finalizando a sessão do usuário
+exports.logout = (req, res) => {
+    req.session.destroy((erro) => {
+        if (erro) {
+            res.status(500).json({
+            message: 'Erro ao finalizar a sessão. Tente novamente!',
+            error: erro.message
+        });
+        }
+    })
+    res.redirect('/login');
+}
+
 /*
 // Atualizar senhas (se necessário)
 const setSenha = async (req, res) => {
