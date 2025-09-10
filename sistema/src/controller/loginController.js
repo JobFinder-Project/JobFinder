@@ -11,8 +11,10 @@ exports.realizarLogin = async (req, res) => {
         senha
     } = req.body;
     try {
-        let user = await Candidato.findOne({
-            email
+        const user = await Candidato.findOne({
+            email: req.body.email
+        }) || await Empresa.findOne({
+            email: req.body.email
         });
 
         // Verifica se o candidato existe
