@@ -29,6 +29,9 @@
       </p>
 
       <form id="companyForm" action="/empresa/cadastrar" method="POST">
+
+      <!-- Etapa 1 -->
+      <div class="form-step active">
         <div class="form-group">
           <label class="form-label">Nome da Empresa*</label>
           <input
@@ -40,7 +43,6 @@
             required
           />
         </div>
-
         <div class="form-group">
           <label class="form-label">CNPJ*</label>
           <input
@@ -48,12 +50,16 @@
             id="cnpj"
             name="cnpj"
             class="form-input"
-            placeholder="XX.XXX.XXX/XXXX-XX"
+            placeholder="00.000.000/0000-00"
             required
           />
           <span class="form-helper">Digite apenas números</span>
         </div>
-
+        <button type="button" class="button button-primary next-btn">Próximo</button>
+      </div>
+        
+      <!-- Etapa 2 -->
+      <div class="form-step">  
         <div class="form-group">
           <label class="form-label">Email*</label>
           <input
@@ -64,13 +70,7 @@
             placeholder="email@suaempresa.com"
             required
           />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Senha*</label>
-          <input type="password" id="senha" name="senha" class="form-input" required />
-        </div>
-
+        </div>        
         <div class="form-group">
           <label class="form-label">Telefone Comercial*</label>
           <input
@@ -78,11 +78,22 @@
             class="form-input"
             id="fone"
             name="fone"
-            placeholder="(XX) XXXXX-XXXX"
+            placeholder="(00) 00000-0000"
             required
           />
         </div>
+        <div class="button-group">
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
+          <button type="button" class="button button-primary next-btn">Próximo</button>
+        </div>
+      </div>
 
+      <!-- Etapa 3 -->
+      <div class="form-step"> 
+        <div class="form-group">
+          <label class="form-label">Senha*</label>
+          <input type="password" id="senha" name="senha" class="form-input" required />
+        </div>
         <div class="form-group">
           <label class="form-label">Bio da Empresa</label>
           <textarea
@@ -95,7 +106,6 @@
             >Fale um pouco sobre a história e valores da sua empresa</span
           >
         </div>
-
         <div class="form-group">
           <label class="form-label">Site da Empresa</label>
           <input
@@ -106,10 +116,35 @@
             placeholder="https://www.suaempresa.com"
           />
         </div>
-
         <div class="button-group">
-          
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
           <button type="submit" class="button button-primary">Salvar</button>
         </div>
-      </form>
-    </main>
+      </div> 
+    </form>
+  </main>
+
+  <script>
+    const steps = document.querySelectorAll(".form-step");
+    const nextBtns = document.querySelectorAll(".next-btn");
+    const prevBtns = document.querySelectorAll(".prev-btn");
+    let currentStep = 0;
+
+    function showStep(step){
+      steps.forEach((s, i) => s.classList.toggle("active, i === step"));
+    }
+
+    nextBtns.forEach(btn => btn.addEventListener("click", () => {
+      if (currentStep < steps.length - 1){
+        currentStep++;
+        showStep(currentStep);
+      }
+    }));
+
+    prevBtns.forEach(btn => btn.addEventListener("click", () => {
+      if (currentStep > 0){
+        currentStep--;
+        showStep(currentStep);
+      }
+    }));
+  </script>
