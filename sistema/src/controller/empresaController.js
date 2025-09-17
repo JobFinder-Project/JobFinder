@@ -113,9 +113,9 @@ const createEmpresa = async (req, res) => {
             cnpj: req.body.cnpj,
             senha: senhaHash,
             fone: req.body.fone,
-            bio: req.body.bio,
-            site: req.body.site
-        })
+            bio: req.body.bio || "",
+            site: req.body.site || ""
+        });
 
         await newEmpresa.save();
         res.redirect('/home');
