@@ -33,7 +33,8 @@
 
       <form id="companyForm" action="/empresa/cadastrar" method="POST">
 
-      <div class="modal active" id="step1">
+      <!-- Etapa 1 -->
+      <div class="form-step active">
         <div class="form-group">
           <label class="form-label">Nome da Empresa*</label>
           <input
@@ -57,12 +58,22 @@
           />
           <span class="form-helper">Digite apenas números</span>
         </div>
-        <div class="button-group">
-          <button type="button" class="button button-primary" onclick="nextStep(2)">Próximo</button>
-        </div>
-        </div>
-
-      <div class="modal" id="step2">
+        <button type="button" class="button button-primary next-btn">Próximo</button>
+      </div>
+        
+      <!-- Etapa 2 -->
+      <div class="form-step">  
+        <div class="form-group">
+          <label class="form-label">Email*</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="email@suaempresa.com"
+            required
+          />
+        </div>        
         <div class="form-group">
           <label class="form-label">Telefone Comercial*</label>
           <input
@@ -75,12 +86,17 @@
           />
         </div>
         <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(1)">Voltar</button>
-          <button type="button" class="button button-primary" onclick="nextStep(3)">Próximo</button>
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
+          <button type="button" class="button button-primary next-btn">Próximo</button>
         </div>
-        </div>
+      </div>
 
-<div class="modal" id="step3">
+      <!-- Etapa 3 -->
+      <div class="form-step"> 
+        <div class="form-group">
+          <label class="form-label">Senha*</label>
+          <input type="password" id="senha" name="senha" class="form-input" required />
+        </div>
         <div class="form-group">
           <label class="form-label">Bio da Empresa</label>
           <textarea
@@ -101,37 +117,18 @@
           />
         </div>
         <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(2)">Voltar</button>
-          <button type="button" class="button button-primary" onclick="nextStep(4)">Próximo</button>
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
+          <button type="submit" class="button button-primary">Salvar</button>
         </div>
-      </div>
-
-      <div class="modal" id="step4">
-        <div class="form-group">
-          <label class="form-label">Email*</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-input"
-            placeholder="email@suaempresa.com"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Senha*</label>
-          <input type="password" id="senha" name="senha" class="form-input" required minlength="8" />
-        </div>
-        <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(3)">Voltar</button>
-          <button type="submit" class="button button-primary">Salvar Cadastro</button>
-        </div>
-      </div>
-      
-      </form> 
+      </div> 
+    </form>
   </main>
 
-<script src="/assets/js/formEmpresa.js"></script>
+  <script>
+    const steps = document.querySelectorAll(".form-step");
+    const nextBtns = document.querySelectorAll(".next-btn");
+    const prevBtns = document.querySelectorAll(".prev-btn");
+    let currentStep = 0;
 
     function showStep(step){
       steps.forEach((s, i) => s.classList.toggle("active, i === step"));
