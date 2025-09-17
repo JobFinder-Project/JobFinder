@@ -161,3 +161,12 @@ textarea.form-input {
 .container {
     animation: fadeIn 0.3s ease-out;
 }
+
+form-step {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.form-step.active {
+    display: block;
+}
