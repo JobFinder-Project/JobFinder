@@ -170,3 +170,10 @@ form-step {
 .form-step.active {
     display: block;
 }
+
+.required-notice {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
