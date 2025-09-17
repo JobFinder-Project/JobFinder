@@ -11,10 +11,8 @@ exports.realizarLogin = async (req, res) => {
         senha
     } = req.body;
     try {
-        const user = await Candidato.findOne({
-            email: req.body.email
-        }) || await Empresa.findOne({
-            email: req.body.email
+        let user = await Candidato.findOne({
+            email
         });
 
         // Verifica se o candidato existe
@@ -150,19 +148,6 @@ exports.redefinirSenha = async (req, res) => {
             error: erro.messgae
         });
     }
-}
-
-// Realiza o logout finalizando a sessão do usuário
-exports.logout = (req, res) => {
-    req.session.destroy((erro) => {
-        if (erro) {
-            res.status(500).json({
-            message: 'Erro ao finalizar a sessão. Tente novamente!',
-            error: erro.message
-        });
-        }
-    })
-    res.redirect('/login');
 }
 
 /*
