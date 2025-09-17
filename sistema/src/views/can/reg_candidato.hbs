@@ -28,7 +28,7 @@
 
     <div class="container">
       
-      <form action="/candidato/cadastrar" method="POST">
+  <form id="candidatoForm" enctype="multipart/form-data" data-form="candidato">
         <div class="form-group">
           <label for="nome">Nome*</label>
           <input type="text" id="nome" name="nome" required />
@@ -101,5 +101,38 @@
 
         <button type="submit">Continuar</button>
       </form>
+
+      <script>
+        document.getElementById('candidatoForm').addEventListener('submit', async function(e){
+          e.preventDefault();
+          const form = e.target;
+          const submitBtn = form.querySelector('button[type="submit"]');
+          if(submitBtn.dataset.loading === 'true') return; // evita duplo clique
+          submitBtn.dataset.loading = 'true';
+          submitBtn.disabled = true;
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = 'Enviando...';
+
+          const formData = new FormData(form);
+          try {
+            const resp = await fetch('/candidato/cadastrar', { method: 'POST', body: formData });
+            const data = await resp.json();
+            if(!resp.ok){
+              let msg = data.error || data.mgs || 'Erro ao cadastrar.';
+              if(msg.includes('|')){ msg = msg.split('|').map(m=>m.trim()).join('<br>'); }
+              Swal.fire({ icon:'error', title:'Erro no cadastro', html: msg });
+              return;
+            }
+            Swal.fire({ icon:'success', title:'Cadastro concluído!', text: data.message })
+              .then(()=> window.location.href = '/login?success=candidato');
+          } catch(err){
+            Swal.fire({ icon:'error', title:'Erro', text:'Falha na comunicação com o servidor.' });
+          } finally {
+            submitBtn.dataset.loading = 'false';
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+          }
+        });
+      </script>
 
     </div>

@@ -57,33 +57,49 @@
   </p>
 </div>
 <script>
-  document.getElementById('loginForm').addEventListener('submit', function (event) {
-    event.preventDefault(); 
+  // Mostrar modal de sucesso após cadastro de empresa
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const success = params.get('success');
+    if (success === 'empresa' || success === 'candidato') {
+      Swal.fire({
+        icon: 'success',
+        title: success === 'empresa' ? 'Empresa cadastrada!' : 'Cadastro de candidato concluído!',
+        text: 'Use seu e-mail e senha para acessar.',
+        confirmButtonText: 'Entrar'
+      });
+    }
+  })();
 
-  
+  document.getElementById('loginForm').addEventListener('submit', function (event) {
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const senha = document.getElementById('senha').value;
 
-
     fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, senha }), 
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'Login bem-sucedido') {
-                
-                window.location.href = data.redirectUrl;
-            } else {
-                alert(data.error || 'Erro ao realizar o login. Tente novamente.');
-            }
-        })
-        .catch(err => {
-            console.error('Erro no login:', err);
-            alert('Erro ao realizar o login. Tente novamente.');
+      .then(r => r.json())
+      .then(data => {
+        if (data.message === 'Login bem-sucedido') {
+          window.location.href = data.redirectUrl;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Falha no login',
+            text: data.error || 'Credenciais inválidas.'
+          });
+        }
+      })
+      .catch(err => {
+        console.error('Erro no login:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: 'Erro ao realizar o login. Tente novamente.'
         });
+      });
   });
 </script>

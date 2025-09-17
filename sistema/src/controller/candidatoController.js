@@ -23,25 +23,19 @@ function toggleMenu() {
 const dashboardCandidato = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
-
-        // Busca todas as vagas
         const vagas = await Vaga.find().populate('empresa');
 
-        // Busca todas as candidaturas do candidato logado
-        const candidaturas = await Candidatura.find({ candidato: candidatoId })
-            .populate({
-                path: 'vaga',
-                populate: { path: 'empresa' }
-            })
-            .populate('candidato');
-
-        // Converte imagens
+        // Converte as imagens para base64
         const vagasComImagens = vagas.map(vaga => {
             let imagemBase64 = null;
             if (vaga.imagem && vaga.imagem.data) {
                 imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
             }
-            return { ...vaga._doc, imagem: imagemBase64 };
+
+            return {
+                ...vaga._doc,
+                imagem: imagemBase64,
+            };
         });
 
         res.render('can/candidatoDashboard', {
@@ -51,7 +45,6 @@ const dashboardCandidato = async (req, res) => {
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,
-            candidaturas, 
         });
     } catch (erro) {
         console.error(erro);
@@ -104,28 +97,18 @@ const getPerfilCandidato = async (req, res) => {
     }
 };
 
-// Salva um novo Candidato no banco de dados
+// Salva um novo Candidato no banco de dados (JSON + validações detalhadas)
 const cadastrarCandidato = async (req, res) => {
-    //Caso seja usado o "confirmar senha"
-    /*if(senha != confirmarSenha){
-        return res.status(422).json({mgs:"As senhas não confere!"})
-    }*/
-
     try {
-        const userExiste = await Candidato.findOne({
-            email: req.body.email
-        })
-
-        // Verifica se o candidato existe 
-        if (userExiste) {
-            return res.status(422).json({
-                mgs: "Email já utilizado no sistema. Por favor, escolher outro."
-            })
+        const existente = await Candidato.findOne({ email: req.body.email });
+        if (existente) {
+            return res.status(422).json({ error: 'E-mail já cadastrado. Escolha outro.' });
         }
- 
-        const salt = await bcrypt.genSalt(12)
-        const senhaHash = await bcrypt.hash(req.body.senha, salt)
-        const novoCandidato = new Candidato({
+
+        const salt = await bcrypt.genSalt(12);
+        const senhaHash = await bcrypt.hash(req.body.senha, salt);
+
+        const candidato = new Candidato({
             nome: req.body.nome,
             cpf: req.body.cpf,
             email: req.body.email,
@@ -137,21 +120,18 @@ const cadastrarCandidato = async (req, res) => {
             descricao: req.body.descricao,
             habilidadesTecnicas: req.body.habilidades,
             idiomas: req.body.idiomas,
-            imagem: req.file ? {
-                data: req.file.buffer,
-                contentType: req.file.mimetype
-            } : undefined
-
+            imagem: req.file ? { data: req.file.buffer, contentType: req.file.mimetype } : undefined
         });
 
-        await novoCandidato.save();
-        res.redirect('/home');
+        await candidato.save();
+        return res.status(201).json({ message: 'Cadastro realizado com sucesso!', id: candidato._id });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao cadastrar o candidato!",
-            error: erro.message
-        });
+        if (erro.name === 'ValidationError') {
+            const msgs = Object.values(erro.errors).map(e => e.message); 
+            return res.status(400).json({ error: msgs.join(' | ') });
+        }
+        return res.status(500).json({ error: 'Erro ao cadastrar o candidato.' });
     }
 };
 

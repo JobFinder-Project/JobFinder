@@ -13,17 +13,13 @@ const dashboardEmpresa = async (req, res) => {
         const candidatos = await candidato.find();
         console.log('Produtos encontrados:', candidatos);
 
-        // Converte a imagem em Base64
-        const candidatosComImagens = candidatos.map(candidato => {
+        // Converte a imagem em Base64 (se existir)
+        const candidatosComImagens = candidatos.map(c => {
             let imagemBase64 = null;
-            if (candidato.imagem && candidato.imagem.data) {
-                imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
+            if (c.imagem && c.imagem.data) {
+                imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString('base64')}`;
             }
-
-            return {
-                ...candidato._doc,
-                imagem: imagemBase64
-            };
+            return { ...c._doc, imagem: imagemBase64 };
         });
 
 
@@ -90,41 +86,20 @@ const getEmpresa = async (req, res) => {
     }
 }
 
-// Salva uma nova Empresa no banco de dados
+// Salva uma nova Empresa no banco de dados (refatorado para service + JSON)
+const { createEmpresa: createEmpresaService } = require('../services/empresaService');
 const createEmpresa = async (req, res) => {
     try {
-        const empresa = await Empresa.findOne({
-            cnpj: req.body.cnpj
+        const empresa = await createEmpresaService(req.body);
+        return res.status(201).json({
+            message: 'Cadastro realizado com sucesso!',
+            id: empresa._id
         });
-        
-        // Verifica se há alguma empresa existente
-        if (empresa) {
-            return res.status(409).json({
-                message: "Empresa já cadastrada!"
-            })
-        }
- 
-        const salt = await bcrypt.genSalt(12)
-        const senhaHash = await bcrypt.hash(req.body.senha, salt)
-
-        const newEmpresa = new Empresa({
-            nome: req.body.nome,
-            email: req.body.email,
-            cnpj: req.body.cnpj,
-            senha: senhaHash,
-            fone: req.body.fone,
-            bio: req.body.bio,
-            site: req.body.site
-        })
-
-        await newEmpresa.save();
-        res.redirect('/home');
-
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao cadastrar a empresa!",
-            error: erro.message
+        const status = erro.status || 500;
+        return res.status(status).json({
+            error: erro.message || 'Erro ao cadastrar a empresa.'
         });
     }
 }

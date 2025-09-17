@@ -28,7 +28,7 @@
         Você poderá complementar as informações posteriormente.
       </p>
 
-      <form id="companyForm" action="/empresa/cadastrar" method="POST">
+  <form id="companyForm" action="/empresa/cadastrar" method="POST" enctype="multipart/form-data" novalidate data-form="empresa">
         <div class="form-group">
           <label class="form-label">Nome da Empresa*</label>
           <input
@@ -56,14 +56,14 @@
 
         <div class="form-group">
           <label class="form-label">Email*</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-input"
-            placeholder="email@suaempresa.com"
-            required
-          />
+          <input type="email" id="email" name="email" class="form-input" placeholder="email@suaempresa.com" required />
+        </div>
+
+
+
+        <div class="form-group">
+          <label class="form-label">Telefone Comercial*</label>
+          <input type="tel" class="form-input" id="fone" name="fone" placeholder="(XX) XXXXX-XXXX" required />
         </div>
 
         <div class="form-group">
@@ -72,39 +72,14 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Telefone Comercial*</label>
-          <input
-            type="tel"
-            class="form-input"
-            id="fone"
-            name="fone"
-            placeholder="(XX) XXXXX-XXXX"
-            required
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-label">Bio da Empresa</label>
-          <textarea
-            class="form-input"
-            id="bio"
-            name="bio"
-            placeholder="Descreva brevemente sua empresa..."
-          ></textarea>
-          <span class="form-helper"
-            >Fale um pouco sobre a história e valores da sua empresa</span
-          >
+          <textarea class="form-input" id="bio" name="bio" placeholder="Descreva brevemente sua empresa..." required></textarea>
+          <span class="form-helper">Fale um pouco sobre a história e valores da sua empresa</span>
         </div>
 
         <div class="form-group">
           <label class="form-label">Site da Empresa</label>
-          <input
-            type="url"
-            class="form-input"
-            id="site"
-            name="site"
-            placeholder="https://www.suaempresa.com"
-          />
+          <input type="url" class="form-input" id="site" name="site" placeholder="https://www.suaempresa.com" />
         </div>
 
         <div class="button-group">
@@ -112,4 +87,49 @@
           <button type="submit" class="button button-primary">Salvar</button>
         </div>
       </form>
-    </main>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script>
+      document.getElementById('companyForm').addEventListener('submit', async function(e){
+        e.preventDefault();
+        const form = e.target;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+        const formData = new FormData(form);
+        const plain = Object.fromEntries(formData.entries());
+        try {
+          const resp = await fetch('/empresa/cadastrar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(plain)
+          });
+          const data = await resp.json();
+          if(!resp.ok){
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro no cadastro',
+              text: data.error || data.message || 'Erro ao cadastrar.'
+            });
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Salvar';
+            return;
+          }
+          Swal.fire({
+            icon: 'success',
+            title: 'Cadastro realizado!',
+            text: data.message || 'Empresa cadastrada com sucesso!',
+            confirmButtonText: 'Ir para o login'
+          }).then(() => {
+            window.location.href = '/login';
+          });
+        } catch(err){
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Falha na comunicação com o servidor.'
+          });
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Salvar';
+        }
+      });
+      </script>

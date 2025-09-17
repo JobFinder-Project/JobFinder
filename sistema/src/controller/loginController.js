@@ -1,6 +1,7 @@
 const Candidato = require('../models/candidatoModel');
 const Empresa = require('../models/empresaModel');
 const bcrypt = require('bcrypt');
+const { authenticate } = require('../services/authService');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
@@ -41,13 +42,13 @@ exports.realizarLogin = async (req, res) => {
 
         return res.json({
             message: 'Login bem-sucedido',
-            redirectUrl: userType === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard',
+            redirectUrl: type === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard'
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao realizar o login. Tente novamente!',
-            error: erro.messgae
+        const status = erro.status || 500;
+        res.status(status).json({
+            error: erro.message || 'Erro ao realizar o login. Tente novamente.'
         });
     }
 };
