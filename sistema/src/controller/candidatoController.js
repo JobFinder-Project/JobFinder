@@ -299,7 +299,7 @@ const candidatarAVaga = async (req, res) => {
             console.log("Imagem convertida para Base64.");
         }
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`)
+        res.redirect('/candidato/dashboard');
 
     } catch (erro) {
         console.error(erro);
