@@ -172,23 +172,29 @@ const getVagas = async (req, res) => {
 // Renderiza a página de Candidaturas
 const getCandidaturas = async (req, res) => {
     try {
-        const candidatoId = req.user._id; // Obtém o ID do candidato autenticado
-        const candidaturas = await Candidatura.find({
-                candidato: candidatoId
+        const candidatoId = req.session.user.id; 
+        
+        const candidaturas = await Candidatura.find({ candidato: candidatoId })
+            .populate({
+                path: 'vaga',
+                select: 'nome area'
             })
-            .populate('vaga')
-            .populate('empresa');
+            .populate({
+                path: 'empresa',
+                select: 'nome'
+            });
 
-        res.render('fun/candidaturas', {
-            title: 'Lista de Candidaturas',
-            style: 'candidaturas.css',
-            candidaturas,
-        });
+        if (!candidaturas || candidaturas.length === 0) {
+            return res.status(200).json([]); 
+        }
+
+        res.status(200).json(candidaturas);
+
     } catch (erro) {
         console.error(erro);
         res.status(500).json({
-            message: 'Erro ao renderizar a página Candidaturas!',
-            error: erro.messgae
+            message: 'Erro ao buscar as candidaturas!',
+            error: erro.message
         });
     }
 };
