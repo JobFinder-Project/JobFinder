@@ -7,10 +7,7 @@ const { getCadastroEmpresa, getEmpresa, createEmpresa, updateEmpresa, deleteEmpr
 const { isAuthenticated, isEmpresa } = require('../middleware/auth');
 
 // Rotas da empresa
-
-router.use(isAuthenticated, isEmpresa);
-
-router.get('/dashboard', dashboardEmpresa);
+router.get('/dashboard', isAuthenticated, isEmpresa, dashboardEmpresa);
 router.get("/cadastrar", getCadastroEmpresa);
 router.get("/:empresaId/perfil", getEmpresa);
 router.post("/cadastrar", createEmpresa);

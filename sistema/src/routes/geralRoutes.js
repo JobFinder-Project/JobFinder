@@ -4,7 +4,7 @@ const multer = require('multer');
 const upload = multer();
 const { isAuthenticated, isEmpresa } = require('../middleware/auth');
 
-const {realizarLogin, recuperarSenha, redefinirSenha, logout} =require('../controller/loginController');
+const {realizarLogin, recuperarSenha, redefinirSenha} =require('../controller/loginController');
 const { getCargo, getHome, getLogin, getRecuperarSenha, getRedefinirSenha, criarVagas } = require('../controller/telasController')
 const {  criarVagaParaEmpresa, dashboardEmpresa, buscacandidatos } = require("../controller/empresaController");
 
@@ -19,7 +19,7 @@ router.get("/recuperar_senha", getRecuperarSenha);
 router.post("/recuperar_senha", recuperarSenha);
 router.get('/redefinir_senha/:token', getRedefinirSenha);
 router.post('/redefinir_senha/:token', redefinirSenha);
-router.get('/logout', logout);
+
 
 
 //EMPRESA
