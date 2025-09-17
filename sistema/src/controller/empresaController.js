@@ -119,7 +119,6 @@ const createEmpresa = async (req, res) => {
         await newEmpresa.save();
         res.redirect('/home');
 
->>>>>>> develop
     } catch (erro) {
         console.error(erro);
         const status = erro.status || 500;
