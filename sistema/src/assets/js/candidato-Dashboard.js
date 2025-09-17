@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButton = document.querySelector('.close-button');
     const candidaturasList = document.getElementById('candidaturas-list');
     
+    const templateSource = document.getElementById('candidatura-template').innerHTML;
+
     const fetchCandidaturas = async () => {
         try {
             const response = await fetch('/candidato/candidaturas'); 
@@ -19,26 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
             if (candidaturas.length === 0) {
                 candidaturasList.innerHTML = `<p class="no-candidaturas-message">Você ainda não possui candidaturas ativas.</p>`;
             } else {
+                let finalHtml = '';
+                
                 candidaturas.forEach(candidatura => {
-                    const listItem = document.createElement('li');
-                    listItem.classList.add('candidatura-item');
-                    
                     const dataFormatada = new Date(candidatura.createdAt).toLocaleDateString('pt-BR');
-
-                    listItem.innerHTML = `
-                        <h3>${candidatura.vaga.nome}</h3>
-                        <p><strong>Empresa:</strong> ${candidatura.empresa.nome}</p>
-                        <p><strong>Data da candidatura:</strong> ${dataFormatada}</p>
-                    `;
-                    candidaturasList.appendChild(listItem);
+                    
+                    let itemHtml = templateSource
+                        .replace('{{vaga.nome}}', candidatura.vaga.nome)
+                        .replace('{{empresa.nome}}', candidatura.empresa.nome)
+                        .replace('{{status}}', candidatura.status)
+                        .replace('{{dataFormatada}}', dataFormatada);
+                    
+                    finalHtml += itemHtml; 
                 });
+                
+                candidaturasList.innerHTML = finalHtml;
             }
             
             modal.style.display = 'flex';
 
         } catch (error) {
             console.error('Erro:', error);
-            candidaturasList.innerHTML = `<p class="no-candidaturas-message">Erro ao exibi as condidaturas.</p>`;
+            candidaturasList.innerHTML = `<p class="no-candidaturas-message">Erro ao exibir as candidaturas.</p>`;
             modal.style.display = 'flex';
         }
     };
@@ -54,18 +58,4 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = 'none';
         }
     });
-
-    candidaturas.forEach(candidatura => {
-    const listItem = document.createElement('li');
-    listItem.classList.add('candidatura-item');
-    
-    const dataFormatada = new Date(candidatura.createdAt).toLocaleDateString('pt-BR');
-
-    listItem.innerHTML = `
-        <h3>${candidatura.vaga.nome}</h3>
-        <p><strong>Empresa:</strong> ${candidatura.empresa.nome}</p>
-        <p><strong>Status:</strong> ${candidatura.status}</p> <p><strong>Data da candidatura:</strong> ${dataFormatada}</p>
-    `;
-    candidaturasList.appendChild(listItem);
-});
 });

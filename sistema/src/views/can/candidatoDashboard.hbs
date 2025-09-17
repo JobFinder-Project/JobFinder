@@ -82,5 +82,14 @@
         </div>
 
     </div>
-    <script src="../../assets/js/candidato-Dashboard.js"></script>
+    <script src="/assets/js/candidato-Dashboard.js"></script>
+    
+    <script id="candidatura-template" type="text/template">
+        <li class="candidatura-item">
+            <h3>{{vaga.nome}}</h3>
+            <p><strong>Empresa:</strong> {{empresa.nome}}</p>
+            <p><strong>Status:</strong> {{status}}</p>
+            <p><strong>Data da candidatura:</strong> {{dataFormatada}}</p>
+        </li>
+    </script>
 </body>
