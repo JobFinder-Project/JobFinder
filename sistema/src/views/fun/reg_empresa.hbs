@@ -28,14 +28,10 @@
         Você poderá complementar as informações posteriormente.
       </p>
 
-
-  <form id="companyForm" action="/empresa/cadastrar" method="POST" enctype="multipart/form-data" novalidate data-form="empresa">
-
-      <p class="required-notice">Campos com * são obrigatórios.</p>
-
       <form id="companyForm" action="/empresa/cadastrar" method="POST">
 
-      <div class="modal active" id="step1">
+      <!-- Etapa 1 -->
+      <div class="form-step active">
         <div class="form-group">
           <label class="form-label">Nome da Empresa*</label>
           <input
@@ -59,25 +55,41 @@
           />
           <span class="form-helper">Digite apenas números</span>
         </div>
-
-
+        <button type="button" class="button button-primary next-btn">Próximo</button>
+      </div>
+        
+      <!-- Etapa 2 -->
+      <div class="form-step">  
         <div class="form-group">
           <label class="form-label">Email*</label>
-          <input type="email" id="email" name="email" class="form-input" placeholder="email@suaempresa.com" required />
-        </div>
-
-
-
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="email@suaempresa.com"
+            required
+          />
+        </div>        
         <div class="form-group">
           <label class="form-label">Telefone Comercial*</label>
-          <input type="tel" class="form-input" id="fone" name="fone" placeholder="(XX) XXXXX-XXXX" required />
-
+          <input
+            type="tel"
+            class="form-input"
+            id="fone"
+            name="fone"
+            placeholder="(00) 00000-0000"
+            required
+          />
+        </div>
         <div class="button-group">
-          <button type="button" class="button button-primary" onclick="nextStep(2)">Próximo</button>
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
+          <button type="button" class="button button-primary next-btn">Próximo</button>
         </div>
-        </div>
+      </div>
 
-      <div class="modal" id="step2">
+      <!-- Etapa 3 -->
+      <div class="form-step"> 
         <div class="form-group">
 
           <input type="password" id="senha" name="senha" class="form-input" required />
@@ -96,8 +108,6 @@
           <button type="button" class="button button-primary" onclick="nextStep(3)">Próximo</button>
         </div>
         </div>
-
-<div class="modal" id="step3">
         <div class="form-group">
           <label class="form-label">Bio da Empresa</label>
           <textarea
@@ -112,62 +122,34 @@
           <input type="url" class="form-input" id="site" name="site" placeholder="https://www.suaempresa.com" />
         </div>
         <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(2)">Voltar</button>
-          <button type="button" class="button button-primary" onclick="nextStep(4)">Próximo</button>
+          <button type="button" class="button button-secondary prev-btn">Voltar</button>
+          <button type="submit" class="button button-primary">Salvar</button>
         </div>
-      </div>
+      </div> 
+    </form>
+  </main>
 
-      <div class="modal" id="step4">
-        <div class="form-group">
-          <label class="form-label">Email*</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            class="form-input"
-            placeholder="email@suaempresa.com"
-            required
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Senha*</label>
-          <input type="password" id="senha" name="senha" class="form-input" required minlength="8" />
-        </div>
-        <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(3)">Voltar</button>
-          <button type="submit" class="button button-primary">Salvar Cadastro</button>
-        </div>
-        
-      </form>
-      <script>
-      document.getElementById('companyForm').addEventListener('submit', async function(e){
-        e.preventDefault();
-        const form = e.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Enviando...';
-        const formData = new FormData(form);
-        const plain = Object.fromEntries(formData.entries());
-        try {
-          const resp = await fetch('/empresa/cadastrar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(plain)
-          });
-          const data = await resp.json();
-          if(!resp.ok){
-              abrirModal('Erro no cadastro', data.error || data.message || 'Erro ao cadastrar.');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Salvar';
-            return;
-          }
-            abrirModal('Cadastro realizado!', data.message || 'Empresa cadastrada com sucesso!').then(() => {
-            window.location.href = '/login';
-          });
-        } catch(err){
-            abrirModal('Erro', 'Falha na comunicação com o servidor.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Salvar';
-        }
-      });
-      </script>
+  <script>
+    const steps = document.querySelectorAll(".form-step");
+    const nextBtns = document.querySelectorAll(".next-btn");
+    const prevBtns = document.querySelectorAll(".prev-btn");
+    let currentStep = 0;
+
+    function showStep(step){
+      steps.forEach((s, i) => s.classList.toggle("active, i === step"));
+    }
+
+    nextBtns.forEach(btn => btn.addEventListener("click", () => {
+      if (currentStep < steps.length - 1){
+        currentStep++;
+        showStep(currentStep);
+      }
+    }));
+
+    prevBtns.forEach(btn => btn.addEventListener("click", () => {
+      if (currentStep > 0){
+        currentStep--;
+        showStep(currentStep);
+      }
+    }));
+  </script>
