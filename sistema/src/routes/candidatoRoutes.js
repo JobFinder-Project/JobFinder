@@ -7,13 +7,13 @@ const { dashboardCandidato, getPerfilCandidato, getCadastroCandidato, cadastrarC
 const {visualizarCandidaturas, visualizarTelaEdicaoCand} = require('../controller/telasController')
 
 // Rotas do candidato
+router.get("/cadastrar", getCadastroCandidato);
+router.post("/cadastrar", upload.single('imagem'), cadastrarCandidato);
 
 router.use(isAuthenticated, isCandidato);
 
 router.get('/dashboard', dashboardCandidato);
 router.get("/perfil/:candidatoId", getPerfilCandidato);
-router.get("/cadastrar", getCadastroCandidato);
-router.post("/cadastrar", upload.single('imagem'), cadastrarCandidato);
 router.get('/vagas/buscar', buscarVagas);
 router.get("/vagas/:id", verVaga);
 router.post("/:candidatoId/vagas/:id", candidatarAVaga);
