@@ -87,7 +87,6 @@
           <button type="submit" class="button button-primary">Salvar</button>
         </div>
       </form>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script>
       document.getElementById('companyForm').addEventListener('submit', async function(e){
         e.preventDefault();
@@ -105,29 +104,16 @@
           });
           const data = await resp.json();
           if(!resp.ok){
-            Swal.fire({
-              icon: 'error',
-              title: 'Erro no cadastro',
-              text: data.error || data.message || 'Erro ao cadastrar.'
-            });
+              abrirModal('Erro no cadastro', data.error || data.message || 'Erro ao cadastrar.');
             submitBtn.disabled = false;
             submitBtn.textContent = 'Salvar';
             return;
           }
-          Swal.fire({
-            icon: 'success',
-            title: 'Cadastro realizado!',
-            text: data.message || 'Empresa cadastrada com sucesso!',
-            confirmButtonText: 'Ir para o login'
-          }).then(() => {
+            abrirModal('Cadastro realizado!', data.message || 'Empresa cadastrada com sucesso!').then(() => {
             window.location.href = '/login';
           });
         } catch(err){
-          Swal.fire({
-            icon: 'error',
-            title: 'Erro',
-            text: 'Falha na comunicação com o servidor.'
-          });
+            abrirModal('Erro', 'Falha na comunicação com o servidor.');
           submitBtn.disabled = false;
           submitBtn.textContent = 'Salvar';
         }

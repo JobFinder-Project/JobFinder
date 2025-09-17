@@ -42,7 +42,7 @@ exports.realizarLogin = async (req, res) => {
 
         return res.json({
             message: 'Login bem-sucedido',
-            redirectUrl: type === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard'
+            redirectUrl: userType === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard'
         });
     } catch (erro) {
         console.error(erro);

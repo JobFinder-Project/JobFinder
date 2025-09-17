@@ -1,7 +1,3 @@
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-
 <body data-empresa-id="{{empresaId}}">
     <nav class="navbar">
         <h1>JobFinder</h1>
@@ -77,16 +73,11 @@
     // Verifica se a URL contém o parâmetro "success"
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
-        Swal.fire({
-            icon: 'success',
-            title: 'Sucesso!',
-            text: 'Vaga criada com sucesso!',
-            confirmButtonText: 'OK',
-            timer: 3000 // Fecha automaticamente após 3 segundos
-        }).then(() => {
-            // Redireciona após o botão OK ser clicado
-            window.location.href = `/empresa/${empresaId}/vagas`;
-        });
+            abrirModal('Vaga criada!', 'A vaga foi criada com sucesso!');
+            // Redirecionar após fechar o modal
+            document.querySelector('.modal-btn').addEventListener('click', () => {
+                window.location.href = '/empresa/dashboard';
+            });
 
         // Garantir redirecionamento mesmo se o tempo expirar
         const redirectTimeout = setTimeout(() => {

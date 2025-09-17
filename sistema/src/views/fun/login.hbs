@@ -62,12 +62,10 @@
     const params = new URLSearchParams(window.location.search);
     const success = params.get('success');
     if (success === 'empresa' || success === 'candidato') {
-      Swal.fire({
-        icon: 'success',
-        title: success === 'empresa' ? 'Empresa cadastrada!' : 'Cadastro de candidato concluído!',
-        text: 'Use seu e-mail e senha para acessar.',
-        confirmButtonText: 'Entrar'
-      });
+      abrirModal(
+        success === 'empresa' ? 'Empresa cadastrada!' : 'Cadastro de candidato concluído!',
+        'Use seu e-mail e senha para acessar.'
+      );
     }
   })();
 
@@ -86,20 +84,12 @@
         if (data.message === 'Login bem-sucedido') {
           window.location.href = data.redirectUrl;
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Falha no login',
-            text: data.error || 'Credenciais inválidas.'
-          });
+          abrirModal('Falha no login', data.error || 'Credenciais inválidas.');
         }
       })
       .catch(err => {
         console.error('Erro no login:', err);
-        Swal.fire({
-          icon: 'error',
-          title: 'Erro',
-          text: 'Erro ao realizar o login. Tente novamente.'
-        });
+        abrirModal('Erro', 'Erro ao realizar o login. Tente novamente.');
       });
   });
 </script>

@@ -120,13 +120,13 @@
             if(!resp.ok){
               let msg = data.error || data.mgs || 'Erro ao cadastrar.';
               if(msg.includes('|')){ msg = msg.split('|').map(m=>m.trim()).join('<br>'); }
-              Swal.fire({ icon:'error', title:'Erro no cadastro', html: msg });
+              abrirModal('Erro no cadastro', msg);
               return;
             }
-            Swal.fire({ icon:'success', title:'Cadastro concluído!', text: data.message })
+            abrirModal('Cadastro concluído!', data.message)
               .then(()=> window.location.href = '/login?success=candidato');
           } catch(err){
-            Swal.fire({ icon:'error', title:'Erro', text:'Falha na comunicação com o servidor.' });
+            abrirModal('Erro', 'Falha na comunicação com o servidor.');
           } finally {
             submitBtn.dataset.loading = 'false';
             submitBtn.disabled = false;

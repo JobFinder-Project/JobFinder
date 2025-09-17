@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
   <link rel="stylesheet" href="/assets/css/{{style}}">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <style>
@@ -30,9 +29,17 @@ footer p {
 
 <body>
     {{{body}}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/src/assets/js/swal-paleta.js"></script>
-    <link rel="stylesheet" href="/src/assets/css/swal-paleta.css">
+    <!-- Modal Local Customizado -->
+    <div id="meuModal" class="modal-backdrop" style="display:none;">
+      <div class="modal-content">
+        <span class="modal-close" onclick="fecharModal()">&times;</span>
+        <h2 id="modal-titulo">Título do Modal</h2>
+        <p id="modal-mensagem">Mensagem do modal aqui.</p>
+        <button class="modal-btn" onclick="fecharModal()">OK</button>
+      </div>
+    </div>
+    <link rel="stylesheet" href="/assets/css/modal.css">
+    <script src="/assets/js/modal.js"></script>
 </body>
 
 </html>
