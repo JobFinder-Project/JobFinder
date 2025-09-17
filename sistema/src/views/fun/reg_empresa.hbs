@@ -23,16 +23,17 @@
     </header>
 
   <main class="container">
+  <main class="container">
       <p class="form-description">
         Preencha as informações básicas da sua empresa para criar seu cadastro.
         Você poderá complementar as informações posteriormente.
       </p>
 
+      <p class="required-notice">Campos com * são obrigatórios.</p>
+
       <form id="companyForm" action="/empresa/cadastrar" method="POST">
 
-      <!-- Etapa 1 - Modal-->
       <div class="modal active" id="step1">
-        <form>
         <div class="form-group">
           <label class="form-label">Nome da Empresa*</label>
           <input
@@ -55,16 +56,13 @@
             required
           />
           <span class="form-helper">Digite apenas números</span>
-         </div>
-          <div class="button-group">
-            <button type="button" class="button button-primary" onclick="nextStep(2)">Próximo</button>
-          </div>
-       </form>
-     </div>
+        </div>
+        <div class="button-group">
+          <button type="button" class="button button-primary" onclick="nextStep(2)">Próximo</button>
+        </div>
+        </div>
 
-      <!-- Etapa 2 - Modal-->
       <div class="modal" id="step2">
-      <form>         
         <div class="form-group">
           <label class="form-label">Telefone Comercial*</label>
           <input
@@ -76,16 +74,39 @@
             required
           />
         </div>
-          <div class="button-group">
-            <button type="button" class="button button-secondary" onclick="prevStep(1)">Voltar</button>
-            <button type="button" class="button button-primary" onclick="nextStep(3)">Próximo</button>
-          </div>
-        </form>
+        <div class="button-group">
+          <button type="button" class="button button-secondary" onclick="prevStep(1)">Voltar</button>
+          <button type="button" class="button button-primary" onclick="nextStep(3)">Próximo</button>
+        </div>
+        </div>
+
+<div class="modal" id="step3">
+        <div class="form-group">
+          <label class="form-label">Bio da Empresa</label>
+          <textarea
+            class="form-input"
+            id="bio"
+            name="bio"
+            placeholder="Descreva brevemente sua empresa..."
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Site da Empresa</label>
+          <input
+            type="url"
+            class="form-input"
+            id="site"
+            name="site"
+            placeholder="https://www.suaempresa.com"
+          />
+        </div>
+        <div class="button-group">
+          <button type="button" class="button button-secondary" onclick="prevStep(2)">Voltar</button>
+          <button type="button" class="button button-primary" onclick="nextStep(4)">Próximo</button>
+        </div>
       </div>
 
-      <!-- Etapa 3 - Modal-->
-      <div class="modal" id="step3">
-        <form id="companyForm" action="/empresa/cadastrar" method="POST"> 
+      <div class="modal" id="step4">
         <div class="form-group">
           <label class="form-label">Email*</label>
           <input
@@ -101,29 +122,16 @@
           <label class="form-label">Senha*</label>
           <input type="password" id="senha" name="senha" class="form-input" required minlength="8" />
         </div>
-        <div class="form-group">
-          <label class="form-label">Bio da Empresa</label>
-          <textarea
-            class="form-input"
-            id="bio"
-            name="bio"
-            placeholder="Descreva brevemente sua empresa..."
-          ></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Site da Empresa</label>
-          <input type="url" class="form-input" id="site" name="site" placeholder="https://www.suaempresa.com" />
-        </div>
         <div class="button-group">
-          <button type="button" class="button button-secondary" onclick="prevStep(2)">Voltar</button>
-          <button type="submit" class="button button-primary">Salvar</button>
+          <button type="button" class="button button-secondary" onclick="prevStep(3)">Voltar</button>
+          <button type="submit" class="button button-primary">Salvar Cadastro</button>
         </div>
-        </form>
-      </div> 
+      </div>
+      
+      </form> 
   </main>
 
-  <!-- Script -->
-  <script src="/sistema/src/views/scripts/formEmpresa.js"></script>
+<script src="/assets/js/formEmpresa.js"></script>
 
     function showStep(step){
       steps.forEach((s, i) => s.classList.toggle("active, i === step"));
