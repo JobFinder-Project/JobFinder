@@ -1,7 +1,7 @@
 // Verifica se o usuário está autenticado
 exports.isAuthenticated = (req, res, next) => {
     try {
-        console.log("req.session em isAuthenticated:", req.session)
+        //console.log("req.session em isAuthenticated:", req.session) //print no teminal dos dados de sessao
         if (req.session && req.session.user) {
             return next();
         }

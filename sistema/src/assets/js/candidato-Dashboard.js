@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. SELEÇÃO DOS ELEMENTOS DO DOM ---
     const modal = document.getElementById('candidaturasModal');
     const modalTitle = document.getElementById('modal-title');
     const openModalBtn = document.getElementById('openCandidaturasModalBtn');
