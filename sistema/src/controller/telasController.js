@@ -172,18 +172,18 @@ const getVagas = async (req, res) => {
 // Renderiza a página de Candidaturas
 const getCandidaturas = async (req, res) => {
     try {
-        const candidatoId = req.session.user.id; 
+        const candidatoId = req.session.user.id;
         
         const candidaturas = await Candidatura.find({ candidato: candidatoId })
             .populate({
                 path: 'vaga',
-                select: 'nome area'
+                select: 'nome area requisitos' 
             })
             .populate({
                 path: 'empresa',
                 select: 'nome'
             });
-
+            
         if (!candidaturas || candidaturas.length === 0) {
             return res.status(200).json([]); 
         }

@@ -369,20 +369,21 @@ const verCandidatura = async (req, res) => {
 // Deleta uma candidatura
 const cancelarCandidatura = async (req, res) => {
     try {
-        const candidaturaId = req.params.candidaturaId;
-        const candidatoId = req.params.candidatoId;
-        const candidatura = await Candidatura.findByIdAndDelete(candidaturaId)
+        const { candidaturaId } = req.params;
+
+        const candidatura = await Candidatura.findByIdAndDelete(candidaturaId);
 
         if (!candidatura) {
-            return res.status(400).send({
+            return res.status(404).json({
                 message: 'Candidatura não encontrada!'
             });
         }
+        
+        res.status(200).json({ success: true, message: 'Candidatura cancelada com sucesso!' });
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`);
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
+        res.status(500).json({
             message: 'Erro ao cancelar a candidatura!',
             error: erro.message
         });
