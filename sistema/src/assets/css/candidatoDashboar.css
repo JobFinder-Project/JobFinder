@@ -205,109 +205,216 @@ body {
     background-color: #2980b9;
 }
 
+.navbar-button {
+    background: none;
+    border: none;
+    color: white; 
+    cursor: pointer;
+    font-size: 1em; 
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+}
 
-/* --- MODAL --- */
 .modal {
-  position: fixed;
-  top: -100%; /* começa fora da tela */
-  background-color: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  overflow-y: auto;
-  transition: top 0.4s ease-in-out;
-  z-index: 1001;
-  border-radius: 0 0 12px 12px;
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); 
+    justify-content: center;
+    align-items: center;
 }
 
-/* Quando aparece */
-.modal.show {
-  top: 80px; /* desce abaixo da navbar */
-  width: 550px;
-  left: 723px;
-}
-
-/* Conteúdo */
 .modal-content {
-  padding: 20px;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    height: 50%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s;
+
+    display: flex;
+    flex-direction: column;
 }
 
-/* Botão fechar */
-.modal .close {
-  font-size: 24px;
-  cursor: pointer;
-  float: right;
-  transition: color 0.2s;
-}
-.modal .close:hover {
-  color: #e63946;
+.modal-content.modo-detalhe {
+    height: auto; 
+    max-height: 80vh;
 }
 
-/* --- BACKDROP --- */
-.modal-backdrop {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; 
-  width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-.modal-backdrop.show {
-  display: block;
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
-/* --- Título --- */
-.modal-content h1 {
-  font-size: 1.6rem;
-  margin-bottom: 1rem;
-  color: #333;
-  text-align: center;
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
 }
 
-/* --- Lista --- */
-.candidatura-list {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 15px;
 }
+
+#lista-view{
+    width: 100%;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+}
+
+#candidaturas-list {
+    list-style: none;
+    padding: 0;
+}
+
 .candidatura-item {
-  background: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  transition: transform 0.2s, box-shadow 0.2s;
+    padding: 15px;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+    border-radius: 5px;
 }
+
+.candidatura-item h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.candidatura-item p {
+    margin: 0 0 5px;
+    color: #666;
+}
+
+.no-candidaturas-message {
+    text-align: center;
+    color: #888;
+    padding: 20px;
+}
+
+.candidatura-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
 .candidatura-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ebebeb;
 }
 
-/* --- Botões --- */
-.candidatura-item button,
-.modal-content button {
-  background: #e63946;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.2s;
-}
-.candidatura-item button:hover,
-.modal-content button:hover {
-  background: #c72534;
+.candidatura-item.selected {
+    border-color: #fcef02; 
+    background-color: #f5f5f5;
 }
 
-/* Botão voltar */
-.modal-content button a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
+.modal-footer {
+    display: flex;
+    margin-top: 10px;
+    justify-content: flex-end;
 }
 
-/* --- Texto sem candidaturas --- */
-.modal-content p {
-  text-align: center;
-  color: #666;
-  font-size: 1rem;
+.btn-visualizar, .btn-voltar, .btn-cancelar, 
+.btn-voltar-detalhes, .btn-confirmar-cancelamento, .btn-ok {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: opacity 0.2s;
+}
+
+.btn-visualizar:hover, .btn-voltar:hover, .btn-cancelar:hover, 
+.btn-voltar-detalhes:hover, .btn-confirmar-cancelamento:hover, .btn-ok:hover {
+    opacity: 0.9;
+}
+
+.btn-visualizar {
+    background-color: #fcef02;
+    color: rgb(0, 0, 0);
+}
+
+/* Agrupa os botões de "voltar" */
+.btn-voltar, .btn-voltar-detalhes {
+    background-color: #cecece;
+    color: rgb(0, 0, 0);
+}
+
+/* Agrupa os botões de "cancelar" */
+.btn-cancelar, .btn-confirmar-cancelamento {
+    background-color: #da505e;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-ok {
+    background-color: #fcef02;
+    color: rgb(0, 0, 0);
+}
+
+.detalhe-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Centralizado */
+}
+
+.modal-content.modo-detalhe {
+    height: auto; 
+    max-height: 80vh; 
+}
+
+.detalhe-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+svg.check-ok{
+    width: 30%;
+    height: 30%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.confirmacao-info {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.confirmacao-info strong {
+    font-size: 1.2em;
 }

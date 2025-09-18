@@ -23,25 +23,19 @@ function toggleMenu() {
 const dashboardCandidato = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
-
-        // Busca todas as vagas
         const vagas = await Vaga.find().populate('empresa');
 
-        // Busca todas as candidaturas do candidato logado
-        const candidaturas = await Candidatura.find({ candidato: candidatoId })
-            .populate({
-                path: 'vaga',
-                populate: { path: 'empresa' }
-            })
-            .populate('candidato');
-
-        // Converte imagens
+        // Converte as imagens para base64
         const vagasComImagens = vagas.map(vaga => {
             let imagemBase64 = null;
             if (vaga.imagem && vaga.imagem.data) {
                 imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
             }
-            return { ...vaga._doc, imagem: imagemBase64 };
+
+            return {
+                ...vaga._doc,
+                imagem: imagemBase64,
+            };
         });
 
         res.render('can/candidatoDashboard', {
@@ -51,7 +45,6 @@ const dashboardCandidato = async (req, res) => {
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,
-            candidaturas, 
         });
     } catch (erro) {
         console.error(erro);
@@ -306,7 +299,7 @@ const candidatarAVaga = async (req, res) => {
             console.log("Imagem convertida para Base64.");
         }
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`)
+        res.redirect('/candidato/dashboard');
 
     } catch (erro) {
         console.error(erro);
@@ -376,20 +369,21 @@ const verCandidatura = async (req, res) => {
 // Deleta uma candidatura
 const cancelarCandidatura = async (req, res) => {
     try {
-        const candidaturaId = req.params.candidaturaId;
-        const candidatoId = req.params.candidatoId;
-        const candidatura = await Candidatura.findByIdAndDelete(candidaturaId)
+        const { candidaturaId } = req.params;
+
+        const candidatura = await Candidatura.findByIdAndDelete(candidaturaId);
 
         if (!candidatura) {
-            return res.status(400).send({
+            return res.status(404).json({
                 message: 'Candidatura não encontrada!'
             });
         }
+        
+        res.status(200).json({ success: true, message: 'Candidatura cancelada com sucesso!' });
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`);
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
+        res.status(500).json({
             message: 'Erro ao cancelar a candidatura!',
             error: erro.message
         });

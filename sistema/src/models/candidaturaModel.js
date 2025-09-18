@@ -22,6 +22,8 @@ const relacaoSchema = new mongoose.Schema({
         enum: ['Pendente', 'Aceito', 'Rejeitado'],
         default: 'Pendente'
     }
+}, {
+    timestamps: true 
 });
 
 module.exports = mongoose.model('Candidatura', relacaoSchema);
