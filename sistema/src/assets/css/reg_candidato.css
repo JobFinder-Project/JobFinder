@@ -1,172 +1,157 @@
-/* Reset e configuração geral */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+/* Indicador de Progresso */
+.progress-container {
+  margin-bottom: 30px;
 }
 
-body {
-    background-color: #f5f5f5;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.header {
-    width: 100%;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+.progress-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
 }
 
-.navigation {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+.progress-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd;
+  z-index: 1;
 }
 
-.back-button,
-.help-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
-    padding: 0.5rem;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-    display: inline-flex;
-    /* Evita que o botão ocupe mais espaço */
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    /* Define um tamanho padrão */
-    height: 40px;
+.progress-step.active:not(:last-child)::after,
+.progress-step.completed:not(:last-child)::after {
+  background-color: #ffd700;
 }
 
-.back-button:hover,
-.help-button:hover {
-    background-color: #f0f0f0;
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ddd;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-weight: bold;
+  font-size: 14px;
+  position: relative;
+  z-index: 2;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-    flex-grow: 1;
+.progress-step.active .step-circle {
+  background-color: #ffd700;
+  color: #000;
 }
 
-/* Container Principal */
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.3s ease-out;
+.progress-step.completed .step-circle {
+  background-color: #28a745;
 }
 
-/* Cabeçalho do Formulário */
-.form-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+.step-label {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
 }
 
-.form-header h1 {
-    font-size: 24px;
-    margin: 0;
+.progress-step.active .step-label,
+.progress-step.completed .step-label {
+  color: #333;
+  font-weight: 600;
 }
 
-/* Seções do Formulário */
-.form-section {
-    margin-bottom: 30px;
+/* Etapas do Formulário */
+.form-step {
+  display: none;
 }
 
-.section-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #222;
+.form-step.active {
+  display: block;
+  animation: slideIn 0.3s ease-out;
 }
 
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
+.step-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
 }
 
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    background-color: #f8f8f8;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+.form-group {
+  margin-bottom: 20px;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    background-color: #fff;
+/* Estados de erro */
+input.error {
+  border-color: #dc3545;
+  background-color: #fff5f5;
 }
 
-textarea {
-    resize: vertical;
-    min-height: 100px;
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
 }
 
-.section-label {
-    font-size: 16px;
-    font-weight: 600;
-    margin-top: 25px;
-    margin-bottom: 15px;
-    color: #333;
+/* Botões de Navegação */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
 }
 
-/* Botões */
-button {
-    background-color: #ffd700;
-    color: #000;
-    padding: 14px 28px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.2s;
+.btn-primary,
+.btn-secondary {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex: 1;
 }
 
-button:hover {
-    background-color: #ffc700;
+.btn-primary {
+  background-color: #ffd700;
+  color: #000;
 }
 
-/* Animação de fade-in */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+.btn-primary:hover {
+  background-color: #ffc700;
+}
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Animação adicional */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
