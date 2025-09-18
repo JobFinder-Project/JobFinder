@@ -16,16 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedCandidaturaId = null;
 
     function switchView(viewName) {
+        const modalContent = modal.querySelector('.modal-content');
+
         if (viewName === 'lista') {
             listaView.style.display = 'block';
             detalheView.style.display = 'none';
             modalTitle.innerText = 'Minhas Candidaturas';
-
+            modalContent.classList.remove('modo-detalhe');
         } else { 
             listaView.style.display = 'none';
             detalheView.style.display = 'block';
             modalTitle.innerText = 'Detalhes da Candidatura';
             modalFooter.style.display = 'none';
+            modalContent.classList.add('modo-detalhe'); 
         }
     }
 

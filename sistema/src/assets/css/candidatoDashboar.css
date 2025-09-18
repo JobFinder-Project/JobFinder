@@ -237,9 +237,19 @@ body {
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
+    height: 50%;
+    max-height: 80vh;
     border-radius: 8px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     animation: fadeIn 0.3s;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content.modo-detalhe {
+    height: auto; 
+    max-height: 80vh;
 }
 
 @keyframes fadeIn {
@@ -254,6 +264,16 @@ body {
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
     margin-bottom: 15px;
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+#lista-view{
+    width: 100%;
 }
 
 .modal-header h2 {
@@ -309,12 +329,12 @@ body {
 }
 
 .candidatura-item:hover {
-    background-color: #f0f0f0;
+    background-color: #ebebeb;
 }
 
 .candidatura-item.selected {
-    border-color: #007bff; 
-    background-color: #e7f3ff;
+    border-color: #fcef02; 
+    background-color: #f5f5f5;
 }
 
 .modal-footer {
@@ -330,13 +350,18 @@ body {
     font-size: 1em;
 }
 
-.btn-visualizar, .btn-voltar {
-    background-color: #007bff;
-    color: white;
+.btn-visualizar {
+    background-color: #fcef02;
+    color: rgb(0, 0, 0);
+}
+
+.btn-voltar {
+    background-color: #cecece;
+    color: rgb(0, 0, 0);
 }
 
 .btn-cancelar {
-    background-color: #dc3545;
+    background-color: #da505e;
     color: white;
     margin-left: 10px;
 }
