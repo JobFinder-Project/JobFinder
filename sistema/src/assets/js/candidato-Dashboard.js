@@ -1,61 +1,151 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- 1. SELEÇÃO DOS ELEMENTOS DO DOM ---
     const modal = document.getElementById('candidaturasModal');
+    const modalTitle = document.getElementById('modal-title');
     const openModalBtn = document.getElementById('openCandidaturasModalBtn');
-    const closeButton = document.querySelector('.close-button');
+    const closeButton = modal.querySelector('.close-button');
     const candidaturasList = document.getElementById('candidaturas-list');
+    const listaView = document.getElementById('lista-view');
+    const detalheView = document.getElementById('detalhe-view');
+    const modalFooter = modal.querySelector('.modal-footer');
+    const visualizarBtn = document.getElementById('visualizar-btn');
+
+    const itemPrototype = document.getElementById('candidatura-item-prototype');
+    const detalhePrototype = document.getElementById('candidatura-detalhe-prototype');
+
+    let candidaturasData = [];
+    let selectedCandidaturaId = null;
+
+    function switchView(viewName) {
+        if (viewName === 'lista') {
+            listaView.style.display = 'block';
+            detalheView.style.display = 'none';
+            modalTitle.innerText = 'Minhas Candidaturas';
+
+        } else { 
+            listaView.style.display = 'none';
+            detalheView.style.display = 'block';
+            modalTitle.innerText = 'Detalhes da Candidatura';
+            modalFooter.style.display = 'none';
+        }
+    }
+
+    function renderListView() {
+
+        while (candidaturasList.children.length > 1) {
+            candidaturasList.removeChild(candidaturasList.lastChild);
+        }
+        modalFooter.style.display = 'none';
+        selectedCandidaturaId = null;
+
+        if (candidaturasData.length === 0) {
+            candidaturasList.innerHTML += `<p class="no-candidaturas-message">Você ainda não possui candidaturas ativas.</p>`;
+        } else {
+            candidaturasData.forEach(candidatura => {
+                const clone = itemPrototype.cloneNode(true); 
+                
+                clone.removeAttribute('id'); 
+                clone.style.display = '';
+                clone.dataset.id = candidatura._id; 
+
+                
+                clone.querySelector('.vaga-nome').textContent = candidatura.vaga.nome;
+                clone.querySelector('.empresa-nome').textContent = candidatura.empresa.nome;
+                clone.querySelector('.status').textContent = candidatura.status;
+                clone.querySelector('.data-candidatura').textContent = new Date(candidatura.createdAt).toLocaleDateString('pt-BR');
+
+                candidaturasList.appendChild(clone);
+            });
+        }
+        switchView('lista');
+    }
+
+    function renderDetailView() {
+        const candidatura = candidaturasData.find(c => c._id === selectedCandidaturaId);
+        if (!candidatura) return;
+
+        const vaga = candidatura.vaga || {};
+        const empresa = candidatura.empresa || {};
+
+        detalheView.innerHTML = '';
+        const clone = detalhePrototype.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.style.display = '';
+
+        clone.querySelector('.vaga-nome').textContent = vaga.nome || 'N/A';
+        clone.querySelector('.empresa-nome').textContent = empresa.nome || 'N/A';
+        clone.querySelector('.status').textContent = candidatura.status;
+        clone.querySelector('.vaga-area').textContent = vaga.area || 'N/A';
+        clone.querySelector('.vaga-requisitos').textContent = vaga.requisitos || 'N/A';
+        clone.querySelector('.data-candidatura').textContent = new Date(candidatura.createdAt).toLocaleDateString('pt-BR');
+        clone.querySelector('.btn-cancelar').dataset.id = candidatura._id;
+
+        detalheView.appendChild(clone);
+        switchView('detalhes');
+    }
     
-    const templateSource = document.getElementById('candidatura-template').innerHTML;
-
-    const fetchCandidaturas = async () => {
+    async function cancelarAplicacao(candidaturaId) {
+        if (!confirm('Tem certeza que deseja cancelar esta candidatura?')) return;
+        const candidatoId = document.body.dataset.candidatoId;
         try {
-            const response = await fetch('/candidato/candidaturas'); 
-            
+            const response = await fetch(`/candidato/${candidatoId}/vagas/delete/${candidaturaId}`, { method: 'POST' });
             if (!response.ok) {
-                throw new Error('Falha ao buscar candidaturas');
+                const err = await response.json();
+                throw new Error(err.message || 'Falha ao cancelar a candidatura.');
             }
+            alert('Candidatura cancelada com sucesso!');
+            openModal();
+        } catch (error) {
+            console.error('Erro ao cancelar:', error);
+            alert(`Ocorreu um erro: ${error.message}`);
+        }
+    }
 
-            const candidaturas = await response.json();
-            
-            candidaturasList.innerHTML = '';
-
-            if (candidaturas.length === 0) {
-                candidaturasList.innerHTML = `<p class="no-candidaturas-message">Você ainda não possui candidaturas ativas.</p>`;
-            } else {
-                let finalHtml = '';
-                
-                candidaturas.forEach(candidatura => {
-                    const dataFormatada = new Date(candidatura.createdAt).toLocaleDateString('pt-BR');
-                    
-                    let itemHtml = templateSource
-                        .replace('{{vaga.nome}}', candidatura.vaga.nome)
-                        .replace('{{empresa.nome}}', candidatura.empresa.nome)
-                        .replace('{{status}}', candidatura.status)
-                        .replace('{{dataFormatada}}', dataFormatada);
-                    
-                    finalHtml += itemHtml; 
-                });
-                
-                candidaturasList.innerHTML = finalHtml;
-            }
-            
+    async function openModal() {
+        try {
+            const response = await fetch('/candidato/candidaturas');
+            if (!response.ok) throw new Error('Falha ao buscar candidaturas');
+            candidaturasData = await response.json();
+            renderListView();
             modal.style.display = 'flex';
-
         } catch (error) {
             console.error('Erro:', error);
-            candidaturasList.innerHTML = `<p class="no-candidaturas-message">Erro ao exibir as candidaturas.</p>`;
+            candidaturasList.innerHTML = `<p class="no-candidaturas-message">Erro ao carregar candidaturas.</p>`;
+            switchView('lista');
             modal.style.display = 'flex';
         }
-    };
+    }
 
-    openModalBtn.addEventListener('click', fetchCandidaturas);
-
-    closeButton.addEventListener('click', () => {
-        modal.style.display = 'none';
+    openModalBtn.addEventListener('click', openModal);
+    closeButton.addEventListener('click', () => modal.style.display = 'none');
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) modal.style.display = 'none';
     });
 
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
+    candidaturasList.addEventListener('click', (e) => {
+        const item = e.target.closest('.candidatura-item');
+        if (!item || !item.dataset.id) return;
+
+        candidaturasList.querySelectorAll('.candidatura-item.selected').forEach(el => el.classList.remove('selected'));
+        item.classList.add('selected');
+
+        selectedCandidaturaId = item.dataset.id;
+        modalFooter.style.display = 'flex';
+    });
+
+    visualizarBtn.addEventListener('click', () => {
+        if (selectedCandidaturaId) {
+            renderDetailView();
+        }
+    });
+
+    detalheView.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-voltar')) {
+            renderListView();
+        }
+        if (e.target.classList.contains('btn-cancelar')) {
+            const id = e.target.dataset.id;
+            cancelarAplicacao(id);
         }
     });
 });
