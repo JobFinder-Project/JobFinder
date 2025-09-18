@@ -19,7 +19,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2c3e50;
+    background-color: #e7b900;
     color: #fff;
     padding: 10px 20px;
     box-sizing: border-box;
@@ -100,11 +100,12 @@ body {
 }
 
 .main-content {
-    margin-top: 5px;
+    margin-top: 10px;
     margin-left: 10%;
     margin-right: 10%;
     width: 80%;
     padding: 20px;
+    top: 10px;
     box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -176,7 +177,7 @@ body {
 .job-image {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    border-radius: 20%;
     object-fit: cover;
     margin-bottom: 0px;
 }
@@ -206,28 +207,38 @@ body {
 }
 
 
+
 /* --- MODAL --- */
 .modal {
   position: fixed;
   top: -100%; /* começa fora da tela */
   background-color: #fff;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  overflow-y: auto;
+  overflow: hidden; /* esconde até abrir */
   transition: top 0.4s ease-in-out;
-  z-index: 1001;
+  z-index: -1;
   border-radius: 0 0 12px 12px;
+  opacity: 0;
+  max-height: 90vh; /* não ultrapassa a tela */
+  max-width: 90vw;  /* não ultrapassa a tela */
+  width: 550px;     /* tamanho base */
 }
 
 /* Quando aparece */
 .modal.show {
   top: 80px; /* desce abaixo da navbar */
-  width: 550px;
-  left: 723px;
+  left: 50%;
+  transform: translateX(10%); /* centraliza */
+  z-index: 1001;
+  opacity: 1;
 }
 
 /* Conteúdo */
 .modal-content {
   padding: 20px;
+  max-height: 70vh;   /* limita o conteúdo */
+  overflow-y: auto;   /* ativa scroll vertical */
+  box-sizing: border-box;
 }
 
 /* Botão fechar */

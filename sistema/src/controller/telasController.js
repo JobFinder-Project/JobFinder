@@ -174,8 +174,8 @@ const getCandidaturas = async (req, res) => {
     try {
         const candidatoId = req.user._id; // Obtém o ID do candidato autenticado
         const candidaturas = await Candidatura.find({
-                candidato: candidatoId
-            })
+            candidato: candidatoId
+        })
             .populate('vaga')
             .populate('empresa');
 
@@ -188,56 +188,6 @@ const getCandidaturas = async (req, res) => {
         console.error(erro);
         res.status(500).json({
             message: 'Erro ao renderizar a página Candidaturas!',
-            error: erro.messgae
-        });
-    }
-};
-
-// Renderiza a página de Candidatura
-const visualizarCandidaturas = async (req, res) => {
-    try {
-        const candidatoId = req.params.candidatoId;
-
-        const candidaturas = await Candidatura.find({
-                candidato: candidatoId
-            })
-            .populate('candidato')
-            .populate('vaga')
-            .populate('empresa');
-
-        // Verifica se há candidaturas para a vaga
-        if (!candidaturas || candidaturas.length === 0) {
-            return res.status(404).send({
-                message: 'Candidaturas não encontradas!'
-            });
-        }
-
-        // Converte as imagens para Base64
-        const candidaturasComImagens = candidaturas.map(candidatura => {
-            let imagemBase64 = null;
-            if (candidatura.vaga.imagem && candidatura.vaga.imagem.data) {
-                imagemBase64 = `data:${candidatura.vaga.imagem.contentType};base64,${candidatura.vaga.imagem.data.toString('base64')}`;
-            }
-
-            return {
-                ...candidatura._doc,
-                vaga: {
-                    ...candidatura.vaga._doc,
-                    imagem: imagemBase64
-                }
-            };
-        });
-
-        res.render('can/ver_candidaturas', {
-            title: 'Lista de Candidaturas',
-            style: 'verCandidatura.css',
-            candidaturas: candidaturasComImagens,
-            candidatoId
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Lista de Candidaturas!',
             error: erro.messgae
         });
     }
@@ -278,35 +228,6 @@ const visualizarCandidatos = async (req, res) => {
 
 }
 
-// Renderiza a página de detalhes de uma vaga
-const getVagaDetalhes = async (req, res) => {
-    try {
-        const candidatoId = req.user._id;
-        const vagaId = req.params.vagaId;
-
-        const vaga = await Vaga.findById(vagaId).populate('empresa');
-
-        // Verifica se a vaga existe
-        if (!vaga) {
-            return res.status(404).json({
-                message: 'Vaga não encontrada!'
-            });
-        }
-
-        res.render('fun/vagaDetalhes', {
-            title: vaga.nome,
-            style: 'vagaDetalhes.css',
-            vaga,
-            candidatoId
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página da vaga!',
-            error: erro.messgae
-        });
-    }
-};
 
 // Renderiza a página de Edição de Perfil do Candidato
 const visualizarTelaEdicaoCand = async (req, res) => {
@@ -365,10 +286,8 @@ module.exports = {
     getRecuperarSenha,
     getRedefinirSenha,
     getCriarVagas,
-    getVagaDetalhes,
     getVagas,
     getCandidaturas,
-    visualizarCandidaturas,
     visualizarCandidatos,
     visualizarTelaEdicaoCand,
     visualizarTelaEdicaoEmpre
