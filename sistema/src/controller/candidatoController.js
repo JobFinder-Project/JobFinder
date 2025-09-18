@@ -155,48 +155,6 @@ const cadastrarCandidato = async (req, res) => {
     }
 };
 
-// Renderiza a página de detalhes de uma vaga
-const verVaga = async (req, res) => {
-    try {
-        const {
-            id
-        } = req.params;
-        const candidatoId = req.session.user.id;
-        const vaga = await Vaga.findById(id).populate('empresa');
-
-        // Verifica se a vaga foi encontrada
-        if (!vaga) {
-            return res.status(404).send({
-                message: 'Vaga não encontrada!'
-            });
-        }
-
-        // Converte a imagem em Base64 (se existir)
-        let imagemBase64 = null;
-        if (vaga.imagem && vaga.imagem.data) {
-            imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
-        }
-
-        res.render('can/vagaDetalhes', {
-            title: vaga.nome,
-            _id: vaga._id,
-            nome: vaga.nome,
-            area: vaga.area,
-            requisitos: vaga.requisitos,
-            empresa: vaga.empresa.nome,
-            imagem: imagemBase64,
-            style: 'vagasDetalhes.css',
-            candidatoId
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao renderizar a página da vaga!',
-            error: erro.message
-        });
-    }
-};
-
 // Renderiza a página da lista de vagas existentes
 const buscarVagas = async (req, res) => {
     try {
@@ -306,68 +264,14 @@ const candidatarAVaga = async (req, res) => {
             console.log("Imagem convertida para Base64.");
         }
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`)
+        res.redirect(`/candidato/dashboard?success=true`)
+       
+
 
     } catch (erro) {
         console.error(erro);
         res.status(500).send({
             message: 'Erro ao realizar a candidatura!',
-            error: erro.message
-        });
-    }
-};
-
-// Renderiza a página de detalhes de uma candidatura
-const verCandidatura = async (req, res) => {
-    try {
-        const {
-            id
-        } = req.params;
-
-        const candidatura = await Candidatura.findById(id)
-            .populate({
-                path: 'vaga',
-                populate: {
-                    path: 'empresa'
-                }
-            })
-            .populate('candidato');
-
-        // Verifica se a candidatura foi encontrada
-        if (!candidatura) {
-            return res.status(404).send({
-                message: 'Candidatura não encontrada!'
-            });
-        }
-
-        // Verifica se os dados necessários estão disponíveis
-        if (!candidatura.vaga || !candidatura.candidato) {
-            return res.status(400).send({
-                message: 'Dados incompletos na candidatura!'
-            });
-        }
-
-        // Converte a imagem da vaga em Base64 (se existir)
-        let imagemBase64 = null;
-        if (candidatura.vaga.imagem && candidatura.vaga.imagem.data) {
-            imagemBase64 = `data:${candidatura.vaga.imagem.contentType};base64,${candidatura.vaga.imagem.data.toString('base64')}`;
-        }
-
-        res.render('can/candidatura', {
-            title: 'Candidatura',
-            vagaNome: candidatura.vaga.nome || 'Não informado',
-            vagaArea: candidatura.vaga.area || 'Não informado',
-            vagaRequisitos: candidatura.vaga.requisitos || 'Não informado',
-            empresa: candidatura.vaga.empresa?.nome || 'Não informado',
-            candidatoNome: candidatura.candidato.nome || 'Não informado',
-            status: candidatura.status || 'Não informado',
-            imagem: imagemBase64,
-        });
-
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao renderizar a página da candidatura!',
             error: erro.message
         });
     }
@@ -386,7 +290,7 @@ const cancelarCandidatura = async (req, res) => {
             });
         }
 
-        res.redirect(`/candidato/${candidatoId}/candidaturas?success=true`);
+        res.redirect(`/candidato/dashboard?success=true`);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({
@@ -453,10 +357,8 @@ module.exports = {
     getCadastroCandidato,
     getPerfilCandidato,
     cadastrarCandidato,
-    verVaga,
     buscarVagas,
     candidatarAVaga,
-    verCandidatura,
     cancelarCandidatura,
     updatePerfil,
     isAuthenticated

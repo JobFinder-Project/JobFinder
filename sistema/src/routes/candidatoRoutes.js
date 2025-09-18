@@ -15,11 +15,8 @@ router.use(isAuthenticated, isCandidato);
 router.get('/dashboard', dashboardCandidato);
 router.get("/perfil/:candidatoId", getPerfilCandidato);
 router.get('/vagas/buscar', buscarVagas);
-router.get("/vagas/:id", verVaga);
 router.post("/:candidatoId/vagas/:id", candidatarAVaga);
-router.get("/candidaturas", isAuthenticated, isCandidato, verCandidatura);
 router.post('/:candidatoId/vagas/delete/:candidaturaId', cancelarCandidatura)
-router.get('/:candidatoId/candidaturas', visualizarCandidaturas)
 router.get('/perfil/:candidatoId/editar', visualizarTelaEdicaoCand);
 router.post('/perfil/:candidatoId/editar', upload.single('imagem'),updatePerfil);
 

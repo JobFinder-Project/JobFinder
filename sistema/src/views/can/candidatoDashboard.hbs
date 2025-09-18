@@ -1,4 +1,3 @@
-
 <script src="./../../assets/js/modal.js" defer></script>
 
 <body>
@@ -13,7 +12,7 @@
             </div>
             <ul class="navbar-menu">
                 <li>
-                    <a href="javascript:void(0)" onclick="abrirModalCandidatura()" oncclick="fecharModalCandidatura()">
+                    <a href="javascript:void(0)" onclick="abrirModalCandidatura()">
                         Minhas Candidaturas
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-card-checklist" viewBox="0 0 16 16">
@@ -48,7 +47,8 @@
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>
                         <p>{{area}}</p>
-                        <button class="register-button" onclick="abrirModalDetalhes()">Ver
+                        <button class="register-button"
+                            onclick="abrirModalDetalhes('{{_id}}', '{{nome}}', '{{area}}', '{{requisitos}}', '{{empresa.nome}}', '{{imagem}}')">Ver
                             Vaga</button>
                     </li>
                     {{/each}}
@@ -93,21 +93,7 @@
     <div id="detalhesModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="fecharModalDetalhes()">&times;</span>
-
-            <form action="/candidato/{{candidatoId}}/vagas/{{_id}}" method="POST">
-                <!-- Detalhes da Vaga -->
-                <div class="vaga-detalhes">
-                    {{#if imagem}}
-                    <img src="{{imagem}}" alt="{{nome}}" class="vaga-imagem" />
-                    {{/if}}
-                    <h2>Área: {{area}}</h2>
-                    <p><strong>Requisitos:</strong> {{requisitos}}</p>
-                    <p><strong>Empresa:</strong> {{empresa}}</p>
-                </div>
-
-                <!-- Botão de Cadastro -->
-                <button type="submit" class="register-button">Candidatar-se</button>
-            </form>
+            <div id="detalhesConteudo"></div>
         </div>
     </div>
 
