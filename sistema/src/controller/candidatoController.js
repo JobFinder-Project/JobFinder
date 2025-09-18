@@ -23,25 +23,19 @@ function toggleMenu() {
 const dashboardCandidato = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
-
-        // Busca todas as vagas
         const vagas = await Vaga.find().populate('empresa');
 
-        // Busca todas as candidaturas do candidato logado
-        const candidaturas = await Candidatura.find({ candidato: candidatoId })
-            .populate({
-                path: 'vaga',
-                populate: { path: 'empresa' }
-            })
-            .populate('candidato');
-
-        // Converte imagens
+        // Converte as imagens para base64
         const vagasComImagens = vagas.map(vaga => {
             let imagemBase64 = null;
             if (vaga.imagem && vaga.imagem.data) {
                 imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
             }
-            return { ...vaga._doc, imagem: imagemBase64 };
+
+            return {
+                ...vaga._doc,
+                imagem: imagemBase64,
+            };
         });
 
         res.render('can/candidatoDashboard', {
@@ -51,7 +45,6 @@ const dashboardCandidato = async (req, res) => {
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,
-            candidaturas, 
         });
     } catch (erro) {
         console.error(erro);

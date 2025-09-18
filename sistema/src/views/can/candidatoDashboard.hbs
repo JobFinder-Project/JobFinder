@@ -34,7 +34,17 @@
         </nav>
 
         <main class="main-content">
-
+            <div class="categories">
+                <button class="category-button">Full Stack</button>
+                <button class="category-button">UX/UI Designer</button>
+                <button class="category-button">Analista de Dados</button>
+                <button class="category-button">Técnico em TI</button>
+                <button class="category-button">Estoquista</button>
+                <button class="category-button">Programador Front End</button>
+                <button class="category-button">Programador Back End</button>
+                <button class="category-button">Operador de caixa</button>
+                <button class="category-button">Enfermagem</button>
+            </div>
 
             <div class="jobs-feed">
                 <ul class="card-grid">
@@ -45,8 +55,7 @@
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>
                         <p>{{area}}</p>
-                        <button class="register-button" onclick="abrirModalDetalhes()">Ver
-                            Vaga</button>
+                        <button class="register-button" onclick="window.location.href = '/candidato/vagas/{{_id}}';">Ver Vaga</button>
                     </li>
                     {{/each}}
                     {{else}}
@@ -128,4 +137,3 @@
 
     <script src="/assets/js/candidato-Dashboard.js"></script>
 </body>
-
