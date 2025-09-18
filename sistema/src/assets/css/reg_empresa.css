@@ -65,7 +65,7 @@ body {
 }
 
 .form-description {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: #666;
     line-height: 1.6;
 }
@@ -160,4 +160,21 @@ textarea.form-input {
 
 .container {
     animation: fadeIn 0.3s ease-out;
+}
+
+/* Modais */
+.modal {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal.active {
+  display: block;
+}
+
+.required-notice {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
 }

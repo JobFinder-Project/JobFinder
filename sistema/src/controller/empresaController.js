@@ -95,6 +95,31 @@ const createEmpresa = async (req, res) => {
             message: 'Cadastro realizado com sucesso!',
             id: empresa._id
         });
+        
+        // Verifica se há alguma empresa existente
+        if (empresa) {
+            return res.status(409).json({
+                message: "Empresa já cadastrada!"
+            })
+        }
+ 
+        const salt = await bcrypt.genSalt(12)
+        const senhaHash = await bcrypt.hash(req.body.senha, salt)
+
+        const newEmpresa = new Empresa({
+            nome: req.body.nome,
+            email: req.body.email,
+            cnpj: req.body.cnpj,
+            senha: senhaHash,
+            fone: req.body.fone,
+            bio: req.body.bio || "",
+            site: req.body.site || ""
+        });
+
+        await newEmpresa.save();
+        res.redirect('/home');
+
+>>>>>>> develop
     } catch (erro) {
         console.error(erro);
         const status = erro.status || 500;
