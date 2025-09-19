@@ -9,31 +9,41 @@ const Swal = require('sweetalert2');
 const dashboardEmpresa = async (req, res) => {
     try {
         const empresaId = req.session.user.id;
+        const empresa = await Empresa.findById(empresaId).populate('vagas');
 
         const candidatos = await candidato.find();
-        console.log('Produtos encontrados:', candidatos);
-
-        // Converte a imagem em Base64
+        // Converte a imagem em Base64 para candidatos
         const candidatosComImagens = candidatos.map(candidato => {
             let imagemBase64 = null;
             if (candidato.imagem && candidato.imagem.data) {
                 imagemBase64 = `data:${candidato.imagem.contentType};base64,${candidato.imagem.data.toString('base64')}`;
             }
-
             return {
                 ...candidato._doc,
                 imagem: imagemBase64
             };
         });
 
+        // Converte a imagem em Base64 para vagas
+        const vagasComImagens = empresa && empresa.vagas ? empresa.vagas.map(vaga => {
+            let imagemBase64 = null;
+            if (vaga.imagem && vaga.imagem.data) {
+                imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
+            }
+            return {
+                ...vaga._doc,
+                imagem: imagemBase64,
+            };
+        }) : [];
 
         res.render('fun/empresaDashboard', {
             title: 'Dashboard',
-            user: req.session.user,
+            user: { ...empresa._doc, _id: empresaId },
             message: 'Bem-vindo ao seu painel, Empresa!',
             style: 'empresaDashboar.css',
             empresaId,
-            candidatos: candidatosComImagens
+            candidatos: candidatosComImagens,
+            vagas: vagasComImagens
         });
     } catch (erro) {
         console.error(erro);
@@ -230,11 +240,11 @@ const criarVaga = async (req, res) => {
             empresa: empresa._id
         });
 
-        empresa.vagas.push(novaVaga._id);
-        await novaVaga.save();
-        await empresa.save();
+    await novaVaga.save();
+    empresa.vagas.push(novaVaga._id);
+    await empresa.save();
 
-        res.redirect(`/empresa/${empresaId}/vagas/criar?success=true`);
+        res.redirect('/empresa/dashboard?showVagas=true');
     } catch (erro) {
         console.error(erro);
         res.status(500).send({

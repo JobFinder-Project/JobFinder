@@ -1,31 +1,30 @@
+<!-- filepath: /home/nicolas/Documentos/Disciplinas/Gerência de Configuração/JobFinder/sistema/src/views/fun/empresaDashboard.hbs -->
 <body>
     <nav class="navbar">
         <h1>JobFinder</h1>
-    <div class="search-container">
+        <div class="search-container">
             <form action="/empresa/candidatos/buscar" method="GET">
                 <span class="search-icon"></span>
                 <input type="text" name="q" class="search-input" placeholder="Buscar Candidatos 🔍">
                 <button type="submit" class="search-button">Buscar</button>
             </form>
-    </div>
+        </div>
         <ul class="navbar-menu">
-            <li><a href="/logout">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                <path fill-rule="evenodd"
-                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-            </svg>
-            </a></li>
+            <li>
+                <a href="/logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                        <path fill-rule="evenodd"
+                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                    </svg>
+                </a>
+            </li>
         </ul>
     </nav>
 
-    <!-- Barra de busca -->
-
-
     <main class="main-content">
-    <!-- Abas de categorias -->
         <div class="category-tabs">
             <button class="tab active">Todos</button>
             <button class="tab">Área de TI</button>
@@ -33,8 +32,6 @@
             <button class="tab">Caixa</button>
             <button class="tab">Vendas</button>
         </div>
-
-        <!-- Grid de candidatos -->
         <div class="candidates-grid">
             {{#each candidatos}}
             <div class="candidate-card">
@@ -48,13 +45,530 @@
             {{/each}}
         </div>
     </main>
-    <!-- Navegação inferior -->
-    <nav class="bottom-nav">
-        <a href="/empresa/dashboard" class="nav-item active">Início</a>
-        <a href="/empresa/{{empresaId}}/vagas" class="nav-item">Vagas</a>
-        <a href="/empresa/{{empresaId}}/vagas/criar" class="nav-item">Add Vagas</a>
-        <a href="/empresa/{{empresaId}}/perfil" class="nav-item">Perfil</a>
-    </nav>
-</body>
 
+    <nav class="bottom-nav custom-nav">
+        <a href="/empresa/dashboard" class="nav-btn active">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#1976d2"><path d="M3 12l9-9 9 9h-3v9h-12v-9h-3z"/></svg>
+            </div>
+            <span>Início</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-btn" id="openVagasModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#1976d2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z"/></svg>
+            </div>
+            <span>Vagas</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-btn" id="openCriarVagaModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#1976d2"><path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/></svg>
+            </div>
+            <span>Add Vagas</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-btn" id="openPerfilModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#1976d2"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+            </div>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <div id="vagasModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeVagasModal">&times;</span>
+            <div class="page-title">
+                <h1>Vagas Disponíveis</h1>
+            </div>
+            <div class="vagas-list-scroll">
+                {{#if vagas.length}}
+                {{#each vagas}}
+                <div class="vaga-card-row">
+                    {{#if this.imagem}}
+                    <img src="{{this.imagem}}" alt="{{this.nome}}" class="job-image" />
+                    {{/if}}
+                    <div class="vaga-card-info">
+                        <h2 class="job-title">{{this.nome}}</h2>
+                        {{#if this.empresa}}
+                        <span class="job-company">{{this.empresa.nome}}</span>
+                        {{/if}}
+                        <div class="vaga-info">
+                            <span class="job-area">{{this.area}}</span>
+                            <a href="/empresa/{{this.empresa._id}}/can/{{_id}}" class="view-job-button">Ver detalhes</a>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="no-data">
+                    <p>Não existem vagas cadastradas.</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div id="criarVagaModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeCriarVagaModal">&times;</span>
+            <div class="page-title">
+                <h1>Criar Nova Vaga</h1>
+            </div>
+            <form class="form-add-vaga" action="/empresa/{{empresaId}}/vagas/criar" method="POST" enctype="multipart/form-data">
+                <div class="form-row">
+                    <label for="nome">Nome da Vaga:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-row">
+                    <label for="area">Área *</label>
+                    <select id="area" name="area" required>
+                        <option value="">Selecione</option>
+                        <option value="Comercial/Vendas">Comercial/Vendas</option>
+                        <option value="Administrativa">Administrativa</option>
+                        <option value="Gastronomia">Gastronomia</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Construção Civil">Construção Civil</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Serviços Gerais">Serviços Gerais</option>
+                        <option value="Finanças">Finanças</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="TI - Tecnologia da Informação">TI - Tecnologia da Informação</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="requisitos">Requisitos *:</label>
+                    <textarea id="requisitos" name="requisitos" rows="4" required></textarea>
+                </div>
+                <div class="form-row">
+                    <label for="imagem">Imagem da Vaga:</label>
+                    <input type="file" id="imagem" name="imagem" accept="image/*">
+                </div>
+                <button type="submit" class="btn-add-vaga">Salvar Vaga</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Perfil - apenas edição, sem link para /perfil -->
+    <div id="perfilModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closePerfilModal">&times;</span>
+            <div class="page-container">
+                <nav class="navbar">
+                    <h1>JobFinder</h1>
+                    <ul class="navbar-menu">
+                        <li>
+                            <a href="/logout">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                                    <path fill-rule="evenodd"
+                                        d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <main class="main-content">
+                    <h2>Editar Perfil</h2>
+                    <form class="form" id="formEditarPerfil" action="/empresa/{{user._id}}/editar" method="POST">
+                        <div class="form-group">
+                            <label for="nome">Nome:</label>
+                            <input type="text" id="nome" name="nome" value="{{user.nome}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CNPJ:</label>
+                            <input type="text" id="cnpj" name="cnpj" value="{{user.cnpj}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" value="{{user.email}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fone">Telefone:</label>
+                            <input type="text" id="fone" name="fone" value="{{user.fone}}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bio">Biografia</label>
+                            <textarea id="bio" name="bio">{{user.bio}}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="site">Site</label>
+                            <input type="url" name="site" id="site" value="{{user.site}}">
+                        </div>
+                        <button type="submit" class="submit-button">Salvar alterações</button>
+                    </form>
+                    <button class="back-button" id="closePerfilModalBtn">Voltar</button>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('openVagasModal').onclick = function() {
+        document.getElementById('vagasModal').style.display = 'flex';
+    }
+    document.getElementById('closeVagasModal').onclick = function() {
+        document.getElementById('vagasModal').style.display = 'none';
+    }
+    document.getElementById('openCriarVagaModal').onclick = function() {
+        document.getElementById('criarVagaModal').style.display = 'flex';
+    }
+    document.getElementById('closeCriarVagaModal').onclick = function() {
+        document.getElementById('criarVagaModal').style.display = 'none';
+    }
+    document.getElementById('openPerfilModal').onclick = function() {
+        document.getElementById('perfilModal').style.display = 'flex';
+    }
+    document.getElementById('closePerfilModal').onclick = function() {
+        document.getElementById('perfilModal').style.display = 'none';
+    }
+    document.getElementById('closePerfilModalBtn').onclick = function() {
+        document.getElementById('perfilModal').style.display = 'none';
+    }
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('vagasModal')) {
+            document.getElementById('vagasModal').style.display = 'none';
+        }
+        if (event.target == document.getElementById('criarVagaModal')) {
+            document.getElementById('criarVagaModal').style.display = 'none';
+        }
+        if (event.target == document.getElementById('perfilModal')) {
+            document.getElementById('perfilModal').style.display = 'none';
+        }
+    }
+
+    // AJAX para editar perfil sem redirecionar
+    document.getElementById('formEditarPerfil').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+            method: 'POST',
+            body: data
+        });
+        if (res.ok) {
+            document.getElementById('perfilModal').style.display = 'none';
+        } else {
+            alert('Erro ao salvar alterações!');
+        }
+    };
+    </script>
+
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .main-content {
+        min-height: 100vh;
+        background: #f8fafc;
+        padding-bottom: 120px;
+    }
+    .category-tabs {
+        margin-bottom: 32px;
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+    }
+    .candidates-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+        margin-bottom: 48px;
+    }
+    .custom-nav {
+        position: fixed;
+        left: 50%;
+        bottom: 32px;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f5f7fa;
+        padding: 24px 0 16px 0;
+        border-radius: 32px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+        max-width: 700px;
+        gap: 40px;
+        z-index: 100;
+    }
+    .nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #222;
+        font-weight: 500;
+        font-size: 1.15em;
+        transition: background 0.2s, box-shadow 0.2s;
+        padding: 22px 32px;
+        border-radius: 28px;
+        background: #e3f0ff;
+        box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+        cursor: pointer;
+    }
+    .nav-btn:hover,
+    .nav-btn.active {
+        background: #1976d2;
+        color: #fff;
+        box-shadow: 0 4px 16px rgba(25,118,210,0.12);
+    }
+    .nav-icon {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal {
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+    .modal-content {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 700px;
+        min-height: 60vh;
+        margin: auto;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        font-size: 32px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .vagas-list-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin: 32px auto;
+        max-width: 700px;
+        width: 100%;
+        max-height: 420px;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+    .vaga-card-row {
+        background: #f5f5f7;
+        border-radius: 18px;
+        padding: 24px 20px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+        border: 1px solid #e0e0e0;
+        transition: box-shadow 0.2s;
+    }
+    .vaga-card-row:hover {
+        box-shadow: 0 6px 24px rgba(25,118,210,0.13);
+    }
+    .job-image {
+        width: 110px;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 1px solid #eee;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    .vaga-card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+    }
+    .job-title {
+        margin: 0;
+        font-size: 1.3em;
+        color: #222;
+        font-weight: 700;
+    }
+    .job-company {
+        color: #1976d2;
+        font-weight: 500;
+        font-size: 1.05em;
+        background: #e3f0ff;
+        padding: 4px 12px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        display: inline-block;
+    }
+    .vaga-info {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        font-size: 1.1em;
+        color: #555;
+        margin-top: 8px;
+    }
+    .job-area {
+        background: #e0e0e0;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-weight: 500;
+        margin-right: 8px;
+    }
+    .view-job-button {
+        background: #1976d2;
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 24px;
+        text-decoration: none;
+        font-weight: 500;
+        margin-left: 8px;
+        transition: background 0.2s;
+        border: none;
+        box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+        white-space: nowrap;
+    }
+    .view-job-button:hover {
+        background: #145ea8;
+    }
+    .form-add-vaga {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        width: 100%;
+        max-width: 440px;
+        margin: 0 auto;
+        background: #f5f5f7;
+        border-radius: 16px;
+        padding: 32px 28px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .form-row {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+    .form-add-vaga label {
+        font-weight: 600;
+        color: #1976d2;
+        margin-bottom: 2px;
+    }
+    .form-add-vaga input[type="text"],
+    .form-add-vaga input[type="file"],
+    .form-add-vaga select,
+    .form-add-vaga textarea {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        font-size: 1em;
+        background: #fff;
+        transition: border-color 0.2s;
+    }
+    .form-add-vaga input[type="text"]:focus,
+    .form-add-vaga select:focus,
+    .form-add-vaga textarea:focus {
+        border-color: #1976d2;
+        outline: none;
+    }
+    .form-add-vaga textarea {
+        resize: vertical;
+        min-height: 60px;
+    }
+    .btn-add-vaga {
+        background: #1976d2;
+        color: #fff;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-size: 1.1em;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        margin-top: 12px;
+        box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+        transition: background 0.2s;
+    }
+    .btn-add-vaga:hover {
+        background: #145ea8;
+    }
+    .page-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background: #f5f5f7;
+        border-radius: 16px;
+        padding: 32px 28px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
+    .form-group label {
+        font-weight: 600;
+        color: #1976d2;
+        margin-bottom: 4px;
+    }
+    .form-group input,
+    .form-group textarea {
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        font-size: 1em;
+        background: #fff;
+        transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #1976d2;
+        outline: none;
+    }
+    .submit-button {
+        background: #1976d2;
+        color: #fff;
+        border-radius: 8px;
+        padding: 12px 0;
+        font-size: 1.1em;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        margin-top: 12px;
+        box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+        transition: background 0.2s;
+    }
+    .submit-button:hover {
+        background: #145ea8;
+    }
+    .back-button {
+        margin-top: 18px;
+        background: #e3f0ff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 24px;
+        font-weight: 500;
+        color: #1976d2;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+        transition: background 0.2s;
+    }
+    .back-button:hover {
+        background: #1976d2;
+        color: #fff;
+    }
+    </style>
+</body>
 </html>
