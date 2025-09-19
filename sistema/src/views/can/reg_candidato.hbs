@@ -1,10 +1,6 @@
 <header class="header">
   <div class="navigation">
-    <button
-      class="back-button"
-      id="backButton"
-      onclick="window.location.href = '/cargo';"
-    >
+    <button class="back-button" id="backButton" onclick="window.location.href = '/cargo';">
       <svg
         width="24"
         height="24"
@@ -18,30 +14,22 @@
     </button>
   </div>
   <div class="logo">Cadastro de Candidato</div>
-
-  <div class="help-container">
-    <button class="help-button">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="currentColor"
-        class="bi bi-question-circle"
-        viewBox="0 0 16 16"
-      >
-        <path
-          d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-        />
-        <path
-          d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"
-        />
-      </svg>
-    </button>
-  </div>
+  <button class="help-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+    </svg>
+  </button>
 </header>
 
-<div class="container">
-  <!-- Indicador de Progresso -->
+<main class="container">
+  <p class="form-description">
+    Preencha suas informações profissionais para criar seu perfil de candidato.
+    Você poderá complementar as informações posteriormente.
+  </p>
+
+  <p class="required-notice">Campos com * são obrigatórios.</p>
+
   <div class="progress-container">
     <div class="progress-bar">
       <div class="progress-step active" data-step="1">
@@ -58,155 +46,193 @@
       </div>
       <div class="progress-step" data-step="4">
         <div class="step-circle">4</div>
+        <div class="step-label">Idiomas</div>
+      </div>
+      <div class="progress-step" data-step="5">
+        <div class="step-circle">5</div>
         <div class="step-label">Finalizar</div>
       </div>
     </div>
   </div>
 
   <form id="candidateForm" action="/candidato/cadastrar" method="POST">
-    <!-- Etapa 1: Dados Básicos -->
-    <div class="form-step active" data-step="1">
-      <h2 class="step-title">Dados Básicos</h2>
-
+    <div class="modal active" id="step1">
       <div class="form-group">
-        <label for="nome">Nome*</label>
-        <input type="text" id="nome" name="nome" required />
-        <div class="error-message" id="nome-error">Nome é obrigatório</div>
+        <label class="form-label">Nome*</label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          class="form-input"
+          placeholder="Digite seu nome completo"
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Foto de Perfil</label>
+        <input 
+          type="file" 
+          id="imagem" 
+          name="imagem" 
+          class="form-input" 
+          accept="image/*" 
+        />
+        <span class="form-helper">Formatos aceitos: JPG, PNG, GIF</span>
       </div>
 
       <div class="form-group">
-        <label for="imagem">Foto de Perfil:</label>
-        <input type="file" id="imagem" name="imagem" accept="image/*" />
+        <label class="form-label">CPF*</label>
+        <input
+          type="text"
+          id="cpf"
+          name="cpf"
+          class="form-input"
+          placeholder="000.000.000-00"
+          maxlength="14"
+          required
+        />
+        <span class="form-helper">Digite apenas números</span>
       </div>
 
-      <div class="form-group">
-        <label for="cpf">CPF*</label>
-        <input type="text" id="cpf" name="cpf" maxlength="14" required />
-        <div class="error-message" id="cpf-error">CPF é obrigatório e deve ser
-          válido</div>
+      <div class="button-group">
+        <button type="button" class="button button-primary" onclick="nextStep(2)">Próximo</button>
       </div>
     </div>
 
-    <!-- Etapa 2: Formação -->
-    <div class="form-step" data-step="2">
-      <h2 class="step-title">Formação Acadêmica</h2>
-
+    <div class="modal" id="step2">
       <div class="form-group">
-        <label for="educacao">Educação*</label>
-        <select id="educacao" name="educacao" required>
-          <option value="">Selecione</option>
+        <label class="form-label">Educação*</label>
+        <select id="educacao" name="educacao" class="form-input" required>
+          <option value="">Selecione seu nível de educação</option>
           <option value="medio">Ensino Médio</option>
           <option value="superior">Ensino Superior</option>
           <option value="pos">Pós-Graduação</option>
           <option value="mestrado">Mestrado</option>
           <option value="doutorado">Doutorado</option>
         </select>
-        <div class="error-message" id="educacao-error">Educação é obrigatória</div>
       </div>
 
       <div class="form-group">
-        <label for="qualificacoes">Qualificações*</label>
+        <label class="form-label">Qualificações*</label>
         <input
           type="text"
           id="qualificacoes"
           name="qualificacoes"
-          placeholder="Ex: Certificação PMP"
+          class="form-input"
+          placeholder="Ex: Certificação PMP, CRM, etc."
           required
         />
-        <div class="error-message" id="qualificacoes-error">Qualificações são
-          obrigatórias</div>
       </div>
 
+      <div class="button-group">
+        <button type="button" class="button button-secondary" onclick="prevStep(1)">Voltar</button>
+        <button type="button" class="button button-primary" onclick="nextStep(3)">Próximo</button>
+      </div>
+    </div>
+
+    <div class="modal" id="step3">
       <div class="form-group">
-        <label for="cursos">Cursos</label>
+        <label class="form-label">Cursos</label>
         <input
           type="text"
           id="cursos"
           name="cursos"
-          placeholder="Ex: Curso de Inglês"
+          class="form-input"
+          placeholder="Ex: Curso de Inglês, Excel Avançado"
         />
       </div>
-    </div>
-
-    <!-- Etapa 3: Experiência -->
-    <div class="form-step" data-step="3">
-      <h2 class="step-title">Experiência Profissional</h2>
 
       <div class="form-group">
-        <label for="descricao">Descrição</label>
+        <label class="form-label">Descrição da Experiência</label>
         <textarea
           id="descricao"
           name="descricao"
-          placeholder="Experiência em gestão de projetos, com foco em metodologias ágeis e liderança de equipes multidisciplinares."
+          class="form-input"
+          placeholder="Experiência em gestão de projetos, com foco em metodologias ágeis..."
         ></textarea>
       </div>
 
       <div class="form-group">
-        <label for="telefone">Telefone*</label>
+        <label class="form-label">Telefone*</label>
         <input
           type="tel"
           id="telefone"
           name="telefone"
+          class="form-input"
+          placeholder="(00) 00000-0000"
           maxlength="15"
           required
         />
-        <div class="error-message" id="telefone-error">Telefone é obrigatório</div>
       </div>
 
+      <div class="button-group">
+        <button type="button" class="button button-secondary" onclick="prevStep(2)">Voltar</button>
+        <button type="button" class="button button-primary" onclick="nextStep(4)">Próximo</button>
+      </div>
+    </div>
+
+    <div class="modal" id="step4">
       <div class="form-group">
-        <label for="habilidades">Habilidades Técnicas</label>
+        <label class="form-label">Habilidades Técnicas</label>
         <input
           type="text"
           id="habilidades"
           name="habilidades"
-          placeholder="Ex: Python, JavaScript, Excel"
+          class="form-input"
+          placeholder="Ex: Python, JavaScript, Excel, Photoshop"
         />
       </div>
-    </div>
-
-    <!-- Etapa 4: Finalização -->
-    <div class="form-step" data-step="4">
-      <h2 class="step-title">Finalizar Cadastro</h2>
 
       <div class="form-group">
-        <label for="idiomas">Idiomas</label>
+        <label class="form-label">Idiomas</label>
         <input
           type="text"
           id="idiomas"
           name="idiomas"
+          class="form-input"
           placeholder="Ex: Inglês - Avançado, Espanhol - Intermediário"
         />
       </div>
 
-      <div class="form-group">
-        <label for="email">Email*</label>
-        <input type="email" id="email" name="email" required />
-        <div class="error-message" id="email-error">Email é obrigatório e deve
-          ser válido</div>
-      </div>
-
-      <div class="form-group">
-        <label for="senha">Senha*</label>
-        <input type="password" id="senha" name="senha" required />
-        <div class="error-message" id="senha-error">Senha é obrigatória</div>
+      <div class="button-group">
+        <button type="button" class="button button-secondary" onclick="prevStep(3)">Voltar</button>
+        <button type="button" class="button button-primary" onclick="nextStep(5)">Próximo</button>
       </div>
     </div>
 
-    <!-- Botões de Navegação -->
-    <div class="button-group">
-      <button
-        type="button"
-        class="btn-secondary"
-        id="prevBtn"
-        style="display: none;"
-      >Anterior</button>
-      <button type="button" class="btn-primary" id="nextBtn">Próximo</button>
-      <button
-        type="submit"
-        class="btn-primary"
-        id="submitBtn"
-        style="display: none;"
-      >Finalizar Cadastro</button>
+    <div class="modal" id="step5">
+      <div class="form-group">
+        <label class="form-label">Email*</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-input"
+          placeholder="seu.email@exemplo.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Senha*</label>
+        <input 
+          type="password" 
+          id="senha" 
+          name="senha" 
+          class="form-input" 
+          placeholder="Mínimo 8 caracteres"
+          required 
+          minlength="8" 
+        />
+        <span class="form-helper">Mínimo 8 caracteres</span>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="button button-secondary" onclick="prevStep(4)">Voltar</button>
+        <button type="submit" class="button button-primary">Finalizar Cadastro</button>
+      </div>
     </div>
   </form>
-</div>
+</main>
+<script src="/assets/js/multi-step-form.js"></script>
