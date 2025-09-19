@@ -71,34 +71,34 @@ const getCadastroEmpresa = async (req, res) => {
 };
 
 // Renderiza a página do perfil
-const getEmpresa = async (req, res) => {
-    try {
-        const {
-            empresaId
-        } = req.params;
-        const empresa = await Empresa.findById(empresaId);
+// const getEmpresa = async (req, res) => {
+//     try {
+//         const {
+//             empresaId
+//         } = req.params;
+//         const empresa = await Empresa.findById(empresaId);
 
-        // Verifica se a empresa existe
-        if (!empresa) {
-            res.status(404).json({
-                message: "Empresa não encontrada!"
-            })
-        }
+//         // Verifica se a empresa existe
+//         if (!empresa) {
+//             res.status(404).json({
+//                 message: "Empresa não encontrada!"
+//             })
+//         }
 
-        res.render('can/getPerfil', {
-            title: empresa.nome,
-            style: 'getPerfilCand.css',
-            user: empresa,
-            id: empresa._id
-        })
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao renderizar a página de perfil da empresa!',
-            error: erro.message
-        });
-    }
-}
+//         res.render('can/getPerfil', {
+//             title: empresa.nome,
+//             style: 'getPerfilCand.css',
+//             user: empresa,
+//             id: empresa._id
+//         })
+//     } catch (erro) {
+//         console.error(erro);
+//         res.status(500).send({
+//             message: 'Erro ao renderizar a página de perfil da empresa!',
+//             error: erro.message
+//         });
+//     }
+// }
 
 // Salva uma nova Empresa no banco de dados
 const createEmpresa = async (req, res) => {
@@ -349,7 +349,6 @@ const updateStatus = async (req, res) => {
 
 module.exports = {
     getCadastroEmpresa,
-    getEmpresa,
     createEmpresa,
     updateEmpresa,
     deleteEmpresa,
