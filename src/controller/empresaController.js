@@ -40,7 +40,7 @@ const dashboardEmpresa = async (req, res) => {
             title: 'Dashboard',
             user: { ...empresa._doc, _id: empresaId },
             message: 'Bem-vindo ao seu painel, Empresa!',
-            style: 'empresaDashboar.css',
+            style: 'empresaDashboard.css',
             empresaId,
             candidatos: candidatosComImagens,
             vagas: vagasComImagens
@@ -157,6 +157,7 @@ const updateEmpresa = async (req, res) => {
 
         // Verifica se a empresa existe
         if (!empresa) {
+            c
             res.status(404).json({
                 message: "Empresa não encontrada!"
             })
@@ -171,7 +172,7 @@ const updateEmpresa = async (req, res) => {
 
         await empresa.save();
 
-        res.redirect(`/empresa/${empresa._id}/perfil`)
+        res.redirect(`/empresa/dashboard`)
 
     } catch (erro) {
         console.error(erro);
