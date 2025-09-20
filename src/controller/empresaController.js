@@ -40,7 +40,7 @@ const dashboardEmpresa = async (req, res) => {
             title: 'Dashboard',
             user: { ...empresa._doc, _id: empresaId },
             message: 'Bem-vindo ao seu painel, Empresa!',
-            style: 'empresaDashboard.css',
+            style: 'empresaDashboar.css',
             empresaId,
             candidatos: candidatosComImagens,
             vagas: vagasComImagens
