@@ -57,6 +57,14 @@
   </p>
 </div>
 <script>
+  // Verifica se a URL contém o parâmetro "cadastro=sucesso"
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('cadastro') === 'sucesso') {
+    alert('Cadastro realizado com sucesso! Faça login para acessar sua conta.');
+    // Remove o parâmetro da URL
+    window.history.replaceState({}, document.title, '/login');
+  }
+
   document.getElementById('loginForm').addEventListener('submit', function (event) {
     event.preventDefault(); 
 
