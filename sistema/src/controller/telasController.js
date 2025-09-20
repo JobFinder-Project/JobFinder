@@ -108,67 +108,6 @@ const getRedefinirSenha = async (req, res) => {
     }
 };
 
-// Renderiza a página de Criação de Vagas
-const getCriarVagas = (req, res) => {
-    try {
-        const {
-            empresaId
-        } = req.params;
-        res.render('fun/criarVagas', {
-            title: 'Criar Vagas',
-            style: 'criarVagas.css',
-            empresaId,
-        })
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Criar Vagas!',
-            error: erro.messgae
-        });
-    }
-};
-
-// Renderiza a página de Vagas
-const getVagas = async (req, res) => {
-    try {
-        const empresaId = req.params.empresaId;
-        const empresa = await Empresa.findById(empresaId).populate('vagas');
-
-        // Verifica se a empresa existe
-        if (!empresa) {
-            return res.status(404).json({
-                message: 'Empresa não encontrada!'
-            });
-        }
-
-        // Converte as imagens para Base64
-        const vagasComImagens = empresa.vagas.map(vaga => {
-            let imagemBase64 = null;
-            if (vaga.imagem && vaga.imagem.data) {
-                imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
-            }
-
-            return {
-                ...vaga._doc,
-                imagem: imagemBase64,
-            };
-        });
-
-        res.render('fun/vagas', {
-            title: "Vagas",
-            style: "vagas.css",
-            vagas: vagasComImagens,
-            empresaId
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Vagas!',
-            error: erro.messgae
-        });
-    }
-};
-
 // Renderiza a página de Candidaturas
 const getCandidaturas = async (req, res) => {
     try {
@@ -370,9 +309,7 @@ module.exports = {
     getLogin,
     getRecuperarSenha,
     getRedefinirSenha,
-    getCriarVagas,
     getVagaDetalhes,
-    getVagas,
     getCandidaturas,
     visualizarCandidaturas,
     visualizarCandidatos,
