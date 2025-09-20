@@ -1,7 +1,7 @@
 <!-- filepath: /home/nicolas/Documentos/Disciplinas/Gerência de Configuração/JobFinder/sistema/src/views/fun/empresaDashboard.hbs -->
 <head>
     <link rel="stylesheet" href="/assets/css/empresaDashboard.css">
-</head>
+</head> 
 
 <body>
     <nav class="navbar">
@@ -53,19 +53,19 @@
     <nav class="bottom-nav custom-nav">
         <a href="javascript:void(0)" class="nav-btn" id="openVagasModal">
             <div class="nav-icon">
-                <svg width="36" height="36" fill="#1976d2"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z"/></svg>
+                <svg width="36" height="36" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z"/></svg>
             </div>
             <span>Vagas</span>
         </a>
         <a href="javascript:void(0)" class="nav-btn" id="openCriarVagaModal">
             <div class="nav-icon">
-                <svg width="36" height="36" fill="#1976d2"><path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/></svg>
+                <svg width="36" height="36" fill="#fff"><path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/></svg>
             </div>
             <span>Add Vagas</span>
         </a>
         <a href="javascript:void(0)" class="nav-btn" id="openPerfilModal">
             <div class="nav-icon">
-                <svg width="36" height="36" fill="#1976d2"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+                <svg width="36" height="36" fill="#fff"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
             </div>
             <span>Perfil</span>
         </a>
@@ -91,7 +91,13 @@
                         {{/if}}
                         <div class="vaga-info">
                             <span class="job-area">{{this.area}}</span>
-                            <a href="/empresa/{{this.empresa._id}}/can/{{_id}}" class="view-job-button">Ver detalhes</a>
+                            <button class="view-job-button"
+                                data-nome="{{this.nome}}"
+                                data-area="{{this.area}}"
+                                data-requisitos="{{this.requisitos}}"
+                                data-empresa="{{this.empresa.nome}}"
+                                data-imagem="{{this.imagem}}"
+                            >Ver detalhes</button>
                         </div>
                     </div>
                 </div>
@@ -145,6 +151,19 @@
         </div>
     </div>
 
+    <!-- Modal Detalhes da Vaga -->
+    <div id="detalhesVagaModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeDetalhesVagaModal">&times;</span>
+            <div class="page-title">
+                <h1 id="detalhesVagaTitulo">Detalhes da Vaga</h1>
+            </div>
+            <div id="detalhesVagaBody">
+                <!-- Conteúdo dinâmico da vaga será inserido aqui via JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Perfil - sem barra superior, apenas editor -->
     <div id="perfilModal" class="modal" style="display:none;">
         <div class="modal-content">
@@ -186,6 +205,7 @@
     </div>
 
     <script>
+    // Abrir modais principais
     document.getElementById('openVagasModal').onclick = function() {
         document.getElementById('vagasModal').style.display = 'flex';
     }
@@ -207,31 +227,74 @@
     document.getElementById('closePerfilModalBtn').onclick = function() {
         document.getElementById('perfilModal').style.display = 'none';
     }
+
+    // Modal Detalhes da Vaga
+    function abrirDetalhesVaga(vaga) {
+        document.getElementById('detalhesVagaTitulo').innerText = vaga.nome || 'Detalhes da Vaga';
+        document.getElementById('detalhesVagaBody').innerHTML = `
+            ${vaga.imagem ? `<img src="${vaga.imagem}" alt="${vaga.nome}" style="max-width:200px;margin-bottom:16px;">` : ''}
+            <p><strong>Área:</strong> ${vaga.area || ''}</p>
+            <p><strong>Requisitos:</strong> ${vaga.requisitos || ''}</p>
+            <p><strong>Empresa:</strong> ${vaga.empresa || ''}</p>
+        `;
+        document.getElementById('detalhesVagaModal').style.display = 'flex';
+    }
+
+    // Adiciona evento nos botões "Ver detalhes" das vagas
+    document.querySelectorAll('.view-job-button').forEach(function(btn) {
+        btn.onclick = function(e) {
+            e.preventDefault();
+            const vaga = {
+                nome: btn.getAttribute('data-nome'),
+                area: btn.getAttribute('data-area'),
+                requisitos: btn.getAttribute('data-requisitos'),
+                empresa: btn.getAttribute('data-empresa'),
+                imagem: btn.getAttribute('data-imagem')
+            };
+            abrirDetalhesVaga(vaga);
+        };
+    });
+
+    document.getElementById('closeDetalhesVagaModal').onclick = function() {
+        document.getElementById('detalhesVagaModal').style.display = 'none';
+    };
+
+    // Fechar modais ao clicar fora
     window.onclick = function(event) {
-        if (event.target == document.getElementById('vagasModal')) {
-            document.getElementById('vagasModal').style.display = 'none';
-        }
-        if (event.target == document.getElementById('criarVagaModal')) {
-            document.getElementById('criarVagaModal').style.display = 'none';
-        }
-        if (event.target == document.getElementById('perfilModal')) {
-            document.getElementById('perfilModal').style.display = 'none';
-        }
+        ['vagasModal', 'criarVagaModal', 'perfilModal', 'detalhesVagaModal'].forEach(function(id) {
+            var modal = document.getElementById(id);
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
     }
 
     // AJAX para editar perfil sem redirecionar
     document.getElementById('formEditarPerfil').onsubmit = async function(e) {
         e.preventDefault();
         const form = e.target;
-        const data = new FormData(form);
+        const data = {
+            nome: form.nome.value,
+            cnpj: form.cnpj.value,
+            email: form.email.value,
+            fone: form.fone.value,
+            bio: form.bio.value,
+            site: form.site.value
+        };
         const res = await fetch(form.action, {
             method: 'POST',
-            body: data
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         });
         if (res.ok) {
+            // esta caindo aqui porem nao salva no banco de dados
             document.getElementById('perfilModal').style.display = 'none';
         } else {
-            alert('Erro ao salvar alterações!');
+            const error = await res.json();
+            console.log(error.error);
+            alert('Erro ao salvar alterações!'+ (error.error || ''));
         }
     };
     </script>
