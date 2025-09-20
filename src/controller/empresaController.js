@@ -17,7 +17,7 @@ const dashboardEmpresa = async (req, res) => {
         const candidatosComImagens = candidatos.map(candidato => {
             let imagemBase64 = null;
             if (candidato.imagem && candidato.imagem.data) {
-                imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
+                imagemBase64 = `data:${candidato.imagem.contentType};base64,${candidato.imagem.data.toString('base64')}`;
             }
 
             return {
@@ -118,7 +118,7 @@ const createEmpresa = async (req, res) => {
         });
 
         await newEmpresa.save();
-        res.redirect('/home');
+        res.redirect('/login?cadastro=sucesso');
 
     } catch (erro) {
         console.error(erro);
