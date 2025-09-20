@@ -118,7 +118,7 @@ const createEmpresa = async (req, res) => {
         });
 
         await newEmpresa.save();
-        res.redirect('/home');
+        res.redirect('/login?cadastro=sucesso');
 
     } catch (erro) {
         console.error(erro);
