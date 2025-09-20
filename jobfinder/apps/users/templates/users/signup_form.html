@@ -11,59 +11,89 @@
 
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-
-    <p>
-      {{ form.first_name.label_tag }}
-      {{ form.first_name }}
-      {{ form.first_name.errors }}
-    </p>
-    <p>
-      {{ form.last_name.label_tag }}
-      {{ form.last_name }}
-      {{ form.last_name.errors }}
-    </p>
-    <p>
-      {{ form.birth_date.label_tag }}
-      {{ form.birth_date }}
-      {{ form.birth_date.errors }}
-    </p>
-    <p>
-      {{ form.phone_number.label_tag }}
-      {{ form.phone_number }}
-      {{ form.phone_number.errors }}
-    </p>
-    <p>
-      {{ form.cep.label_tag }}
-      {{ form.cep }}
-      {{ form.cep.errors }}
-    </p>
-    <p>
-      {{ form.cpf.label_tag }}
-      {{ form.cpf }}
-      {{ form.cpf.errors }}
-    </p>
-    <p>
-      {{ form.resume.label_tag }}
-      {{ form.resume }}
-      {{ form.resume.errors }}
-    </p>
-
-    <hr>
-    <p><strong>Crie suas credenciais de acesso:</strong></p>
-    
-    <p>
-      {{ form.email.label_tag }}
-      {{ form.email }}
-      {{ form.email.errors }}
-    </p>
-    <p>
-      {{ form.password.label_tag }}
-      {{ form.password }}
-      {{ form.password.errors }}
-    </p>
-    
+    {% if user_type == 'candidate' %}
+      <p>
+        {{ form.first_name.label_tag }}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
+      </p>
+      <p>
+        {{ form.last_name.label_tag }}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
+      </p>
+      <p>
+        {{ form.birth_date.label_tag }}
+        {{ form.birth_date }}
+        {{ form.birth_date.errors }}
+      </p>
+      <p>
+        {{ form.phone_number.label_tag }}
+        {{ form.phone_number }}
+        {{ form.phone_number.errors }}
+      </p>
+      <p>
+        {{ form.cep.label_tag }}
+        {{ form.cep }}
+        {{ form.cep.errors }}
+      </p>
+      <p>
+        {{ form.cpf.label_tag }}
+        {{ form.cpf }}
+        {{ form.cpf.errors }}
+      </p>
+      <p>
+        {{ form.resume.label_tag }}
+        {{ form.resume }}
+        {{ form.resume.errors }}
+      </p>
+      <hr>
+      <p><strong>Crie suas credenciais de acesso:</strong></p>
+      <p>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+      </p>
+      <p>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+      </p>
+    {% else %}
+      <p>
+        {{ form.company_name.label_tag }}
+        {{ form.company_name }}
+        {{ form.company_name.errors }}
+      </p>
+      <p>
+        {{ form.cnpj.label_tag }}
+        {{ form.cnpj }}
+        {{ form.cnpj.errors }}
+      </p>
+      <p>
+        {{ form.phone_company.label_tag }}
+        {{ form.phone_company }}
+        {{ form.phone_company.errors }}
+      </p>
+      <p>
+        {{ form.website.label_tag }}
+        {{ form.website }}
+        {{ form.website.errors }}
+      </p>
+      <hr>
+      <p><strong>Crie suas credenciais de acesso:</strong></p>
+      <p>
+        {{ form.email.label_tag }}
+        {{ form.email }}
+        {{ form.email.errors }}
+      </p>
+      <p>
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {{ form.password.errors }}
+      </p>
+    {% endif %}
     {{ form.non_field_errors }}
-
     <br>
     <button type="submit">Finalizar Cadastro</button>
   </form>
@@ -93,6 +123,21 @@
                   { mask: '(00) 00000-0000' }
               ]
           });
+      }
+
+      const cnpjElement = document.getElementById('id_cnpj');
+      if (cnpjElement) {
+        IMask(cnpjElement, { mask: '00.000.000/0000-00' });
+      }
+
+      const phoneCompanyElement = document.getElementById('id_phone_company');
+      if (phoneCompanyElement) {
+        IMask(phoneCompanyElement, {
+          mask: [
+            { mask: '(00) 0000-0000' },
+            { mask: '(00) 00000-0000' }
+          ]
+        });
       }
     });
   </script>
