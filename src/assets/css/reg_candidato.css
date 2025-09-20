@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+body {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header {
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.back-button,
+.help-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+.back-button:hover,
+.help-button:hover {
+    background-color: #f0f0f0;
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    flex-grow: 1;
+}
+.container {
+    max-width: 600px;
+    width: 100%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 1rem;
+}
+.form-description {
+    margin-bottom: 1rem;
+    color: #666;
+    line-height: 1.6;
+}
+.required-notice {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+.form-group {
+    margin-bottom: 1.5rem;
+}
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+.form-input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #eee;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+.form-input:focus {
+    outline: none;
+    border-color: #ffe100;
+    box-shadow: 0 0 0 3px rgba(255, 225, 0, 0.1);
+}
+.form-input::placeholder {
+    color: #999;
+}
+textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+}
+.form-helper {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+    display: block;
+}
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+.button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.button-primary {
+    background-color: #ffe100;
+    color: #333;
+}
+.button-secondary {
+    background-color: #eee;
+    color: #333;
+}
+.button-primary:hover {
+    background-color: #ffd700;
+}
+.button-secondary:hover {
+    background-color: #e0e0e0;
+}
+/* Modais */
+.modal {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+.modal.active {
+    display: block;
+}
+
+/* Indicador de Progresso - Integrado ao design system */
+.progress-container {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.progress-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: 1;
+}
+
+.progress-step.active:not(:last-child)::after,
+.progress-step.completed:not(:last-child)::after {
+    background-color: #ffe100;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 14px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.progress-step.active .step-circle {
+    background-color: #ffe100;
+    color: #333;
+}
+
+.progress-step.completed .step-circle {
+    background-color: #28a745;
+}
+
+.step-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 400;
+}
+
+.progress-step.active .step-label,
+.progress-step.completed .step-label {
+    color: #333;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estados de erro - seguindo o padrão */
+.form-input.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+}
