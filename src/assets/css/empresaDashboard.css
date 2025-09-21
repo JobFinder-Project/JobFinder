@@ -652,7 +652,84 @@ html, body {
             padding: 10px;
             font-size: 1em;
         }
-    }/* Media queries para responsividade APENAS MODAL PERFIL */
+    }/* Estilos para visualização de perfil */
+.perfil-visualizacao {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.perfil-info-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-row strong {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-row span {
+    color: #333;
+    font-size: 1.1em;
+    word-wrap: break-word;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.perfil-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Media queries para dispositivos móveis */
+@media (max-width: 768px) {
+    .perfil-info-card {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .info-row {
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    
+    .info-row span {
+        font-size: 1em;
+        padding: 6px 10px;
+    }
+    
+    .perfil-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Media queries para responsividade APENAS MODAL PERFIL */
 @media (max-width: 768px) {
     .modal-content.perfil-modal {
         padding: 20px;

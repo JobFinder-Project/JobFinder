@@ -164,40 +164,82 @@
         </div>
     </div>
 
-    <!-- Modal Perfil - estrutura padronizada -->
+    <!-- Modal Visualizar Perfil -->
     <div id="perfilModal" class="modal" style="display:none;">
         <div class="modal-content perfil-modal">
             <span class="close" id="closePerfilModal">&times;</span>
+            <div class="page-title">
+                <h1>Meu Perfil</h1>
+            </div>
+            <div class="perfil-visualizacao">
+                <div class="perfil-info-card">
+                    <div class="info-row">
+                        <strong>Nome da Empresa:</strong>
+                        <span id="visualNome">{{user.nome}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>CNPJ:</strong>
+                        <span id="visualCnpj">{{user.cnpj}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Email:</strong>
+                        <span id="visualEmail">{{user.email}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Telefone:</strong>
+                        <span id="visualFone">{{user.fone}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Biografia:</strong>
+                        <span id="visualBio">{{user.bio}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Site:</strong>
+                        <span id="visualSite">{{user.site}}</span>
+                    </div>
+                </div>
+                <div class="perfil-actions">
+                    <button type="button" class="btn-add-vaga" id="editarPerfilBtn">Editar Perfil</button>
+                    <button type="button" class="back-button" id="closePerfilModalBtn">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Perfil -->
+    <div id="editarPerfilModal" class="modal" style="display:none;">
+        <div class="modal-content perfil-modal">
+            <span class="close" id="closeEditarPerfilModal">&times;</span>
             <div class="page-title">
                 <h1>Editar Perfil</h1>
             </div>
             <form class="form-add-vaga" id="formEditarPerfil" action="/empresa/{{user._id}}/editar" method="POST">
                 <div class="form-row">
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" name="nome" value="{{user.nome}}" required>
+                    <label for="editNome">Nome:</label>
+                    <input type="text" id="editNome" name="nome" value="{{user.nome}}" required>
                 </div>
                 <div class="form-row">
-                    <label for="cpf">CNPJ:</label>
-                    <input type="text" id="cnpj" name="cnpj" value="{{user.cnpj}}" required>
+                    <label for="editCnpj">CNPJ:</label>
+                    <input type="text" id="editCnpj" name="cnpj" value="{{user.cnpj}}" required>
                 </div>
                 <div class="form-row">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" value="{{user.email}}" required>
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="email" value="{{user.email}}" required>
                 </div>
                 <div class="form-row">
-                    <label for="fone">Telefone:</label>
-                    <input type="text" id="fone" name="fone" value="{{user.fone}}" required>
+                    <label for="editFone">Telefone:</label>
+                    <input type="text" id="editFone" name="fone" value="{{user.fone}}" required>
                 </div>
                 <div class="form-row">
-                    <label for="bio">Biografia</label>
-                    <textarea id="bio" name="bio">{{user.bio}}</textarea>
+                    <label for="editBio">Biografia</label>
+                    <textarea id="editBio" name="bio">{{user.bio}}</textarea>
                 </div>
                 <div class="form-row">
-                    <label for="site">Site</label>
-                    <input type="url" name="site" id="site" value="{{user.site}}">
+                    <label for="editSite">Site</label>
+                    <input type="url" name="site" id="editSite" value="{{user.site}}">
                 </div>
                 <button type="submit" class="btn-add-vaga">Salvar alterações</button>
-                <button type="button" class="back-button" id="closePerfilModalBtn">Voltar</button>
+                <button type="button" class="back-button" id="voltarVisualizarBtn">Voltar</button>
             </form>
         </div>
     </div>
@@ -216,6 +258,8 @@
     document.getElementById('closeCriarVagaModal').onclick = function() {
         document.getElementById('criarVagaModal').style.display = 'none';
     }
+    
+    // Controle do modal de perfil (visualização)
     document.getElementById('openPerfilModal').onclick = function() {
         document.getElementById('perfilModal').style.display = 'flex';
     }
@@ -224,6 +268,23 @@
     }
     document.getElementById('closePerfilModalBtn').onclick = function() {
         document.getElementById('perfilModal').style.display = 'none';
+    }
+
+    // Controle do modal de edição de perfil
+    document.getElementById('editarPerfilBtn').onclick = function() {
+        // Fechar modal de visualização e abrir modal de edição
+        document.getElementById('perfilModal').style.display = 'none';
+        document.getElementById('editarPerfilModal').style.display = 'flex';
+    }
+    
+    document.getElementById('closeEditarPerfilModal').onclick = function() {
+        document.getElementById('editarPerfilModal').style.display = 'none';
+    }
+    
+    document.getElementById('voltarVisualizarBtn').onclick = function() {
+        // Fechar modal de edição e voltar para visualização
+        document.getElementById('editarPerfilModal').style.display = 'none';
+        document.getElementById('perfilModal').style.display = 'flex';
     }
 
     // Modal Detalhes da Vaga
@@ -259,7 +320,7 @@
 
     // Fechar modais ao clicar fora
     window.onclick = function(event) {
-        ['vagasModal', 'criarVagaModal', 'perfilModal', 'detalhesVagaModal'].forEach(function(id) {
+        ['vagasModal', 'criarVagaModal', 'perfilModal', 'editarPerfilModal', 'detalhesVagaModal'].forEach(function(id) {
             var modal = document.getElementById(id);
             if (event.target == modal) {
                 modal.style.display = 'none';
@@ -272,27 +333,44 @@
         e.preventDefault();
         const form = e.target;
         const data = {
-            nome: form.nome.value,
-            cnpj: form.cnpj.value,
-            email: form.email.value,
-            fone: form.fone.value,
-            bio: form.bio.value,
-            site: form.site.value
+            nome: form.editNome.value,
+            cnpj: form.editCnpj.value,
+            email: form.editEmail.value,
+            fone: form.editFone.value,
+            bio: form.editBio.value,
+            site: form.editSite.value
         };
-        const res = await fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        if (res.ok) {
-            // esta caindo aqui porem nao salva no banco de dados
-            document.getElementById('perfilModal').style.display = 'none';
-        } else {
-            const error = await res.json();
-            console.log(error.error);
-            alert('Erro ao salvar alterações!'+ (error.error || ''));
+        
+        try {
+            const res = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            if (res.ok) {
+                // Atualizar os dados na visualização
+                document.getElementById('visualNome').textContent = data.nome;
+                document.getElementById('visualCnpj').textContent = data.cnpj;
+                document.getElementById('visualEmail').textContent = data.email;
+                document.getElementById('visualFone').textContent = data.fone;
+                document.getElementById('visualBio').textContent = data.bio;
+                document.getElementById('visualSite').textContent = data.site;
+                
+                // Fechar modal de edição e voltar para visualização
+                document.getElementById('editarPerfilModal').style.display = 'none';
+                document.getElementById('perfilModal').style.display = 'flex';
+                
+                alert('Perfil atualizado com sucesso!');
+            } else {
+                const error = await res.json();
+                alert('Erro ao salvar alterações: ' + (error.error || 'Erro desconhecido'));
+            }
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+            alert('Erro ao conectar com o servidor');
         }
     };
     </script>
