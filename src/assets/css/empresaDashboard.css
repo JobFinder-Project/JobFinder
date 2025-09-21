@@ -1,0 +1,785 @@
+/* Estilos básicos unificados */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    overflow-x: hidden; /* Remove scroll horizontal apenas */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar do empresaDashboar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: #fff;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar h1 {
+    font-size: 24px;
+}
+
+.navbar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-menu li {
+    margin: 0;
+}
+
+.navbar-menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar-menu li a:hover {
+    background-color: #c0c0c0;
+}
+
+.navbar-menu svg {
+    width: 25px;
+    height: 25px;
+}
+
+.svg {
+    padding: 10;
+}
+
+/* Barra de busca do empresaDashboar.css */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    margin: 0;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-button:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos de cards de candidatos do empresaDashboar.css */
+.candidate-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.candidate-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.candidate-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.candidate-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.candidate-qualification {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.view-profile-button {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.view-profile-button:hover {
+    background-color: #2980b9;
+}
+
+/* Navegação inferior do empresaDashboar.css */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+.nav-item {
+    text-align: center;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-item.active {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.nav-item:hover {
+    color: #2980b9;
+}
+
+.main-content {
+    background: #f8fafc;
+    padding-bottom: 120px;
+    margin-top: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Remove altura mínima e overflow para permitir scroll natural */
+}
+
+.category-tabs {
+    margin-bottom: 32px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Estilos de tabs do empresaDashboar.css */
+.tab {
+    padding: 10px 20px;
+    background-color: #ecf0f1;
+    transition: background-color 0.3s, box-shadow 0.2s;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.tab:hover {
+    background-color: #bdc3c7;
+}
+
+.tab.active {
+    background-color: #3498db;
+    color: #fff;
+    border-color: #3498db;
+}
+
+.candidates-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 48px;
+}
+
+.custom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: 32px;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f7fa;
+    padding: 24px 0 16px 0;
+    border-radius: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    max-width: 700px;
+    gap: 40px;
+    z-index: 100;
+}
+
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1.15em;
+    transition: background 0.2s, box-shadow 0.2s;
+    padding: 22px 32px;
+    border-radius: 28px;
+    background: #1976d2;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.15);
+    cursor: pointer;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #0d47a1;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(13,71,161,0.25);
+}
+
+.nav-icon {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 700px;
+    min-height: 60vh;
+    margin: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Modal de perfil específico com scroll - APENAS PARA MODAL PERFIL */
+.modal-content.perfil-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
+    /* Scroll personalizado apenas para modal perfil */
+}
+
+.modal-content.perfil-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content.perfil-modal::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content.perfil-modal::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.modal-content.perfil-modal::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.vagas-list-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 32px auto;
+    max-width: 700px;
+    width: 100%;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.vaga-card-row {
+    background: #f5f5f7;
+    border-radius: 18px;
+    padding: 24px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.2s;
+}
+
+.vaga-card-row:hover {
+    box-shadow: 0 6px 24px rgba(25,118,210,0.13);
+}
+
+.job-image {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid #eee;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.vaga-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.job-title {
+    margin: 0;
+    font-size: 1.3em;
+    color: #222;
+    font-weight: 700;
+}
+
+.job-company {
+    color: #1976d2;
+    font-weight: 500;
+    font-size: 1.05em;
+    background: #e3f0ff;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+.vaga-info {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-size: 1.1em;
+    color: #555;
+    margin-top: 8px;
+}
+
+.job-area {
+    background: #e0e0e0;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-right: 8px;
+}
+
+.view-job-button {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 24px;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 8px;
+    transition: background 0.2s;
+    border: none;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    white-space: nowrap;
+}
+
+.view-job-button:hover {
+    background: #145ea8;
+}
+
+.form-add-vaga {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    background: #f5f5f7;
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-add-vaga label {
+    font-weight: 600;
+    color: #1976d2;
+    margin-bottom: 2px;
+}
+
+.form-add-vaga input[type="text"],
+.form-add-vaga input[type="email"],
+.form-add-vaga input[type="url"],
+.form-add-vaga input[type="file"],
+.form-add-vaga select,
+.form-add-vaga textarea {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 1em;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+
+.form-add-vaga input:focus,
+.form-add-vaga select:focus,
+.form-add-vaga textarea:focus {
+    border-color: #1976d2;
+    outline: none;
+}
+
+.form-add-vaga textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.btn-add-vaga {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    transition: background 0.2s;
+}
+
+.btn-add-vaga:hover {
+    background: #145ea8;
+}
+
+.page-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f5f5f7;
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #1976d2;
+    margin-bottom: 4px;
+}
+
+.form-group input,
+.form-group textarea {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 1em;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #1976d2;
+    outline: none;
+}
+
+.submit-button {
+    background: #1976d2;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    transition: background 0.2s;
+}
+
+.submit-button:hover {
+    background: #145ea8;
+}
+
+.back-button {
+    margin-top: 18px;
+    background: #e3f0ff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 500;
+    color: #1976d2;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    transition: background 0.2s;
+    width: 100%;
+}
+
+.back-button:hover {
+    background: #1976d2;
+    color: #fff;
+}
+
+/* Estilo para título dos modais */
+.page-title {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+    .page-title h1 {
+        margin: 0;
+        font-size: 1.8em;
+        color: #1976d2;
+        font-weight: 700;
+    }
+
+    /* Media queries responsivas para modal de perfil com scroll */
+    @media (max-width: 768px) {
+        .modal-content.perfil-modal {
+            padding: 20px;
+            margin: 10px;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 20px);
+        }
+
+        .page-title h1 {
+            font-size: 1.5em;
+        }
+
+        .form-add-vaga {
+            padding: 20px 16px;
+        }
+
+        .close {
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+        }
+    }
+
+    @media (max-height: 600px) {
+        .modal-content.perfil-modal {
+            max-height: calc(100vh - 40px);
+            min-height: auto;
+        }
+    }
+
+    /* Dispositivos muito pequenos */
+    @media (max-width: 480px) {
+        .modal-content.perfil-modal {
+            padding: 15px;
+            margin: 5px;
+            border-radius: 8px;
+            max-height: calc(100vh - 10px);
+        }
+
+        .form-add-vaga {
+            padding: 15px 10px;
+            gap: 16px;
+        }
+
+        .form-row {
+            gap: 5px;
+        }
+
+        .btn-add-vaga,
+        .back-button {
+            padding: 10px;
+            font-size: 1em;
+        }
+    }/* Estilos para visualização de perfil */
+.perfil-visualizacao {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.perfil-info-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-row strong {
+    color: #1976d2;
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-row span {
+    color: #333;
+    font-size: 1.1em;
+    word-wrap: break-word;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.perfil-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Media queries para dispositivos móveis */
+@media (max-width: 768px) {
+    .perfil-info-card {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    .info-row {
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+    }
+    
+    .info-row span {
+        font-size: 1em;
+        padding: 6px 10px;
+    }
+    
+    .perfil-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* Media queries para responsividade APENAS MODAL PERFIL */
+@media (max-width: 768px) {
+    .modal-content.perfil-modal {
+        padding: 20px;
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+    }
+
+    .modal-content.perfil-modal .page-title h1 {
+        font-size: 1.5em;
+    }
+
+    .modal-content.perfil-modal .form-add-vaga {
+        padding: 20px 16px;
+    }
+
+    .modal-content.perfil-modal .close {
+        top: 10px;
+        right: 20px;
+        font-size: 28px;
+    }
+}
+
+@media (max-height: 600px) {
+    .modal-content.perfil-modal {
+        max-height: calc(100vh - 40px);
+        min-height: auto;
+    }
+}
+
+/* Melhoria para dispositivos muito pequenos - apenas modal perfil */
+@media (max-width: 480px) {
+    .modal-content.perfil-modal {
+        padding: 15px;
+        margin: 5px;
+        border-radius: 8px;
+    }
+
+    .modal-content.perfil-modal .form-add-vaga {
+        padding: 15px 10px;
+        gap: 16px;
+    }
+
+    .modal-content.perfil-modal .form-row {
+        gap: 5px;
+    }
+
+    .modal-content.perfil-modal .btn-add-vaga,
+    .modal-content.perfil-modal .back-button {
+        padding: 10px;
+        font-size: 1em;
+    }
+}
