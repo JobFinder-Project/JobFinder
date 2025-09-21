@@ -14,8 +14,6 @@ router.use(isAuthenticated, isEmpresa);
 
 router.get('/dashboard', dashboardEmpresa);
 router.get('/perfil', getPerfil);
-    
-
 router.get("/:empresaId/editar", visualizarTelaEdicaoEmpre);
 router.post("/:empresaId/editar", updateEmpresa);
 router.delete("/excluir/:id", deleteEmpresa);

@@ -422,4 +422,5 @@ module.exports = {
     criarVaga,
     buscarCandidatos,
     updateStatus,
+    getPerfil
 }
