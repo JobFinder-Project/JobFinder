@@ -351,7 +351,7 @@ const verCandidatura = async (req, res) => {
             vagaNome: candidatura.vaga.nome || 'Não informado',
             vagaArea: candidatura.vaga.area || 'Não informado',
             vagaRequisitos: candidatura.vaga.requisitos || 'Não informado',
-            empresa: candidatura.vaga.empresa && candidatura.vaga.empresa.nome || 'Não informado',
+            empresa: candidatura.vaga.empresa?.nome || 'Não informado',
             candidatoNome: candidatura.candidato.nome || 'Não informado',
             status: candidatura.status || 'Não informado',
             imagem: imagemBase64,
