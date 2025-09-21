@@ -153,16 +153,19 @@ const updateEmpresa = async (req, res) => {
         const {
             empresaId
         } = req.params;
-        const empresa = await Empresa.findByIdAndUpdate(empresaId);
+        
+        // Busca a empresa
+        const empresa = await Empresa.findById(empresaId);
 
         // Verifica se a empresa existe
         if (!empresa) {
-            c
-            res.status(404).json({
-                message: "Empresa não encontrada!"
-            })
+            return res.status(404).json({
+                success: false,
+                error: "Empresa não encontrada!"
+            });
         }
 
+        // Atualiza os campos
         empresa.nome = nome || empresa.nome;
         empresa.cnpj = cnpj || empresa.cnpj;
         empresa.email = email || empresa.email;
@@ -170,16 +173,47 @@ const updateEmpresa = async (req, res) => {
         empresa.bio = bio || empresa.bio;
         empresa.site = site || empresa.site;
 
+        // Salva as alterações
         await empresa.save();
 
-        res.redirect(`/empresa/dashboard`)
+        // Verifica o Content-Type da requisição
+        const contentType = req.headers['content-type'];
+        
+        if (contentType && contentType.includes('application/json')) {
+            // Resposta JSON para AJAX
+            res.json({
+                success: true,
+                message: 'Perfil atualizado com sucesso!',
+                empresa: {
+                    _id: empresa._id,
+                    nome: empresa.nome,
+                    cnpj: empresa.cnpj,
+                    email: empresa.email,
+                    fone: empresa.fone,
+                    bio: empresa.bio,
+                    site: empresa.site
+                }
+            });
+        } else {
+            // Redirecionamento para form tradicional
+            res.redirect(`/empresa/dashboard`);
+        }
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao editar o perfil da empresa!',
-            error: erro.message
-        });
+        const contentType = req.headers['content-type'];
+        
+        if (contentType && contentType.includes('application/json')) {
+            res.status(500).json({
+                success: false,
+                error: 'Erro ao editar o perfil da empresa: ' + erro.message
+            });
+        } else {
+            res.status(500).send({
+                message: 'Erro ao editar o perfil da empresa!',
+                error: erro.message
+            });
+        }
     }
 }
 
@@ -213,41 +247,48 @@ const deleteEmpresa = async (req, res) => {
 // Salva uma nova Vaga mo banco de dados
 const criarVaga = async (req, res) => {
     try {
-        const {
-            empresaId
-        } = req.params;
-        const {
-            nome,
-            area,
-            requisitos
-        } = req.body;
+        const { empresaId } = req.params;
+        const { nome, area, requisitos } = req.body;
 
-        // Verifica se a empresa existe
+        // Busca a empresa
         const empresa = await Empresa.findById(empresaId);
         if (!empresa) {
-            return res.status(404).send({
-                message: 'Empresa não encontrada!'
+            return res.status(404).json({
+                success: false,
+                error: 'Empresa não encontrada!'
             });
         }
 
-        const novaVaga = new Vagas({
-            nome,
-            area,
-            requisitos,
-            imagem: req.file ? {
+        // Cria objeto da vaga seguindo o mesmo padrão do updateEmpresa
+        const dadosVaga = {
+            nome: nome,
+            area: area, 
+            requisitos: requisitos,
+            empresa: empresa._id
+        };
+
+        // Adiciona imagem se existir
+        if (req.file) {
+            dadosVaga.imagem = {
                 data: req.file.buffer,
                 contentType: req.file.mimetype
-            } : undefined,
-            empresa: empresa._id
-        });
+            };
+        }
 
-    await novaVaga.save();
-    empresa.vagas.push(novaVaga._id);
-    await empresa.save();
+        // Cria nova vaga
+        const novaVaga = new Vagas(dadosVaga);
+        
+        // Salva a vaga
+        await novaVaga.save();
+        
+        // Adiciona vaga à empresa e salva
+        empresa.vagas.push(novaVaga._id);
+        await empresa.save();
 
+        // Resposta de sucesso
         res.redirect('/empresa/dashboard?showVagas=true');
     } catch (erro) {
-        console.error(erro);
+        console.error('Erro ao criar vaga:', erro);
         res.status(500).send({
             message: 'Erro ao criar vaga para a empresa!',
             error: erro.message
