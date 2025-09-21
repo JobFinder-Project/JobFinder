@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 const { getCandidaturas, visualizarCandidatos, visualizarTelaEdicaoEmpre} = require('../controller/telasController')
-const { getCadastroEmpresa, createEmpresa, updateEmpresa, deleteEmpresa, dashboardEmpresa, criarVaga, updateStatus, buscarCandidatos } = require("../controller/empresaController");
+const { getCadastroEmpresa, createEmpresa, updateEmpresa, deleteEmpresa, dashboardEmpresa, criarVaga, updateStatus, buscarCandidatos, getPerfil, } = require("../controller/empresaController");
 const { isAuthenticated, isEmpresa } = require('../middleware/auth');
 
 // Rotas da empresa
@@ -13,6 +13,9 @@ router.post("/cadastrar", createEmpresa);
 router.use(isAuthenticated, isEmpresa);
 
 router.get('/dashboard', dashboardEmpresa);
+router.get('/perfil', getPerfil);
+    
+
 router.get("/:empresaId/editar", visualizarTelaEdicaoEmpre);
 router.post("/:empresaId/editar", updateEmpresa);
 router.delete("/excluir/:id", deleteEmpresa);
