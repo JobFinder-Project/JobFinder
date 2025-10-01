@@ -98,3 +98,21 @@
     </div>
 
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script defer>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('success') === 'true') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso!',
+      text: 'Candidatura realizada com sucesso!',
+      confirmButtonText: 'OK',
+      timer: 3000 // Fecha automaticamente após 3 segundos
+    }).then(() => {
+      // Redireciona para o dashboard
+      window.location.href = "/candidato/dashboard";
+    });
+  }
+</script>
+
