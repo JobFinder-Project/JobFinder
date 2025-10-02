@@ -286,7 +286,7 @@ const criarVaga = async (req, res) => {
         await empresa.save();
 
         // Resposta de sucesso
-        res.redirect('/empresa/dashboard?showVagas=true');
+        res.redirect(`/empresa/dashboard?vagaCriada=true&empresaId=${empresaId}`);
     } catch (erro) {
         console.error('Erro ao criar vaga:', erro);
         res.status(500).send({

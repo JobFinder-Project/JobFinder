@@ -783,3 +783,83 @@ html, body {
         font-size: 1em;
     }
 }
+
+/* Modal de Sucesso para criação de vaga */
+.modal-sucesso {
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.modal-sucesso-content {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.modal-sucesso-content .close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.modal-sucesso-content .close:hover {
+    color: #000;
+}
+
+.icone-sucesso {
+    color: #4CAF50;
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.modal-sucesso-content h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.modal-sucesso-content p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.btn-ok-sucesso {
+    background-color: #1976d2;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.btn-ok-sucesso:hover {
+    background-color: #1976d2;
+}
