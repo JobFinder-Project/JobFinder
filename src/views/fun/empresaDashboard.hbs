@@ -117,7 +117,7 @@
             <div class="page-title">
                 <h1>Criar Nova Vaga</h1>
             </div>
-            <form class="form-add-vaga" action="/empresa/{{empresaId}}/vagas/criar" method="POST" enctype="multipart/form-data">
+            <form class="form-add-vaga" action="/empresa/{{empresaId}}/vagas/criar" method="POST" enctype="multipart/form-data" id="formCriarVaga">
                 <div class="form-row">
                     <label for="nome">Nome da Vaga:</label>
                     <input type="text" id="nome" name="nome" required>
@@ -244,7 +244,44 @@
         </div>
     </div>
 
+    <!-- Modal de Sucesso para Criação de Vaga -->
+    <div id="modalSucessoVaga" class="modal-sucesso" style="display:none;">
+        <div class="modal-sucesso-content">
+            <span class="close" id="closeModalSucesso">&times;</span>
+            <div class="icone-sucesso">✓</div>
+            <h2>Vaga Publicada com Sucesso!</h2>
+            <p>Sua vaga foi criada e está disponível para candidatos se inscreverem. Você pode visualizá-la na seção "Vagas" ou criar uma nova vaga.</p>
+            <button class="btn-ok-sucesso" id="btnOkSucesso">OK</button>
+        </div>
+    </div>
+
     <script>
+    // Verificar se a vaga foi criada com sucesso
+    function verificarSucessoCriacaoVaga() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('vagaCriada') === 'true') {
+            document.getElementById('modalSucessoVaga').style.display = 'flex';
+            
+            // Limpar parâmetros da URL sem recarregar a página
+            const url = new URL(window.location);
+            url.searchParams.delete('vagaCriada');
+            url.searchParams.delete('empresaId');
+            window.history.replaceState({}, document.title, url.pathname + url.search);
+        }
+    }
+
+    // Controles do modal de sucesso
+    document.getElementById('closeModalSucesso').onclick = function() {
+        document.getElementById('modalSucessoVaga').style.display = 'none';
+    }
+    
+    document.getElementById('btnOkSucesso').onclick = function() {
+        document.getElementById('modalSucessoVaga').style.display = 'none';
+    }
+
+    // Verificar sucesso quando a página carregar
+    document.addEventListener('DOMContentLoaded', verificarSucessoCriacaoVaga);
+
     // Abrir modais principais
     document.getElementById('openVagasModal').onclick = function() {
         document.getElementById('vagasModal').style.display = 'flex';
@@ -256,6 +293,12 @@
         document.getElementById('criarVagaModal').style.display = 'flex';
     }
     document.getElementById('closeCriarVagaModal').onclick = function() {
+        document.getElementById('criarVagaModal').style.display = 'none';
+    }
+    
+    // Adicionar evento de submit no formulário de criar vaga
+    document.getElementById('formCriarVaga').onsubmit = function() {
+        // Fechar o modal imediatamente após o submit
         document.getElementById('criarVagaModal').style.display = 'none';
     }
     
@@ -320,7 +363,7 @@
 
     // Fechar modais ao clicar fora
     window.onclick = function(event) {
-        ['vagasModal', 'criarVagaModal', 'perfilModal', 'editarPerfilModal', 'detalhesVagaModal'].forEach(function(id) {
+        ['vagasModal', 'criarVagaModal', 'perfilModal', 'editarPerfilModal', 'detalhesVagaModal', 'modalSucessoVaga'].forEach(function(id) {
             var modal = document.getElementById(id);
             if (event.target == modal) {
                 modal.style.display = 'none';
