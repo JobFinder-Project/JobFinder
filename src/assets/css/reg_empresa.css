@@ -30,8 +30,7 @@ body {
     gap: 1rem;
 }
 
-.back-button,
-.help-button {
+.back-button, .help-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -41,8 +40,7 @@ body {
     transition: background-color 0.2s ease;
 }
 
-.back-button:hover,
-.help-button:hover {
+.back-button:hover, .help-button:hover {
     background-color: #f0f0f0;
 }
 
@@ -68,6 +66,13 @@ body {
     margin-bottom: 1rem;
     color: #666;
     line-height: 1.6;
+}
+
+.required-notice {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 1rem;
+    font-style: italic;
 }
 
 .form-group {
@@ -109,6 +114,23 @@ textarea.form-input {
     font-size: 0.875rem;
     color: #666;
     margin-top: 0.5rem;
+    display: block;
+}
+
+.error-message {
+    display: none;
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+.error-message.active {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.form-input.is-invalid {
+    border-color: #dc3545;
 }
 
 .button-group {
@@ -158,23 +180,86 @@ textarea.form-input {
     }
 }
 
-.container {
+.modal {
+    display: none;
     animation: fadeIn 0.3s ease-out;
 }
 
-/* Modais */
-.modal {
-  display: none;
-  animation: fadeIn 0.3s ease-out;
-}
-
 .modal.active {
-  display: block;
+    display: block;
 }
 
-.required-notice {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 1rem;
-  font-style: italic;
+.progress-container {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.progress-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.progress-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: -50%;
+    width: 100%;
+    height: 2px;
+    background-color: #ddd;
+    z-index: 1;
+    transition: background-color 0.2s ease;
+}
+
+.progress-step.completed:not(:last-child)::after {
+    background-color: #ffe100;
+}
+
+.step-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ddd;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 14px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.2s ease;
+}
+
+.progress-step.active .step-circle {
+    background-color: #ffe100;
+    color: #333;
+}
+
+.progress-step.completed .step-circle {
+    background-color: #28a745;
+    color: white;
+}
+
+.step-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 400;
+}
+
+.progress-step.active .step-label, .progress-step.completed .step-label {
+    color: #333;
+    font-weight: 600;
 }
