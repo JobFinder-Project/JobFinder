@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const detalhePrototype = document.getElementById('candidatura-detalhe-prototype');
     const confirmacaoPrototype = document.getElementById('candidatura-confirmacao-prototype');
     const resultadoPrototype = document.getElementById('candidatura-resultado-prototype');
+    const list = document.getElementById('categoriesList');
 
     let candidaturasData = [];
     let selectedCandidaturaId = null;
@@ -148,6 +149,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function filtroVagasPorCategoria(category) {
+        const cards = document.querySelectorAll('#card-job');
+        if (!category) {
+            // Mostra todos os cards se não houver categoria ativa
+            cards.forEach(card => card.style.display = '');
+            return;
+        }
+        // Filtra os cards pela categoria selecionada
+        cards.forEach(card => {
+            const areaElement = card.querySelector('p:last-of-type');
+            const area = areaElement ? areaElement.textContent.trim() : '';
+            if (area === category) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
     openModalBtn.addEventListener('click', openModal);
     closeButton.addEventListener('click', () => modal.style.display = 'none');
     window.addEventListener('click', (event) => {
@@ -192,6 +212,25 @@ document.addEventListener('DOMContentLoaded', () => {
     resultadoView.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-ok')) {
             openModal();
+        }
+    });
+
+    // Filtro de vagas por categoria
+    list.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-chip')) {
+            const activeBtn = list.querySelector('.category-chip.active');
+            const clickedBtn = e.target;
+            const category = clickedBtn.textContent.trim();
+
+            // Se já está ativa, desativa e mostra todos
+            if (activeBtn === clickedBtn) {
+                clickedBtn.classList.remove('active');
+                filtroVagasPorCategoria('');
+            } else {
+                list.querySelectorAll('.category-chip').forEach(btn => btn.classList.remove('active'));
+                clickedBtn.classList.add('active');
+                filtroVagasPorCategoria(category);
+            }
         }
     });
 });

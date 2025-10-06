@@ -41,22 +41,18 @@
 
         <main class="main-content">
             <div class="categories modern-categories">
-                <button class="category-chip">Full Stack</button>
-                <button class="category-chip">UX/UI Designer</button>
-                <button class="category-chip">Analista de Dados</button>
-                <button class="category-chip">Técnico em TI</button>
-                <button class="category-chip">Estoquista</button>
-                <button class="category-chip">Programador Front End</button>
-                <button class="category-chip">Programador Back End</button>
-                <button class="category-chip">Operador de caixa</button>
-                <button class="category-chip">Enfermagem</button>
+                <div id="categoriesList" class="categories-list">
+                    {{#each vagas}}
+                    <button class="category-chip" data-category="{{this}}">{{area}}</button>
+                    {{/each}}
+                </div>
             </div>                
 
             <div class="jobs-feed">
                 <ul class="card-grid">
                     {{#if vagas.length}}
                     {{#each vagas}}
-                    <li class="job-card modern-job-card">
+                    <li id="card-job" class="job-card modern-job-card">
                         <img src="{{imagem}}" alt="{{nome}}" class="job-image" />
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>

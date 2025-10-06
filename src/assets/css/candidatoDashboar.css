@@ -108,6 +108,17 @@ body {
     display: flex;
     flex-wrap: nowrap;
     gap: 10px;
+    position: relative;
+    overflow: hidden; /* Remove o scroll */
+    align-items: center;
+}
+
+.categories-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    transition: transform 0.3s;
+    will-change: transform;
 }
 
 .job-card {
@@ -370,8 +381,8 @@ svg.check-ok{
 /* Modern dashboard adjustments */
 .dashboard-wrapper {
     min-height: 100vh;
-/*     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
- */}
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
 
 .navbar {
     border-bottom: 1px solid #e0e0e0;
