@@ -5,16 +5,6 @@ body {
     background-color: #ffffff;
 }
 
-.svg {
-    padding: 10;
-}
-
-.page-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -26,10 +16,15 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.05);
 }
 
 .navbar h1 {
     font-size: 24px;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
 .navbar-menu svg {
@@ -44,12 +39,11 @@ body {
 }
 
 .search-input {
-    margin-left: 10%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 100vh;
+    width: 100%;
     max-width: 70%;
 }
 
@@ -60,7 +54,7 @@ body {
     transition: background-color 0.3s, box-shadow 0.2s;
     color: rgb(0, 0, 0);
     border: none;
-    padding: 10px;
+    padding: 10px 16px; /* Aumente o padding para melhor aparência */
     margin: 0;
     border-radius: 5px;
     cursor: pointer;
@@ -112,21 +106,8 @@ body {
 .categories {
     margin-bottom: 20px;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
-}
-
-.category-button {
-    padding: 10px 20px;
-    background-color: #ecf0f1;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.category-button:hover {
-    background-color: #bdc3c7;
 }
 
 .job-card {
@@ -142,30 +123,9 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-}
-
-
-/* Título do card */
-.job-card h2 {
-    font-size: 1.2rem;
-}
-
-/* Preço do produto */
-.job-card p {
-    font-size: 1rem;
-}
-
-.card-grid {
-    display: flex;
-    flex-wrap: wrap;
-    /* Permite quebra de linha se necessário */
-    justify-content: center;
-    /* Centraliza os cards */
-    gap: 20px;
-    /* Espaçamento entre os cards */
-    list-style-type: none;
-    /* Remove marcadores de lista */
-    padding: 0;
+    border: none;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+    background: #fff;
 }
 
 .job-card:hover {
@@ -316,12 +276,6 @@ body {
     color: #666;
 }
 
-.no-candidaturas-message {
-    text-align: center;
-    color: #888;
-    padding: 20px;
-}
-
 .candidatura-item {
     cursor: pointer;
     border: 2px solid transparent;
@@ -381,12 +335,6 @@ body {
     color: rgb(0, 0, 0);
 }
 
-.detalhe-actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center; /* Centralizado */
-}
-
 .modal-content.modo-detalhe {
     height: auto; 
     max-height: 80vh; 
@@ -417,4 +365,110 @@ svg.check-ok{
 
 .confirmacao-info strong {
     font-size: 1.2em;
+}
+
+/* Modern dashboard adjustments */
+.dashboard-wrapper {
+    min-height: 100vh;
+/*     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+ */}
+
+.navbar {
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.05);
+    background: #2c3e50;
+}
+
+.navbar-left h1 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.navbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    gap: 10px;
+}
+
+.category-chip {
+    background: #fff;
+    color: #2c3e50;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 8px 18px;
+    margin: 4px 6px 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(44,62,80,0.03);
+}
+
+.category-chip:hover, .category-chip.active {
+    background: #fcef02;
+    color: #2c3e50;
+    border-color: #fcef02;
+}
+
+.modern-job-card {
+    border: none;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #fff;
+}
+
+.modern-job-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(44,62,80,0.15);
+}
+
+.navbar-label {
+    display: none;
+}
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .main-content {
+        margin: 0;
+        width: 100%;
+    }
+    .dashboard-wrapper {
+        padding: 0;
+    }
+    .navbar-center {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .categories {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .card-grid {
+        flex-direction: row;
+        align-items: center;
+    }
+    .job-card {
+        width: 95vw;
+        max-width: 350px;
+    }
 }
