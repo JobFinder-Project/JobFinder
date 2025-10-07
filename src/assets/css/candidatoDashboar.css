@@ -119,6 +119,47 @@ body {
     gap: 10px;
     transition: transform 0.3s;
     will-change: transform;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.category-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+    transition: background 0.2s;
+}
+
+.category-arrow.left {
+    left: 0;
+}
+
+.category-arrow.right {
+    right: 0px;
+}
+
+.category-arrow.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.category-arrow svg {
+    width: 18px;
+    height: 18px;
+    color: #2c3e50;
 }
 
 .job-card {

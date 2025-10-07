@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultadoPrototype = document.getElementById('candidatura-resultado-prototype');
     const list = document.getElementById('categoriesList');
 
+    const left = document.getElementById('catLeft');
+    const right = document.getElementById('catRight');
+    let offset = 0;
+    const step = 120; // pixels to scroll per click
+
     let candidaturasData = [];
     let selectedCandidaturaId = null;
 
@@ -168,6 +173,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function atualizaVisibilidadeSetas() {
+        // Só mostra as setas se houver overflow horizontal
+        if (list.scrollWidth > list.clientWidth) {
+            left.style.display = 'flex';
+            right.style.display = 'flex';
+        } else {
+            left.style.display = 'none';
+            right.style.display = 'none';
+            // Reseta o scroll se não houver overflow
+            list.scrollLeft = 0;
+        }
+        atualizaEstadoSetas();
+    }
+
+    // Atualiza o estado (ativado/desativado) das setas
+    function atualizaEstadoSetas() {
+        left.classList.toggle('disabled', list.scrollLeft === 0);
+        right.classList.toggle('disabled', list.scrollLeft + list.clientWidth >= list.scrollWidth);
+    }
+
+    // Função para arrastar o scroll ao clicar nas setas
+    function arrastarScroll(event) {
+        event.preventDefault();
+        if (event.currentTarget.id === 'catLeft') {
+            list.scrollLeft -= step;
+        } else {
+            list.scrollLeft += step;
+        }
+        setTimeout(updateArrowState, 100);
+    }
+
+    // Inicializa o estado das setas e o scroll
+    function inicializaSeta() {
+        list.scrollLeft = 0;
+        atualizaVisibilidadeSetas();
+    }
+
+    // Chama ao carregar e ao redimensionar a tela
+    window.addEventListener('resize', inicializaSeta);
+    document.addEventListener('DOMContentLoaded', inicializaSeta);
+
     openModalBtn.addEventListener('click', openModal);
     closeButton.addEventListener('click', () => modal.style.display = 'none');
     window.addEventListener('click', (event) => {
@@ -233,4 +279,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    left.addEventListener('click', arrastarScroll);
+    right.addEventListener('click', arrastarScroll);
+    list.addEventListener('scroll', atualizaEstadoSetas);
 });
