@@ -48,8 +48,8 @@
                     </svg>
                 </button>
                 <div id="categoriesList" class="categories-list">
-                    {{#each vagas}}
-                    <button class="category-chip" data-category="{{area}}">{{area}}</button>
+                    {{#each areas}}
+                    <button class="category-chip" data-category="{{this}}">{{this}}</button>
                     {{/each}}
                 </div>
                 <button id="catRight" class="category-arrow right">

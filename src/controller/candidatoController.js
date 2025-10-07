@@ -38,6 +38,9 @@ const dashboardCandidato = async (req, res) => {
             };
         });
 
+        // Coleta apenas as areas únicas das vagas retornadas, sem duplicatas
+        const areas = [...new Set(vagas.map(vaga => vaga.area))];
+
         res.render('can/candidatoDashboard', {
             title: 'Dashboard',
             user: req.session.user,
@@ -45,6 +48,7 @@ const dashboardCandidato = async (req, res) => {
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,
+            areas
         });
     } catch (erro) {
         console.error(erro);
