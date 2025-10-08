@@ -6,5 +6,7 @@ const mongoose =require('mongoose')
 //const dbUri = 'mongodb://localhost:27017/JobFinder'
 const dbUri = process.env.MONGO_URI
 
-
+if (!dbUri) {
+  throw new Error('MONGO_URI não definida no ambiente')
+}
 module.exports = () => mongoose.connect(dbUri)
