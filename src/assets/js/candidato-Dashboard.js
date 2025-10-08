@@ -1,3 +1,6 @@
+import { arrowsCategories } from "./setasCategorias.js";
+import { setupCategoryFilter } from "./filtroCategorias.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('candidaturasModal');
     const modalTitle = document.getElementById('modal-title');
@@ -16,12 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const detalhePrototype = document.getElementById('candidatura-detalhe-prototype');
     const confirmacaoPrototype = document.getElementById('candidatura-confirmacao-prototype');
     const resultadoPrototype = document.getElementById('candidatura-resultado-prototype');
-    const list = document.getElementById('categoriesList');
 
+    const categoriesList = document.getElementById('categoriesList');
     const left = document.getElementById('catLeft');
     const right = document.getElementById('catRight');
-    let offset = 0;
-    const step = 120; // pixels to scroll per click
 
     let candidaturasData = [];
     let selectedCandidaturaId = null;
@@ -154,66 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function filtroVagasPorCategoria(category) {
-        const cards = document.querySelectorAll('#card-job');
-        if (!category) {
-            // Mostra todos os cards se não houver categoria ativa
-            cards.forEach(card => card.style.display = '');
-            return;
-        }
-        // Filtra os cards pela categoria selecionada
-        cards.forEach(card => {
-            const areaElement = card.querySelector('p:last-of-type');
-            const area = areaElement ? areaElement.textContent.trim() : '';
-            if (area === category) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
-
-    function atualizaVisibilidadeSetas() {
-        // Só mostra as setas se houver overflow horizontal
-        if (list.scrollWidth > list.clientWidth) {
-            left.style.display = 'flex';
-            right.style.display = 'flex';
-        } else {
-            left.style.display = 'none';
-            right.style.display = 'none';
-            // Reseta o scroll se não houver overflow
-            list.scrollLeft = 0;
-        }
-        atualizaEstadoSetas();
-    }
-
-    // Atualiza o estado (ativado/desativado) das setas
-    function atualizaEstadoSetas() {
-        left.classList.toggle('disabled', list.scrollLeft === 0);
-        right.classList.toggle('disabled', list.scrollLeft + list.clientWidth >= list.scrollWidth);
-    }
-
-    // Função para arrastar o scroll ao clicar nas setas
-    function arrastarScroll(event) {
-        event.preventDefault();
-        if (event.currentTarget.id === 'catLeft') {
-            list.scrollLeft -= step;
-        } else {
-            list.scrollLeft += step;
-        }
-        setTimeout(updateArrowState, 100);
-    }
-
-    // Inicializa o estado das setas e o scroll
-    function inicializaSeta() {
-        list.scrollLeft = 0;
-        atualizaVisibilidadeSetas();
-    }
-
-    // Chama ao carregar e ao redimensionar a tela
-    window.addEventListener('resize', inicializaSeta);
-    document.addEventListener('DOMContentLoaded', inicializaSeta);
-
     openModalBtn.addEventListener('click', openModal);
     closeButton.addEventListener('click', () => modal.style.display = 'none');
     window.addEventListener('click', (event) => {
@@ -260,27 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openModal();
         }
     });
+    
+    // Inicialização do filtro de categorias
+    setupCategoryFilter(categoriesList);
 
-    // Filtro de vagas por categoria
-    list.addEventListener('click', (e) => {
-        if (e.target.classList.contains('category-chip')) {
-            const activeBtn = list.querySelector('.category-chip.active');
-            const clickedBtn = e.target;
-            const category = clickedBtn.textContent.trim();
-
-            // Se já está ativa, desativa e mostra todos
-            if (activeBtn === clickedBtn) {
-                clickedBtn.classList.remove('active');
-                filtroVagasPorCategoria('');
-            } else {
-                list.querySelectorAll('.category-chip').forEach(btn => btn.classList.remove('active'));
-                clickedBtn.classList.add('active');
-                filtroVagasPorCategoria(category);
-            }
-        }
-    });
-
-    left.addEventListener('click', arrastarScroll);
-    right.addEventListener('click', arrastarScroll);
-    list.addEventListener('scroll', atualizaEstadoSetas);
+    // Inicialização das setas de navegação das categorias
+    arrowsCategories(categoriesList, left, right);
 });

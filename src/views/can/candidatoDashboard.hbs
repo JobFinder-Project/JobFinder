@@ -30,7 +30,7 @@
                         <img src="{{imagem}}" alt="{{nome}}" class="job-image" />
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>
-                        <p>{{area}}</p>
+                        <p class="job-area">{{area}}</p>
                         <button class="register-button" onclick="window.location.href = '/candidato/vagas/{{_id}}';">Ver Vaga</button>
                     </li>
                     {{/each}}
@@ -111,5 +111,5 @@
         </div>
     </div>
 
-    <script src="/assets/js/candidato-Dashboard.js"></script>
+    <script type="module" src="/assets/js/candidato-Dashboard.js"></script>
 </body>
