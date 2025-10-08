@@ -1,0 +1,64 @@
+name: JobFinder CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - develop
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest 
+
+    services: 
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v3 
+
+      - name: 2. Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x' 
+          cache: 'npm' 
+
+      - name: 3. Instalar Dependências
+        run: npm install
+
+      - name: 4. Executar Testes Automatizados
+        run: npm test
+        env: 
+          MONGO_URI: mongodb://mongodb:27017/jobfinder-test
+          SESSION_SECRET: ${{ secrets.TEST_SESSION_SECRET }} 
+          
+
+      - name: 5. Verificar Build (se aplicável)
+        run: npm run build --if-present
+
+
+    # CD
+
+  deploy-staging:
+    needs: build-and-test 
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' # Condição para rodar
+
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v3
+
+      - name: 2. Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+
+      - name: 3. Instalar Dependências (incluindo devDependencies)
+        run: npm install
+
+      - name: 4. Deploy para o Ambiente de Staging
+
+        run: |
+          curl -X POST ${{ secrets.TESTE }}
+        
