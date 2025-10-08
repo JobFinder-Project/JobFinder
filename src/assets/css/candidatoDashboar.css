@@ -5,117 +5,6 @@ body {
     background-color: #ffffff;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 10px 20px;
-    box-sizing: border-box;
-    position: sticky;
-    top: 0;
-    z-index: 8;
-    border-bottom: 1px solid #e0e0e0;
-    box-shadow: 0 2px 8px rgba(44,62,80,0.05);
-}
-
-.navbar h1 {
-    font-size: 24px;
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.navbar-menu svg {
-    width: 25px;
-    height: 25px;
-}
-
-.search-input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 70%;
-}
-
-.search-button {
-    background-color: #fcef02;
-    text-decoration: none;
-    text-align: center;
-    transition: background-color 0.3s, box-shadow 0.2s;
-    color: rgb(0, 0, 0);
-    border: none;
-    padding: 10px 16px; /* Aumente o padding para melhor aparência */
-    margin: 0;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.search-button:hover {
-    background-color: #2980b9;
-}
-
-.navbar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar-menu li {
-    margin: 0;
-}
-
-.navbar-menu li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    position: relative;
-}
-
-.navbar-menu li a:hover {
-    background-color: #c0c0c0;
-}
-
-.navbar-label {
-    display: block;
-    font-size: 12px;
-    color: #fff;
-    margin-top: 4px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.navbar-button {
-    background: none;
-    border: none;
-    color: white; 
-    cursor: pointer;
-    font-size: 1em; 
-    display: flex;
-    align-items: center;
-    gap: 8px; 
-    position: relative;
-}
-
-.navbar-button:hover .navbar-tooltip,
-.navbar-menu li a:hover .navbar-tooltip,
-.navbar-button:focus .navbar-tooltip,
-.navbar-menu li a:focus .navbar-tooltip {
-    opacity: 1;
-}
-
 .main-content {
     margin-top: 5px;
     margin-left: 10%;
@@ -437,24 +326,6 @@ svg.check-ok{
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-.navbar-left h1 {
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.navbar-center {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.search-form {
-    margin-top: 20px;
-    max-width: 600px;
-    gap: 10px;
-}
-
 .category-chip {
     background: #fff;
     color: #2c3e50;
@@ -505,9 +376,6 @@ svg.check-ok{
     }
     .dashboard-wrapper {
         padding: 0;
-    }
-    .navbar-center {
-        display: none;
     }
 }
 
