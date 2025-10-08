@@ -421,7 +421,7 @@ const updatePerfil = async (req, res) => {
 
         await candidato.save();
 
-        res.redirect(`/candidato/perfil/${candidatoId}`);
+        res.redirect(`/candidato/dashboard`);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({

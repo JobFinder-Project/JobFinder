@@ -108,7 +108,7 @@ const getRedefinirSenha = async (req, res) => {
     }
 };
 
-// Renderiza a página de Candidaturas
+// Retorna json de candidaturas
 const getCandidaturas = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
