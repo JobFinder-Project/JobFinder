@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const perfilModal = document.getElementById('perfilModal');
     const openPerfilModalBtn = document.getElementById('openPerfilModal');
     const closePerfilModalBtn = document.getElementById('closePerfilModal');
-    const closePerfilModalBtnFooter = document.getElementById('closePerfilModalBtn');
 
     const categoriesList = document.getElementById('categoriesList');
     const left = document.getElementById('catLeft');
@@ -211,9 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
         perfilModal.style.display = 'flex';
     });
     closePerfilModalBtn.addEventListener('click', () => {
-        perfilModal.style.display = 'none';
-    });
-    closePerfilModalBtnFooter.addEventListener('click', () => {
         perfilModal.style.display = 'none';
     });
     window.addEventListener('click', (event) => {
