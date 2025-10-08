@@ -230,11 +230,15 @@ const buscarVagas = async (req, res) => {
             };
         });
 
+        // Coleta apenas as areas únicas das vagas retornadas, sem duplicatas
+        const areas = [...new Set(vagas.map(vaga => vaga.area))];
+
         res.render('can/resultVagas', {
             vagas: vagasComImagens,
             query: q,
             title: 'Lista de Vagas',
-            style: 'buscaVagas.css'
+            areas,
+            style: 'candidatoDashboar.css',
         });
     } catch (erro) {
         console.error(erro);
