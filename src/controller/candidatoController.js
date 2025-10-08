@@ -44,7 +44,7 @@ const dashboardCandidato = async (req, res) => {
         res.render('can/candidatoDashboard', {
             title: 'Dashboard',
             user: req.session.user,
-            message: 'Bem-vindo ao seu painel, Candidato!',
+            inDashboard: true,
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,

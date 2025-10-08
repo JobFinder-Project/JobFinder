@@ -11,6 +11,7 @@
         </form>
     </div>
     <ul class="navbar-menu">
+        {{#if inDashboard}}
         <li>
             <a id="openCandidaturasModalBtn" class="navbar-button" title="Minhas Candidaturas">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
@@ -29,6 +30,18 @@
                 <span class="navbar-label">Perfil</span>
             </a>
         </li>
+        {{else}}
+        <li>
+            <a href="/candidato/dashboard" class="navbar-button" title="Voltar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+                    <path fill-rule="evenodd" d="M8.354 11.354a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L6.707 8l2.647 2.646a.5.5 0 0 1 0 .708z"/>
+                    <path fill-rule="evenodd" d="M11.5 8a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h6a.5.5 0 0 1 .5.5z"/>
+                </svg>
+                <span class="navbar-label">Voltar</span>
+            </a>
+        </li>
+        {{/if}}
         <li>
             <a href="/logout" class="navbar-button" title="Sair">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
