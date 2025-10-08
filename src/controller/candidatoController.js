@@ -24,6 +24,12 @@ const dashboardCandidato = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
         const vagas = await Vaga.find().populate('empresa');
+        const candidato = await Candidato.findById(candidatoId, '-senha');
+
+        // Verifica se o candidato existe
+        if (!candidato) {
+            return res.status(404).send("Candidato não encontrado");
+        }
 
         // Converte as imagens para base64
         const vagasComImagens = vagas.map(vaga => {
@@ -44,6 +50,7 @@ const dashboardCandidato = async (req, res) => {
         res.render('can/candidatoDashboard', {
             title: 'Dashboard',
             user: req.session.user,
+            candidato,
             inDashboard: true,
             style: 'candidatoDashboar.css',
             candidatoId,
@@ -70,32 +77,6 @@ const getCadastroCandidato = async (req, res) => {
         console.error(erro);
         res.status(500).send({
             message: "Erro ao renderizar a página de registro do candidato!",
-            error: erro.message
-        });
-    }
-};
-
-// Renderiza a página do perfil
-const getPerfilCandidato = async (req, res) => {
-    try {
-        const id = req.params.candidatoId;
-        const candidato = await Candidato.findById(id, '-senha');
-
-        // Verifica se o candidato existe
-        if (!candidato) {
-            return res.status(404).send("Candidato não encontrado");
-        }
-
-        res.render('can/getPerfil', {
-            title: candidato.nome,
-            style: "getPerfilCand.css",
-            user: candidato,
-            id: candidato._id,
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar o perfil do candidato!",
             error: erro.message
         });
     }
@@ -453,7 +434,6 @@ const updatePerfil = async (req, res) => {
 module.exports = {
     dashboardCandidato,
     getCadastroCandidato,
-    getPerfilCandidato,
     cadastrarCandidato,
     verVaga,
     buscarVagas,
