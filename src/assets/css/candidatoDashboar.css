@@ -9,10 +9,11 @@ body {
     margin-top: 5px;
     margin-left: 10%;
     margin-right: 10%;
+    margin-bottom: 30px;
     width: 80%;
     padding: 20px;
     box-sizing: border-box;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.2);
 }
 
 .categories {
@@ -323,7 +324,6 @@ svg.check-ok{
 /* Modern dashboard adjustments */
 .dashboard-wrapper {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .category-chip {
