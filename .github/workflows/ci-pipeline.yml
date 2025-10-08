@@ -31,7 +31,7 @@ jobs:
         run: npm test
         env: 
           MONGO_URI: mongodb://mongodb:27017/jobfinder-test
-          SESSION_SECRET: ${{ secrets.TEST_SESSION_SECRET }} 
+          SESSION_SECRET: ${{ secrets.SECRET}} 
           
 
       - name: 5. Verificar Build (se aplicável)
