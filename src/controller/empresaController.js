@@ -165,11 +165,38 @@ const updateEmpresa = async (req, res) => {
             });
         }
 
+        // validação de CNPJ
+        const cnpjNumerico = cnpj.replace(/\D/g, '');
+        if (cnpjNumerico.length !== 14){
+            return res.status(400).json({
+                success: false,
+                error: "CNPJ deve conter 14 dígitos numéricos"
+            });
+        }
+
+        // validação de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)){
+            return res.status(400).json({
+                success: false,
+                error: "Formato de email inválido"
+            });
+        }
+
+        // validação de telefone
+        const foneNumerico = fone.replace(/\D/g, '');
+        if (foneNumerico.length < 10 || foneNumerico > 11){
+            return res.status(400).json({
+                success: false,
+                error: "Telefone deve conter 10 ou 11 digitos"
+            });
+        }
+
         // Atualiza os campos
         empresa.nome = nome || empresa.nome;
-        empresa.cnpj = cnpj || empresa.cnpj;
+        empresa.cnpj = cnpjNumerico || empresa.cnpj;
         empresa.email = email || empresa.email;
-        empresa.fone = fone || empresa.fone;
+        empresa.fone = foneNumerico || empresa.fone;
         empresa.bio = bio || empresa.bio;
         empresa.site = site || empresa.site;
 
