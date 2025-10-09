@@ -369,11 +369,6 @@ svg.check-ok{
     margin: 0;
 }
 
-/* Reutilização de estilos para o modal de perfil */
-#perfilModal.modal {
-    /* Já herda de .modal */
-}
-
 #perfilModal .modal-content {
     /* Já herda de .modal-content */
     max-width: 500px;
@@ -384,12 +379,7 @@ svg.check-ok{
     align-items: stretch;
 }
 
-#perfilModal .modal-header {
-    /* Já herda de .modal-header */
-}
-
 #perfilModal .modal-body {
-    /* Já herda de .modal-body */
     padding: 10px 0 0 0;
 }
 
@@ -402,7 +392,6 @@ svg.check-ok{
 
 #perfilModal .btn-edit,
 #perfilModal .btn-back {
-    /* Reutiliza estilos dos botões já definidos */
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
