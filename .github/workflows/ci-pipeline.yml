@@ -8,11 +8,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest 
 
-    services: 
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
+    #services: 
+      #mongodb:
+        #image: mongo:latest
+        #ports:
 
     steps:
       - name: 1. Checkout do Código
