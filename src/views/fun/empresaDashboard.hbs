@@ -274,112 +274,224 @@
         }
     }
 
-    // aplicar máscaras quando o modal edição abrir
-    document.getElementById('editarPerfilBtn').onclick = function(){
-        document.getElementById('perfilModal').style.display = 'none';
-        document.getElementById('editarPerfilModal').style.display = 'flex';
-    
-        // Aplicar máscaras após o modal abrir
-        setTimeout(aplicarMascarasEdicao, 100);
+    // Variável para armazenar valores originais 
+    let valoresOriginais = {}
+
+    // Função para carregar valores originais quando o modal abre
+    function carregarValoresOriginais() {
+        valoresOriginais = {
+            nome: document.getElementById('editNome').value,
+            cnpj: document.getElementById('editCnpj').value,
+            email: document.getElementById('editEmail').value,
+            fone: document.getElementById('editFone').value,
+            bio: document.getElementById('editBio').value,
+            site: document.getElementById('editSite').value
+
+        };
     }
 
-    // função para aplicar máscaras
-    function aplicarMascarasEdicao() {
-        // mascara para CNPJ
+    // Função para resetar formulário aos valore originais
+    function resetarFormularioEdicao() {
+        if (valoresOriginais) {
+            document.getElementById('editNome').value = valoresOriginais.nome || '';
+            document.getElementById('editCnpj').value = valoresOriginais.cnpj || '';
+            document.getElementById('editEmail').value = valoresOriginais.email || '';
+            document.getElementById('editFone').value = valoresOriginais.fone || '';
+            document.getElementById('editBio').value = valoresOriginais.bio || '';
+            document.getElementById('editSite').value = valoresOriginais.site || '';
+        }
+        // Limpar mensagem de erro
+        document.querySelectorAll('.error-message').forEach(span => {
+            span.textContent = '';
+        });
+
+        // Limpar classes de validação 
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.classList.remove('is-invalid', 'invalid', 'valid');
+        });
+    }
+
+    // Função validação de Email
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Função validação de CNPJ
+    function validateCNPJ(cnpj) {
+        cnpj = cnpj.replace(/\D/g, ''); // tira caracteres não números
+
+        // Verifica se cnpj tem 14 digitos
+        if (cnpj.length !== 14) return false;
+
+        // Elimina CNPJs com todos os números iguais
+        if (/^(\d)\1{13}$/.test(cnpj)) return false;
+
+        let tamanho = cnpj.length - 2;
+        let numeros = cnpj.substring(0, tamanho);
+        const digitos = cnpj.substring(tamanho);
+        let soma = 0;
+        let pos = tamanho - 7;
+        let resultado;
+
+        // Cálculo do primeiro digito verificador
+        for (let i = tamanho; i >= 1; i --) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+
+        resultado = tamanho + 1;
+        numeros = cnpj.substring(0, tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+
+        // Cálculo do segundo digito verificador
+        for (let i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado !== parseInt(digitos.charAt(1))) return false;
+
+        return true;
+    }
+
+    function validateFoneFormat(value) {
+        const cleanedValue = value.replace(/\D/g, "");
+        return cleanedValue.length === 10 || cleanedValue.length === 11;
+    }
+
+    function showValidationError(inputElement, errorElement, message) {
+        if (!inputElement || errorElement) return;
+
+        if (message) {
+            inputElement.classList.add('is-invalid');
+            errorElement.textContent = message;
+            errorElement.classList.add('active');
+        } else {
+            inputElement.classList.remove('is-invalid');
+            errorElement.classList.remove('active');
+            errorElement.textContent = '';
+        }
+    }
+
+    // Aplicar máscaras
+    function AplicarMascarasEdicao() {
+
+        // Máscara para CNPJ
         const cnpjInput = document.getElementById('editCnpj');
-        cnpjInput.addEventListener('input', function(e){
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 14) {
-                value = value.replace(/(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1/$2');
-                value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
-                e.target.value = value
-            }
-            validarCNPJ(e.target);
-        });
+        if (cnpjInput) {
+            cnpjInput.addEventListener("input", (e) => {
+                let value = e.target.value.replace(/\D/g, "");
+                value = value.substring(0, 14); //limite 14 digitos
 
-        // Máscara para Telefone
-        const foneInput = document.getElementById('editFone');
-        foneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                if (value.length > 12) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+                } else if (value.length > 8) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{1,4})/, "$1.$2.$3/$4");
+                } else if (value.length > 5) {
+                    value = value.replace(/^(\d{2})(\d{3})(\d{1,3})/, "$1.$2.$3");
+                } else if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d{1,3})/, "$1.$2");
+                }
                 e.target.value = value;
-            }
-            validarTelefone(e.target);
-        });
 
-        // Validação em tempo real para Email
+                validarCampoCNPJ(e.target);
+            });
+        }
+
+        // Máscara para telefone
+        const foneInput = document.getElementById('editFone');
+        if (foneInput) {
+            foneInput.addEventListener("input", (e) => {
+                let value = e.target.value.replace(/\D/g, "");
+                value = value.substring(0, 11); // Limite de 11 digitos
+
+                if (value.length > 10) {
+                    value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+                } else if (value.length > 6) {
+                    value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+                } else if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+                } else {
+                    value = value.replace(/^(\d*)/, "($1");
+                }
+                e.target.value = value;
+
+                validarCampoTelefone(e.target);
+            });
+        }
+
+        // Validação de email
         const emailInput = document.getElementById('editEmail');
-        emailInput.addEventListener('blur', function(e) {
-            validarEmail(e.target);
-        });
-    }
+        if (emailInput) {
+            emailInput.addEventListener('input', function(e) {
+                validarCampoEmail(e.target);
+            });
+        }
+    }   
 
-    // Funções de validação
-    function validarCNPJ(input) {
+    // Funções para validação de campos
+    function validarCampoCNPJ(input) {
         const cnpj = input.value.replace(/\D/g, '');
         const errorSpan = document.getElementById('editCnpjError');
-    
-        if (cnpj.length !== 14) {
-            errorSpan.textContent = 'CNPJ deve ter 14 dígitos';
-            input.classList.add('invalid');
-            return false;
+
+        if (!validateCNPJ(input.value)) {
+        showValidationError(input, errorSpan, "CNPJ inválido, verifique os números digitados.");
+        return false;
         } else {
-            errorSpan.textContent = '';
-            input.classList.remove('invalid');
+            showValidationError(input, errorSpan, '');
             return true;
         }
     }
 
-    function validarEmail(input) {
+    function validarCampoEmail(input) {
         const email = input.value;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const errorSpan = document.getElementById('editEmailError');
-    
-        if (!emailRegex.test(email)) {
-            errorSpan.textContent = 'Email inválido';
-            input.classList.add('invalid');
+
+        if (input.value.trim() && !validarCampoEmail(input.value)) {
+            showValidationError(input, errorSpan, "Por favor, digite um endereço e-mail inválido.");
             return false;
         } else {
-            errorSpan.textContent = '';
-            input.classList.remove('invalid');
+            showValidationError(input, errorSpan, '');
             return true;
         }
     }
 
-    function validarTelefone(input) {
+    function validarCampoTelefone(input) {
         const telefone = input.value.replace(/\D/g, '');
         const errorSpan = document.getElementById('editFoneError');
-    
-        if (telefone.length < 10 || telefone.length > 11) {
-            errorSpan.textContent = 'Telefone deve ter 10 ou 11 dígitos';
-            input.classList.add('invalid');
+
+        if (!validateFoneFormat(input.value)) {
+            showValidationError(input, errorSpan, "Telefone deve conter 10 ou 11 digitos.");
             return false;
         } else {
-            errorSpan.textContent = '';
-            input.classList.remove('invalid');
+            showValidationError(input, errorSpan, '');
             return true;
         }
     }
 
-    // Validação antes do submit
-    document.getElementById('formEditarPerfil').addEventListener('submit', function(e) {
-        e.preventDefault();
-    
-        const cnpjValido = validarCNPJ(document.getElementById('editCnpj'));
-        const emailValido = validarEmail(document.getElementById('editEmail'));
-        const telefoneValido = validarTelefone(document.getElementById('editFone'));
-    
-        if (cnpjValido && emailValido && telefoneValido) {
-            // Se todas as validações passarem, enviar o formulário
-            this.submit();
-        } else {
-            alert('Por favor, corrija os erros antes de enviar o formulário.');
-        }
-    });
+    function validarFormularioEdicao() {
+        const cnpjValido = validarCampoCNPJ(document.getElementById('editCnpj'));
+        const emailValido = validarCampoEmail(document.getElementById('editEmail'));
+        const telefoneValido = validarCampoTelefone(document.getElementById('editFone'));
+
+        return cnpjValido && emailValido && telefoneValido;
+    }
+
+    // aplicar máscaras quando modal de edição abrir
+    document.getElementById('editarPerfilBtn').onclick = function() {
+        document.getElementById('perfilModal').style.display = 'none';
+        document.getElementById('editarPerfilModal').style.display = 'flex';
+
+        // carregar valores originais atuais
+        carregarValoresOriginais();
+
+        // aplicar máscaras após modal abrir
+        setTimeout(AplicarMascarasEdicao, 100);
+
+    };
 
     // Controles do modal de sucesso
     document.getElementById('closeModalSucesso').onclick = function() {
@@ -485,12 +597,19 @@
     // AJAX para editar perfil sem redirecionar
     document.getElementById('formEditarPerfil').onsubmit = async function(e) {
         e.preventDefault();
+
+        // Validar antes do envio
+        if (!validarFormularioEdicao()) {
+            alert("Por favor, corrija os erros em vermelho antes de enviar.");
+            return false;
+        }
+
         const form = e.target;
         const data = {
             nome: form.editNome.value,
-            cnpj: form.editCnpj.value,
+            cnpj: form.editCnpj.value.replace(/\D/g, ''), // só números
             email: form.editEmail.value,
-            fone: form.editFone.value,
+            fone: form.editFone.value.replace(/\D/g, ''), // só números
             bio: form.editBio.value,
             site: form.editSite.value
         };
