@@ -23,4 +23,4 @@ jobs:
 
       - name: 4. Deploy para o Ambiente de Staging
         run: |
-          curl -X POST ${{ secrets.TESTE }}
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

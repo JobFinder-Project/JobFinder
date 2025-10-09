@@ -30,8 +30,8 @@ jobs:
       - name: 4. Executar Testes Automatizados
         run: npm test
         env: 
-          MONGO_URI: mongodb://mongodb:27017/jobfinder-test
-          SESSION_SECRET: ${{secrets.SECRET}} 
+          MONGO_URI: ${{secrets.MONGO_URI}}
+          SESSION_SECRET: ${{secrets.SESSION_SECRET}} 
           
 
       - name: 5. Verificar Build (se aplicável)
