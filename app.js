@@ -25,26 +25,26 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
-try {
-    app.use(session({
-        secret: process.env.SESSION_SECRET || 'fallback-key',
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({
-            mongoUrl: process.env.MONGO_URI
-        }),
-        cookie: {
-            maxAge: 1000 * 60 * 60, // 1 hora
-            secure: process.env.NODE_ENV === 'production', // Apenas true em produção
-            httpOnly: true
-        }
-    }));
-} catch (erro) {
-    console.error(erro);
-    res.status(500).json({
-        message: 'Erro ao configurar a seessão do usuário!',
-        error: erro.messgae
-    });
+if (process.env.NODE_ENV !== 'test') {
+    try {
+        app.use(session({
+            secret: process.env.SESSION_SECRET || 'fallback-key',
+            resave: false,
+            saveUninitialized: false,
+            store: MongoStore.create({
+                mongoUrl: process.env.MONGO_URI
+            }),
+            cookie: {
+                maxAge: 1000 * 60 * 60, // 1 hora
+                secure: process.env.NODE_ENV === 'production', // Apenas true em produção
+                httpOnly: true
+            }
+        }));
+    } catch (erro) {
+        console.error('Erro fatal ao configurar a sessão do usuário!', erro);
+        process.exit(1);
+
+    }
 }
 
 // Configuração das rotas
