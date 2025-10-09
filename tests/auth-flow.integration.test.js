@@ -116,3 +116,42 @@ describe('Fluxo de Autenticação do Candidato', () => {
 });
 
 
+// ===================================================================================
+// == TESTES PARA O FLUXO DA EMPRESA
+// ===================================================================================
+describe('Fluxo de Autenticação da Empresa', () => {
+
+  // Dados de teste que respeitam as validações do seu empresaModel.js
+  const mockEmpresa = {
+    nome: 'Empresa de Teste LTDA',
+    cnpj: '12345678000199', // 14 dígitos, sem formatação
+    email: 'contato@empresa.com',
+    senha: 'senhaempresaforte',
+    fone: '9233334444', // 10 ou 11 dígitos
+  };
+
+  it('deve CADASTRAR uma nova empresa e redirecionar para o login', async () => {
+    // A rota de cadastro é POST /empresa/cadastrar, conforme empresaRoutes.js
+    const response = await agent
+      .post('/empresa/cadastrar')
+      .send(mockEmpresa);
+
+    // O controller createEmpresa redireciona para /login?cadastro=sucesso
+    expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toBe('/login?cadastro=sucesso');
+  });
+
+  it('deve realizar o LOGIN com uma empresa existente e retornar a URL do dashboard', async () => {
+    // Preparação
+    await agent.post('/empresa/cadastrar').send(mockEmpresa);
+    
+    // Ação
+    const loginResponse = await agent
+      .post('/login')
+      .send({ email: mockEmpresa.email, senha: mockEmpresa.senha });
+      
+    // Validação
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body.redirectUrl).toBe('/empresa/dashboard');
+  });
+});
