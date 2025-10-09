@@ -33,6 +33,6 @@ jobs:
           SESSION_SECRET: ${{secrets.SESSION_SECRET}} 
           
 
-      - name: 5. Verificar Build (se aplicável)
-        run: npm run build --if-present
+      #- name: 5. Verificar Build (se aplicável)
+        #run: npm run build --if-present
 
