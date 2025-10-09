@@ -1,3 +1,6 @@
+import { arrowsCategories } from "./setasCategorias.js";
+import { setupCategoryFilter } from "./filtroCategorias.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('candidaturasModal');
     const modalTitle = document.getElementById('modal-title');
@@ -16,6 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const detalhePrototype = document.getElementById('candidatura-detalhe-prototype');
     const confirmacaoPrototype = document.getElementById('candidatura-confirmacao-prototype');
     const resultadoPrototype = document.getElementById('candidatura-resultado-prototype');
+
+    const perfilModal = document.getElementById('perfilModal');
+    const openPerfilModalBtn = document.getElementById('openPerfilModal');
+    const closePerfilModalBtn = document.getElementById('closePerfilModal');
+
+    const vagaDetalhesModal = document.getElementById('vagaDetalhesModal');
+    const openVagaDetalhesModalBtn = document.getElementById('openVagaDetalhesModal');
+    const closeVagaDetalhesModalBtn = document.getElementById('closeVagaDetalhesModal');
+
+    const categoriesList = document.getElementById('categoriesList');
+    const left = document.getElementById('catLeft');
+    const right = document.getElementById('catRight');
 
     let candidaturasData = [];
     let selectedCandidaturaId = null;
@@ -148,6 +163,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function candidatarUmaVaga(candidatoId, vagaId) {
+        try {
+            const postResponse = await fetch(`/candidato/${candidatoId}/vagas/${vagaId}`, { method: 'POST' });
+            if (!postResponse.ok) throw new Error('Você já se candidatou a essa vaga!');
+            
+            document.getElementById('vagaDetalhesModal').style.display = 'none';
+            alert('Candidatura realizada com sucesso!');
+        } catch (err) {
+            alert('Erro ao candidatar-se! ' + err.message);
+        }
+    }
+
+    function renderizarVaga(btn) {
+        btn.addEventListener('click', async () => {
+            const vagaId = btn.getAttribute('data-vaga-id');
+            const candidatoId = document.body.dataset.candidatoId;
+            const body = document.getElementById('vagaDetalhesBody');
+            const candidatarBtn = document.getElementById('candidatarBtn'); 
+
+            // Busca os dados da vaga via rota GET do back-end
+            try {
+                const response = await fetch(`/candidato/vagas/${vagaId}`);
+                if (!response.ok) throw new Error('Vaga não encontrada');
+                const vaga = await response.json();
+                
+                body.innerHTML = `
+                    ${vaga.imagem ? `<img src="${vaga.imagem}" alt="Imagem da Vaga" class="job-image" />` : `<p><i>Sem imagem disponível</i></p>`}
+                    <h3>${vaga.nome}</h3>
+                    <div class="detalhes-vaga">
+                    <p><strong>Área:</strong> ${vaga.area}</p>
+                    <p><strong>Requisitos:</strong> ${vaga.requisitos}</p>
+                    <p><strong>Empresa:</strong> ${vaga.empresa?.nome || vaga.empresa || ''}</p>
+                    </div>
+                `;
+                candidatarBtn.style.display = '';
+                candidatarBtn.onclick = () => candidatarUmaVaga(candidatoId, vagaId);
+            } catch (err) {
+                body.innerHTML = `<p>Erro ao buscar vaga.</p>`;
+                candidatarBtn.style.display = 'none';
+            }
+            document.getElementById('vagaDetalhesModal').style.display = 'flex';
+        });
+    };
+    
     openModalBtn.addEventListener('click', openModal);
     closeButton.addEventListener('click', () => modal.style.display = 'none');
     window.addEventListener('click', (event) => {
@@ -194,4 +253,30 @@ document.addEventListener('DOMContentLoaded', () => {
             openModal();
         }
     });
+    
+    openPerfilModalBtn.addEventListener('click', () => {
+        perfilModal.style.display = 'flex';
+    });
+    closePerfilModalBtn.addEventListener('click', () => {
+        perfilModal.style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+        if (event.target === perfilModal) perfilModal.style.display = 'none';
+    });
+
+    document.querySelectorAll('.register-button[data-vaga-id]').forEach(btn => renderizarVaga(btn));
+
+    closeVagaDetalhesModalBtn.addEventListener('click', () => {
+        vagaDetalhesModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === vagaDetalhesModal) vagaDetalhesModal.style.display = 'none';
+    });
+
+    // Inicialização do filtro de categorias
+    setupCategoryFilter(categoriesList);
+
+    // Inicialização das setas de navegação das categorias
+    arrowsCategories(categoriesList, left, right);
 });
