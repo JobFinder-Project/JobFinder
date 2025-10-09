@@ -217,18 +217,22 @@
                 <div class="form-row">
                     <label for="editNome">Nome:</label>
                     <input type="text" id="editNome" name="nome" value="{{user.nome}}" required>
+                    <span class="error-message" id="editNomeError"></span>
                 </div>
                 <div class="form-row">
                     <label for="editCnpj">CNPJ:</label>
-                    <input type="text" id="editCnpj" name="cnpj" value="{{user.cnpj}}" required>
+                    <input type="text" id="editCnpj" name="cnpj" value="{{user.cnpj}}" placeholder="00.000.000/0000-00" required>
+                    <span class="error-message" id="editCnpjError"></span>
                 </div>
                 <div class="form-row">
                     <label for="editEmail">Email:</label>
-                    <input type="email" id="editEmail" name="email" value="{{user.email}}" required>
+                    <input type="email" id="editEmail" name="email" value="{{user.email}}" placeholder="email@empresa.com" required>
+                    <span class="error-message" id="editEmailError"></span>
                 </div>
                 <div class="form-row">
                     <label for="editFone">Telefone:</label>
-                    <input type="text" id="editFone" name="fone" value="{{user.fone}}" required>
+                    <input type="text" id="editFone" name="fone" value="{{user.fone}}" placeholder="(00) 00000-0000" required>
+                    <span class="error-message" id="editFoneError"></span>
                 </div>
                 <div class="form-row">
                     <label for="editBio">Biografia</label>
@@ -255,167 +259,6 @@
         </div>
     </div>
 
-    <script>
-    // Verificar se a vaga foi criada com sucesso
-    function verificarSucessoCriacaoVaga() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('vagaCriada') === 'true') {
-            document.getElementById('modalSucessoVaga').style.display = 'flex';
-            
-            // Limpar parâmetros da URL sem recarregar a página
-            const url = new URL(window.location);
-            url.searchParams.delete('vagaCriada');
-            url.searchParams.delete('empresaId');
-            window.history.replaceState({}, document.title, url.pathname + url.search);
-        }
-    }
-
-    // Controles do modal de sucesso
-    document.getElementById('closeModalSucesso').onclick = function() {
-        document.getElementById('modalSucessoVaga').style.display = 'none';
-    }
-    
-    document.getElementById('btnOkSucesso').onclick = function() {
-        document.getElementById('modalSucessoVaga').style.display = 'none';
-    }
-
-    // Verificar sucesso quando a página carregar
-    document.addEventListener('DOMContentLoaded', verificarSucessoCriacaoVaga);
-
-    // Abrir modais principais
-    document.getElementById('openVagasModal').onclick = function() {
-        document.getElementById('vagasModal').style.display = 'flex';
-    }
-    document.getElementById('closeVagasModal').onclick = function() {
-        document.getElementById('vagasModal').style.display = 'none';
-    }
-    document.getElementById('openCriarVagaModal').onclick = function() {
-        document.getElementById('criarVagaModal').style.display = 'flex';
-    }
-    document.getElementById('closeCriarVagaModal').onclick = function() {
-        document.getElementById('criarVagaModal').style.display = 'none';
-    }
-    
-    // Adicionar evento de submit no formulário de criar vaga
-    document.getElementById('formCriarVaga').onsubmit = function() {
-        // Fechar o modal imediatamente após o submit
-        document.getElementById('criarVagaModal').style.display = 'none';
-    }
-    
-    // Controle do modal de perfil (visualização)
-    document.getElementById('openPerfilModal').onclick = function() {
-        document.getElementById('perfilModal').style.display = 'flex';
-    }
-    document.getElementById('closePerfilModal').onclick = function() {
-        document.getElementById('perfilModal').style.display = 'none';
-    }
-    document.getElementById('closePerfilModalBtn').onclick = function() {
-        document.getElementById('perfilModal').style.display = 'none';
-    }
-
-    // Controle do modal de edição de perfil
-    document.getElementById('editarPerfilBtn').onclick = function() {
-        // Fechar modal de visualização e abrir modal de edição
-        document.getElementById('perfilModal').style.display = 'none';
-        document.getElementById('editarPerfilModal').style.display = 'flex';
-    }
-    
-    document.getElementById('closeEditarPerfilModal').onclick = function() {
-        document.getElementById('editarPerfilModal').style.display = 'none';
-    }
-    
-    document.getElementById('voltarVisualizarBtn').onclick = function() {
-        // Fechar modal de edição e voltar para visualização
-        document.getElementById('editarPerfilModal').style.display = 'none';
-        document.getElementById('perfilModal').style.display = 'flex';
-    }
-
-    // Modal Detalhes da Vaga
-    function abrirDetalhesVaga(vaga) {
-        document.getElementById('detalhesVagaTitulo').innerText = vaga.nome || 'Detalhes da Vaga';
-        document.getElementById('detalhesVagaBody').innerHTML = `
-            ${vaga.imagem ? `<img src="${vaga.imagem}" alt="${vaga.nome}" style="max-width:200px;margin-bottom:16px;">` : ''}
-            <p><strong>Área:</strong> ${vaga.area || ''}</p>
-            <p><strong>Requisitos:</strong> ${vaga.requisitos || ''}</p>
-            <p><strong>Empresa:</strong> ${vaga.empresa || ''}</p>
-        `;
-        document.getElementById('detalhesVagaModal').style.display = 'flex';
-    }
-
-    // Adiciona evento nos botões "Ver detalhes" das vagas
-    document.querySelectorAll('.view-job-button').forEach(function(btn) {
-        btn.onclick = function(e) {
-            e.preventDefault();
-            const vaga = {
-                nome: btn.getAttribute('data-nome'),
-                area: btn.getAttribute('data-area'),
-                requisitos: btn.getAttribute('data-requisitos'),
-                empresa: btn.getAttribute('data-empresa'),
-                imagem: btn.getAttribute('data-imagem')
-            };
-            abrirDetalhesVaga(vaga);
-        };
-    });
-
-    document.getElementById('closeDetalhesVagaModal').onclick = function() {
-        document.getElementById('detalhesVagaModal').style.display = 'none';
-    };
-
-    // Fechar modais ao clicar fora
-    window.onclick = function(event) {
-        ['vagasModal', 'criarVagaModal', 'perfilModal', 'editarPerfilModal', 'detalhesVagaModal', 'modalSucessoVaga'].forEach(function(id) {
-            var modal = document.getElementById(id);
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    }
-
-    // AJAX para editar perfil sem redirecionar
-    document.getElementById('formEditarPerfil').onsubmit = async function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const data = {
-            nome: form.editNome.value,
-            cnpj: form.editCnpj.value,
-            email: form.editEmail.value,
-            fone: form.editFone.value,
-            bio: form.editBio.value,
-            site: form.editSite.value
-        };
-        
-        try {
-            const res = await fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (res.ok) {
-                // Atualizar os dados na visualização
-                document.getElementById('visualNome').textContent = data.nome;
-                document.getElementById('visualCnpj').textContent = data.cnpj;
-                document.getElementById('visualEmail').textContent = data.email;
-                document.getElementById('visualFone').textContent = data.fone;
-                document.getElementById('visualBio').textContent = data.bio;
-                document.getElementById('visualSite').textContent = data.site;
-                
-                // Fechar modal de edição e voltar para visualização
-                document.getElementById('editarPerfilModal').style.display = 'none';
-                document.getElementById('perfilModal').style.display = 'flex';
-                
-                alert('Perfil atualizado com sucesso!');
-            } else {
-                const error = await res.json();
-                alert('Erro ao salvar alterações: ' + (error.error || 'Erro desconhecido'));
-            }
-        } catch (error) {
-            console.error('Erro na requisição:', error);
-            alert('Erro ao conectar com o servidor');
-        }
-    };
-    </script>
+    <script src="/assets/js/empresa-Dashboard.js"></script>
 </body>
 </html>
