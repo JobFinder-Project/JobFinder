@@ -29,7 +29,7 @@ jobs:
       - name: 4. Executar Testes Automatizados
         run: npm test
         env: 
-          MONGO_URI: ${{secrets.MONGO_URI}}
+          #MONGO_URI: ${{secrets.MONGO_URI}}
           SESSION_SECRET: ${{secrets.SESSION_SECRET}} 
           
 
