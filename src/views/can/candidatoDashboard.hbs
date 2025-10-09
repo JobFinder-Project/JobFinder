@@ -31,7 +31,9 @@
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>
                         <p class="job-area">{{area}}</p>
-                        <button class="register-button" onclick="window.location.href = '/candidato/vagas/{{_id}}';">Ver Vaga</button>
+                        <button id="openVagaDetalhesModal" class="register-button" data-vaga-id="{{_id}}">
+                            Ver Vaga
+                        </button>
                     </li>
                     {{/each}}
                     {{else}}
@@ -111,7 +113,7 @@
         </div>
     </div>
 
-    <div id="perfilModal" class="modal" style="display:none;">
+    <div id="perfilModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Meu Perfil</h2>
@@ -144,6 +146,21 @@
                     <button class="btn-edit" onclick="window.location.href = '/candidato/perfil/{{candidatoId}}/editar';">Editar</button>
                     {{/if}}
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="vagaDetalhesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="vagaDetalhesTitulo">Detalhes da Vaga</h2>
+                <span class="close-button" id="closeVagaDetalhesModal">&times;</span>
+            </div>
+            <div class="modal-body" id="vagaDetalhesBody">
+               
+            </div>
+            <div class="modal-footer">
+                <button id="candidatarBtn" class="register-button">Candidatar-se</button>
             </div>
         </div>
     </div>

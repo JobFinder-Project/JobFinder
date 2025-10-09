@@ -155,17 +155,7 @@ const verVaga = async (req, res) => {
             imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
         }
 
-        res.render('can/vagaDetalhes', {
-            title: vaga.nome,
-            _id: vaga._id,
-            nome: vaga.nome,
-            area: vaga.area,
-            requisitos: vaga.requisitos,
-            empresa: vaga.empresa.nome,
-            imagem: imagemBase64,
-            style: 'vagasDetalhes.css',
-            candidatoId
-        });
+        res.status(200).json(vaga);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({
