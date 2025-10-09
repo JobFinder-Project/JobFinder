@@ -5,6 +5,49 @@ const bcrypt = require("bcrypt");
 const Candidatura = require("../models/candidaturaModel");
 const Swal = require('sweetalert2');
 
+// Função validação CNPJ
+function validateCNPJ(cnpj) {
+    cnpj = cnpj.replace(/\D/g, ''); // só números
+
+    // verifica se tem 14 digitos
+    if (cnpj.length !== 14) return false;
+
+    // remove CNPJs com todos os dígitos iguais
+    if (/^(\d)\1{13}$/.test(cnpj)) return false;
+
+    let tamanho = cnpj.length - 2;
+    let numeros = cnpj.substring(0, tamanho);
+    const digitos = cnpj.substring(tamanho);
+    let soma = 0;
+    let pos = tamanho - 7;
+    let resultado;
+
+    // Cálculo do primeiro dígito verificador
+    for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado !== parseInt(digitos.charAt(0))) return false;
+
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+
+    // Cálculo do segundo dígito verificador
+    for (let i = tamanho; i >= 1; i--) {
+        soma += numeros.charAt(tamanho - i) * pos--;
+        if (pos < 2) pos = 9;
+    }
+
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+    if (resultado !== parseInt(digitos.charAt(1))) return false;
+
+    return true;
+}
+
 // Renderiza a página de dashboard
 const dashboardEmpresa = async (req, res) => {
     try {
@@ -165,40 +208,58 @@ const updateEmpresa = async (req, res) => {
             });
         }
 
+        let cnpjNumerico;
+        let foneNumerico;
+
         // validação de CNPJ
-        const cnpjNumerico = cnpj.replace(/\D/g, '');
-        if (cnpjNumerico.length !== 14){
-            return res.status(400).json({
-                success: false,
-                error: "CNPJ deve conter 14 dígitos numéricos"
-            });
+        if (cnpj !== undefined) {
+            cnpjNumerico = cnpj.replace(/\D/g, '');
+
+            if (cnpjNumerico.length !== 14){
+                return res.status(400).json({
+                    success: false,
+                    error: "CNPJ deve conter 14 dígitos numéricos"
+                });
+            }
+        
+            if (!validateCNPJ(cnpjNumerico)) {
+                return res.status(400).json({
+                    success: false,
+                    error: "CNPJ inválido, verifique os números digitados"
+                });
+            }
         }
 
         // validação de email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)){
-            return res.status(400).json({
-                success: false,
-                error: "Formato de email inválido"
-            });
+        if (email !== undefined) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)){
+                return res.status(400).json({
+                    success: false,
+                    error: "Formato de email inválido"
+                });
+            }
         }
 
         // validação de telefone
-        const foneNumerico = fone.replace(/\D/g, '');
-        if (foneNumerico.length < 10 || foneNumerico > 11){
-            return res.status(400).json({
-                success: false,
-                error: "Telefone deve conter 10 ou 11 digitos"
-            });
+        if (fone !== undefined) {
+            foneNumerico = fone.replace(/\D/g, '');
+
+            if (foneNumerico.length < 10 || foneNumerico.length > 11) {
+                return res.status(400).json({
+                    success: false,
+                    error: "Telefone deve conter 10 ou 11 digitos"
+                });
+            }
         }
 
         // Atualiza os campos
-        empresa.nome = nome || empresa.nome;
-        empresa.cnpj = cnpjNumerico || empresa.cnpj;
-        empresa.email = email || empresa.email;
-        empresa.fone = foneNumerico || empresa.fone;
-        empresa.bio = bio || empresa.bio;
-        empresa.site = site || empresa.site;
+        if (nome !== undefined) empresa.nome = nome;
+        if (cnpj !== undefined) empresa.cnpj = cnpjNumerico;
+        if (email !== undefined) empresa.email = email;
+        if (fone !== undefined) empresa.fone = foneNumerico;
+        if (bio !== undefined) empresa.bio = bio;
+        if (site !== undefined) empresa.site = site;
 
         // Salva as alterações
         await empresa.save();
