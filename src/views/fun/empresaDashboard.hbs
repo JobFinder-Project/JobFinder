@@ -493,6 +493,34 @@
 
     };
 
+        // Resetar ao fechar modal
+    document.getElementById('closeEditarPerfilModal').onclick = function () {
+        resetarFormularioEdicao();
+        document.getElementById('editarPerfilModal').style.display = 'none';
+    };
+
+    // Resetar ao clicar em voltar
+    document.getElementById('voltarVisualizarBtn').onclick = function () {
+        resetarFormularioEdicao();
+        document.getElementById('editarPerfilModal').style.display = 'none';
+        document.getElementById('perfilModal').style.display = 'flex';
+    };
+
+    // Resetar quando o modal de perfil for fechado
+    document.getElementById('closePerfilModal').onclick = function () {
+        resetarFormularioEdicao();
+        document.getElementById('perfilModal').style.display = 'none';
+    };
+
+    // Resetar quando navegar entre modais
+    document.getElementById('openVagasModal').onclick = function () {
+        resetarFormularioEdicao();
+    }
+
+    document.getElementById('openCriarVagaModal').onclick = function () {
+        resetarFormularioEdicao();
+    }
+
     // Controles do modal de sucesso
     document.getElementById('closeModalSucesso').onclick = function() {
         document.getElementById('modalSucessoVaga').style.display = 'none';
