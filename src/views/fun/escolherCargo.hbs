@@ -88,7 +88,7 @@
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Impede o envio do formulário
 
-    const userType = document.querySelector('input[name="user-type"]:checked')?.value;
+    const userType = document.querySelector('input[name="user-type"]:checked') && document.querySelector('input[name="user-type"]:checked').value;
 
     if (userType === "candidate") {
       window.location.href = "/candidato/cadastrar"; 
