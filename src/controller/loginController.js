@@ -162,7 +162,7 @@ exports.logout = (req, res) => {
         });
         }
     })
-    res.redirect('/home');
+    res.redirect('/login');
 }
 
 /*
