@@ -24,6 +24,12 @@ const dashboardCandidato = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
         const vagas = await Vaga.find().populate('empresa');
+        const candidato = await Candidato.findById(candidatoId, '-senha');
+
+        // Verifica se o candidato existe
+        if (!candidato) {
+            return res.status(404).send("Candidato não encontrado");
+        }
 
         // Converte as imagens para base64
         const vagasComImagens = vagas.map(vaga => {
@@ -38,13 +44,18 @@ const dashboardCandidato = async (req, res) => {
             };
         });
 
+        // Coleta apenas as areas únicas das vagas retornadas, sem duplicatas
+        const areas = [...new Set(vagas.map(vaga => vaga.area))];
+
         res.render('can/candidatoDashboard', {
             title: 'Dashboard',
             user: req.session.user,
-            message: 'Bem-vindo ao seu painel, Candidato!',
+            candidato,
+            inDashboard: true,
             style: 'candidatoDashboar.css',
             candidatoId,
             vagas: vagasComImagens,
+            areas
         });
     } catch (erro) {
         console.error(erro);
@@ -66,32 +77,6 @@ const getCadastroCandidato = async (req, res) => {
         console.error(erro);
         res.status(500).send({
             message: "Erro ao renderizar a página de registro do candidato!",
-            error: erro.message
-        });
-    }
-};
-
-// Renderiza a página do perfil
-const getPerfilCandidato = async (req, res) => {
-    try {
-        const id = req.params.candidatoId;
-        const candidato = await Candidato.findById(id, '-senha');
-
-        // Verifica se o candidato existe
-        if (!candidato) {
-            return res.status(404).send("Candidato não encontrado");
-        }
-
-        res.render('can/getPerfil', {
-            title: candidato.nome,
-            style: "getPerfilCand.css",
-            user: candidato,
-            id: candidato._id,
-        });
-    } catch (erro) {
-        console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar o perfil do candidato!",
             error: erro.message
         });
     }
@@ -170,17 +155,7 @@ const verVaga = async (req, res) => {
             imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
         }
 
-        res.render('can/vagaDetalhes', {
-            title: vaga.nome,
-            _id: vaga._id,
-            nome: vaga.nome,
-            area: vaga.area,
-            requisitos: vaga.requisitos,
-            empresa: vaga.empresa.nome,
-            imagem: imagemBase64,
-            style: 'vagasDetalhes.css',
-            candidatoId
-        });
+        res.status(200).json(vaga);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({
@@ -226,11 +201,15 @@ const buscarVagas = async (req, res) => {
             };
         });
 
+        // Coleta apenas as areas únicas das vagas retornadas, sem duplicatas
+        const areas = [...new Set(vagas.map(vaga => vaga.area))];
+
         res.render('can/resultVagas', {
             vagas: vagasComImagens,
             query: q,
             title: 'Lista de Vagas',
-            style: 'buscaVagas.css'
+            areas,
+            style: 'candidatoDashboar.css',
         });
     } catch (erro) {
         console.error(erro);
@@ -351,7 +330,7 @@ const verCandidatura = async (req, res) => {
             vagaNome: candidatura.vaga.nome || 'Não informado',
             vagaArea: candidatura.vaga.area || 'Não informado',
             vagaRequisitos: candidatura.vaga.requisitos || 'Não informado',
-            empresa: candidatura.vaga.empresa?.nome || 'Não informado',
+            empresa: candidatura.vaga.empresa && candidatura.vaga.empresa.nome || 'Não informado',
             candidatoNome: candidatura.candidato.nome || 'Não informado',
             status: candidatura.status || 'Não informado',
             imagem: imagemBase64,
@@ -432,7 +411,7 @@ const updatePerfil = async (req, res) => {
 
         await candidato.save();
 
-        res.redirect(`/candidato/perfil/${candidatoId}`);
+        res.redirect(`/candidato/dashboard`);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({
@@ -445,7 +424,6 @@ const updatePerfil = async (req, res) => {
 module.exports = {
     dashboardCandidato,
     getCadastroCandidato,
-    getPerfilCandidato,
     cadastrarCandidato,
     verVaga,
     buscarVagas,

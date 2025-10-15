@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 const { isAuthenticated, isCandidato} = require('../middleware/auth');
-const { dashboardCandidato, getPerfilCandidato, getCadastroCandidato, cadastrarCandidato, verVaga,candidatarAVaga, buscarVagas, verCandidatura, cancelarCandidatura, updatePerfil } = require('../controller/candidatoController');
+const { dashboardCandidato, getCadastroCandidato, cadastrarCandidato, verVaga,candidatarAVaga, buscarVagas, verCandidatura, cancelarCandidatura, updatePerfil } = require('../controller/candidatoController');
 const { visualizarTelaEdicaoCand, getCandidaturas} = require('../controller/telasController')
 
 // Rotas do candidato
@@ -13,7 +13,6 @@ router.post("/cadastrar", upload.single('imagem'), cadastrarCandidato);
 router.use(isAuthenticated, isCandidato);
 
 router.get('/dashboard', dashboardCandidato);
-router.get("/perfil/:candidatoId", getPerfilCandidato);
 router.get('/vagas/buscar', buscarVagas);
 router.get("/vagas/:id", verVaga);
 router.post("/:candidatoId/vagas/:id", candidatarAVaga);

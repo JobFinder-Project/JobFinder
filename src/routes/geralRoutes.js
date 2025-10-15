@@ -12,6 +12,7 @@ const { verVaga, candidatarse, buscarvagas } = require('../controller/candidatoC
 
 // Rotas de renderização das páginas
 router.get("/home", getHome);
+router.get("/", getHome);
 router.get("/cargo", getCargo);
 router.get("/login", getLogin);
 router.post("/login", realizarLogin);

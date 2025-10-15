@@ -1,61 +1,39 @@
 <body data-candidato-id="{{candidatoId}}">
-    <div class="page-container">
-        <nav class="navbar">
-            <h1>JobFinder</h1>
-            <div class="search-container">
-                <form action="/candidato/vagas/buscar" method="GET">
-                    <input type="text" name="q" class="search-input" placeholder="Buscar Vagas">
-                    <button type="submit" class="search-button">Buscar</button>
-                </form>
-            </div>
-            <ul class="navbar-menu">
-                <li>
-                    <button id="openCandidaturasModalBtn" class="navbar-button">
-                        Minhas Candidaturas
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                            <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
-                            <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0M7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0"/>
-                        </svg>
-                    </button>
-                </li>
-                <li><a href="/candidato/perfil/{{candidatoId}}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                    </svg>
-                </a></li>
-                <li><a href="/logout">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-                    </svg>
-                </a></li>
-            </ul>
-        </nav>
-
+    <div class="dashboard-wrapper">
+        {{>navbar-candidato}}
         <main class="main-content">
-            <div class="categories">
-                <button class="category-button">Full Stack</button>
-                <button class="category-button">UX/UI Designer</button>
-                <button class="category-button">Analista de Dados</button>
-                <button class="category-button">Técnico em TI</button>
-                <button class="category-button">Estoquista</button>
-                <button class="category-button">Programador Front End</button>
-                <button class="category-button">Programador Back End</button>
-                <button class="category-button">Operador de caixa</button>
-                <button class="category-button">Enfermagem</button>
-            </div>
+            <div class="categories modern-categories">
+                <button id="catLeft" class="category-arrow left disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11 1.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-1 0v-12a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M4.854 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 8l2.855 2.854a.5.5 0 1 1-.708.708l-3-3z"/>
+                    </svg>
+                </button>
+                <div id="categoriesList" class="categories-list">
+                    {{#each areas}}
+                    <button class="category-chip" data-category="{{this}}">{{this}}</button>
+                    {{/each}}
+                </div>
+                <button id="catRight" class="category-arrow right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5 1.5a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 1 0v-12a.5.5 0 0 0-.5-.5z"/>
+                        <path d="M11.146 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 8l-2.855 2.854a.5.5 0 1 0 .708.708l3-3z"/>
+                    </svg>
+                </button>
+            </div>                
 
             <div class="jobs-feed">
                 <ul class="card-grid">
                     {{#if vagas.length}}
                     {{#each vagas}}
-                    <li class="job-card">
+                    <li id="card-job" class="job-card modern-job-card">
                         <img src="{{imagem}}" alt="{{nome}}" class="job-image" />
                         <h2>{{nome}}</h2>
                         <p class="job-company">{{empresa.nome}}</p>
-                        <p>{{area}}</p>
-                        <button class="register-button" onclick="window.location.href = '/candidato/vagas/{{_id}}';">Ver Vaga</button>
+                        <p class="job-area">{{area}}</p>
+                        <button id="openVagaDetalhesModal" class="register-button" data-vaga-id="{{_id}}">
+                            Ver Vaga
+                        </button>
                     </li>
                     {{/each}}
                     {{else}}
@@ -135,5 +113,59 @@
         </div>
     </div>
 
-    <script src="/assets/js/candidato-Dashboard.js"></script>
+    <div id="perfilModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Meu Perfil</h2>
+                <span class="close-button" id="closePerfilModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                {{#if candidato.cpf}}
+                <section>
+                    {{#if candidato.imagem}}
+                    <div>
+                        <img src="data:{{candidato.imagem.contentType}};base64,{{candidato.imagem.data}}" alt="Imagem do candidato">
+                    </div>
+                    {{/if}}
+                    <p class="perfil-nome">{{candidato.nome}}</p>
+                    <p><strong>CPF:</strong> {{candidato.cpf}}</p>
+                    <p><strong>Email:</strong> {{candidato.email}}</p>
+                    <p><strong>Telefone:</strong> {{candidato.telefone}}</p>
+                    <p><strong>Educação:</strong> {{candidato.educacao}}</p>
+                    <p><strong>Qualificações:</strong> {{candidato.qualificacao}}</p>
+                    <p><strong>Cursos:</strong> {{#if candidato.cursos}}{{#each candidato.cursos}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}Não informado{{/if}}</p>
+                    <p><strong>Descrição:</strong> {{candidato.descricao}}</p>
+                    <p><strong>Habilidades Técnicas:</strong> {{candidato.habilidadesTecnicas}}</p>
+                    <p><strong>Idiomas:</strong> {{#if candidato.idiomas}}{{#each candidato.idiomas}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{else}}Não informado{{/if}}</p>
+                </section>
+                {{else}}
+                <p>Erro: Usuário não encontrado.</p>
+                {{/if}}
+                <div class="buttons">
+                    {{#if candidato.cpf}}
+                    <button class="btn-edit" onclick="window.location.href = '/candidato/perfil/{{candidatoId}}/editar';">Editar</button>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="vagaDetalhesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="vagaDetalhesTitulo">Detalhes da Vaga</h2>
+                <span class="close-button" id="closeVagaDetalhesModal">&times;</span>
+            </div>
+            <div class="modal-body" id="vagaDetalhesBody">
+               
+            </div>
+            <div class="modal-footer">
+                <button id="candidatarBtn" class="register-button">Candidatar-se</button>
+            </div>
+        </div>
+    </div>
+
+    {{>footer-candidato}}
+
+    <script type="module" src="/assets/js/candidato-Dashboard.js"></script>
 </body>

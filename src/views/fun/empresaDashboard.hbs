@@ -1,31 +1,34 @@
+<!-- filepath: /home/nicolas/Documentos/Disciplinas/Gerência de Configuração/JobFinder/sistema/src/views/fun/empresaDashboard.hbs -->
+<head>
+    <link rel="stylesheet" href="/assets/css/empresaDashboard.css">
+</head> 
+
 <body>
     <nav class="navbar">
         <h1>JobFinder</h1>
-    <div class="search-container">
+        <div class="search-container">
             <form action="/empresa/candidatos/buscar" method="GET">
                 <span class="search-icon"></span>
                 <input type="text" name="q" class="search-input" placeholder="Buscar Candidatos 🔍">
                 <button type="submit" class="search-button">Buscar</button>
             </form>
-    </div>
+        </div>
         <ul class="navbar-menu">
-            <li><a href="/logout">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                <path fill-rule="evenodd"
-                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-            </svg>
-            </a></li>
+            <li>
+                <a href="/logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                        <path fill-rule="evenodd"
+                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                    </svg>
+                </a>
+            </li>
         </ul>
     </nav>
 
-    <!-- Barra de busca -->
-
-
     <main class="main-content">
-    <!-- Abas de categorias -->
         <div class="category-tabs">
             <button class="tab active">Todos</button>
             <button class="tab">Área de TI</button>
@@ -33,8 +36,6 @@
             <button class="tab">Caixa</button>
             <button class="tab">Vendas</button>
         </div>
-
-        <!-- Grid de candidatos -->
         <div class="candidates-grid">
             {{#each candidatos}}
             <div class="candidate-card">
@@ -48,13 +49,216 @@
             {{/each}}
         </div>
     </main>
-    <!-- Navegação inferior -->
-    <nav class="bottom-nav">
-        <a href="/empresa/dashboard" class="nav-item active">Início</a>
-        <a href="/empresa/{{empresaId}}/vagas" class="nav-item">Vagas</a>
-        <a href="/empresa/{{empresaId}}/vagas/criar" class="nav-item">Add Vagas</a>
-        <a href="/empresa/{{empresaId}}/perfil" class="nav-item">Perfil</a>
-    </nav>
-</body>
 
+    <nav class="bottom-nav custom-nav">
+        <a href="javascript:void(0)" class="nav-btn" id="openVagasModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#fff"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z"/></svg>
+            </div>
+            <span>Vagas</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-btn" id="openCriarVagaModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#fff"><path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/></svg>
+            </div>
+            <span>Add Vagas</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-btn" id="openPerfilModal">
+            <div class="nav-icon">
+                <svg width="36" height="36" fill="#fff"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/></svg>
+            </div>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <div id="vagasModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeVagasModal">&times;</span>
+            <div class="page-title">
+                <h1>Vagas Disponíveis</h1>
+            </div>
+            <div class="vagas-list-scroll">
+                {{#if vagas.length}}
+                {{#each vagas}}
+                <div class="vaga-card-row">
+                    {{#if this.imagem}}
+                    <img src="{{this.imagem}}" alt="{{this.nome}}" class="job-image" />
+                    {{/if}}
+                    <div class="vaga-card-info">
+                        <h2 class="job-title">{{this.nome}}</h2>
+                        {{#if this.empresa}}
+                        <span class="job-company">{{this.empresa.nome}}</span>
+                        {{/if}}
+                        <div class="vaga-info">
+                            <span class="job-area">{{this.area}}</span>
+                            <button class="view-job-button"
+                                data-nome="{{this.nome}}"
+                                data-area="{{this.area}}"
+                                data-requisitos="{{this.requisitos}}"
+                                data-empresa="{{this.empresa.nome}}"
+                                data-imagem="{{this.imagem}}"
+                            >Ver detalhes</button>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="no-data">
+                    <p>Não existem vagas cadastradas.</p>
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div id="criarVagaModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeCriarVagaModal">&times;</span>
+            <div class="page-title">
+                <h1>Criar Nova Vaga</h1>
+            </div>
+            <form class="form-add-vaga" action="/empresa/{{empresaId}}/vagas/criar" method="POST" enctype="multipart/form-data" id="formCriarVaga">
+                <div class="form-row">
+                    <label for="nome">Nome da Vaga:</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-row">
+                    <label for="area">Área *</label>
+                    <select id="area" name="area" required>
+                        <option value="">Selecione</option>
+                        <option value="Comercial/Vendas">Comercial/Vendas</option>
+                        <option value="Administrativa">Administrativa</option>
+                        <option value="Gastronomia">Gastronomia</option>
+                        <option value="Logística">Logística</option>
+                        <option value="Construção Civil">Construção Civil</option>
+                        <option value="Industrial">Industrial</option>
+                        <option value="Serviços Gerais">Serviços Gerais</option>
+                        <option value="Finanças">Finanças</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="TI - Tecnologia da Informação">TI - Tecnologia da Informação</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="requisitos">Requisitos *:</label>
+                    <textarea id="requisitos" name="requisitos" rows="4" required></textarea>
+                </div>
+                <div class="form-row">
+                    <label for="imagem">Imagem da Vaga:</label>
+                    <input type="file" id="imagem" name="imagem" accept="image/*">
+                </div>
+                <button type="submit" class="btn-add-vaga">Salvar Vaga</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detalhes da Vaga -->
+    <div id="detalhesVagaModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeDetalhesVagaModal">&times;</span>
+            <div class="page-title">
+                <h1 id="detalhesVagaTitulo">Detalhes da Vaga</h1>
+            </div>
+            <div id="detalhesVagaBody">
+                <!-- Conteúdo dinâmico da vaga será inserido aqui via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar Perfil -->
+    <div id="perfilModal" class="modal" style="display:none;">
+        <div class="modal-content perfil-modal">
+            <span class="close" id="closePerfilModal">&times;</span>
+            <div class="page-title">
+                <h1>Meu Perfil</h1>
+            </div>
+            <div class="perfil-visualizacao">
+                <div class="perfil-info-card">
+                    <div class="info-row">
+                        <strong>Nome da Empresa:</strong>
+                        <span id="visualNome">{{user.nome}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>CNPJ:</strong>
+                        <span id="visualCnpj">{{user.cnpj}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Email:</strong>
+                        <span id="visualEmail">{{user.email}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Telefone:</strong>
+                        <span id="visualFone">{{user.fone}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Biografia:</strong>
+                        <span id="visualBio">{{user.bio}}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Site:</strong>
+                        <span id="visualSite">{{user.site}}</span>
+                    </div>
+                </div>
+                <div class="perfil-actions">
+                    <button type="button" class="btn-add-vaga" id="editarPerfilBtn">Editar Perfil</button>
+                    <button type="button" class="back-button" id="closePerfilModalBtn">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Perfil -->
+    <div id="editarPerfilModal" class="modal" style="display:none;">
+        <div class="modal-content perfil-modal">
+            <span class="close" id="closeEditarPerfilModal">&times;</span>
+            <div class="page-title">
+                <h1>Editar Perfil</h1>
+            </div>
+            <form class="form-add-vaga" id="formEditarPerfil" action="/empresa/{{user._id}}/editar" method="POST">
+                <div class="form-row">
+                    <label for="editNome">Nome:</label>
+                    <input type="text" id="editNome" name="nome" value="{{user.nome}}" required>
+                    <span class="error-message" id="editNomeError"></span>
+                </div>
+                <div class="form-row">
+                    <label for="editCnpj">CNPJ:</label>
+                    <input type="text" id="editCnpj" name="cnpj" value="{{user.cnpj}}" placeholder="00.000.000/0000-00" required>
+                    <span class="error-message" id="editCnpjError"></span>
+                </div>
+                <div class="form-row">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="email" value="{{user.email}}" placeholder="email@empresa.com" required>
+                    <span class="error-message" id="editEmailError"></span>
+                </div>
+                <div class="form-row">
+                    <label for="editFone">Telefone:</label>
+                    <input type="text" id="editFone" name="fone" value="{{user.fone}}" placeholder="(00) 00000-0000" required>
+                    <span class="error-message" id="editFoneError"></span>
+                </div>
+                <div class="form-row">
+                    <label for="editBio">Biografia</label>
+                    <textarea id="editBio" name="bio">{{user.bio}}</textarea>
+                </div>
+                <div class="form-row">
+                    <label for="editSite">Site</label>
+                    <input type="url" name="site" id="editSite" value="{{user.site}}">
+                </div>
+                <button type="submit" class="btn-add-vaga">Salvar alterações</button>
+                <button type="button" class="back-button" id="voltarVisualizarBtn">Voltar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Sucesso para Criação de Vaga -->
+    <div id="modalSucessoVaga" class="modal-sucesso" style="display:none;">
+        <div class="modal-sucesso-content">
+            <span class="close" id="closeModalSucesso">&times;</span>
+            <div class="icone-sucesso">✓</div>
+            <h2>Vaga Publicada com Sucesso!</h2>
+            <p>Sua vaga foi criada e está disponível para candidatos se inscreverem. Você pode visualizá-la na seção "Vagas" ou criar uma nova vaga.</p>
+            <button class="btn-ok-sucesso" id="btnOkSucesso">OK</button>
+        </div>
+    </div>
+
+    <script src="/assets/js/empresa-Dashboard.js"></script>
+</body>
 </html>
