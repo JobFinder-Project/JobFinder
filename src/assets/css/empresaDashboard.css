@@ -1,17 +1,17 @@
-/* Estilos básicos unificados */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
-    overflow-x: hidden; /* Remove scroll horizontal apenas */
+    overflow-x: auto; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-html, body {
+html {
     height: 100%;
-    margin: 0;
-    padding: 0;
 }
 
 /* Navbar do empresaDashboar.css */
@@ -179,15 +179,16 @@ html, body {
 
 .main-content {
     background: #f8fafc;
-    padding-bottom: 120px;
     margin-top: 5px;
-    margin-left: 10%;
-    margin-right: 10%;
-    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - 80px);
+    max-width: 1200px;
     padding: 20px;
     box-sizing: border-box;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* Remove altura mínima e overflow para permitir scroll natural */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    flex: 1 0 auto; /* allow main content to grow and push footer down when needed */
+    overflow: auto;
 }
 
 .category-tabs {
@@ -236,11 +237,11 @@ html, body {
     justify-content: center;
     align-items: center;
     background: #f5f7fa;
-    padding: 24px 0 16px 0;
-    border-radius: 32px;
+    padding: 16px 12px;
+    border-radius: 28px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
     max-width: 700px;
-    gap: 40px;
+    gap: 24px;
     z-index: 100;
 }
 
