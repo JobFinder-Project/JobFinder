@@ -478,6 +478,30 @@ svg.check-ok{
     
 }
 
+/* Estilos específicos para o modal de sucesso ao editar perfil */
+#perfilSuccessModal .modal-content {
+    max-width: 420px; /* largura menor e mais focada */
+    width: 90%;
+    height: auto; /* altura automática conforme conteúdo */
+    max-height: 50vh; /* limitar a altura para não ocupar a tela inteira */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#perfilSuccessModal .modal-body {
+    padding: 10px 0 0 0;
+}
+
+/* Reduz o tamanho do ícone dentro do modal de sucesso */
+#perfilSuccessModal svg.check-ok {
+    width: 80px !important;
+    height: 80px !important;
+}
+
 /* Centraliza e destaca o nome do candidato no modal de perfil */
 #perfilModal .perfil-nome {
     text-align: center;
