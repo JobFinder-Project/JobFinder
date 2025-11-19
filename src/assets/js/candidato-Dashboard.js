@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const openPerfilModalBtn = document.getElementById('openPerfilModal');
     const closePerfilModalBtn = document.getElementById('closePerfilModal');
 
+    const perfilSuccessModal = document.getElementById('perfilSuccessModal');
+    const perfilSuccessOk = document.getElementById('perfilSuccessOk');
+
     const vagaDetalhesModal = document.getElementById('vagaDetalhesModal');
     const openVagaDetalhesModalBtn = document.getElementById('openVagaDetalhesModal');
     const closeVagaDetalhesModalBtn = document.getElementById('closeVagaDetalhesModal');
@@ -263,6 +266,26 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         if (event.target === perfilModal) perfilModal.style.display = 'none';
     });
+
+    // Fechar modal de sucesso (botão OK ou clique fora)
+    if (perfilSuccessOk) {
+        perfilSuccessOk.addEventListener('click', () => {
+            if (perfilSuccessModal) perfilSuccessModal.style.display = 'none';
+        });
+    }
+    window.addEventListener('click', (event) => {
+        if (event.target === perfilSuccessModal) perfilSuccessModal.style.display = 'none';
+    });
+
+    // Verifica flag setada pelo servidor para exibir modal
+    try {
+        const profileUpdated = document.body.dataset.profileUpdated;
+        if (profileUpdated === '1' && perfilSuccessModal) {
+            perfilSuccessModal.style.display = 'flex';
+        }
+    } catch (err) {
+        // ignore
+    }
 
     document.querySelectorAll('.register-button[data-vaga-id]').forEach(btn => renderizarVaga(btn));
 
