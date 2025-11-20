@@ -281,7 +281,23 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         const profileUpdated = document.body.dataset.profileUpdated;
         if (profileUpdated === '1' && perfilSuccessModal) {
+            // Exibe o modal
             perfilSuccessModal.style.display = 'flex';
+
+            // Remove o parâmetro `updated` da URL para evitar que o modal reapareça ao recarregar
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('updated');
+                const newUrl = url.pathname + (url.search ? url.search : '') + (url.hash ? url.hash : '');
+                history.replaceState(null, '', newUrl);
+            } catch (e) {
+                // Se URL API não estiver disponível, tenta uma alternativa simples
+                const loc = window.location.href.split('?')[0];
+                history.replaceState(null, '', loc);
+            }
+
+            // Atualiza o atributo para que scripts que leem dataset não considerem mais a flag
+            document.body.dataset.profileUpdated = '0';
         }
     } catch (err) {
         // ignore
