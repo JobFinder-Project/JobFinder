@@ -54,6 +54,7 @@ const dashboardCandidato = async (req, res) => {
             inDashboard: true,
             style: 'candidatoDashboar.css',
             candidatoId,
+            profileUpdated: req.query && req.query.updated === '1',
             vagas: vagasComImagens,
             areas
         });
@@ -409,9 +410,10 @@ const updatePerfil = async (req, res) => {
             candidato.imagem = req.file.path;
         }
 
-        await candidato.save();
+    await candidato.save();
 
-        res.redirect(`/candidato/dashboard`);
+    // Redireciona para o dashboard com flag indicando sucesso na atualização
+    res.redirect(`/candidato/dashboard?updated=1`);
     } catch (erro) {
         console.error(erro);
         res.status(500).send({

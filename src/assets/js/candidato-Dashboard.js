@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const openPerfilModalBtn = document.getElementById('openPerfilModal');
     const closePerfilModalBtn = document.getElementById('closePerfilModal');
 
+    const perfilSuccessModal = document.getElementById('perfilSuccessModal');
+    const perfilSuccessOk = document.getElementById('perfilSuccessOk');
+
     const vagaDetalhesModal = document.getElementById('vagaDetalhesModal');
     const openVagaDetalhesModalBtn = document.getElementById('openVagaDetalhesModal');
     const closeVagaDetalhesModalBtn = document.getElementById('closeVagaDetalhesModal');
@@ -263,6 +266,42 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         if (event.target === perfilModal) perfilModal.style.display = 'none';
     });
+
+    // Fechar modal de sucesso (botão OK ou clique fora)
+    if (perfilSuccessOk) {
+        perfilSuccessOk.addEventListener('click', () => {
+            if (perfilSuccessModal) perfilSuccessModal.style.display = 'none';
+        });
+    }
+    window.addEventListener('click', (event) => {
+        if (event.target === perfilSuccessModal) perfilSuccessModal.style.display = 'none';
+    });
+
+    // Verifica flag setada pelo servidor para exibir modal
+    try {
+        const profileUpdated = document.body.dataset.profileUpdated;
+        if (profileUpdated === '1' && perfilSuccessModal) {
+            // Exibe o modal
+            perfilSuccessModal.style.display = 'flex';
+
+            // Remove o parâmetro `updated` da URL para evitar que o modal reapareça ao recarregar
+            try {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('updated');
+                const newUrl = url.pathname + (url.search ? url.search : '') + (url.hash ? url.hash : '');
+                history.replaceState(null, '', newUrl);
+            } catch (e) {
+                // Se URL API não estiver disponível, tenta uma alternativa simples
+                const loc = window.location.href.split('?')[0];
+                history.replaceState(null, '', loc);
+            }
+
+            // Atualiza o atributo para que scripts que leem dataset não considerem mais a flag
+            document.body.dataset.profileUpdated = '0';
+        }
+    } catch (err) {
+        // ignore
+    }
 
     document.querySelectorAll('.register-button[data-vaga-id]').forEach(btn => renderizarVaga(btn));
 
