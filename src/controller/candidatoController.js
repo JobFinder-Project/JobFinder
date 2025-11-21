@@ -406,8 +406,12 @@ const updatePerfil = async (req, res) => {
         candidato.idiomas = idiomas || candidato.idiomas;
 
         // Verificar se uma nova imagem foi enviada
-        if (req.file && req.file.path) {
-            candidato.imagem = req.file.path;
+        if (req.file) {
+            // Salva como Buffer + contentType
+            candidato.imagem = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
         }
 
     await candidato.save();
