@@ -264,10 +264,18 @@ const visualizarTelaEdicaoCand = async (req, res) => {
             return res.status(404).send('Candidato não encontrado');
         }
 
+        // converte a imagem do candidato para string para a view de edição
+        let candidatoParaView = candidato.toObject();
+        if (candidato && candidato.imagem && candidato.imagem.data) {
+            candidatoParaView.imagem = `data:${candidato.imagem.contentType};base64,${candidato.imagem.data.toString('base64')}`;
+        } else {
+            candidatoParaView.imagem = null;
+        }
+
         res.render('can/perfilEditar', {
             title: 'Edição de Perfil',
             style: 'perfilEditar.css',
-            user: candidato,
+            user: candidatoParaView,
         });
     } catch (erro) {
         console.error(erro);
