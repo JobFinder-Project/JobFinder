@@ -47,10 +47,22 @@ const dashboardCandidato = async (req, res) => {
         // Coleta apenas as areas únicas das vagas retornadas, sem duplicatas
         const areas = [...new Set(vagas.map(vaga => vaga.area))];
 
+        // converte buffer do candidato para base64, se existir
+        let candidatoParaRender;
+        if (candidato && candidato.imagem && candidato.imagem.data) {
+            candidatoParaRender = candidato.toObject(); // converte documento Mongoose em objeto simples
+            candidatoParaRender.imagem = {
+                contentType: candidato.imagem.contentType,
+                data: candidato.imagem.data.toString('base64') // converte Buffer -> base64 string
+            };
+        } else {
+            candidatoParaRender = candidato; // sem imagem
+        }
+
         res.render('can/candidatoDashboard', {
             title: 'Dashboard',
             user: req.session.user,
-            candidato,
+            candidato: candidatoParaRender,
             inDashboard: true,
             style: 'candidatoDashboar.css',
             candidatoId,
@@ -406,8 +418,12 @@ const updatePerfil = async (req, res) => {
         candidato.idiomas = idiomas || candidato.idiomas;
 
         // Verificar se uma nova imagem foi enviada
-        if (req.file && req.file.path) {
-            candidato.imagem = req.file.path;
+        if (req.file) {
+            // Salva como Buffer + contentType
+            candidato.imagem = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            };
         }
 
     await candidato.save();
