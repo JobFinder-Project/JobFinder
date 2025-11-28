@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const openVagaDetalhesModalBtn = document.getElementById('openVagaDetalhesModal');
     const closeVagaDetalhesModalBtn = document.getElementById('closeVagaDetalhesModal');
 
+    const candidaturaDuplicadaModal = document.getElementById('candidaturaDuplicadaModal');
+    const candidaturaDuplicadaOk = document.getElementById('candidaturaDuplicadaOk');
+
     const categoriesList = document.getElementById('categoriesList');
     const left = document.getElementById('catLeft');
     const right = document.getElementById('catRight');
@@ -169,12 +172,22 @@ document.addEventListener('DOMContentLoaded', () => {
     async function candidatarUmaVaga(candidatoId, vagaId) {
         try {
             const postResponse = await fetch(`/candidato/${candidatoId}/vagas/${vagaId}`, { method: 'POST' });
-            if (!postResponse.ok) throw new Error('Você já se candidatou a essa vaga!');
+            if (!postResponse.ok) {
+                const errorData = await postResponse.json();
+                throw new Error(errorData.message || 'Erro ao realizar candidatura');
+            }
             
             document.getElementById('vagaDetalhesModal').style.display = 'none';
             alert('Candidatura realizada com sucesso!');
         } catch (err) {
-            alert('Erro ao candidatar-se! ' + err.message);
+            console.log('Erro capturado:', err.message);
+            // Verifica se é erro de candidatura duplicada
+            if (err.message.includes('já se candidatou') || err.message.includes('já está inscrito') || err.message.includes('já candidatou')) {
+                document.getElementById('vagaDetalhesModal').style.display = 'none';
+                candidaturaDuplicadaModal.style.display = 'flex';
+            } else {
+                alert('Erro ao candidatar-se! ' + err.message);
+            }
         }
     }
 
@@ -183,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const vagaId = btn.getAttribute('data-vaga-id');
             const candidatoId = document.body.dataset.candidatoId;
             const body = document.getElementById('vagaDetalhesBody');
-            const candidatarBtn = document.getElementById('candidatarBtn'); 
+            const candidatarBtn = document.getElementById('candidatarBtn');
 
             // Busca os dados da vaga via rota GET do back-end
             try {
@@ -311,6 +324,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('click', (event) => {
         if (event.target === vagaDetalhesModal) vagaDetalhesModal.style.display = 'none';
+    });
+
+    // Event listeners para o modal de candidatura duplicada
+    if (candidaturaDuplicadaOk) {
+        candidaturaDuplicadaOk.addEventListener('click', () => {
+            candidaturaDuplicadaModal.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', (event) => {
+        if (event.target === candidaturaDuplicadaModal) {
+            candidaturaDuplicadaModal.style.display = 'none';
+        }
     });
 
     // Inicialização do filtro de categorias
