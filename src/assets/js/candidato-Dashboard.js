@@ -180,8 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('vagaDetalhesModal').style.display = 'none';
             alert('Candidatura realizada com sucesso!');
         } catch (err) {
+            console.log('Erro capturado:', err.message);
             // Verifica se é erro de candidatura duplicada
-            if (err.message.includes('já se candidatou') || err.message.includes('já está inscrito')) {
+            if (err.message.includes('já se candidatou') || err.message.includes('já está inscrito') || err.message.includes('já candidatou')) {
                 document.getElementById('vagaDetalhesModal').style.display = 'none';
                 candidaturaDuplicadaModal.style.display = 'flex';
             } else {
