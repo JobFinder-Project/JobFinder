@@ -1,0 +1,55 @@
+name: "✨ Nova funcionalidade / Feature Request"
+description: "Sugestão de nova funcionalidade ou melhoria no sistema"
+title: "[Feature]: "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 📝 Descrição da Feature"
+  - type: textarea
+    id: descricao
+    attributes:
+      label: "📝 Descrição da Feature"
+      description: Explique de forma clara e objetiva qual é a funcionalidade desejada.
+      placeholder: "Ex: Permitir exportar relatórios em PDF..."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## ❓ Problema Relacionado"
+  - type: textarea
+    id: problema
+    attributes:
+      label: "❓ Problema Relacionado"
+      description: Existe algum problema atual que essa feature resolve?
+      placeholder: "Ex: Atualmente só é possível exportar em CSV..."
+    validations:
+      required: false
+
+
+  - type: markdown
+    attributes:
+      value: "## ✅ Critérios de Aceitação"
+  - type: textarea
+    id: criterios
+    attributes:
+      label: "✅ Critérios de Aceite"
+      description: Liste o que deve estar funcionando para considerar a feature concluída.
+      placeholder: "- [ ] O usuário consegue exportar em PDF\n- [ ] O layout segue padrão da UI"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## 📎 Contexto Adicional"
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "📎 Contexto Adicional"
+      description: Inclua prints, diagramas ou links que ajudem na implementação.
+      placeholder: "Links, prints, diagramas..."
+    validations:
+      required: false
