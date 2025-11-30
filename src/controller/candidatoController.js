@@ -72,9 +72,12 @@ const dashboardCandidato = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar a página dashboard do candidato!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Dashboard',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao renderizar a página dashboard do candidato!"
         });
     }
 };
@@ -88,20 +91,18 @@ const getCadastroCandidato = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar a página de registro do candidato!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Cadastro',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao renderizar a página de registro do candidato!"
         });
     }
 };
 
 // Salva um novo Candidato no banco de dados
 const cadastrarCandidato = async (req, res) => {
-    //Caso seja usado o "confirmar senha"
-    /*if(senha != confirmarSenha){
-        return res.status(422).json({mgs:"As senhas não confere!"})
-    }*/
-
     try {
         const userExiste = await Candidato.findOne({
             email: req.body.email
@@ -139,9 +140,12 @@ const cadastrarCandidato = async (req, res) => {
         res.redirect('/home');
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao cadastrar o candidato!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Cadastrar',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao cadastrar o candidato!"
         });
     }
 };
@@ -157,8 +161,12 @@ const verVaga = async (req, res) => {
 
         // Verifica se a vaga foi encontrada
         if (!vaga) {
-            return res.status(404).send({
-                message: 'Vaga não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Vaga não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'A vaga solicitada não existe.'
             });
         }
 
@@ -171,9 +179,12 @@ const verVaga = async (req, res) => {
         res.status(200).json(vaga);
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao renderizar a página da vaga!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Vaga',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página da vaga!'
         });
     }
 };
@@ -226,9 +237,12 @@ const buscarVagas = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao buscar as vagas!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Busca',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao buscar as vagas!'
         });
     }
 };
@@ -243,24 +257,36 @@ const candidatarAVaga = async (req, res) => {
 
         // Valida se o ID do candidato existe na sessão
         if (!candidatoId) {
-            return res.status(400).send({
-                message: 'Usuário não autenticado!'
+             return res.status(400).render('paginaErro', {
+                title: 'Não Autenticado',
+                style: 'paginaErro.css',
+                status: 400,
+                erro: 'Unauthorized',
+                mensagem: 'Usuário não autenticado!'
             });
         }
 
         // Busca a vaga pelo ID e popula os dados da empresa associada
         const vaga = await Vaga.findById(id).populate('empresa');
         if (!vaga) {
-            return res.status(404).send({
-                message: 'Vaga não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Vaga não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Vaga não encontrada!'
             });
         }
 
         // Busca o candidato pelo ID
         const candidato = await Candidato.findById(candidatoId);
         if (!candidato) {
-            return res.status(404).send({
-                message: 'Candidato não encontrado!'
+             return res.status(404).render('paginaErro', {
+                title: 'Candidato não Encontrado',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'User Not Found',
+                mensagem: 'Candidato não encontrado!'
             });
         }
 
@@ -270,8 +296,12 @@ const candidatarAVaga = async (req, res) => {
             vaga: vaga._id
         });
         if (candidaturaExistente) {
-            return res.status(400).send({
-                message: 'Você já se candidatou a esta vaga!'
+             return res.status(400).render('paginaErro', {
+                title: 'Já Candidatado',
+                style: 'paginaErro.css',
+                status: 400,
+                erro: 'Duplicate Entry',
+                mensagem: 'Você já se candidatou a esta vaga!'
             });
         }
 
@@ -295,9 +325,12 @@ const candidatarAVaga = async (req, res) => {
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao realizar a candidatura!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Candidatura',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao realizar a candidatura!'
         });
     }
 };
@@ -320,15 +353,23 @@ const verCandidatura = async (req, res) => {
 
         // Verifica se a candidatura foi encontrada
         if (!candidatura) {
-            return res.status(404).send({
-                message: 'Candidatura não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Candidatura não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Candidatura não encontrada!'
             });
         }
 
         // Verifica se os dados necessários estão disponíveis
         if (!candidatura.vaga || !candidatura.candidato) {
-            return res.status(400).send({
-                message: 'Dados incompletos na candidatura!'
+             return res.status(400).render('paginaErro', {
+                title: 'Dados Incompletos',
+                style: 'paginaErro.css',
+                status: 400,
+                erro: 'Bad Data',
+                mensagem: 'Dados incompletos na candidatura!'
             });
         }
 
@@ -351,9 +392,12 @@ const verCandidatura = async (req, res) => {
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao renderizar a página da candidatura!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Visualização',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página da candidatura!'
         });
     }
 };
@@ -366,8 +410,12 @@ const cancelarCandidatura = async (req, res) => {
         const candidatura = await Candidatura.findByIdAndDelete(candidaturaId);
 
         if (!candidatura) {
-            return res.status(404).json({
-                message: 'Candidatura não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Erro ao Cancelar',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Candidatura não encontrada!'
             });
         }
         
@@ -375,9 +423,12 @@ const cancelarCandidatura = async (req, res) => {
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao cancelar a candidatura!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Cancelamento',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao cancelar a candidatura!'
         });
     }
 };
@@ -401,8 +452,12 @@ const updatePerfil = async (req, res) => {
         const candidato = await Candidato.findById(candidatoId);
 
         if (!candidato) {
-            return res.status(404).send({
-                message: 'Candidato não encontrado!'
+             return res.status(404).render('paginaErro', {
+                title: 'Candidato não Encontrado',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'User Not Found',
+                mensagem: 'Candidato não encontrado!'
             });
         }
 
@@ -432,9 +487,12 @@ const updatePerfil = async (req, res) => {
     res.redirect(`/candidato/dashboard?updated=1`);
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao editar o perfil!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Atualização',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao editar o perfil!'
         });
     }
 };
