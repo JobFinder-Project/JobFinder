@@ -2,7 +2,6 @@ const Candidato = require('../models/candidatoModel');
 const Empresa = require('../models/empresaModel');
 const Candidatura = require('../models/candidaturaModel');
 const Vaga = require('../models/vagasModel');
-//const Vaga = require('../models/vagasModel');
 
 // Renderiza a página Home
 const getHome = async (req, res) => {
@@ -13,9 +12,12 @@ const getHome = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página incial!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Home',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página inicial!'
         });
     }
 }
@@ -29,9 +31,12 @@ const getCargo = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página de cargos!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Escolha de Cargo',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página de escolha de cargos!'
         });
     }
 };
@@ -45,9 +50,12 @@ const getLogin = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página de login!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Login',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página de login!'
         });
     }
 };
@@ -61,9 +69,12 @@ const getRecuperarSenha = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Recuperar Senha!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Recuperação',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página Recuperar Senha!'
         });
     }
 };
@@ -89,8 +100,13 @@ const getRedefinirSenha = async (req, res) => {
 
         // Verifica se o usuário existe
         if (!user) {
-            return res.status(400).json({
-                error: 'Token inválido ou expirado.'
+            // Aqui optamos por renderizar o erro também, pois é uma tela visual
+            return res.status(400).render('paginaErro', {
+                title: 'Token Inválido',
+                style: 'paginaErro.css',
+                status: 400,
+                erro: 'Token não encontrado ou expirado',
+                mensagem: 'O link de redefinição de senha é inválido ou já expirou.'
             });
         }
 
@@ -101,14 +117,18 @@ const getRedefinirSenha = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Redefenir Senha!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Redefinir',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página Redefinir Senha!'
         });
     }
 };
 
-// Retorna json de candidaturas
+// Retorna json de candidaturas 
+// NOTA: Se esta rota for chamada via AJAX, o front receberá HTML de erro. Se for acesso direto, verá a tela bonita.
 const getCandidaturas = async (req, res) => {
     try {
         const candidatoId = req.session.user.id;
@@ -131,9 +151,12 @@ const getCandidaturas = async (req, res) => {
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao buscar as candidaturas!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao buscar candidaturas',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Não foi possível carregar suas candidaturas.'
         });
     }
 };
@@ -152,8 +175,13 @@ const visualizarCandidaturas = async (req, res) => {
 
         // Verifica se há candidaturas para a vaga
         if (!candidaturas || candidaturas.length === 0) {
-            return res.status(404).send({
-                message: 'Candidaturas não encontradas!'
+            // Adaptado para renderizar erro visual ao invés de JSON solto
+            return res.status(404).render('paginaErro', {
+                title: 'Nenhuma Candidatura',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Candidaturas não encontradas!'
             });
         }
 
@@ -181,9 +209,12 @@ const visualizarCandidaturas = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Lista de Candidaturas!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Lista de Candidaturas',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página Lista de Candidaturas!'
         });
     }
 };
@@ -202,8 +233,12 @@ const visualizarCandidatos = async (req, res) => {
 
         // Verifica se há candidaturas para a vaga
         if (!candidaturas) {
-            return res.status(404).send({
-                message: 'Candidaturas nao encontradas!'
+             return res.status(404).render('paginaErro', {
+                title: 'Nenhum Candidato',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Candidaturas não encontradas!'
             });
         }
 
@@ -215,9 +250,12 @@ const visualizarCandidatos = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página Lista de Candidatos!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Lista de Candidatos',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página Lista de Candidatos!'
         });
     }
 
@@ -233,8 +271,12 @@ const getVagaDetalhes = async (req, res) => {
 
         // Verifica se a vaga existe
         if (!vaga) {
-            return res.status(404).json({
-                message: 'Vaga não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Vaga não encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'A vaga solicitada não existe ou foi removida.'
             });
         }
 
@@ -246,9 +288,12 @@ const getVagaDetalhes = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página da vaga!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro nos Detalhes',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página da vaga!'
         });
     }
 };
@@ -261,7 +306,13 @@ const visualizarTelaEdicaoCand = async (req, res) => {
 
         // Verifica se o candidato existe
         if (!candidato) {
-            return res.status(404).send('Candidato não encontrado');
+            return res.status(404).render('paginaErro', {
+                title: 'Candidato não encontrado',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'O perfil do candidato não foi encontrado.'
+            });
         }
 
         // converte a imagem do candidato para string para a view de edição
@@ -279,9 +330,12 @@ const visualizarTelaEdicaoCand = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página de edição do perfil do candidato!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Edição',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página de edição do perfil do candidato!'
         });
     }
 };
@@ -292,9 +346,15 @@ const visualizarTelaEdicaoEmpre = async (req, res) => {
         const empresaId = req.params.empresaId;
         const empresa = await Empresa.findById(empresaId);
 
-        // Verifica se o candidato existe
+        // Verifica se a empresa existe
         if (!empresa) {
-            return res.status(404).send('Empresa não encontrada');
+             return res.status(404).render('paginaErro', {
+                title: 'Empresa não encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'O perfil da empresa não foi encontrado.'
+            });
         }
 
         res.render('fun/perfilEditar', {
@@ -304,9 +364,12 @@ const visualizarTelaEdicaoEmpre = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao renderizar a página de edição do perfil da empresa!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Edição',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao renderizar a página de edição do perfil da empresa!'
         });
     }
 };
