@@ -1,4 +1,4 @@
-# 🔀 [PR] - Título do PR e #ID
+# 🔀 [PR] - Título do PR
 
 ## 📌 Descrição
 
@@ -41,5 +41,5 @@ Aviso: Apenas o revisor selecionado à este PR pode marcar o checklist!
 Insira capturas de tela ou vídeos exibindo a alteração realizada ou o novo fluxo do processo modificado. Caso não queira inserir as evidências, a exclusão deste tópico é permitida.
 
 ---
-
+## Issue Relacionada:
 Closes #ID
