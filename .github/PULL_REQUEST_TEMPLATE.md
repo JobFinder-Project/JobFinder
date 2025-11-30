@@ -1,4 +1,4 @@
-# 🔀 Pull Request: Nome da Task e #ID
+# 🔀 [PR] - Título do PR e #ID
 
 ## 📌 Descrição
 
@@ -19,15 +19,18 @@ Marque com um "x" as opções aplicáveis:
   - [ ] ⬆️ Upgrade de dependências
   - [ ] Outro: \_\_\_\_\_\_\_\_\_\_\_
 
-## 📝 Auditoria
+## :mag: Auditoria
 
 Revise se as alterações cumprem os requisitos funcionais, possuem testes adequados, não introduzem regressões, seguem os padrões de código e práticas de segurança, e têm a documentação atualizada.
 
 - [ ] Nome da branch segue o padrão semântico (e.g., `feature/, fix/, refactor/` ou padrão do GitHub).
 - [ ] O PR está saindo de uma `feature branch` para a `develop`.
 - [ ] Todos os commits seguem o padrão semântico (e.g., `:bug: fix: descrição #ID`).
-- [ ] O pipeline de CI/Testes foi executado com sucesso nesta branch.
-- [ ] A documentação da PR está clara e objetiva, descrevendo o propósito e impacto da mudança.
+- [ ] O código segue o padrão de estilo do projeto  
+- [ ] Foram realizados testes locais  
+- [ ] Documentação foi atualizada (se necessário)  
+- [ ] Não quebra funcionalidades existentes  
+
 
 **Observações:**
 
