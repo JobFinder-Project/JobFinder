@@ -45,9 +45,14 @@ exports.realizarLogin = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao realizar o login. Tente novamente!',
-            error: erro.messgae
+        // Se a requisição for AJAX, o render vai retornar HTML para o JS que espera JSON.
+        // Mas conforme a task pede para substituir JSON de erro por página, segue a implementação:
+        res.status(500).render('paginaErro', {
+            title: 'Falha no Login',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao processar o login. Tente novamente!'
         });
     }
 };
@@ -71,8 +76,13 @@ exports.recuperarSenha = async (req, res) => {
 
         // Verifica se o usuário existe
         if (!user) {
-            return res.status(404).json({
-                error: 'E-mail não encontrado.'
+            // Transformando em página de erro para manter consistência visual
+             return res.status(404).render('paginaErro', {
+                title: 'E-mail não encontrado',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'User Not Found',
+                mensagem: 'O e-mail informado não consta em nossa base de dados.'
             });
         }
 
@@ -103,9 +113,12 @@ exports.recuperarSenha = async (req, res) => {
         res.redirect('/login');
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao recuperar a senha. Tente novamente!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Recuperação',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao tentar enviar o e-mail de recuperação. Tente novamente!'
         });
     }
 }
@@ -131,8 +144,12 @@ exports.redefinirSenha = async (req, res) => {
 
         // Verifica se o usuário existe
         if (!user) {
-            return res.status(404).json({
-                error: 'Token inválido ou expirado.'
+             return res.status(404).render('paginaErro', {
+                title: 'Token Inválido',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Invalid Token',
+                mensagem: 'O token de redefinição é inválido ou expirou.'
             });
         }
 
@@ -145,9 +162,12 @@ exports.redefinirSenha = async (req, res) => {
         res.redirect('/login');
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({
-            message: 'Erro ao redefenir a senha. Tente novamente!',
-            error: erro.messgae
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Redefinição',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao redefinir a senha. Tente novamente!'
         });
     }
 }
@@ -156,34 +176,14 @@ exports.redefinirSenha = async (req, res) => {
 exports.logout = (req, res) => {
     req.session.destroy((erro) => {
         if (erro) {
-            res.status(500).json({
-            message: 'Erro ao finalizar a sessão. Tente novamente!',
-            error: erro.message
-        });
+             res.status(500).render('paginaErro', {
+                title: 'Erro no Logout',
+                style: 'paginaErro.css',
+                status: 500,
+                erro: erro.message || erro,
+                mensagem: 'Erro ao finalizar a sessão. Tente novamente!'
+            });
         }
     })
     res.redirect('/login');
 }
-
-/*
-// Atualizar senhas (se necessário)
-const setSenha = async (req, res) => {
-    try {
-        const candidatos = await Candidato.find({});
-        for (const candidato of candidatos) {
-            if (!candidato.senha.startsWith('$2b$')) {
-                const salt = await bcrypt.genSalt(12);
-                candidato.senha = await bcrypt.hash(candidato.senha, salt);
-                await candidato.save();
-            }
-        }
-        res.status(200).send("Todas as senhas foram atualizadas.");
-    } catch (error) {
-        res.status(500).send("Erro ao atualizar as senhas.");
-    }
-};
-
-module.exports = {
-    realizarLogin,
-    setSenha,
-};*/

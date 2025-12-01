@@ -1,0 +1,65 @@
+name: "⬆️ Atualização / Upgrade Request"
+description: "Solicitação de atualização de dependência, versão ou infraestrutura"
+title: "[Upgrade]: "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: checkboxes
+    id: impacto
+    attributes:
+      label: 🔍 Impacto
+      description: Marque os pontos afetados
+      options:
+        - label: Interface
+        - label: Backend
+        - label: API
+        - label: Banco de Dados
+
+  - type: markdown
+    attributes:
+      value: "## 📦 Componente a ser atualizado"
+  - type: input
+    id: componente
+    attributes:
+      label: 📦 O que será atualizado?
+      description: Especifique o componente, dependência ou infraestrutura.
+      placeholder: "Ex: Node.js 18 → 20"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## ❓ Motivo da Atualização"
+  - type: textarea
+    id: motivo
+    attributes:
+      label: ❓ Motivo da Atualização
+      description: Por que essa atualização é necessária?
+      placeholder: "Ex: correção de vulnerabilidade, compatibilidade, novas features"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## ⚠️ Riscos"
+  - type: textarea
+    id: riscos
+    attributes:
+      label: ⚠️ Riscos
+      description: Liste possíveis riscos ao aplicar esse upgrade.
+      placeholder: "Ex: Quebra de compatibilidade com API antiga"
+    validations:
+      required: false 
+        
+  - type: markdown
+    attributes:
+      value: "## ✅ Passos para Validação"
+  - type: textarea
+    id: validacao
+    attributes:
+      label: ✅ Passos para Validação
+      description: Explique como verificar que a atualização foi aplicada corretamente.
+      placeholder: "Ex: Rodar testes unitários, validar deploy no ambiente de staging"
+    validations:
+      required: true
