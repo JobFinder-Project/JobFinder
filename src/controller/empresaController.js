@@ -90,9 +90,12 @@ const dashboardEmpresa = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar a página dashboard da empresa!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Dashboard',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao renderizar a página dashboard da empresa!"
         });
     }
 };
@@ -106,42 +109,15 @@ const getCadastroEmpresa = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao renderizar a página de cadastro da empresa!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Cadastro',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao renderizar a página de cadastro da empresa!"
         });
     }
 };
-
-// Renderiza a página do perfil
-// const getEmpresa = async (req, res) => {
-//     try {
-//         const {
-//             empresaId
-//         } = req.params;
-//         const empresa = await Empresa.findById(empresaId);
-
-//         // Verifica se a empresa existe
-//         if (!empresa) {
-//             res.status(404).json({
-//                 message: "Empresa não encontrada!"
-//             })
-//         }
-
-//         res.render('can/getPerfil', {
-//             title: empresa.nome,
-//             style: 'getPerfilCand.css',
-//             user: empresa,
-//             id: empresa._id
-//         })
-//     } catch (erro) {
-//         console.error(erro);
-//         res.status(500).send({
-//             message: 'Erro ao renderizar a página de perfil da empresa!',
-//             error: erro.message
-//         });
-//     }
-// }
 
 // Salva uma nova Empresa no banco de dados
 const createEmpresa = async (req, res) => {
@@ -175,9 +151,12 @@ const createEmpresa = async (req, res) => {
 
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: "Erro ao cadastrar a empresa!",
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Cadastrar',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: "Erro ao cadastrar a empresa!"
         });
     }
 }
@@ -291,15 +270,20 @@ const updateEmpresa = async (req, res) => {
         console.error(erro);
         const contentType = req.headers['content-type'];
         
+        // Mantivemos a lógica condicional para não quebrar requisições AJAX que esperam JSON
         if (contentType && contentType.includes('application/json')) {
             res.status(500).json({
                 success: false,
                 error: 'Erro ao editar o perfil da empresa: ' + erro.message
             });
         } else {
-            res.status(500).send({
-                message: 'Erro ao editar o perfil da empresa!',
-                error: erro.message
+            // Para requisições comuns, renderizamos a página de erro
+            res.status(500).render('paginaErro', {
+                title: 'Erro na Edição',
+                style: 'paginaErro.css',
+                status: 500,
+                erro: erro.message || erro,
+                mensagem: 'Erro ao editar o perfil da empresa!'
             });
         }
     }
@@ -315,8 +299,12 @@ const deleteEmpresa = async (req, res) => {
 
         // Verifica se a empresa existe
         if (!delEmpresa) {
-            return res.status(404).json({
-                message: "Empresa não encontrada!"
+             return res.status(404).render('paginaErro', {
+                title: 'Empresa não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: "Empresa não encontrada!"
             });
         }
 
@@ -325,9 +313,12 @@ const deleteEmpresa = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao deletar a empresa!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Deletar',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao deletar a empresa!'
         });
     }
 }
@@ -341,9 +332,12 @@ const criarVaga = async (req, res) => {
         // Busca a empresa
         const empresa = await Empresa.findById(empresaId);
         if (!empresa) {
-            return res.status(404).json({
-                success: false,
-                error: 'Empresa não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Empresa não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Empresa não encontrada!'
             });
         }
 
@@ -377,9 +371,12 @@ const criarVaga = async (req, res) => {
         res.redirect(`/empresa/dashboard?vagaCriada=true&empresaId=${empresaId}`);
     } catch (erro) {
         console.error('Erro ao criar vaga:', erro);
-        res.status(500).send({
-            message: 'Erro ao criar vaga para a empresa!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Criar Vaga',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao criar vaga para a empresa!'
         });
     }
 };
@@ -428,9 +425,12 @@ const buscarCandidatos = async (req, res) => {
         });
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao buscar os candidatos da vaga!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro na Busca',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao buscar os candidatos da vaga!'
         });
     }
 };
@@ -447,8 +447,12 @@ const updateStatus = async (req, res) => {
 
         // Verifica se o status é válido
         if (!['Pendente', 'Aceito', 'Rejeitado'].includes(status)) {
-            return res.status(400).send({
-                message: 'Status inválido!'
+             return res.status(400).render('paginaErro', {
+                title: 'Status Inválido',
+                style: 'paginaErro.css',
+                status: 400,
+                erro: 'Bad Request',
+                mensagem: 'Status inválido!'
             });
         }
 
@@ -462,24 +466,29 @@ const updateStatus = async (req, res) => {
 
         // Verifica se a candidatura existe
         if (!candidaturaAtualizada) {
-            return res.status(404).send({
-                message: 'Candidatura não encontrada!'
+             return res.status(404).render('paginaErro', {
+                title: 'Candidatura não Encontrada',
+                style: 'paginaErro.css',
+                status: 404,
+                erro: 'Not Found',
+                mensagem: 'Candidatura não encontrada!'
             });
         }
 
         res.redirect('/empresa/dashboard');
     } catch (erro) {
         console.error(erro);
-        res.status(500).send({
-            message: 'Erro ao atualizar o status da candidatura da vaga!',
-            error: erro.message
+        res.status(500).render('paginaErro', {
+            title: 'Erro ao Atualizar',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: erro.message || erro,
+            mensagem: 'Erro ao atualizar o status da candidatura da vaga!'
         });
     }
 };
 
 // Função de empresaRoust:
-
-
 
 const getPerfil = async (req, res) => {
     
@@ -498,7 +507,16 @@ const getPerfil = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'Erro ao buscar perfil da empresa' });
+        // Como esta rota parece ser estritamente API (retorna JSON no success),
+        // idealmente manteria JSON no erro. Mas seguindo a task de refatorar TODOS,
+        // aqui vai a versão renderizada:
+        res.status(500).render('paginaErro', {
+            title: 'Erro no Perfil',
+            style: 'paginaErro.css',
+            status: 500,
+            erro: error.message || error,
+            mensagem: 'Erro ao buscar perfil da empresa'
+        });
     }}
 
 module.exports = {
