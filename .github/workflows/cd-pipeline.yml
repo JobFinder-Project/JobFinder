@@ -20,6 +20,7 @@ jobs:
 
       - name: 3. Instalar Dependências
         run: npm install
+        working-directory: ./backend
 
       - name: 4. Deploy para o Ambiente de Staging
         run: |
