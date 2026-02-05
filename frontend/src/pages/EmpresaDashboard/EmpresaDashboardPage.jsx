@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import NavbarEmpresa from '../../components/Navbar/NavbarEmpresa/NavbarEmpresa'
 import CandidateCard from './components/CandidateCard/CandidateCard'
 import VagasModal from './components/VagasModal/VagasModal'
 import CriarVagaModal from './components/CriarVagaModal/CriarVagaModal'
 import PerfilEmpresaModal from './components/PerfilEmpresaModal/PerfilEmpresaModal'
-import { empresaService, authService } from '../../services'
+import { empresaService } from '../../services'
 import styles from './EmpresaDashboard.module.css'
 
 function EmpresaDashboard() {
@@ -13,7 +14,6 @@ function EmpresaDashboard() {
   const [empresaId, setEmpresaId] = useState(null)
   const [candidatos, setCandidatos] = useState([])
   const [vagas, setVagas] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedTab, setSelectedTab] = useState('Todos')
   const [loading, setLoading] = useState(true)
 
@@ -43,23 +43,6 @@ function EmpresaDashboard() {
     }
   }
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      navigate(`/empresa/candidatos/buscar?q=${encodeURIComponent(searchQuery)}`)
-    }
-  }
-
-  const handleLogout = async () => {
-    try {
-      await authService.logout()
-      navigate('/login')
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error)
-      navigate('/login')
-    }
-  }
-
   const handleVagaCriada = () => {
     setShowCriarVagaModal(false)
     fetchDashboardData()
@@ -79,46 +62,7 @@ function EmpresaDashboard() {
 
   return (
     <div className={styles.dashboardWrapper}>
-      <nav className={styles.navbar}>
-        <h1>JobFinder</h1>
-        <div className={styles.searchContainer}>
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              name="q"
-              className={styles.searchInput}
-              placeholder="Buscar Candidatos 🔍"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button type="submit" className={styles.searchButton}>
-              Buscar
-            </button>
-          </form>
-        </div>
-        <ul className={styles.navbarMenu}>
-          <li>
-            <button onClick={handleLogout} className={styles.logoutButton}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"
-                />
-                <path
-                  fillRule="evenodd"
-                  d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
-                />
-              </svg>
-            </button>
-          </li>
-        </ul>
-      </nav>
+      <NavbarEmpresa />
 
       <main className={styles.mainContent}>
         <div className={styles.categoryTabs}>
