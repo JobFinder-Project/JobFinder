@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
+import { empresaService, authService } from '../../services'
 import styles from './BuscaCandidatos.module.css'
 
 function BuscaCandidatos() {
@@ -21,11 +22,8 @@ function BuscaCandidatos() {
 
   const fetchCandidatos = async () => {
     try {
-      const response = await fetch(`/api/empresa/candidatos/buscar?q=${encodeURIComponent(query)}`)
-      if (response.ok) {
-        const data = await response.json()
-        setCandidatos(data.candidatos || data || [])
-      }
+      const data = await empresaService.buscarCandidatos(query)
+      setCandidatos(data.candidatos || data || [])
     } catch (error) {
       console.error('Erro ao buscar candidatos:', error)
     } finally {
@@ -42,7 +40,7 @@ function BuscaCandidatos() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/logout')
+      await authService.logout()
       navigate('/login')
     } catch (error) {
       console.error('Erro ao fazer logout:', error)

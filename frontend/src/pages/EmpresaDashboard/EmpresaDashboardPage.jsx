@@ -4,6 +4,7 @@ import CandidateCard from './components/CandidateCard/CandidateCard'
 import VagasModal from './components/VagasModal/VagasModal'
 import CriarVagaModal from './components/CriarVagaModal/CriarVagaModal'
 import PerfilEmpresaModal from './components/PerfilEmpresaModal/PerfilEmpresaModal'
+import { empresaService, authService } from '../../services'
 import styles from './EmpresaDashboard.module.css'
 
 function EmpresaDashboard() {
@@ -29,19 +30,14 @@ function EmpresaDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('/api/empresa/dashboard')
-      if (response.ok) {
-        const data = await response.json()
-        setEmpresa(data.user)
-        setEmpresaId(data.empresaId)
-        setCandidatos(data.candidatos || [])
-        setVagas(data.vagas || [])
-      } else {
-        // Se não autenticado, redireciona para login
-        navigate('/login')
-      }
+      const data = await empresaService.getDashboard()
+      setEmpresa(data.user)
+      setEmpresaId(data.empresaId)
+      setCandidatos(data.candidatos || [])
+      setVagas(data.vagas || [])
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
+      navigate('/login')
     } finally {
       setLoading(false)
     }
@@ -56,7 +52,7 @@ function EmpresaDashboard() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/logout')
+      await authService.logout()
       navigate('/login')
     } catch (error) {
       console.error('Erro ao fazer logout:', error)

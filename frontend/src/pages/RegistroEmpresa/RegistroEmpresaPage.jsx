@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { empresaService } from '../../services'
 import styles from './RegistroEmpresa.module.css'
 
 function RegistroEmpresa() {
@@ -78,23 +79,11 @@ function RegistroEmpresa() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/empresa/cadastrar', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-
-      if (response.ok) {
-        navigate('/login')
-      } else {
-        const data = await response.json()
-        alert(data.message || 'Erro ao cadastrar')
-      }
+      await empresaService.cadastrar(formData)
+      navigate('/login')
     } catch (error) {
       console.error('Erro:', error)
-      alert('Erro ao conectar com o servidor')
+      alert(error.data?.message || 'Erro ao cadastrar')
     } finally {
       setLoading(false)
     }

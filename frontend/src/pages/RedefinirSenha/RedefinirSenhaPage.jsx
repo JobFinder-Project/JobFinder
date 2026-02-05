@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { authService } from '../../services'
 import styles from './RedefinirSenha.module.css'
 
 function RedefinirSenha() {
@@ -28,26 +29,14 @@ function RedefinirSenha() {
     setLoading(true)
 
     try {
-      const response = await fetch(`/api/redefinir_senha/${token}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ senha })
-      })
-
-      if (response.ok) {
-        setSuccess(true)
-        setTimeout(() => {
-          navigate('/login')
-        }, 3000)
-      } else {
-        const data = await response.json()
-        setError(data.message || 'Erro ao redefinir senha')
-      }
+      await authService.redefinirSenha(token, senha)
+      setSuccess(true)
+      setTimeout(() => {
+        navigate('/login')
+      }, 3000)
     } catch (err) {
       console.error('Erro:', err)
-      setError('Erro ao conectar com o servidor')
+      setError(err.data?.message || 'Erro ao redefinir senha')
     } finally {
       setLoading(false)
     }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Modal from '../../../../components/ui/Modal/Modal'
+import { empresaService } from '../../../../services'
 import styles from './CriarVagaModal.module.css'
 
 function CriarVagaModal({ empresaId, onClose, onSuccess }) {
@@ -47,22 +48,13 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
         data.append('imagem', imagem)
       }
 
-      const response = await fetch(`/api/empresa/${empresaId}/vagas/criar`, {
-        method: 'POST',
-        body: data,
-      })
-
-      if (response.ok) {
-        setShowSuccess(true)
-      } else {
-        const result = await response.json()
-        alert(result.error || 'Erro ao criar vaga')
-      }
+      await empresaService.criarVaga(empresaId, data)
+      setShowSuccess(true)
     } catch (error) {
       console.error('Erro ao criar vaga:', error)
-      alert('Erro ao criar vaga. Tente novamente.')
+      alert(error.data?.error || 'Erro ao criar vaga. Tente novamente.')
     } finally {
-      setLoading(false)
+      setLoading(true)
     }
   }
 

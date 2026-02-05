@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Modal from '../../../../components/ui/Modal/Modal'
+import { empresaService } from '../../../../services'
 import styles from './PerfilEmpresaModal.module.css'
 
 function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
@@ -24,25 +25,13 @@ function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
     setLoading(true)
 
     try {
-      const response = await fetch(`/api/empresa/${empresaId}/editar`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (response.ok) {
-        alert('Perfil atualizado com sucesso!')
-        setIsEditing(false)
-        onUpdate()
-      } else {
-        const result = await response.json()
-        alert(result.error || 'Erro ao atualizar perfil')
-      }
+      await empresaService.atualizarPerfil(empresaId, formData)
+      alert('Perfil atualizado com sucesso!')
+      setIsEditing(false)
+      onUpdate()
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error)
-      alert('Erro ao atualizar perfil. Tente novamente.')
+      alert(error.data?.error || 'Erro ao atualizar perfil. Tente novamente.')
     } finally {
       setLoading(false)
     }

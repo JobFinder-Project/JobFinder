@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Modal from '../../../../components/ui/Modal/Modal'
+import { candidatoService } from '../../../../services'
 import styles from './CandidaturasModal.module.css'
 
 function CandidaturasModal({ candidatoId, onClose }) {
@@ -15,11 +16,8 @@ function CandidaturasModal({ candidatoId, onClose }) {
 
   const fetchCandidaturas = async () => {
     try {
-      const response = await fetch('/api/candidato/candidaturas')
-      if (response.ok) {
-        const data = await response.json()
-        setCandidaturas(data.candidaturas || [])
-      }
+      const data = await candidatoService.getCandidaturas()
+      setCandidaturas(data.candidaturas || [])
     } catch (error) {
       console.error('Erro ao carregar candidaturas:', error)
     } finally {
@@ -38,18 +36,10 @@ function CandidaturasModal({ candidatoId, onClose }) {
 
   const handleConfirmarCancelamento = async () => {
     try {
-      const response = await fetch(`/api/candidato/${candidatoId}/vagas/delete/${selectedCandidatura._id}`, {
-        method: 'POST'
-      })
-      
-      if (response.ok) {
-        setResultMessage('Candidatura cancelada com sucesso!')
-        setView('resultado')
-        fetchCandidaturas()
-      } else {
-        setResultMessage('Erro ao cancelar candidatura.')
-        setView('resultado')
-      }
+      await candidatoService.cancelarCandidatura(candidatoId, selectedCandidatura._id)
+      setResultMessage('Candidatura cancelada com sucesso!')
+      setView('resultado')
+      fetchCandidaturas()
     } catch (error) {
       console.error('Erro ao cancelar:', error)
       setResultMessage('Erro ao cancelar candidatura.')

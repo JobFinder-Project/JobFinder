@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { candidatoService } from '../../services'
 import styles from './RegistroCandidato.module.css'
 
 function RegistroCandidato() {
@@ -89,20 +90,11 @@ function RegistroCandidato() {
         }
       })
 
-      const response = await fetch('/api/candidato/cadastrar', {
-        method: 'POST',
-        body: formDataToSend
-      })
-
-      if (response.ok) {
-        navigate('/login')
-      } else {
-        const data = await response.json()
-        alert(data.message || 'Erro ao cadastrar')
-      }
+      await candidatoService.cadastrar(formDataToSend)
+      navigate('/login')
     } catch (error) {
       console.error('Erro:', error)
-      alert('Erro ao conectar com o servidor')
+      alert(error.data?.message || 'Erro ao cadastrar')
     } finally {
       setLoading(false)
     }

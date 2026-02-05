@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Modal from '../../../../components/ui/Modal/Modal'
+import { candidatoService } from '../../../../services'
 import styles from './VagaDetalhesModal.module.css'
 
 function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
@@ -11,26 +12,15 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     setLoading(true)
 
     try {
-      const response = await fetch(`/api/candidato/${candidatoId}/vagas/${vaga._id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-
-      const data = await response.json()
-
-      if (response.status === 400 && data.error?.includes('já')) {
-        // Candidatura duplicada
-        setShowDuplicadaModal(true)
-      } else if (response.ok) {
-        setShowSuccessModal(true)
-      } else {
-        alert(data.error || 'Erro ao realizar candidatura')
-      }
+      await candidatoService.candidatarVaga(candidatoId, vaga._id)
+      setShowSuccessModal(true)
     } catch (error) {
       console.error('Erro ao candidatar:', error)
-      alert('Erro ao realizar candidatura. Tente novamente.')
+      if (error.status === 400 && error.data?.error?.includes('já')) {
+        setShowDuplicadaModal(true)
+      } else {
+        alert(error.data?.error || 'Erro ao realizar candidatura. Tente novamente.')
+      }
     } finally {
       setLoading(false)
     }

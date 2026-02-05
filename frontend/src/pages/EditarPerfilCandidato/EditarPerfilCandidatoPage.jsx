@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { candidatoService } from '../../services'
 import styles from './EditarPerfilCandidato.module.css'
 
 function EditarPerfilCandidato() {
@@ -28,35 +29,31 @@ function EditarPerfilCandidato() {
 
   const fetchCandidatoData = async () => {
     try {
-      const response = await fetch('/api/candidato/dashboard')
-      if (response.ok) {
-        const data = await response.json()
-        const candidato = data.candidato
+      const data = await candidatoService.getDashboard()
+      const candidato = data.candidato
 
-        if (candidato) {
-          setFormData({
-            nome: candidato.nome || '',
-            cpf: candidato.cpf || '',
-            email: candidato.email || '',
-            telefone: candidato.telefone || '',
-            educacao: candidato.educacao || '',
-            qualificacao: candidato.qualificacao || '',
-            cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
-            descricao: candidato.descricao || '',
-            habilidadesTecnicas: candidato.habilidadesTecnicas || '',
-            idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : candidato.idiomas || '',
-            imagem: null
-          })
+      if (candidato) {
+        setFormData({
+          nome: candidato.nome || '',
+          cpf: candidato.cpf || '',
+          email: candidato.email || '',
+          telefone: candidato.telefone || '',
+          educacao: candidato.educacao || '',
+          qualificacao: candidato.qualificacao || '',
+          cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
+          descricao: candidato.descricao || '',
+          habilidadesTecnicas: candidato.habilidadesTecnicas || '',
+          idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : candidato.idiomas || '',
+          imagem: null
+        })
 
-          if (candidato.imagem && candidato.imagem.data) {
-            setPreviewImage(`data:${candidato.imagem.contentType};base64,${candidato.imagem.data}`)
-          }
+        if (candidato.imagem && candidato.imagem.data) {
+          setPreviewImage(`data:${candidato.imagem.contentType};base64,${candidato.imagem.data}`)
         }
-      } else {
-        navigate('/login')
       }
     } catch (error) {
       console.error('Erro ao carregar dados:', error)
+      navigate('/login')
     } finally {
       setLoading(false)
     }
@@ -128,21 +125,12 @@ function EditarPerfilCandidato() {
         formDataToSend.append('imagem', formData.imagem)
       }
 
-      const response = await fetch(`/api/candidato/${candidatoId}/editar`, {
-        method: 'POST',
-        body: formDataToSend
-      })
-
-      if (response.ok) {
-        alert('Perfil atualizado com sucesso!')
-        navigate('/candidato/dashboard')
-      } else {
-        const data = await response.json()
-        alert(data.error || 'Erro ao atualizar perfil')
-      }
+      await candidatoService.atualizarPerfil(candidatoId, formDataToSend)
+      alert('Perfil atualizado com sucesso!')
+      navigate('/candidato/dashboard')
     } catch (error) {
       console.error('Erro:', error)
-      alert('Erro ao conectar com o servidor')
+      alert(error.data?.error || 'Erro ao atualizar perfil')
     } finally {
       setSaving(false)
     }

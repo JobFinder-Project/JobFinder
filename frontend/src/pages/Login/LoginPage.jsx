@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { authService } from '../../services'
 import styles from './Login.module.css'
 
 function Login() {
@@ -23,15 +24,7 @@ function Login() {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, senha }),
-      })
-
-      const data = await response.json()
+      const data = await authService.login({ email, senha })
 
       if (data.message === 'Login bem-sucedido') {
         window.location.href = data.redirectUrl
@@ -40,7 +33,7 @@ function Login() {
       }
     } catch (err) {
       console.error('Erro no login:', err)
-      alert('Erro ao realizar o login. Tente novamente.')
+      alert(err.data?.error || 'Erro ao realizar o login. Tente novamente.')
     } finally {
       setLoading(false)
     }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { authService } from '../../services'
 import styles from './Navbar.module.css'
 
 function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
@@ -15,7 +16,7 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/logout')
+      await authService.logout()
       navigate('/login')
     } catch (error) {
       console.error('Erro ao fazer logout:', error)

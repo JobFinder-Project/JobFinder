@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
+import { vagasService } from '../../services'
 import styles from './BuscaVagas.module.css'
 
 function BuscaVagas() {
@@ -23,17 +24,8 @@ function BuscaVagas() {
 
   const fetchVagas = async () => {
     try {
-      let url = '/api/vagas'
-      const params = new URLSearchParams()
-      if (query) params.append('q', query)
-      if (selectedCategory) params.append('area', selectedCategory)
-      if (params.toString()) url += `?${params.toString()}`
-
-      const response = await fetch(url)
-      if (response.ok) {
-        const data = await response.json()
-        setVagas(data.vagas || [])
-      }
+      const data = await vagasService.buscar({ q: query, area: selectedCategory })
+      setVagas(data.vagas || [])
     } catch (error) {
       console.error('Erro ao buscar vagas:', error)
     } finally {
@@ -43,11 +35,8 @@ function BuscaVagas() {
 
   const fetchAreas = async () => {
     try {
-      const response = await fetch('/api/areas')
-      if (response.ok) {
-        const data = await response.json()
-        setAreas(data || [])
-      }
+      const data = await vagasService.getAreas()
+      setAreas(data || [])
     } catch (error) {
       console.error('Erro ao buscar áreas:', error)
     }

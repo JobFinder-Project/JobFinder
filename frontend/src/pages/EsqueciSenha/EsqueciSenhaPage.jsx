@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { authService } from '../../services'
 import styles from './EsqueciSenha.module.css'
 
 function EsqueciSenha() {
@@ -14,23 +15,11 @@ function EsqueciSenha() {
     setError('')
 
     try {
-      const response = await fetch('/api/recuperar_senha', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email })
-      })
-
-      if (response.ok) {
-        setSuccess(true)
-      } else {
-        const data = await response.json()
-        setError(data.message || 'Erro ao enviar email')
-      }
+      await authService.recuperarSenha(email)
+      setSuccess(true)
     } catch (err) {
       console.error('Erro:', err)
-      setError('Erro ao conectar com o servidor')
+      setError(err.data?.message || 'Erro ao enviar email')
     } finally {
       setLoading(false)
     }

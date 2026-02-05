@@ -7,6 +7,7 @@ import CategoryFilter from './components/CategoryFilter/CategoryFilter'
 import CandidaturasModal from './components/CandidaturasModal/CandidaturasModal'
 import PerfilModal from './components/PerfilModal/PerfilModal'
 import VagaDetalhesModal from './components/VagaDetalhesModal/VagaDetalhesModal'
+import { candidatoService } from '../../services'
 import styles from './CandidatoDashboard.module.css'
 
 function CandidatoDashboard() {
@@ -30,19 +31,14 @@ function CandidatoDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await fetch('/api/candidato/dashboard')
-      if (response.ok) {
-        const data = await response.json()
-        setCandidatoId(data.candidatoId)
-        setCandidato(data.candidato)
-        setVagas(data.vagas || [])
-        setAreas(data.areas || [])
-      } else {
-        
-        navigate('/login')
-      }
+      const data = await candidatoService.getDashboard()
+      setCandidatoId(data.candidatoId)
+      setCandidato(data.candidato)
+      setVagas(data.vagas || [])
+      setAreas(data.areas || [])
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
+      navigate('/login')
     } finally {
       setLoading(false)
     }
