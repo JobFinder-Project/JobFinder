@@ -1,0 +1,206 @@
+.modalOverlay {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow-y: auto;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.closeButton:hover {
+  color: #333;
+}
+
+.pageTitle {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.pageTitle h1 {
+  color: #333;
+  margin: 0;
+}
+
+/* Visualização do Perfil */
+.perfilVisualizacao {
+  padding: 10px 0;
+}
+
+.perfilInfoCard {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.infoRow {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.infoRow:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.infoRow strong {
+  color: #495057;
+  font-size: 0.9em;
+}
+
+.infoRow span {
+  color: #333;
+  font-size: 1.05em;
+}
+
+.perfilActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btnEdit {
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btnEdit:hover {
+  background-color: #2980b9;
+}
+
+.btnClose {
+  padding: 12px 24px;
+  background-color: #ecf0f1;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btnClose:hover {
+  background-color: #bdc3c7;
+}
+
+/* Formulário de Edição */
+.formEditPerfil {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formRow label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95em;
+}
+
+.formRow input,
+.formRow textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.formRow input:focus,
+.formRow textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.formRow textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.btnSave {
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btnSave:hover {
+  background-color: #2980b9;
+}
+
+.btnSave:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btnBack {
+  padding: 12px 24px;
+  background-color: #ecf0f1;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btnBack:hover {
+  background-color: #bdc3c7;
+}
