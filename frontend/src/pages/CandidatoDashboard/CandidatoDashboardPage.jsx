@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Navbar, Footer } from '../../components'
-import JobCard from './components/JobCard'
-import CategoryFilter from './components/CategoryFilter'
-import CandidaturasModal from './components/CandidaturasModal'
-import PerfilModal from './components/PerfilModal'
-import VagaDetalhesModal from './components/VagaDetalhesModal'
+import Navbar from '../../components/Navbar/Navbar'
+import Footer from '../../components/Footer/Footer'
+import JobCard from './components/JobCard/JobCard'
+import CategoryFilter from './components/CategoryFilter/CategoryFilter'
+import CandidaturasModal from './components/CandidaturasModal/CandidaturasModal'
+import PerfilModal from './components/PerfilModal/PerfilModal'
+import VagaDetalhesModal from './components/VagaDetalhesModal/VagaDetalhesModal'
 import styles from './CandidatoDashboard.module.css'
 
 function CandidatoDashboard() {

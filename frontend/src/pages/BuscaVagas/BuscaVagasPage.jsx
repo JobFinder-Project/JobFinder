@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Navbar } from '../../components'
-import { Footer } from '../../components'
+import Navbar from '../../components/Navbar/Navbar'
+import Footer from '../../components/Footer/Footer'
 import styles from './BuscaVagas.module.css'
 
 function BuscaVagas() {

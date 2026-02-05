@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 // Pages
-import Home from './pages/Home'
-import Login from './pages/Login'
-import CandidatoDashboard from './pages/CandidatoDashboard'
-import EmpresaDashboard from './pages/EmpresaDashboard'
-import RegistroCandidato from './pages/RegistroCandidato'
-import RegistroEmpresa from './pages/RegistroEmpresa'
-import EscolherCargo from './pages/EscolherCargo'
-import EsqueciSenha from './pages/EsqueciSenha'
-import RedefinirSenha from './pages/RedefinirSenha'
-import BuscaVagas from './pages/BuscaVagas'
-import BuscaCandidatos from './pages/BuscaCandidatos'
-import EditarPerfilCandidato from './pages/EditarPerfilCandidato'
-import PaginaErro from './pages/PaginaErro'
+import Home from './pages/Home/HomePage'
+import Login from './pages/Login/LoginPage'
+import CandidatoDashboard from './pages/CandidatoDashboard/CandidatoDashboardPage'
+import EmpresaDashboard from './pages/EmpresaDashboard/EmpresaDashboardPage'
+import RegistroCandidato from './pages/RegistroCandidato/RegistroCandidatoPage'
+import RegistroEmpresa from './pages/RegistroEmpresa/RegistroEmpresaPage'
+import EscolherCargo from './pages/EscolherCargo/EscolherCargoPage'
+import EsqueciSenha from './pages/EsqueciSenha/EsqueciSenhaPage'
+import RedefinirSenha from './pages/RedefinirSenha/RedefinirSenhaPage'
+import BuscaVagas from './pages/BuscaVagas/BuscaVagasPage'
+import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
+import EditarPerfilCandidato from './pages/EditarPerfilCandidato/EditarPerfilCandidatoPage'
+import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 
 function App() {
   return (

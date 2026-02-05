@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CandidateCard from './components/CandidateCard'
-import VagasModal from './components/VagasModal'
-import CriarVagaModal from './components/CriarVagaModal'
-import PerfilEmpresaModal from './components/PerfilEmpresaModal'
+import CandidateCard from './components/CandidateCard/CandidateCard'
+import VagasModal from './components/VagasModal/VagasModal'
+import CriarVagaModal from './components/CriarVagaModal/CriarVagaModal'
+import PerfilEmpresaModal from './components/PerfilEmpresaModal/PerfilEmpresaModal'
 import styles from './EmpresaDashboard.module.css'
 
 function EmpresaDashboard() {
