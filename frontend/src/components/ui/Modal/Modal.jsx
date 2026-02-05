@@ -1,17 +1,5 @@
 import styles from './Modal.module.css'
 
-/**
- * Modal genérico reutilizável com padrão de composição
- * 
- * @param {Object} props
- * @param {string} props.title - Título do modal (opcional se usar hideHeader)
- * @param {boolean} props.hideHeader - Esconde o header do modal
- * @param {boolean} props.hideCloseButton - Esconde o botão de fechar
- * @param {function} props.onClose - Função chamada ao fechar o modal
- * @param {React.ReactNode} props.children - Conteúdo do modal
- * @param {string} props.size - Tamanho do modal: 'sm' | 'md' | 'lg' | 'xl' (padrão: 'md')
- * @param {string} props.className - Classes CSS adicionais para o conteúdo
- */
 function Modal({ 
   title, 
   hideHeader = false,

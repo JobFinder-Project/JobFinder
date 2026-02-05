@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Modal from '../../../../components/ui/Modal/Modal'
 import styles from './CriarVagaModal.module.css'
 
 function CriarVagaModal({ empresaId, onClose, onSuccess }) {
@@ -72,29 +73,27 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
 
   if (showSuccess) {
     return (
-      <div className={styles.modalOverlay} onClick={onClose}>
-        <div className={styles.modalSuccessContent} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.successIcon}>✓</div>
-          <h2>Vaga Publicada com Sucesso!</h2>
-          <p>
-            Sua vaga foi criada e está disponível para candidatos se inscreverem.
-            Você pode visualizá-la na seção "Vagas" ou criar uma nova vaga.
-          </p>
-          <button className={styles.btnOkSuccess} onClick={handleSuccessOk}>
-            OK
-          </button>
-        </div>
-      </div>
+      <Modal title="Sucesso" onClose={handleSuccessOk} size="sm" hideHeader>
+        <Modal.Body>
+          <div className={styles.successContent}>
+            <div className={styles.successIcon}>✓</div>
+            <h2>Vaga Publicada com Sucesso!</h2>
+            <p>
+              Sua vaga foi criada e está disponível para candidatos se inscreverem.
+              Você pode visualizá-la na seção "Vagas" ou criar uma nova vaga.
+            </p>
+            <button className={styles.btnOkSuccess} onClick={handleSuccessOk}>
+              OK
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
     )
   }
 
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <span className={styles.closeButton} onClick={onClose}>&times;</span>
-        <div className={styles.pageTitle}>
-          <h1>Criar Nova Vaga</h1>
-        </div>
+    <Modal title="Criar Nova Vaga" onClose={onClose} size="lg">
+      <Modal.Body>
         <form className={styles.formAddVaga} onSubmit={handleSubmit}>
           <div className={styles.formRow}>
             <label htmlFor="nome">Nome da Vaga:</label>
@@ -149,8 +148,8 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
             {loading ? 'Salvando...' : 'Salvar Vaga'}
           </button>
         </form>
-      </div>
-    </div>
+      </Modal.Body>
+    </Modal>
   )
 }
 
