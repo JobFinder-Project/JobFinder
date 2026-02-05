@@ -1,19 +1,132 @@
-.container {
+.wrapper {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 2rem;
+  padding-top: 0;
 }
 
-.container h1 {
+.header {
+  width: 100%;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.headerIcon {
+  color: #333;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.content h1 {
   font-size: 2.5rem;
   color: #333;
   margin-bottom: 1rem;
 }
 
-.container p {
+.content p {
   font-size: 1.1rem;
   color: #666;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.heroImage {
+  flex: 1;
+  max-width: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.heroImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.button {
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  width: 200px;
+  transition: background-color 0.2s ease;
+}
+
+.primaryButton {
+  background-color: #ffe100;
+  color: #333;
+  border: none;
+}
+
+.primaryButton:hover {
+  background-color: #ffd700;
+}
+
+.secondaryButton {
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.secondaryButton:hover {
+  background-color: #f5f5f5;
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .heroImage {
+    max-width: 100%;
+  }
+
+  .content h1 {
+    font-size: 2rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+
+  .button {
+    width: 100%;
+  }
 }
