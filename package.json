@@ -1,0 +1,27 @@
+{
+  "name": "jobfinder",
+  "version": "1.0.0",
+  "description": "JobFinder - Plataforma de conexão entre candidatos e empresas",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm start",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "test": "cd backend && npm test",
+    "test:backend": "cd backend && npm test",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "start": "cd backend && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JobFinder-Project/JobFinder.git"
+  },
+  "license": "MIT"
+}
