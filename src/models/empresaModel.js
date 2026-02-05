@@ -7,7 +7,7 @@ const EmpresaSchema = mongoose.Schema({
     required: true,
     validate: {
       validator: function (v) {
-        return /^[a-zA-Zá-ú-\s]+$/.test(v);
+        return /^[a-zA-Zá-ú0-9\-\s]+$/.test(v);
       },
       message: 'Nome inválido'
     },
