@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BiInfoCircle, BiPlus, BiUser } from 'react-icons/bi'
 import NavbarEmpresa from '../../components/Navbar/NavbarEmpresa/NavbarEmpresa'
 import CandidateCard from './components/CandidateCard/CandidateCard'
 import VagasModal from './components/VagasModal/VagasModal'
@@ -90,27 +91,21 @@ function EmpresaDashboard() {
 
       {/* Navegação inferior */}
       <nav className={styles.bottomNav}>
-        <button className={styles.navBtn} onClick={() => setShowVagasModal(true)}>
+<button className={styles.navBtn} onClick={() => setShowVagasModal(true)}>
           <div className={styles.navIcon}>
-            <svg width="36" height="36" fill="#fff" viewBox="0 0 24 24">
-              <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2v-6h2v6z" />
-            </svg>
+            <BiInfoCircle size={36} color="#fff" />
           </div>
           <span>Vagas</span>
         </button>
-        <button className={styles.navBtn} onClick={() => setShowCriarVagaModal(true)}>
+<button className={styles.navBtn} onClick={() => setShowCriarVagaModal(true)}>
           <div className={styles.navIcon}>
-            <svg width="36" height="36" fill="#fff" viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z" />
-            </svg>
+            <BiPlus size={36} color="#fff" />
           </div>
           <span>Add Vagas</span>
         </button>
-        <button className={styles.navBtn} onClick={() => setShowPerfilModal(true)}>
+<button className={styles.navBtn} onClick={() => setShowPerfilModal(true)}>
           <div className={styles.navIcon}>
-            <svg width="36" height="36" fill="#fff" viewBox="0 0 24 24">
-              <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-            </svg>
+            <BiUser size={36} color="#fff" />
           </div>
           <span>Perfil</span>
         </button>

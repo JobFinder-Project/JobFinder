@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
+import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
 import { vagasService } from '../../services'
@@ -67,14 +68,11 @@ function BuscaVagas() {
       <main className={styles.mainContent}>
         {/* Categories */}
         <div className={styles.categories}>
-          <button 
+<button 
             className={styles.categoryArrow}
             onClick={() => scrollCategories('left')}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M11 1.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-1 0v-12a.5.5 0 0 1 .5-.5z"/>
-              <path d="M4.854 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 8l2.855 2.854a.5.5 0 1 1-.708.708l-3-3z"/>
-            </svg>
+            <BiChevronLeft size={18} />
           </button>
           
           <div className={styles.categoriesList} ref={categoriesRef}>
@@ -89,14 +87,11 @@ function BuscaVagas() {
             ))}
           </div>
           
-          <button 
+<button 
             className={styles.categoryArrow}
             onClick={() => scrollCategories('right')}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M5 1.5a.5.5 0 0 0-.5.5v12a.5.5 0 0 0 1 0v-12a.5.5 0 0 0-.5-.5z"/>
-              <path d="M11.146 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 8l-2.855 2.854a.5.5 0 1 0 .708.708l3-3z"/>
-            </svg>
+            <BiChevronRight size={18} />
           </button>
         </div>
 
