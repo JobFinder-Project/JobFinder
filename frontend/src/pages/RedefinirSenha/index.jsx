@@ -1,0 +1,112 @@
+import { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import styles from './RedefinirSenha.module.css'
+
+function RedefinirSenha() {
+  const { token } = useParams()
+  const navigate = useNavigate()
+  const [senha, setSenha] = useState('')
+  const [confirmarSenha, setConfirmarSenha] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError('')
+
+    if (senha !== confirmarSenha) {
+      setError('As senhas não coincidem')
+      return
+    }
+
+    if (senha.length < 8) {
+      setError('A senha deve ter no mínimo 8 caracteres')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const response = await fetch(`/api/redefinir_senha/${token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ senha })
+      })
+
+      if (response.ok) {
+        setSuccess(true)
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000)
+      } else {
+        const data = await response.json()
+        setError(data.message || 'Erro ao redefinir senha')
+      }
+    } catch (err) {
+      console.error('Erro:', err)
+      setError('Erro ao conectar com o servidor')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <div className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.successIcon}>✓</div>
+          <h1>Senha Redefinida!</h1>
+          <p>
+            Sua senha foi alterada com sucesso. Você será redirecionado para o login em instantes...
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <h1>Redefinir Senha</h1>
+        <p>Digite sua nova senha abaixo.</p>
+
+        {error && <div className={styles.errorAlert}>{error}</div>}
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="senha">Nova Senha</label>
+          <input
+            type="password"
+            id="senha"
+            name="senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            placeholder="Digite sua nova senha"
+            minLength={8}
+            required
+          />
+
+          <label htmlFor="confirmarSenha">Confirmar Senha</label>
+          <input
+            type="password"
+            id="confirmarSenha"
+            name="confirmarSenha"
+            value={confirmarSenha}
+            onChange={(e) => setConfirmarSenha(e.target.value)}
+            placeholder="Confirme sua nova senha"
+            minLength={8}
+            required
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? 'Redefinindo...' : 'Redefinir Senha'}
+          </button>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default RedefinirSenha
