@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
 import { candidatoService } from '../../services'
 import styles from './EditarPerfilCandidato.module.css'
 
@@ -145,23 +146,8 @@ function EditarPerfilCandidato() {
   }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.navigation}>
-          <button 
-            className={styles.backButton} 
-            onClick={() => navigate('/candidato/dashboard')}
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </button>
-        </div>
-        <div className={styles.logo}>Editar Perfil</div>
-        <div style={{ width: '24px' }}></div>
-      </header>
-
-      <main className={styles.container}>
+    <AuthLayout title="Editar Perfil" backTo="/candidato/dashboard" showHelp={false}>
+      <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
           {/* Foto de Perfil */}
           <div className={styles.imageSection}>
@@ -347,8 +333,8 @@ function EditarPerfilCandidato() {
             </button>
           </div>
         </form>
-      </main>
-    </div>
+      </div>
+    </AuthLayout>
   )
 }
 

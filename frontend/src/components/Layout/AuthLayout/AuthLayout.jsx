@@ -8,17 +8,19 @@ import styles from './AuthLayout.module.css'
  * @param {string} props.title - Título exibido no header
  * @param {string} props.backTo - Rota para o botão de voltar (opcional)
  * @param {boolean} props.showHelp - Mostrar botão de ajuda (default: true)
+ * @param {string} props.className - Classes CSS adicionais para o wrapper
  */
 function AuthLayout({ 
   children, 
   title = 'Área de Login', 
   backTo = '/home',
-  showHelp = true 
+  showHelp = true,
+  className = ''
 }) {
   const navigate = useNavigate()
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${className}`}>
       <header className={styles.header}>
         <div className={styles.navigation}>
           {backTo && (
