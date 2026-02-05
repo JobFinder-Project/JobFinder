@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
 import { authService } from '../../services'
 import styles from './EsqueciSenha.module.css'
 
@@ -27,7 +28,7 @@ function EsqueciSenha() {
 
   if (success) {
     return (
-      <div className={styles.page}>
+      <AuthLayout title="Email Enviado" backTo="/login" showHelp={false}>
         <div className={styles.container}>
           <div className={styles.successIcon}>✓</div>
           <h1>Email Enviado!</h1>
@@ -39,14 +40,13 @@ function EsqueciSenha() {
             Voltar ao Login
           </Link>
         </div>
-      </div>
+      </AuthLayout>
     )
   }
 
   return (
-    <div className={styles.page}>
+    <AuthLayout title="Esqueci a Senha" backTo="/login" showHelp={false}>
       <div className={styles.container}>
-        <h1>Esqueceu a Senha</h1>
         <p>
           Digite o endereço de e-mail associado à sua conta e enviaremos
           instruções para redefinir sua senha.
@@ -74,7 +74,7 @@ function EsqueciSenha() {
           Voltar ao Login
         </Link>
       </div>
-    </div>
+    </AuthLayout>
   )
 }
 

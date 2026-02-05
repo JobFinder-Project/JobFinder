@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
 import { authService } from '../../services'
 import styles from './RedefinirSenha.module.css'
 
@@ -44,7 +45,7 @@ function RedefinirSenha() {
 
   if (success) {
     return (
-      <div className={styles.page}>
+      <AuthLayout title="Senha Redefinida" backTo="/login" showHelp={false}>
         <div className={styles.container}>
           <div className={styles.successIcon}>✓</div>
           <h1>Senha Redefinida!</h1>
@@ -52,14 +53,13 @@ function RedefinirSenha() {
             Sua senha foi alterada com sucesso. Você será redirecionado para o login em instantes...
           </p>
         </div>
-      </div>
+      </AuthLayout>
     )
   }
 
   return (
-    <div className={styles.page}>
+    <AuthLayout title="Redefinir Senha" backTo="/login" showHelp={false}>
       <div className={styles.container}>
-        <h1>Redefinir Senha</h1>
         <p>Digite sua nova senha abaixo.</p>
 
         {error && <div className={styles.errorAlert}>{error}</div>}
@@ -94,7 +94,7 @@ function RedefinirSenha() {
           </button>
         </form>
       </div>
-    </div>
+    </AuthLayout>
   )
 }
 
