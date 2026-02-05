@@ -87,6 +87,22 @@
   background-color: #c0c0c0;
 }
 
+.logoutButton {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.logoutButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .mainContent {
   background: #f8fafc;
   margin-top: 5px;

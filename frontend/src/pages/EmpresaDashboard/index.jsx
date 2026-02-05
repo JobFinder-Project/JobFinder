@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import CandidateCard from './components/CandidateCard'
 import VagasModal from './components/VagasModal'
 import CriarVagaModal from './components/CriarVagaModal'
@@ -7,6 +7,7 @@ import PerfilEmpresaModal from './components/PerfilEmpresaModal'
 import styles from './EmpresaDashboard.module.css'
 
 function EmpresaDashboard() {
+  const navigate = useNavigate()
   const [empresa, setEmpresa] = useState(null)
   const [empresaId, setEmpresaId] = useState(null)
   const [candidatos, setCandidatos] = useState([])
@@ -29,11 +30,16 @@ function EmpresaDashboard() {
   const fetchDashboardData = async () => {
     try {
       const response = await fetch('/api/empresa/dashboard')
-      const data = await response.json()
-      setEmpresa(data.user)
-      setEmpresaId(data.empresaId)
-      setCandidatos(data.candidatos || [])
-      setVagas(data.vagas || [])
+      if (response.ok) {
+        const data = await response.json()
+        setEmpresa(data.user)
+        setEmpresaId(data.empresaId)
+        setCandidatos(data.candidatos || [])
+        setVagas(data.vagas || [])
+      } else {
+        // Se não autenticado, redireciona para login
+        navigate('/login')
+      }
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
     } finally {
@@ -44,7 +50,17 @@ function EmpresaDashboard() {
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      window.location.href = `/empresa/candidatos/buscar?q=${encodeURIComponent(searchQuery)}`
+      navigate(`/empresa/candidatos/buscar?q=${encodeURIComponent(searchQuery)}`)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout')
+      navigate('/login')
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error)
+      navigate('/login')
     }
   }
 
@@ -86,7 +102,7 @@ function EmpresaDashboard() {
         </div>
         <ul className={styles.navbarMenu}>
           <li>
-            <Link to="/logout" className={styles.logoutLink}>
+            <button onClick={handleLogout} className={styles.logoutButton}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="25"
@@ -103,7 +119,7 @@ function EmpresaDashboard() {
                   d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
                 />
               </svg>
-            </Link>
+            </button>
           </li>
         </ul>
       </nav>
