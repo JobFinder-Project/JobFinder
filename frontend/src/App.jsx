@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import GuestRoute from './components/GuestRoute/GuestRoute'
 
 // Pages
 import Home from './pages/Home/HomePage'
@@ -18,29 +21,69 @@ import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 function App() {
   return (
     <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/cargo" element={<EscolherCargo />} />
-        <Route path="/esqueci-senha" element={<EsqueciSenha />} />
-        <Route path="/redefinir-senha/:token" element={<RedefinirSenha />} />
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          
+          {/* Guest Only Routes (redireciona se já logado) */}
+          <Route path="/login" element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          } />
+          <Route path="/cargo" element={
+            <GuestRoute>
+              <EscolherCargo />
+            </GuestRoute>
+          } />
+          <Route path="/candidato/cadastrar" element={
+            <GuestRoute>
+              <RegistroCandidato />
+            </GuestRoute>
+          } />
+          <Route path="/empresa/cadastrar" element={
+            <GuestRoute>
+              <RegistroEmpresa />
+            </GuestRoute>
+          } />
+          <Route path="/esqueci-senha" element={<EsqueciSenha />} />
+          <Route path="/redefinir-senha/:token" element={<RedefinirSenha />} />
 
-        {/* Candidato Routes */}
-        <Route path="/candidato/cadastrar" element={<RegistroCandidato />} />
-        <Route path="/candidato/dashboard" element={<CandidatoDashboard />} />
-        <Route path="/candidato/vagas" element={<BuscaVagas />} />
-        <Route path="/candidato/perfil/:candidatoId/editar" element={<EditarPerfilCandidato />} />
+          {/* Protected Candidato Routes */}
+          <Route path="/candidato/dashboard" element={
+            <ProtectedRoute allowedRole="candidato">
+              <CandidatoDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/candidato/vagas" element={
+            <ProtectedRoute allowedRole="candidato">
+              <BuscaVagas />
+            </ProtectedRoute>
+          } />
+          <Route path="/candidato/perfil/:candidatoId/editar" element={
+            <ProtectedRoute allowedRole="candidato">
+              <EditarPerfilCandidato />
+            </ProtectedRoute>
+          } />
 
-        {/* Empresa Routes */}
-        <Route path="/empresa/cadastrar" element={<RegistroEmpresa />} />
-        <Route path="/empresa/dashboard" element={<EmpresaDashboard />} />
-        <Route path="/empresa/candidatos/buscar" element={<BuscaCandidatos />} />
+          {/* Protected Empresa Routes */}
+          <Route path="/empresa/dashboard" element={
+            <ProtectedRoute allowedRole="empresa">
+              <EmpresaDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/empresa/candidatos/buscar" element={
+            <ProtectedRoute allowedRole="empresa">
+              <BuscaCandidatos />
+            </ProtectedRoute>
+          } />
 
-        {/* 404 */}
-        <Route path="*" element={<PaginaErro />} />
-      </Routes>
+          {/* 404 */}
+          <Route path="*" element={<PaginaErro />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   )
 }

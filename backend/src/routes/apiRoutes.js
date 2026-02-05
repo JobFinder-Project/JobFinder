@@ -67,6 +67,43 @@ router.post('/login', async (req, res) => {
 });
 
 
+// Endpoint para verificar sessão atual
+router.get('/me', async (req, res) => {
+    if (!req.session || !req.session.user) {
+        return res.status(401).json({ authenticated: false });
+    }
+
+    try {
+        const { id, role } = req.session.user;
+        let user = null;
+
+        if (role === 'candidato') {
+            user = await Candidato.findById(id).select('-senha -resetToken -tokenExpiration');
+        } else if (role === 'empresa') {
+            user = await Empresa.findById(id).select('-senha -resetToken -tokenExpiration');
+        }
+
+        if (!user) {
+            req.session.destroy();
+            return res.status(401).json({ authenticated: false });
+        }
+
+        res.json({
+            authenticated: true,
+            user: {
+                id: user._id,
+                nome: user.nome,
+                email: user.email,
+                role
+            }
+        });
+    } catch (erro) {
+        console.error('Erro ao verificar sessão:', erro);
+        res.status(500).json({ error: 'Erro ao verificar sessão' });
+    }
+});
+
+
 router.get('/logout', (req, res) => {
     req.session.destroy((erro) => {
         if (erro) {

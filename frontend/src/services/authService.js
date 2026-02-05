@@ -5,6 +5,13 @@ import api from './api'
 
 export const authService = {
   /**
+   * Verifica sessão atual
+   */
+  getMe: async () => {
+    return api.get('/me')
+  },
+
+  /**
    * Realiza login
    */
   login: async (credentials) => {
