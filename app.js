@@ -2,6 +2,7 @@ const express = require('express')
 const empresaRoutes = require('./src/routes/empresaRoutes');
 const candidatoRoutes = require('./src/routes/candidatoRoutes');
 const geral = require('./src/routes/geralRoutes')
+const apiRoutes = require('./src/routes/apiRoutes')
 const hbs = require('handlebars');
 const path = require('path')
 const {
@@ -52,6 +53,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // Configuração das rotas
+app.use('/api', apiRoutes);  // Rotas da API (JSON)
 app.use('/empresa', empresaRoutes);
 app.use('/candidato', candidatoRoutes);
 app.use(geral);

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Navbar, Footer } from '../../components'
 import JobCard from './components/JobCard'
 import CategoryFilter from './components/CategoryFilter'
@@ -8,6 +9,7 @@ import VagaDetalhesModal from './components/VagaDetalhesModal'
 import styles from './CandidatoDashboard.module.css'
 
 function CandidatoDashboard() {
+  const navigate = useNavigate()
   const [candidatoId, setCandidatoId] = useState(null)
   const [candidato, setCandidato] = useState(null)
   const [vagas, setVagas] = useState([])
@@ -28,11 +30,16 @@ function CandidatoDashboard() {
   const fetchDashboardData = async () => {
     try {
       const response = await fetch('/api/candidato/dashboard')
-      const data = await response.json()
-      setCandidatoId(data.candidatoId)
-      setCandidato(data.candidato)
-      setVagas(data.vagas || [])
-      setAreas(data.areas || [])
+      if (response.ok) {
+        const data = await response.json()
+        setCandidatoId(data.candidatoId)
+        setCandidato(data.candidato)
+        setVagas(data.vagas || [])
+        setAreas(data.areas || [])
+      } else {
+        
+        navigate('/login')
+      }
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
     } finally {

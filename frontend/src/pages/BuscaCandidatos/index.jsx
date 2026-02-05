@@ -40,8 +40,14 @@ function BuscaCandidatos() {
     }
   }
 
-  const handleLogout = () => {
-    navigate('/logout')
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout')
+      navigate('/login')
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error)
+      navigate('/login')
+    }
   }
 
   return (

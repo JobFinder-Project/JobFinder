@@ -1,14 +1,25 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './Navbar.module.css'
 
 function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
+  const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      window.location.href = `/candidato/vagas/buscar?q=${encodeURIComponent(searchQuery)}`
+      navigate(`/candidato/vagas?q=${encodeURIComponent(searchQuery)}`)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout')
+      navigate('/login')
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error)
+      navigate('/login')
     }
   }
 
@@ -111,7 +122,7 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
           </li>
         )}
         <li>
-          <Link to="/logout" className={styles.navbarButton} title="Sair">
+          <button onClick={handleLogout} className={styles.navbarButton} title="Sair">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -129,7 +140,7 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
               />
             </svg>
             <span className={styles.navbarLabel}>Sair</span>
-          </Link>
+          </button>
         </li>
       </ul>
     </nav>

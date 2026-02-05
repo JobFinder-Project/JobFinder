@@ -14,9 +14,11 @@ function CandidaturasModal({ candidatoId, onClose }) {
 
   const fetchCandidaturas = async () => {
     try {
-      const response = await fetch(`/api/candidato/${candidatoId}/candidaturas`)
-      const data = await response.json()
-      setCandidaturas(data.candidaturas || [])
+      const response = await fetch('/api/candidato/candidaturas')
+      if (response.ok) {
+        const data = await response.json()
+        setCandidaturas(data.candidaturas || [])
+      }
     } catch (error) {
       console.error('Erro ao carregar candidaturas:', error)
     } finally {
@@ -35,8 +37,8 @@ function CandidaturasModal({ candidatoId, onClose }) {
 
   const handleConfirmarCancelamento = async () => {
     try {
-      const response = await fetch(`/api/candidatura/${selectedCandidatura._id}/cancelar`, {
-        method: 'DELETE'
+      const response = await fetch(`/api/candidato/${candidatoId}/vagas/delete/${selectedCandidatura._id}`, {
+        method: 'POST'
       })
       
       if (response.ok) {

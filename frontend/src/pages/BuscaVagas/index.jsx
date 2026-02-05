@@ -23,7 +23,7 @@ function BuscaVagas() {
 
   const fetchVagas = async () => {
     try {
-      let url = '/api/candidato/vagas'
+      let url = '/api/vagas'
       const params = new URLSearchParams()
       if (query) params.append('q', query)
       if (selectedCategory) params.append('area', selectedCategory)
@@ -32,7 +32,7 @@ function BuscaVagas() {
       const response = await fetch(url)
       if (response.ok) {
         const data = await response.json()
-        setVagas(data.vagas || data || [])
+        setVagas(data.vagas || [])
       }
     } catch (error) {
       console.error('Erro ao buscar vagas:', error)

@@ -12,6 +12,7 @@ import EsqueciSenha from './pages/EsqueciSenha'
 import RedefinirSenha from './pages/RedefinirSenha'
 import BuscaVagas from './pages/BuscaVagas'
 import BuscaCandidatos from './pages/BuscaCandidatos'
+import EditarPerfilCandidato from './pages/EditarPerfilCandidato'
 import PaginaErro from './pages/PaginaErro'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/candidato/cadastrar" element={<RegistroCandidato />} />
         <Route path="/candidato/dashboard" element={<CandidatoDashboard />} />
         <Route path="/candidato/vagas" element={<BuscaVagas />} />
+        <Route path="/candidato/perfil/:candidatoId/editar" element={<EditarPerfilCandidato />} />
 
         {/* Empresa Routes */}
         <Route path="/empresa/cadastrar" element={<RegistroEmpresa />} />

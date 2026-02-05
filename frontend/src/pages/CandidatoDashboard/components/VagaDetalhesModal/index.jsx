@@ -10,20 +10,16 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     setLoading(true)
 
     try {
-      const response = await fetch('/api/candidatura', {
+      const response = await fetch(`/api/candidato/${candidatoId}/vagas/${vaga._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          candidatoId,
-          vagaId: vaga._id,
-        }),
+        }
       })
 
       const data = await response.json()
 
-      if (response.status === 409) {
+      if (response.status === 400 && data.error?.includes('já')) {
         // Candidatura duplicada
         setShowDuplicadaModal(true)
       } else if (response.ok) {
