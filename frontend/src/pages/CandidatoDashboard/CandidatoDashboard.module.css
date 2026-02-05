@@ -1,0 +1,60 @@
+.dashboardWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.mainContent {
+  margin-top: 5px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 30px;
+  width: 80%;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.2);
+  flex: 1;
+  background-color: #fff;
+}
+
+.jobsFeed {
+  margin-top: 20px;
+}
+
+.cardGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.noData {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.noData p {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .mainContent {
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
+    padding: 15px;
+  }
+}
