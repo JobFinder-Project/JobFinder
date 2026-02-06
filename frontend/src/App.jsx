@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import AuthProvider from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+
+const queryClient = new QueryClient()
+
 import GuestRoute from './components/GuestRoute/GuestRoute'
 
 // Pages
@@ -20,9 +24,10 @@ import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
-        <Routes>
+    <QueryClientProvider client={queryClient}>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <AuthProvider>
+          <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -83,8 +88,9 @@ function App() {
           {/* 404 */}
           <Route path="*" element={<PaginaErro />} />
         </Routes>
-      </AuthProvider>
-    </Router>
+        </AuthProvider>
+      </Router>
+    </QueryClientProvider>
   )
 }
 

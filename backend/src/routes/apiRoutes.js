@@ -1,38 +1,38 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const multer = require("multer");
+const multer = require('multer');
 const upload = multer();
 
-const Candidato = require("../models/candidatoModel");
-const Empresa = require("../models/empresaModel");
-const Vaga = require("../models/vagasModel");
-const Candidatura = require("../models/candidaturaModel");
-const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
+const Candidato = require('../models/candidatoModel');
+const Empresa = require('../models/empresaModel');
+const Vaga = require('../models/vagasModel');
+const Candidatura = require('../models/candidaturaModel');
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const isAuthenticatedApi = (req, res, next) => {
     if (req.session && req.session.user) {
         return next();
     }
-    return res.status(401).json({ error: "Não autenticado. Faça login." });
+    return res.status(401).json({ error: 'Não autenticado. Faça login.' });
 };
 
 const isCandidatoApi = (req, res, next) => {
-    if (req.session.user && req.session.user.role === "candidato") {
+    if (req.session.user && req.session.user.role === 'candidato') {
         return next();
     }
-    return res.status(403).json({ error: "Acesso negado. Apenas candidatos." });
+    return res.status(403).json({ error: 'Acesso negado. Apenas candidatos.' });
 };
 
 const isEmpresaApi = (req, res, next) => {
-    if (req.session.user && req.session.user.role === "empresa") {
+    if (req.session.user && req.session.user.role === 'empresa') {
         return next();
     }
-    return res.status(403).json({ error: "Acesso negado. Apenas empresas." });
+    return res.status(403).json({ error: 'Acesso negado. Apenas empresas.' });
 };
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, senha } = req.body;
     try {
         const user =
@@ -40,12 +40,12 @@ router.post("/login", async (req, res) => {
             (await Empresa.findOne({ email }));
 
         if (!user) {
-            return res.status(401).json({ error: "E-mail ou senha inválidos." });
+            return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
         }
 
         const isValidPassword = await bcrypt.compare(senha, user.senha);
         if (!isValidPassword) {
-            return res.status(401).json({ error: "E-mail ou senha inválidos." });
+            return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
         }
 
         const userType = user.constructor.modelName.toLowerCase();
@@ -57,21 +57,21 @@ router.post("/login", async (req, res) => {
 
         res.json({
             success: true,
-            message: "Login bem-sucedido",
+            message: 'Login bem-sucedido',
             redirectUrl:
-                userType === "candidato"
-                    ? "/candidato/dashboard"
-                    : "/empresa/dashboard",
+                userType === 'candidato'
+                    ? '/candidato/dashboard'
+                    : '/empresa/dashboard',
         });
     } catch (erro) {
         console.error(erro);
         res
             .status(500)
-            .json({ error: "Erro ao processar o login. Tente novamente!" });
+            .json({ error: 'Erro ao processar o login. Tente novamente!' });
     }
 });
 
-router.get("/me", async (req, res) => {
+router.get('/me', async (req, res) => {
     if (!req.session || !req.session.user) {
         return res.status(401).json({ authenticated: false });
     }
@@ -80,13 +80,13 @@ router.get("/me", async (req, res) => {
         const { id, role } = req.session.user;
         let user = null;
 
-        if (role === "candidato") {
+        if (role === 'candidato') {
             user = await Candidato.findById(id).select(
-                "-senha -resetToken -tokenExpiration",
+                '-senha -resetToken -tokenExpiration',
             );
-        } else if (role === "empresa") {
+        } else if (role === 'empresa') {
             user = await Empresa.findById(id).select(
-                "-senha -resetToken -tokenExpiration",
+                '-senha -resetToken -tokenExpiration',
             );
         }
 
@@ -105,25 +105,25 @@ router.get("/me", async (req, res) => {
             },
         });
     } catch (erro) {
-        console.error("Erro ao verificar sessão:", erro);
-        res.status(500).json({ error: "Erro ao verificar sessão" });
+        console.error('Erro ao verificar sessão:', erro);
+        res.status(500).json({ error: 'Erro ao verificar sessão' });
     }
 });
 
-router.get("/logout", (req, res) => {
+router.get('/logout', (req, res) => {
     req.session.destroy((erro) => {
         if (erro) {
-            return res.status(500).json({ error: "Erro ao finalizar sessão" });
+            return res.status(500).json({ error: 'Erro ao finalizar sessão' });
         }
-        res.clearCookie("connect.sid");
-        res.json({ success: true, message: "Logout realizado com sucesso" });
+        res.clearCookie('connect.sid');
+        res.json({ success: true, message: 'Logout realizado com sucesso' });
     });
 });
 
-router.post("/recuperar_senha", async (req, res) => {
+router.post('/recuperar_senha', async (req, res) => {
     try {
         const transporter = nodemailer.createTransport({
-            service: "Gmail",
+            service: 'Gmail',
             auth: {
                 user: process.env.APP_EMAIL,
                 pass: process.env.APP_PASS,
@@ -136,11 +136,11 @@ router.post("/recuperar_senha", async (req, res) => {
 
         if (!user) {
             return res.status(404).json({
-                error: "O e-mail informado não consta em nossa base de dados.",
+                error: 'O e-mail informado não consta em nossa base de dados.',
             });
         }
 
-        const token = crypto.randomBytes(20).toString("hex");
+        const token = crypto.randomBytes(20).toString('hex');
         const tokenExpiration = Date.now() + 15 * 60 * 1000;
 
         user.resetToken = token;
@@ -152,11 +152,11 @@ router.post("/recuperar_senha", async (req, res) => {
         const mailOptions = {
             from: process.env.APP_EMAIL,
             to: req.body.email,
-            subject: "Recuperar senha - App JobFinder",
+            subject: 'Recuperar senha - App JobFinder',
             html: `
             <h1>Recuperar Senha</h1>
             <p>Para recuperar sua senha, acesse o link abaixo:</p>
-            <a href="${linkReset}">${linkReset}</a>
+            <a href='${linkReset}'>${linkReset}</a>
             <p>Este link expira em 15 minutos.</p>
             <p>Se você não solicitou isso, ignore este e-mail.</p>
             `,
@@ -166,17 +166,17 @@ router.post("/recuperar_senha", async (req, res) => {
 
         res.json({
             success: true,
-            message: "E-mail de recuperação enviado com sucesso!",
+            message: 'E-mail de recuperação enviado com sucesso!',
         });
     } catch (erro) {
         console.error(erro);
         res.status(500).json({
-            error: "Erro ao tentar enviar o e-mail de recuperação. Tente novamente!",
+            error: 'Erro ao tentar enviar o e-mail de recuperação. Tente novamente!',
         });
     }
 });
 
-router.post("/redefinir_senha/:token", async (req, res) => {
+router.post('/redefinir_senha/:token', async (req, res) => {
     try {
         const { token } = req.params;
 
@@ -193,7 +193,7 @@ router.post("/redefinir_senha/:token", async (req, res) => {
         if (!user) {
             return res
                 .status(404)
-                .json({ error: "O token de redefinição é inválido ou expirou." });
+                .json({ error: 'O token de redefinição é inválido ou expirou.' });
         }
 
         const salt = await bcrypt.genSalt(12);
@@ -202,31 +202,31 @@ router.post("/redefinir_senha/:token", async (req, res) => {
         user.resetTokenExpiration = undefined;
         await user.save();
 
-        res.json({ success: true, message: "Senha redefinida com sucesso!" });
+        res.json({ success: true, message: 'Senha redefinida com sucesso!' });
     } catch (erro) {
         console.error(erro);
         res
             .status(500)
-            .json({ error: "Erro ao redefinir a senha. Tente novamente!" });
+            .json({ error: 'Erro ao redefinir a senha. Tente novamente!' });
     }
 });
 
-router.get("/candidato/dashboard", isAuthenticatedApi,
+router.get('/candidato/dashboard', isAuthenticatedApi,
     isCandidatoApi,
     async (req, res) => {
         try {
             const candidatoId = req.session.user.id;
-            const vagas = await Vaga.find().populate("empresa");
-            const candidato = await Candidato.findById(candidatoId, "-senha");
+            const vagas = await Vaga.find().populate('empresa');
+            const candidato = await Candidato.findById(candidatoId, '-senha');
 
             if (!candidato) {
-                return res.status(404).json({ error: "Candidato não encontrado" });
+                return res.status(404).json({ error: 'Candidato não encontrado' });
             }
 
             const vagasComImagens = vagas.map((vaga) => {
                 let imagemBase64 = null;
                 if (vaga.imagem && vaga.imagem.data) {
-                    imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString("base64")}`;
+                    imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
                 }
                 return {
                     ...vaga._doc,
@@ -240,7 +240,7 @@ router.get("/candidato/dashboard", isAuthenticatedApi,
             if (candidato.imagem && candidato.imagem.data) {
                 candidatoFormatado.imagem = {
                     contentType: candidato.imagem.contentType,
-                    data: candidato.imagem.data.toString("base64"),
+                    data: candidato.imagem.data.toString('base64'),
                 };
             }
 
@@ -252,13 +252,13 @@ router.get("/candidato/dashboard", isAuthenticatedApi,
             });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao carregar dashboard" });
+            res.status(500).json({ error: 'Erro ao carregar dashboard' });
         }
     },
 );
 
 router.get(
-    "/candidato/candidaturas",
+    '/candidato/candidaturas',
     isAuthenticatedApi,
     isCandidatoApi,
     async (req, res) => {
@@ -267,8 +267,8 @@ router.get(
             const candidaturas = await Candidatura.find({
                 candidato: candidatoId,
             }).populate({
-                path: "vaga",
-                populate: { path: "empresa" },
+                path: 'vaga',
+                populate: { path: 'empresa' },
             });
 
             const candidaturasFormatadas = candidaturas.map((c) => ({
@@ -277,7 +277,7 @@ router.get(
                     ? {
                         ...c.vaga._doc,
                         imagem: c.vaga.imagem?.data
-                            ? `data:${c.vaga.imagem.contentType};base64,${c.vaga.imagem.data.toString("base64")}`
+                            ? `data:${c.vaga.imagem.contentType};base64,${c.vaga.imagem.data.toString('base64')}`
                             : null,
                     }
                     : null,
@@ -286,34 +286,34 @@ router.get(
             res.json({ candidaturas: candidaturasFormatadas });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao carregar candidaturas" });
+            res.status(500).json({ error: 'Erro ao carregar candidaturas' });
         }
     },
 );
 
 router.post(
-    "/candidato/cadastrar",
-    upload.single("imagem"),
+    '/candidato/cadastrar',
+    upload.single('imagem'),
     async (req, res) => {
         try {
             const { nome, email, senha, cpf } = req.body;
             const userExiste = await Candidato.findOne({ email: req.body.email });
 
             if (userExiste) {
-                return res.status(422).json({ error: "Email já utilizado no sistema" });
+                return res.status(422).json({ error: 'Email já utilizado no sistema' });
             }
 
-            if (!senha || typeof senha !== "string") {
+            if (!senha || typeof senha !== 'string') {
                 return res
                     .status(400)
-                    .json({ error: "A senha é obrigatória e deve ser texto." });
+                    .json({ error: 'A senha é obrigatória e deve ser texto.' });
             }
 
             const emailExistente =
                 (await Candidato.findOne({ email })) ||
                 (await Empresa.findOne({ email }));
             if (emailExistente) {
-                return res.status(400).json({ error: "Este e-mail já está em uso." });
+                return res.status(400).json({ error: 'Este e-mail já está em uso.' });
             }
 
             const salt = await bcrypt.genSalt(12);
@@ -340,16 +340,16 @@ router.post(
             });
 
             await novoCandidato.save();
-            res.json({ success: true, message: "Cadastro realizado com sucesso" });
+            res.json({ success: true, message: 'Cadastro realizado com sucesso' });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao cadastrar candidato" });
+            res.status(500).json({ error: 'Erro ao cadastrar candidato' });
         }
     },
 );
 
 router.post(
-    "/candidato/:candidatoId/vagas/:vagaId",
+    '/candidato/:candidatoId/vagas/:vagaId',
     isAuthenticatedApi,
     isCandidatoApi,
     async (req, res) => {
@@ -364,51 +364,51 @@ router.post(
             if (candidaturaExistente) {
                 return res
                     .status(400)
-                    .json({ error: "Você já se candidatou a esta vaga" });
+                    .json({ error: 'Você já se candidatou a esta vaga' });
             }
 
             const vaga = await Vaga.findById(vagaId);
             if (!vaga) {
-                return res.status(404).json({ error: "Vaga não encontrada" });
+                return res.status(404).json({ error: 'Vaga não encontrada' });
             }
 
             const novaCandidatura = new Candidatura({
                 candidato: candidatoId,
                 vaga: vagaId,
                 empresa: vaga.empresa,
-                status: "Pendente",
+                status: 'Pendente',
             });
 
             await novaCandidatura.save();
-            res.json({ success: true, message: "Candidatura realizada com sucesso" });
+            res.json({ success: true, message: 'Candidatura realizada com sucesso' });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao candidatar" });
+            res.status(500).json({ error: 'Erro ao candidatar' });
         }
     },
 );
 
 router.post(
-    "/candidato/:candidatoId/vagas/delete/:candidaturaId",
+    '/candidato/:candidatoId/vagas/delete/:candidaturaId',
     isAuthenticatedApi,
     isCandidatoApi,
     async (req, res) => {
         try {
             const { candidaturaId } = req.params;
             await Candidatura.findByIdAndDelete(candidaturaId);
-            res.json({ success: true, message: "Candidatura cancelada" });
+            res.json({ success: true, message: 'Candidatura cancelada' });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao cancelar candidatura" });
+            res.status(500).json({ error: 'Erro ao cancelar candidatura' });
         }
     },
 );
 
 router.post(
-    "/candidato/:candidatoId/editar",
+    '/candidato/:candidatoId/editar',
     isAuthenticatedApi,
     isCandidatoApi,
-    upload.single("imagem"),
+    upload.single('imagem'),
     async (req, res) => {
         try {
             const { candidatoId } = req.params;
@@ -427,7 +427,7 @@ router.post(
 
             const candidato = await Candidato.findById(candidatoId);
             if (!candidato) {
-                return res.status(404).json({ error: "Candidato não encontrado" });
+                return res.status(404).json({ error: 'Candidato não encontrado' });
             }
 
             if (nome !== undefined) candidato.nome = nome;
@@ -438,9 +438,9 @@ router.post(
             if (qualificacao !== undefined) candidato.qualificacao = qualificacao;
             if (cursos !== undefined) {
                 candidato.cursos =
-                    typeof cursos === "string"
+                    typeof cursos === 'string'
                         ? cursos
-                            .split(",")
+                            .split(',')
                             .map((c) => c.trim())
                             .filter((c) => c)
                         : cursos;
@@ -451,8 +451,8 @@ router.post(
             if (idiomas !== undefined) {
                 let listaIdiomas = Array.isArray(idiomas)
                     ? idiomas
-                    : typeof idiomas === "string"
-                        ? idiomas.split(",")
+                    : typeof idiomas === 'string'
+                        ? idiomas.split(',')
                         : [];
                 candidato.idiomas = listaIdiomas.map((i) => i.trim()).filter((i) => i);
             }
@@ -468,36 +468,36 @@ router.post(
 
             res.json({
                 success: true,
-                message: "Perfil atualizado com sucesso",
+                message: 'Perfil atualizado com sucesso',
             });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao atualizar perfil" });
+            res.status(500).json({ error: 'Erro ao atualizar perfil' });
         }
     },
 );
 
 router.get(
-    "/empresa/dashboard",
+    '/empresa/dashboard',
     isAuthenticatedApi,
     isEmpresaApi,
     async (req, res) => {
         try {
             const empresaId = req.session.user.id;
-            const empresa = await Empresa.findById(empresaId, "-senha").populate(
-                "vagas",
+            const empresa = await Empresa.findById(empresaId, '-senha').populate(
+                'vagas',
             );
 
             if (!empresa) {
-                return res.status(404).json({ error: "Empresa não encontrada" });
+                return res.status(404).json({ error: 'Empresa não encontrada' });
             }
 
-            const candidatos = await Candidato.find({}, "-senha");
+            const candidatos = await Candidato.find({}, '-senha');
 
             const candidatosComImagens = candidatos.map((c) => {
                 let imagemBase64 = null;
                 if (c.imagem && c.imagem.data) {
-                    imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString("base64")}`;
+                    imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString('base64')}`;
                 }
                 return { ...c._doc, imagem: imagemBase64 };
             });
@@ -506,7 +506,7 @@ router.get(
                 ? empresa.vagas.map((v) => {
                     let imagemBase64 = null;
                     if (v.imagem && v.imagem.data) {
-                        imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString("base64")}`;
+                        imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
                     }
                     return { ...v._doc, imagem: imagemBase64 };
                 })
@@ -520,38 +520,38 @@ router.get(
             });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao carregar dashboard" });
+            res.status(500).json({ error: 'Erro ao carregar dashboard' });
         }
     },
 );
 
 router.get(
-    "/empresa/perfil",
+    '/empresa/perfil',
     isAuthenticatedApi,
     isEmpresaApi,
     async (req, res) => {
         try {
             const empresaId = req.session.user.id;
-            const empresa = await Empresa.findById(empresaId, "-senha");
+            const empresa = await Empresa.findById(empresaId, '-senha');
 
             if (!empresa) {
-                return res.status(404).json({ error: "Empresa não encontrada" });
+                return res.status(404).json({ error: 'Empresa não encontrada' });
             }
 
             res.json({ empresa });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao carregar perfil" });
+            res.status(500).json({ error: 'Erro ao carregar perfil' });
         }
     },
 );
 
-router.post("/empresa/cadastrar", async (req, res) => {
+router.post('/empresa/cadastrar', async (req, res) => {
     try {
         const empresaExistente = await Empresa.findOne({ cnpj: req.body.cnpj });
 
         if (empresaExistente) {
-            return res.status(409).json({ error: "Empresa já cadastrada" });
+            return res.status(409).json({ error: 'Empresa já cadastrada' });
         }
 
         const salt = await bcrypt.genSalt(12);
@@ -563,20 +563,20 @@ router.post("/empresa/cadastrar", async (req, res) => {
             cnpj: req.body.cnpj,
             senha: senhaHash,
             fone: req.body.fone,
-            bio: req.body.bio || "",
-            site: req.body.site || "",
+            bio: req.body.bio || '',
+            site: req.body.site || '',
         });
 
         await novaEmpresa.save();
-        res.json({ success: true, message: "Empresa cadastrada com sucesso" });
+        res.json({ success: true, message: 'Empresa cadastrada com sucesso' });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({ error: "Erro ao cadastrar empresa" });
+        res.status(500).json({ error: 'Erro ao cadastrar empresa' });
     }
 });
 
 router.post(
-    "/empresa/:empresaId/editar",
+    '/empresa/:empresaId/editar',
     isAuthenticatedApi,
     isEmpresaApi,
     async (req, res) => {
@@ -586,13 +586,13 @@ router.post(
 
             const empresa = await Empresa.findById(empresaId);
             if (!empresa) {
-                return res.status(404).json({ error: "Empresa não encontrada" });
+                return res.status(404).json({ error: 'Empresa não encontrada' });
             }
 
             if (nome !== undefined) empresa.nome = nome;
-            if (cnpj !== undefined) empresa.cnpj = cnpj.replace(/\D/g, "");
+            if (cnpj !== undefined) empresa.cnpj = cnpj.replace(/\D/g, '');
             if (email !== undefined) empresa.email = email;
-            if (fone !== undefined) empresa.fone = fone.replace(/\D/g, "");
+            if (fone !== undefined) empresa.fone = fone.replace(/\D/g, '');
             if (bio !== undefined) empresa.bio = bio;
             if (site !== undefined) empresa.site = site;
 
@@ -600,7 +600,7 @@ router.post(
 
             res.json({
                 success: true,
-                message: "Perfil atualizado com sucesso",
+                message: 'Perfil atualizado com sucesso',
                 empresa: {
                     _id: empresa._id,
                     nome: empresa.nome,
@@ -613,16 +613,16 @@ router.post(
             });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao atualizar perfil" });
+            res.status(500).json({ error: 'Erro ao atualizar perfil' });
         }
     },
 );
 
 router.post(
-    "/empresa/:empresaId/vagas/criar",
+    '/empresa/:empresaId/vagas/criar',
     isAuthenticatedApi,
     isEmpresaApi,
-    upload.single("imagem"),
+    upload.single('imagem'),
     async (req, res) => {
         try {
             const { empresaId } = req.params;
@@ -630,7 +630,7 @@ router.post(
 
             const empresa = await Empresa.findById(empresaId);
             if (!empresa) {
-                return res.status(404).json({ error: "Empresa não encontrada" });
+                return res.status(404).json({ error: 'Empresa não encontrada' });
             }
 
             const dadosVaga = {
@@ -655,18 +655,18 @@ router.post(
 
             res.json({
                 success: true,
-                message: "Vaga criada com sucesso",
+                message: 'Vaga criada com sucesso',
                 vaga: novaVaga,
             });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao criar vaga" });
+            res.status(500).json({ error: 'Erro ao criar vaga' });
         }
     },
 );
 
 router.get(
-    "/empresa/candidatos/buscar",
+    '/empresa/candidatos/buscar',
     isAuthenticatedApi,
     isEmpresaApi,
     async (req, res) => {
@@ -676,18 +676,18 @@ router.get(
             const candidatos = await Candidato.find(
                 {
                     $or: [
-                        { qualificacao: { $regex: q || "", $options: "i" } },
-                        { educacao: { $regex: q || "", $options: "i" } },
-                        { nome: { $regex: q || "", $options: "i" } },
+                        { qualificacao: { $regex: q || '', $options: 'i' } },
+                        { educacao: { $regex: q || '', $options: 'i' } },
+                        { nome: { $regex: q || '', $options: 'i' } },
                     ],
                 },
-                "-senha",
+                '-senha',
             );
 
             const candidatosComImagens = candidatos.map((c) => {
                 let imagemBase64 = null;
                 if (c.imagem && c.imagem.data) {
-                    imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString("base64")}`;
+                    imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString('base64')}`;
                 }
                 return { ...c._doc, imagem: imagemBase64 };
             });
@@ -695,20 +695,20 @@ router.get(
             res.json({ candidatos: candidatosComImagens, query: q });
         } catch (erro) {
             console.error(erro);
-            res.status(500).json({ error: "Erro ao buscar candidatos" });
+            res.status(500).json({ error: 'Erro ao buscar candidatos' });
         }
     },
 );
 
-router.get("/vagas", async (req, res) => {
+router.get('/vagas', async (req, res) => {
     try {
         const { q, area } = req.query;
         let query = {};
 
         if (q) {
             query.$or = [
-                { nome: { $regex: q, $options: "i" } },
-                { area: { $regex: q, $options: "i" } },
+                { nome: { $regex: q, $options: 'i' } },
+                { area: { $regex: q, $options: 'i' } },
             ];
         }
 
@@ -716,12 +716,12 @@ router.get("/vagas", async (req, res) => {
             query.area = area;
         }
 
-        const vagas = await Vaga.find(query).populate("empresa");
+        const vagas = await Vaga.find(query).populate('empresa');
 
         const vagasFormatadas = vagas.map((v) => {
             let imagemBase64 = null;
             if (v.imagem && v.imagem.data) {
-                imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString("base64")}`;
+                imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
             }
             return { ...v._doc, imagem: imagemBase64 };
         });
@@ -729,18 +729,18 @@ router.get("/vagas", async (req, res) => {
         res.json({ vagas: vagasFormatadas });
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({ error: "Erro ao buscar vagas" });
+        res.status(500).json({ error: 'Erro ao buscar vagas' });
     }
 });
 
-router.get("/areas", async (req, res) => {
+router.get('/areas', async (req, res) => {
     try {
-        const vagas = await Vaga.find({}, "area");
+        const vagas = await Vaga.find({}, 'area');
         const areas = [...new Set(vagas.map((v) => v.area))];
         res.json(areas);
     } catch (erro) {
         console.error(erro);
-        res.status(500).json({ error: "Erro ao buscar áreas" });
+        res.status(500).json({ error: 'Erro ao buscar áreas' });
     }
 });
 

@@ -1,11 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { candidatoService } from '../services'
+import { logout } from '../contexts/AuthContext'
 
-/**
- * Hook para gerenciar dados e operações do candidato
- * @returns {Object} - Funções e estados do candidato
- */
+
 export function useCandidato() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -39,6 +37,7 @@ export function useCandidato() {
       return { success: true, data }
     } catch (err) {
       if (err.status === 401) {
+        await logout();
         navigate('/login')
         return { success: false, error: 'Sessão expirada' }
       }
@@ -105,7 +104,7 @@ export function useCandidato() {
     
     try {
       await candidatoService.cancelarCandidatura(candidatoId, candidaturaId)
-      // Atualiza lista local removendo a candidatura cancelada
+      
       setCandidaturas(prev => prev.filter(c => c._id !== candidaturaId))
       return { success: true }
     } catch (err) {

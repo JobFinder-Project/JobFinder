@@ -1,51 +1,43 @@
-/**
- * Configuração base para chamadas de API
- */
-
 const API_BASE_URL = '/api'
-
-/**
- * Wrapper para fetch com configurações padrão
- */
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`
   
   const config = {
     ...options,
+    credentials: 'include', 
     headers: {
       ...options.headers,
     },
   }
 
-  // Adiciona Content-Type JSON apenas se não for FormData
   if (!(options.body instanceof FormData)) {
     config.headers['Content-Type'] = 'application/json'
   }
 
-  const response = await fetch(url, config)
-  
-  // Tenta parsear como JSON, se falhar retorna texto
-  let data
-  const contentType = response.headers.get('content-type')
-  if (contentType && contentType.includes('application/json')) {
-    data = await response.json()
-  } else {
-    data = await response.text()
-  }
+  try {
+    const response = await fetch(url, config)
+    
+    let data
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json()
+    } else {
+      data = await response.text()
+    }
 
-  if (!response.ok) {
-    const error = new Error(data?.error || data?.message || 'Erro na requisição')
-    error.status = response.status
-    error.data = data
+    if (!response.ok) {
+      const error = new Error(data?.error || data?.message || 'Erro na requisição')
+      error.status = response.status
+      error.data = data
+      throw error
+    }
+
+    return data
+  } catch (error) {
     throw error
   }
-
-  return data
 }
 
-/**
- * Métodos HTTP
- */
 export const api = {
   get: (endpoint) => request(endpoint, { method: 'GET' }),
   

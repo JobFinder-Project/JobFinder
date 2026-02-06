@@ -1,11 +1,8 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { empresaService } from '../services'
+import { logout } from '../contexts/AuthContext'
 
-/**
- * Hook para gerenciar dados e operações da empresa
- * @returns {Object} - Funções e estados da empresa
- */
 export function useEmpresa() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -41,6 +38,7 @@ export function useEmpresa() {
       return { success: true, data }
     } catch (err) {
       if (err.status === 401) {
+        await logout();
         navigate('/login')
         return { success: false, error: 'Sessão expirada' }
       }
