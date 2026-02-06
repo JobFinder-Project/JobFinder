@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { BiCheckCircle } from 'react-icons/bi'
-import Modal from '../../../../components/ui/Modal/Modal'
-import { candidatoService } from '../../../../services'
+import Modal from '../../../components/ui/Modal/Modal'
+import { candidatoService } from '../../../services'
 import styles from './CandidaturasModal.module.css'
 
 function CandidaturasModal({ candidatoId, onClose }) {
   const [candidaturas, setCandidaturas] = useState([])
-  const [view, setView] = useState('lista') // lista, detalhe, confirmacao, resultado
+  const [view, setView] = useState('lista')
   const [selectedCandidatura, setSelectedCandidatura] = useState(null)
   const [resultMessage, setResultMessage] = useState('')
   const [loading, setLoading] = useState(true)
@@ -63,7 +63,7 @@ function CandidaturasModal({ candidatoId, onClose }) {
   }
 
   return (
-    <Modal title="Minhas Candidaturas" onClose={onClose}>
+    <Modal title='Minhas Candidaturas' onClose={onClose}>
       <Modal.Body>
         {loading ? (
           <p>Carregando...</p>
@@ -125,7 +125,7 @@ function CandidaturasModal({ candidatoId, onClose }) {
           </div>
         ) : view === 'resultado' ? (
           <div className={styles.resultadoView}>
-            <BiCheckCircle className={styles.checkIcon} size={64} color="#63E6BE" />
+            <BiCheckCircle className={styles.checkIcon} size={64} color='#63E6BE' />
             <h4>{resultMessage}</h4>
             <div className={styles.detalheActions}>
               <button className={styles.btnOk} onClick={handleVoltar}>OK</button>

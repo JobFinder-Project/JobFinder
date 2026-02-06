@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BiInfoCircle, BiPlus, BiUser } from 'react-icons/bi'
 import NavbarEmpresa from '../../components/Navbar/NavbarEmpresa/NavbarEmpresa'
-import CandidateCard from './components/CandidateCard/CandidateCard'
-import VagasModal from './components/VagasModal/VagasModal'
-import CriarVagaModal from './components/CriarVagaModal/CriarVagaModal'
-import PerfilEmpresaModal from './components/PerfilEmpresaModal/PerfilEmpresaModal'
+import CandidateCard from '../../features/candidato/CandidateCard'
+import VagasModal from '../../features/vagas/VagasModal/VagasModal'
+import CriarVagaModal from '../../features/vagas/CriarVagaModal/CriarVagaModal'
+import PerfilEmpresaModal from '../../features/empresa/PerfilEmpresaModal/PerfilEmpresaModal'
 import { empresaService } from '../../services'
 import styles from './EmpresaDashboard.module.css'
 
@@ -18,7 +18,6 @@ function EmpresaDashboard() {
   const [selectedTab, setSelectedTab] = useState('Todos')
   const [loading, setLoading] = useState(true)
 
-  // Modais
   const [showVagasModal, setShowVagasModal] = useState(false)
   const [showCriarVagaModal, setShowCriarVagaModal] = useState(false)
   const [showPerfilModal, setShowPerfilModal] = useState(false)
@@ -93,19 +92,19 @@ function EmpresaDashboard() {
       <nav className={styles.bottomNav}>
 <button className={styles.navBtn} onClick={() => setShowVagasModal(true)}>
           <div className={styles.navIcon}>
-            <BiInfoCircle size={36} color="#fff" />
+            <BiInfoCircle size={36} color='#fff' />
           </div>
           <span>Vagas</span>
         </button>
 <button className={styles.navBtn} onClick={() => setShowCriarVagaModal(true)}>
           <div className={styles.navIcon}>
-            <BiPlus size={36} color="#fff" />
+            <BiPlus size={36} color='#fff' />
           </div>
           <span>Add Vagas</span>
         </button>
 <button className={styles.navBtn} onClick={() => setShowPerfilModal(true)}>
           <div className={styles.navIcon}>
-            <BiUser size={36} color="#fff" />
+            <BiUser size={36} color='#fff' />
           </div>
           <span>Perfil</span>
         </button>

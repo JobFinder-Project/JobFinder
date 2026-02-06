@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Modal from '../../../../components/ui/Modal/Modal'
-import { empresaService } from '../../../../services'
+import Modal from '../../../components/ui/Modal/Modal'
+import { empresaService } from '../../../services'
 import styles from './CriarVagaModal.module.css'
 
 function CriarVagaModal({ empresaId, onClose, onSuccess }) {
@@ -65,14 +65,14 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
 
   if (showSuccess) {
     return (
-      <Modal title="Sucesso" onClose={handleSuccessOk} size="sm" hideHeader>
+      <Modal title='Sucesso' onClose={handleSuccessOk} size='sm' hideHeader>
         <Modal.Body>
           <div className={styles.successContent}>
             <div className={styles.successIcon}>✓</div>
             <h2>Vaga Publicada com Sucesso!</h2>
             <p>
               Sua vaga foi criada e está disponível para candidatos se inscreverem.
-              Você pode visualizá-la na seção "Vagas" ou criar uma nova vaga.
+              Você pode visualizá-la na seção 'Vagas' ou criar uma nova vaga.
             </p>
             <button className={styles.btnOkSuccess} onClick={handleSuccessOk}>
               OK
@@ -84,30 +84,30 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
   }
 
   return (
-    <Modal title="Criar Nova Vaga" onClose={onClose} size="lg">
+    <Modal title='Criar Nova Vaga' onClose={onClose} size='lg'>
       <Modal.Body>
         <form className={styles.formAddVaga} onSubmit={handleSubmit}>
           <div className={styles.formRow}>
-            <label htmlFor="nome">Nome da Vaga:</label>
+            <label htmlFor='nome'>Nome da Vaga:</label>
             <input
-              type="text"
-              id="nome"
-              name="nome"
+              type='text'
+              id='nome'
+              name='nome'
               value={formData.nome}
               onChange={handleChange}
               required
             />
           </div>
           <div className={styles.formRow}>
-            <label htmlFor="area">Área *</label>
+            <label htmlFor='area'>Área *</label>
             <select
-              id="area"
-              name="area"
+              id='area'
+              name='area'
               value={formData.area}
               onChange={handleChange}
               required
             >
-              <option value="">Selecione</option>
+              <option value=''>Selecione</option>
               {areas.map((area) => (
                 <option key={area} value={area}>
                   {area}
@@ -116,27 +116,27 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
             </select>
           </div>
           <div className={styles.formRow}>
-            <label htmlFor="requisitos">Requisitos *:</label>
+            <label htmlFor='requisitos'>Requisitos *:</label>
             <textarea
-              id="requisitos"
-              name="requisitos"
-              rows="4"
+              id='requisitos'
+              name='requisitos'
+              rows='4'
               value={formData.requisitos}
               onChange={handleChange}
               required
             />
           </div>
           <div className={styles.formRow}>
-            <label htmlFor="imagem">Imagem da Vaga:</label>
+            <label htmlFor='imagem'>Imagem da Vaga:</label>
             <input
-              type="file"
-              id="imagem"
-              name="imagem"
-              accept="image/*"
+              type='file'
+              id='imagem'
+              name='imagem'
+              accept='image/*'
               onChange={handleImageChange}
             />
           </div>
-          <button type="submit" className={styles.btnAddVaga} disabled={loading}>
+          <button type='submit' className={styles.btnAddVaga} disabled={loading}>
             {loading ? 'Salvando...' : 'Salvar Vaga'}
           </button>
         </form>

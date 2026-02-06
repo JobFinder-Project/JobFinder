@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Modal from '../../../../components/ui/Modal/Modal'
-import { empresaService } from '../../../../services'
+import Modal from '../../../components/ui/Modal/Modal'
+import { empresaService } from '../../../services'
 import styles from './PerfilEmpresaModal.module.css'
 
 function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
@@ -40,83 +40,83 @@ function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
   const modalTitle = isEditing ? 'Editar Perfil' : 'Meu Perfil'
 
   return (
-    <Modal title={modalTitle} onClose={onClose} size="lg">
+    <Modal title={modalTitle} onClose={onClose} size='lg'>
       <Modal.Body>
         {isEditing ? (
           <form className={styles.formEditPerfil} onSubmit={handleSubmit}>
             <div className={styles.formRow}>
-              <label htmlFor="editNome">Nome:</label>
+              <label htmlFor='editNome'>Nome:</label>
               <input
-                type="text"
-                id="editNome"
-                name="nome"
+                type='text'
+                id='editNome'
+                name='nome'
                 value={formData.nome}
                 onChange={handleChange}
                 required
               />
             </div>
             <div className={styles.formRow}>
-              <label htmlFor="editCnpj">CNPJ:</label>
+              <label htmlFor='editCnpj'>CNPJ:</label>
               <input
-                type="text"
-                id="editCnpj"
-                name="cnpj"
+                type='text'
+                id='editCnpj'
+                name='cnpj'
                 value={formData.cnpj}
                 onChange={handleChange}
-                placeholder="00.000.000/0000-00"
+                placeholder='00.000.000/0000-00'
                 required
               />
             </div>
             <div className={styles.formRow}>
-              <label htmlFor="editEmail">Email:</label>
+              <label htmlFor='editEmail'>Email:</label>
               <input
-                type="email"
-                id="editEmail"
-                name="email"
+                type='email'
+                id='editEmail'
+                name='email'
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="email@empresa.com"
+                placeholder='email@empresa.com'
                 required
               />
             </div>
             <div className={styles.formRow}>
-              <label htmlFor="editFone">Telefone:</label>
+              <label htmlFor='editFone'>Telefone:</label>
               <input
-                type="text"
-                id="editFone"
-                name="fone"
+                type='text'
+                id='editFone'
+                name='fone'
                 value={formData.fone}
                 onChange={handleChange}
-                placeholder="(00) 00000-0000"
+                placeholder='(00) 00000-0000'
                 required
               />
             </div>
             <div className={styles.formRow}>
-              <label htmlFor="editBio">Biografia:</label>
+              <label htmlFor='editBio'>Biografia:</label>
               <textarea
-                id="editBio"
-                name="bio"
+                id='editBio'
+                name='bio'
                 value={formData.bio}
                 onChange={handleChange}
-                rows="3"
+                rows='3'
               />
             </div>
             <div className={styles.formRow}>
-              <label htmlFor="editSite">Site:</label>
+              <label htmlFor='editSite'>Site:</label>
               <input
-                type="url"
-                id="editSite"
-                name="site"
+                type='url'
+                id='editSite'
+                name='site'
                 value={formData.site}
                 onChange={handleChange}
               />
             </div>
             <div className={styles.formActions}>
-              <button type="submit" className={styles.btnSave} disabled={loading}>
+              <button type='submit' className={styles.btnSave} disabled={loading}>
                 {loading ? 'Salvando...' : 'Salvar alterações'}
               </button>
               <button
-                type="button"
+                type='button'
                 className={styles.btnBack}
                 onClick={() => setIsEditing(false)}
               >

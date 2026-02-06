@@ -2,7 +2,6 @@ import styles from './CandidateCard.module.css'
 
 function CandidateCard({ candidato }) {
   const handleViewProfile = () => {
-    // TODO: Implementar visualização do perfil do candidato
     console.log('Ver perfil do candidato:', candidato._id)
   }
 

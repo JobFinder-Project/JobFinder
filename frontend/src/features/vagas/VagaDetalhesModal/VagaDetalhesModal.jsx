@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BiCheckCircle, BiInfoCircle } from 'react-icons/bi'
-import Modal from '../../../../components/ui/Modal/Modal'
-import { candidatoService } from '../../../../services'
+import Modal from '../../../components/ui/Modal/Modal'
+import { candidatoService } from '../../../services'
 import styles from './VagaDetalhesModal.module.css'
 
 function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
@@ -29,10 +29,10 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
 
   if (showDuplicadaModal) {
     return (
-      <Modal title="Candidatura Existente" onClose={onClose} size="sm">
+      <Modal title='Candidatura Existente' onClose={onClose} size='sm'>
         <Modal.Body>
 <div className={styles.warningContent}>
-            <BiInfoCircle className={styles.warningIcon} size={64} color="#FFA94D" />
+            <BiInfoCircle className={styles.warningIcon} size={64} color='#FFA94D' />
             <h4>Você já se candidatou a esta vaga!</h4>
             <p>Não é possível enviar uma nova candidatura para uma vaga em que você já está inscrito.</p>
             <button className={styles.btnOk} onClick={onClose}>Entendi</button>
@@ -44,10 +44,10 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
 
   if (showSuccessModal) {
     return (
-      <Modal title="Candidatura Enviada" onClose={onClose} size="sm">
+      <Modal title='Candidatura Enviada' onClose={onClose} size='sm'>
         <Modal.Body>
 <div className={styles.successContent}>
-            <BiCheckCircle className={styles.checkIcon} size={64} color="#63E6BE" />
+            <BiCheckCircle className={styles.checkIcon} size={64} color='#63E6BE' />
             <h4>Candidatura enviada com sucesso!</h4>
             <button className={styles.btnOk} onClick={onClose}>OK</button>
           </div>
@@ -57,7 +57,7 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
   }
 
   return (
-    <Modal title="Detalhes da Vaga" onClose={onClose}>
+    <Modal title='Detalhes da Vaga' onClose={onClose}>
       <Modal.Body>
         <div className={styles.vagaInfo}>
           <h3>{vaga.nome}</h3>

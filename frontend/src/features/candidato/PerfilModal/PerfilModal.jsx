@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import Modal from '../../../../components/ui/Modal/Modal'
+import Modal from '../../../components/ui/Modal/Modal'
 import styles from './PerfilModal.module.css'
 
 function PerfilModal({ candidato, candidatoId, onClose }) {

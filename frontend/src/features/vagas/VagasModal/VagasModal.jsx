@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Modal from '../../../../components/ui/Modal/Modal'
+import Modal from '../../../components/ui/Modal/Modal'
 import styles from './VagasModal.module.css'
 
 function VagasModal({ vagas, onClose }) {
@@ -16,7 +16,7 @@ function VagasModal({ vagas, onClose }) {
   const modalTitle = selectedVaga ? 'Detalhes da Vaga' : 'Vagas Disponíveis'
 
   return (
-    <Modal title={modalTitle} onClose={onClose} size="lg">
+    <Modal title={modalTitle} onClose={onClose} size='lg'>
       <Modal.Body>
         {selectedVaga ? (
           <div className={styles.vagaDetalhes}>
