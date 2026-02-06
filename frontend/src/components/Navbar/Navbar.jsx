@@ -1,30 +1,29 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { BiListCheck, BiUserCircle, BiLeftArrowAlt, BiLogOut } from 'react-icons/bi'
-import { authService } from '../../services'
-import styles from './Navbar.module.css'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  BiListCheck,
+  BiUserCircle,
+  BiLeftArrowAlt,
+  BiLogOut,
+} from 'react-icons/bi';
+import { useAuth } from '../../contexts/AuthContext';
+import styles from './Navbar.module.css';
 
-function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
-  const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
+export default function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
+const { logout } = useAuth(); 
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/candidato/vagas?q=${encodeURIComponent(searchQuery)}`)
+      navigate(`/candidato/vagas?q=${encodeURIComponent(searchQuery)}`);
     }
-  }
+  };
 
   const handleLogout = async () => {
-    try {
-      await authService.logout()
-      navigate('/login')
-    } catch (error) {
-      console.error('Erro ao fazer logout:', error)
-      navigate('/login')
-    }
-  }
-
+    await logout(); 
+  };
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbarLeft}>
@@ -34,14 +33,14 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
       <div className={styles.navbarCenter}>
         <form onSubmit={handleSearch} className={styles.searchForm}>
           <input
-            type="text"
-            name="q"
+            type='text'
+            name='q'
             className={styles.searchInput}
-            placeholder="Buscar Vagas"
+            placeholder='Buscar Vagas'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button type="submit" className={styles.searchButton}>
+          <button type='submit' className={styles.searchButton}>
             Buscar
           </button>
         </form>
@@ -54,9 +53,9 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
               <button
                 className={styles.navbarButton}
                 onClick={onOpenCandidaturas}
-                title="Minhas Candidaturas"
+                title='Minhas Candidaturas'
               >
-<BiListCheck size={20} />
+                <BiListCheck size={20} />
                 <span className={styles.navbarLabel}>Candidaturas</span>
               </button>
             </li>
@@ -64,9 +63,9 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
               <button
                 className={styles.navbarButton}
                 onClick={onOpenPerfil}
-                title="Perfil"
+                title='Perfil'
               >
-<BiUserCircle size={20} />
+                <BiUserCircle size={20} />
                 <span className={styles.navbarLabel}>Perfil</span>
               </button>
             </li>
@@ -74,9 +73,9 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
         ) : (
           <li>
             <Link
-              to="/candidato/dashboard"
+              to='/candidato/dashboard'
               className={styles.navbarButton}
-              title="Voltar"
+              title='Voltar'
             >
               <BiLeftArrowAlt size={20} />
               <span className={styles.navbarLabel}>Voltar</span>
@@ -84,14 +83,16 @@ function Navbar({ inDashboard = false, onOpenCandidaturas, onOpenPerfil }) {
           </li>
         )}
         <li>
-          <button onClick={handleLogout} className={styles.navbarButton} title="Sair">
-<BiLogOut size={20} />
+          <button
+            onClick={handleLogout}
+            className={styles.navbarButton}
+            title='Sair'
+          >
+            <BiLogOut size={20} />
             <span className={styles.navbarLabel}>Sair</span>
           </button>
         </li>
       </ul>
     </nav>
-  )
+  );
 }
-
-export default Navbar
