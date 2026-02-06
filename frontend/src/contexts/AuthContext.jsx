@@ -1,58 +1,66 @@
-import { createContext, useContext, useState, useEffect, useCallback } from 'react'
-import { authService } from '../services'
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { authService } from '../services';
 
-const AuthContext = createContext(null)
+const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+export default function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Verifica sessão ao carregar a aplicação
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
-  const checkAuth = async () => {
-    try {
-      const data = await authService.getMe()
-      if (data.authenticated) {
-        setUser(data.user)
-      } else {
+  const checkAuth = useCallback(async () => {
+      try {
+        const data = await authService.getMe()
+        if (data && data.authenticated) {
+          setUser(data.user)
+        } else {
+          setUser(null)
+        }
+      } catch (err) {
+
+        console.warn('Sessão inválida ou expirada:', err);
         setUser(null)
+      } finally {
+        setLoading(false)
       }
-    } catch (err) {
-      // 401 é esperado quando não está logado
-      setUser(null)
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [])
 
   const login = useCallback(async (credentials) => {
-    setError(null)
-    
+    setError(null);
+
     try {
-      const data = await authService.login(credentials)
-      // Após login, busca dados do usuário
-      await checkAuth()
-      return { success: true, data }
+      const data = await authService.login(credentials);
+      await checkAuth();
+      return { success: true, data };
     } catch (err) {
-      const errorMessage = err.data?.error || 'Erro ao fazer login'
-      setError(errorMessage)
-      return { success: false, error: errorMessage }
+      const errorMessage = err.data?.error || 'Erro ao fazer login';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     }
-  }, [])
+  }, []);
 
   const logout = useCallback(async () => {
+    setLoading(true);
     try {
-      await authService.logout()
+      await authService.logout(); 
     } catch (err) {
-      console.error('Erro ao fazer logout:', err)
+      console.error('Erro no logout', err);
     } finally {
-      setUser(null)
+      setUser(null);
+      setLoading(false);
+
     }
-  }, [])
+  }, []);
 
   const value = {
     user,
@@ -64,22 +72,16 @@ export function AuthProvider({ children }) {
     login,
     logout,
     checkAuth,
-    clearError: () => setError(null)
-  }
+    clearError: () => setError(null),
+  };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider')
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
-  return context
+  return context;
 }
-
-export default AuthContext
