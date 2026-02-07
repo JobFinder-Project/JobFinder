@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
-import { authService } from '../../services'
+import { authService } from '../../services/authService'
 import styles from './EsqueciSenha.module.css'
 
-function EsqueciSenha() {
+export default function EsqueciSenha() {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -28,7 +28,7 @@ function EsqueciSenha() {
 
   if (success) {
     return (
-      <AuthLayout title="Email Enviado" backTo="/login" showHelp={false}>
+      <AuthLayout title='Email Enviado' backTo='/login' showHelp={false}>
         <div className={styles.container}>
           <div className={styles.successIcon}>✓</div>
           <h1>Email Enviado!</h1>
@@ -36,7 +36,7 @@ function EsqueciSenha() {
             Enviamos as instruções para redefinir sua senha para <strong>{email}</strong>.
             Verifique sua caixa de entrada e spam.
           </p>
-          <Link to="/login" className={styles.loginLink}>
+          <Link to='/login' className={styles.loginLink}>
             Voltar ao Login
           </Link>
         </div>
@@ -45,7 +45,7 @@ function EsqueciSenha() {
   }
 
   return (
-    <AuthLayout title="Esqueci a Senha" backTo="/login" showHelp={false}>
+    <AuthLayout title='Esqueci a Senha' backTo='/login' showHelp={false}>
       <div className={styles.container}>
         <p>
           Digite o endereço de e-mail associado à sua conta e enviaremos
@@ -55,27 +55,25 @@ function EsqueciSenha() {
         {error && <div className={styles.errorAlert}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Endereço de Email</label>
+          <label htmlFor='email'>Endereço de Email</label>
           <input
-            type="email"
-            id="email"
-            name="email"
+            type='email'
+            id='email'
+            name='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="exemplo@email.com"
+            placeholder='exemplo@email.com'
             required
           />
-          <button type="submit" disabled={loading}>
+          <button type='submit' disabled={loading}>
             {loading ? 'Enviando...' : 'Enviar Link de Redefinição'}
           </button>
         </form>
 
-        <Link to="/login" className={styles.loginLink}>
+        <Link to='/login' className={styles.loginLink}>
           Voltar ao Login
         </Link>
       </div>
     </AuthLayout>
   )
 }
-
-export default EsqueciSenha

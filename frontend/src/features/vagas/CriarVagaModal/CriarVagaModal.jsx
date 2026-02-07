@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Modal from '../../../components/ui/Modal/Modal'
-import { empresaService } from '../../../services'
+import { empresaService } from '../../../services/empresaService'
 import styles from './CriarVagaModal.module.css'
 
-function CriarVagaModal({ empresaId, onClose, onSuccess }) {
+export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     nome: '',
     area: '',
@@ -144,5 +144,3 @@ function CriarVagaModal({ empresaId, onClose, onSuccess }) {
     </Modal>
   )
 }
-
-export default CriarVagaModal

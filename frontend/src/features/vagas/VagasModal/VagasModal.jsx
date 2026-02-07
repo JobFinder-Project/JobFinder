@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Modal from '../../../components/ui/Modal/Modal'
 import styles from './VagasModal.module.css'
 
-function VagasModal({ vagas, onClose }) {
+export default function VagasModal({ vagas, onClose }) {
   const [selectedVaga, setSelectedVaga] = useState(null)
 
   const handleViewDetails = (vaga) => {
@@ -75,5 +75,3 @@ function VagasModal({ vagas, onClose }) {
     </Modal>
   )
 }
-
-export default VagasModal

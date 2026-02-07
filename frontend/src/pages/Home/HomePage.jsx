@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import { BiLogIn } from 'react-icons/bi'
 import styles from './Home.module.css'
 
-function Home() {
+export default function Home() {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <div className={styles.logo}>JobFinder</div>
-        <Link to="/login" className={styles.headerIcon}>
+        <Link to='/login' className={styles.headerIcon}>
           <BiLogIn size={24} />
         </Link>
       </header>
@@ -22,23 +22,21 @@ function Home() {
             sonhos.
           </p>
           <div className={styles.buttonGroup}>
-            <Link to="/cargo" className={`${styles.button} ${styles.primaryButton}`}>
+            <Link to='/cargo' className={`${styles.button} ${styles.primaryButton}`}>
               Cadastre-se
             </Link>
-            <Link to="/login" className={`${styles.button} ${styles.secondaryButton}`}>
+            <Link to='/login' className={`${styles.button} ${styles.secondaryButton}`}>
               Entrar
             </Link>
           </div>
         </div>
         <div className={styles.heroImage}>
           <img
-            src="/img/imagem1.jpeg"
-            alt="Pessoas trabalham em um ambiente de escritório moderno"
+            src='/img/imagem1.jpeg'
+            alt='Pessoas trabalham em um ambiente de escritório moderno'
           />
         </div>
       </main>
     </div>
   )
 }
-
-export default Home

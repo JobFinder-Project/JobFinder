@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { BiArrowBack } from 'react-icons/bi'
 import Navbar from '../../components/Navbar/Navbar'
-import { empresaService } from '../../services'
+import { empresaService } from '../../services/empresaService'
 import styles from './BuscaCandidatos.module.css'
 
-function BuscaCandidatos() {
+export default function BuscaCandidatos() {
   const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
   
@@ -85,5 +85,3 @@ function BuscaCandidatos() {
     </div>
   )
 }
-
-export default BuscaCandidatos

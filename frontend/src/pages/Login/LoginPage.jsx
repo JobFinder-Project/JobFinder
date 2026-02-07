@@ -22,14 +22,14 @@ export default function Login() {
   }, [searchParams, navigate])
 
   if (isAuthenticated && user) {
-      return (
-          <div style={{padding: 20, textAlign: 'center'}}>
-              <h2>Você já está logado como {user.nome}</h2>
-              <Link to={user.role === 'empresa' ? '/empresa/dashboard' : '/candidato/dashboard'}>
-                  Ir para Dashboard
-              </Link>
-          </div>
-      );
+    return (
+      <div style={{ padding: 20, textAlign: 'center' }}>
+        <h2>Você já está logado como {user.nome}</h2>
+        <Link to={user.role === 'empresa' ? '/empresa/dashboard' : '/candidato/dashboard'}>
+          Ir para Dashboard
+        </Link>
+      </div>
+    );
   }
 
   const handleSubmit = async (e) => {

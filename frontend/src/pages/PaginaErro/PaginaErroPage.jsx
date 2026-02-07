@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './PaginaErro.module.css'
 
-function PaginaErro({ 
+export default function PaginaErro({ 
   status = '404', 
   title = 'Página não encontrada', 
   mensagem = 'A página que você está procurando não existe ou foi movida.',
@@ -34,5 +34,3 @@ function PaginaErro({
     </div>
   )
 }
-
-export default PaginaErro

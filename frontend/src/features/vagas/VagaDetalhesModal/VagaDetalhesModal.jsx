@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { BiCheckCircle, BiInfoCircle } from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
-import { candidatoService } from '../../../services'
+import { candidatoService } from '../../../services/candidatoService'
 import styles from './VagaDetalhesModal.module.css'
 
-function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
+export default function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
   const [loading, setLoading] = useState(false)
   const [showDuplicadaModal, setShowDuplicadaModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -31,7 +31,7 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     return (
       <Modal title='Candidatura Existente' onClose={onClose} size='sm'>
         <Modal.Body>
-<div className={styles.warningContent}>
+          <div className={styles.warningContent}>
             <BiInfoCircle className={styles.warningIcon} size={64} color='#FFA94D' />
             <h4>Você já se candidatou a esta vaga!</h4>
             <p>Não é possível enviar uma nova candidatura para uma vaga em que você já está inscrito.</p>
@@ -46,7 +46,7 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     return (
       <Modal title='Candidatura Enviada' onClose={onClose} size='sm'>
         <Modal.Body>
-<div className={styles.successContent}>
+          <div className={styles.successContent}>
             <BiCheckCircle className={styles.checkIcon} size={64} color='#63E6BE' />
             <h4>Candidatura enviada com sucesso!</h4>
             <button className={styles.btnOk} onClick={onClose}>OK</button>
@@ -82,5 +82,3 @@ function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     </Modal>
   )
 }
-
-export default VagaDetalhesModal

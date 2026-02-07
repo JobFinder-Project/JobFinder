@@ -5,7 +5,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { authService } from '../services';
+import { authService } from '../services/authService';
 
 const AuthContext = createContext(null);
 
@@ -19,20 +19,20 @@ export default function AuthProvider({ children }) {
   }, []);
 
   const checkAuth = useCallback(async () => {
-      try {
-        const data = await authService.getMe()
-        if (data && data.authenticated) {
-          setUser(data.user)
-        } else {
-          setUser(null)
-        }
-      } catch (err) {
-
-        console.warn('Sessão inválida ou expirada:', err);
+    try {
+      const data = await authService.getMe()
+      if (data && data.authenticated) {
+        setUser(data.user)
+      } else {
         setUser(null)
-      } finally {
-        setLoading(false)
       }
+    } catch (err) {
+
+      console.warn('Sessão inválida ou expirada:', err);
+      setUser(null)
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   const login = useCallback(async (credentials) => {
@@ -52,7 +52,7 @@ export default function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     setLoading(true);
     try {
-      await authService.logout(); 
+      await authService.logout();
     } catch (err) {
       console.error('Erro no logout', err);
     } finally {

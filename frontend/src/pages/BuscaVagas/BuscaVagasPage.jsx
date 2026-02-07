@@ -3,19 +3,19 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import Navbar from '../../components/Navbar/Navbar'
 import Footer from '../../components/Footer/Footer'
-import { vagasService } from '../../services'
+import { vagasService } from '../../services/vagasService'
 import styles from './BuscaVagas.module.css'
 
-function BuscaVagas() {
+export default function BuscaVagas() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
-  
+
   const [vagas, setVagas] = useState([])
   const [areas, setAreas] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState('')
-  
+
   const categoriesRef = useRef(null)
 
   useEffect(() => {
@@ -64,17 +64,17 @@ function BuscaVagas() {
   return (
     <div className={styles.dashboardWrapper}>
       <Navbar inDashboard />
-      
+
       <main className={styles.mainContent}>
         {/* Categories */}
         <div className={styles.categories}>
-<button 
+          <button
             className={styles.categoryArrow}
             onClick={() => scrollCategories('left')}
           >
             <BiChevronLeft size={18} />
           </button>
-          
+
           <div className={styles.categoriesList} ref={categoriesRef}>
             {areas.map((area, index) => (
               <button
@@ -86,8 +86,8 @@ function BuscaVagas() {
               </button>
             ))}
           </div>
-          
-<button 
+
+          <button
             className={styles.categoryArrow}
             onClick={() => scrollCategories('right')}
           >
@@ -103,17 +103,17 @@ function BuscaVagas() {
             <ul className={styles.cardGrid}>
               {vagas.map((vaga) => (
                 <li key={vaga._id} className={styles.jobCard}>
-                  <img 
-                    src={vaga.imagem || '/img/default-job.png'} 
-                    alt={vaga.nome} 
-                    className={styles.jobImage} 
+                  <img
+                    src={vaga.imagem || '/img/default-job.png'}
+                    alt={vaga.nome}
+                    className={styles.jobImage}
                   />
                   <h2>{vaga.nome}</h2>
                   {vaga.empresa && (
                     <p className={styles.jobCompany}>{vaga.empresa.nome}</p>
                   )}
                   <p className={styles.jobArea}>{vaga.area}</p>
-                  <button 
+                  <button
                     className={styles.registerButton}
                     onClick={() => handleVerVaga(vaga._id)}
                   >
@@ -134,5 +134,3 @@ function BuscaVagas() {
     </div>
   )
 }
-
-export default BuscaVagas

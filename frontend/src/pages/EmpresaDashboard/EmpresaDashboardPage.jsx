@@ -6,15 +6,14 @@ import CandidateCard from '../../features/candidato/CandidateCard'
 import VagasModal from '../../features/vagas/VagasModal/VagasModal' 
 import CriarVagaModal from '../../features/vagas/CriarVagaModal/CriarVagaModal'
 import PerfilEmpresaModal from '../../features/empresa/PerfilEmpresaModal/PerfilEmpresaModal'
-import { empresaService } from '../../services'
+import { empresaService } from '../../services/empresaService'
 import { useAuth } from '../../contexts/AuthContext'
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './EmpresaDashboard.module.css'
 
-function EmpresaDashboard() {
+export default function EmpresaDashboard() {
   const navigate = useNavigate()
   const { user, isAuthenticated, logout } = useAuth()
-
   const [empresa, setEmpresa] = useState(null)
   const [candidatos, setCandidatos] = useState([])
   const [vagas, setVagas] = useState([])
@@ -39,13 +38,12 @@ function EmpresaDashboard() {
       setEmpresa(data.empresa)
       setVagas(data.vagas || [])
       
-      // Busca candidatos
       const candidatosData = await empresaService.buscarCandidatos('')
       setCandidatos(candidatosData.candidatos || [])
       
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
-      setFetchError(true) // Marca que deu erro
+      setFetchError(true) 
       
       if (error.status === 401 || error.message.includes('401')) {
          await logout();
@@ -113,19 +111,19 @@ function EmpresaDashboard() {
         <nav className={styles.bottomNav}>
             <button className={styles.navBtn} onClick={() => setShowVagasModal(true)}>
             <div className={styles.navIcon}>
-                <BiInfoCircle size={36} color="#fff" />
+                <BiInfoCircle size={36} color='#fff' />
             </div>
             <span>Vagas</span>
             </button>
             <button className={styles.navBtn} onClick={() => setShowCriarVagaModal(true)}>
             <div className={styles.navIcon}>
-                <BiPlus size={36} color="#fff" />
+                <BiPlus size={36} color='#fff' />
             </div>
             <span>Add Vagas</span>
             </button>
             <button className={styles.navBtn} onClick={() => setShowPerfilModal(true)}>
             <div className={styles.navIcon}>
-                <BiUser size={36} color="#fff" />
+                <BiUser size={36} color='#fff' />
             </div>
             <span>Perfil</span>
             </button>
@@ -160,5 +158,3 @@ function EmpresaDashboard() {
     </div>
   )
 }
-
-export default EmpresaDashboard

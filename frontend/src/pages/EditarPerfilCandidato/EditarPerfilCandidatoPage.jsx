@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
-import { candidatoService } from '../../services'
+import { candidatoService } from '../../services/candidatoService'
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './EditarPerfilCandidato.module.css'
 
-function EditarPerfilCandidato() {
+export default function EditarPerfilCandidato() {
   const navigate = useNavigate()
   const { candidatoId } = useParams()
   const [loading, setLoading] = useState(true)
@@ -65,7 +65,7 @@ function EditarPerfilCandidato() {
     const { name, value, files } = e.target
     if (files && files[0]) {
       setFormData(prev => ({ ...prev, [name]: files[0] }))
-      // Preview da nova imagem
+
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreviewImage(reader.result)
@@ -109,8 +109,7 @@ function EditarPerfilCandidato() {
 
     try {
       const formDataToSend = new FormData()
-      
-      // Adiciona todos os campos
+
       formDataToSend.append('nome', formData.nome)
       formDataToSend.append('cpf', formData.cpf)
       formDataToSend.append('email', formData.email)
@@ -121,8 +120,7 @@ function EditarPerfilCandidato() {
       formDataToSend.append('descricao', formData.descricao)
       formDataToSend.append('habilidadesTecnicas', formData.habilidadesTecnicas)
       formDataToSend.append('idiomas', formData.idiomas)
-      
-      // Só adiciona imagem se foi selecionada uma nova
+
       if (formData.imagem) {
         formDataToSend.append('imagem', formData.imagem)
       }
@@ -143,40 +141,39 @@ function EditarPerfilCandidato() {
   }
 
   return (
-    <AuthLayout title="Editar Perfil" backTo="/candidato/dashboard" showHelp={false}>
+    <AuthLayout title='Editar Perfil' backTo='/candidato/dashboard' showHelp={false}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Foto de Perfil */}
+          
           <div className={styles.imageSection}>
             {previewImage && (
-              <img src={previewImage} alt="Preview" className={styles.previewImage} />
+              <img src={previewImage} alt='Preview' className={styles.previewImage} />
             )}
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Foto de Perfil</label>
               <input
-                type="file"
-                name="imagem"
+                type='file'
+                name='imagem'
                 onChange={handleChange}
                 className={styles.formInput}
-                accept="image/*"
+                accept='image/*'
               />
               <span className={styles.formHelper}>Formatos aceitos: JPG, PNG, GIF</span>
             </div>
           </div>
 
-          {/* Dados Básicos */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Dados Básicos</h3>
-            
+
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Nome*</label>
               <input
-                type="text"
-                name="nome"
+                type='text'
+                name='nome'
                 value={formData.nome}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Digite seu nome completo"
+                placeholder='Digite seu nome completo'
                 required
               />
             </div>
@@ -185,12 +182,12 @@ function EditarPerfilCandidato() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>CPF*</label>
                 <input
-                  type="text"
-                  name="cpf"
+                  type='text'
+                  name='cpf'
                   value={formData.cpf}
                   onChange={handleCPFChange}
                   className={styles.formInput}
-                  placeholder="000.000.000-00"
+                  placeholder='000.000.000-00'
                   maxLength={14}
                   required
                 />
@@ -199,12 +196,12 @@ function EditarPerfilCandidato() {
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Telefone*</label>
                 <input
-                  type="text"
-                  name="telefone"
+                  type='text'
+                  name='telefone'
                   value={formData.telefone}
                   onChange={handlePhoneChange}
                   className={styles.formInput}
-                  placeholder="(00) 00000-0000"
+                  placeholder='(00) 00000-0000'
                   maxLength={15}
                   required
                 />
@@ -214,58 +211,56 @@ function EditarPerfilCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Email*</label>
               <input
-                type="email"
-                name="email"
+                type='email'
+                name='email'
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="seu@email.com"
+                placeholder='seu@email.com'
                 required
               />
             </div>
           </div>
 
-          {/* Formação */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Formação</h3>
-            
+
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Educação</label>
               <input
-                type="text"
-                name="educacao"
+                type='text'
+                name='educacao'
                 value={formData.educacao}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Graduação em Administração"
+                placeholder='Ex: Graduação em Administração'
               />
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Cursos</label>
               <textarea
-                name="cursos"
+                name='cursos'
                 value={formData.cursos}
                 onChange={handleChange}
                 className={styles.formTextarea}
-                placeholder="Liste seus cursos separados por vírgula"
+                placeholder='Liste seus cursos separados por vírgula'
                 rows={3}
               />
             </div>
           </div>
 
-          {/* Experiência */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Experiência</h3>
-            
+
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Qualificações</label>
               <textarea
-                name="qualificacao"
+                name='qualificacao'
                 value={formData.qualificacao}
                 onChange={handleChange}
                 className={styles.formTextarea}
-                placeholder="Descreva suas qualificações profissionais"
+                placeholder='Descreva suas qualificações profissionais'
                 rows={3}
               />
             </div>
@@ -273,11 +268,11 @@ function EditarPerfilCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Habilidades Técnicas</label>
               <textarea
-                name="habilidadesTecnicas"
+                name='habilidadesTecnicas'
                 value={formData.habilidadesTecnicas}
                 onChange={handleChange}
                 className={styles.formTextarea}
-                placeholder="Liste suas habilidades técnicas"
+                placeholder='Liste suas habilidades técnicas'
                 rows={3}
               />
             </div>
@@ -285,44 +280,42 @@ function EditarPerfilCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Descrição</label>
               <textarea
-                name="descricao"
+                name='descricao'
                 value={formData.descricao}
                 onChange={handleChange}
                 className={styles.formTextarea}
-                placeholder="Fale um pouco sobre você"
+                placeholder='Fale um pouco sobre você'
                 rows={4}
               />
             </div>
           </div>
 
-          {/* Idiomas */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Idiomas</h3>
-            
+
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Idiomas</label>
               <input
-                type="text"
-                name="idiomas"
+                type='text'
+                name='idiomas'
                 value={formData.idiomas}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Português, Inglês, Espanhol"
+                placeholder='Ex: Português, Inglês, Espanhol'
               />
             </div>
           </div>
 
-          {/* Botões */}
           <div className={styles.buttonGroup}>
-            <button 
-              type="button" 
+            <button
+              type='button'
               className={styles.buttonSecondary}
               onClick={() => navigate('/candidato/dashboard')}
             >
               Cancelar
             </button>
-            <button 
-              type="submit" 
+            <button
+              type='submit'
               className={styles.buttonPrimary}
               disabled={saving}
             >
@@ -334,5 +327,3 @@ function EditarPerfilCandidato() {
     </AuthLayout>
   )
 }
-
-export default EditarPerfilCandidato

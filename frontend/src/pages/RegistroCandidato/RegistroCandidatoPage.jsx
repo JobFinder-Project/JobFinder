@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
-import { candidatoService } from '../../services'
+import { candidatoService } from '../../services/candidatoService'
 import styles from './RegistroCandidato.module.css'
 
-function RegistroCandidato() {
+export default function RegistroCandidato() {
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -102,7 +102,7 @@ function RegistroCandidato() {
   }
 
   return (
-    <AuthLayout title="Cadastro de Candidato" backTo="/cargo">
+    <AuthLayout title='Cadastro de Candidato' backTo='/cargo'>
       <div className={styles.container}>
         <p className={styles.formDescription}>
           Preencha suas informações profissionais para criar seu perfil de candidato.
@@ -114,7 +114,7 @@ function RegistroCandidato() {
         <div className={styles.progressContainer}>
           <div className={styles.progressBar}>
             {steps.map((step) => (
-              <div 
+              <div
                 key={step.number}
                 className={`${styles.progressStep} ${currentStep >= step.number ? styles.active : ''} ${currentStep > step.number ? styles.completed : ''}`}
               >
@@ -126,17 +126,17 @@ function RegistroCandidato() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          {/* Step 1: Dados Básicos */}
+          {/* Etapa 1: Dados Básicos */}
           <div className={`${styles.stepContent} ${currentStep === 1 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Nome*</label>
               <input
-                type="text"
-                name="nome"
+                type='text'
+                name='nome'
                 value={formData.nome}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Digite seu nome completo"
+                placeholder='Digite seu nome completo'
                 required
               />
             </div>
@@ -144,11 +144,11 @@ function RegistroCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Foto de Perfil</label>
               <input
-                type="file"
-                name="imagem"
+                type='file'
+                name='imagem'
                 onChange={handleChange}
                 className={styles.formInput}
-                accept="image/*"
+                accept='image/*'
               />
               <span className={styles.formHelper}>Formatos aceitos: JPG, PNG, GIF</span>
             </div>
@@ -156,12 +156,12 @@ function RegistroCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>CPF*</label>
               <input
-                type="text"
-                name="cpf"
+                type='text'
+                name='cpf'
                 value={formData.cpf}
                 onChange={handleCPFChange}
                 className={styles.formInput}
-                placeholder="000.000.000-00"
+                placeholder='000.000.000-00'
                 maxLength={14}
                 required
               />
@@ -169,151 +169,151 @@ function RegistroCandidato() {
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 2: Formação */}
+          {/* Etapa 2: Formação */}
           <div className={`${styles.stepContent} ${currentStep === 2 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Educação*</label>
               <select
-                name="educacao"
+                name='educacao'
                 value={formData.educacao}
                 onChange={handleChange}
                 className={styles.formInput}
                 required
               >
-                <option value="">Selecione seu nível de educação</option>
-                <option value="medio">Ensino Médio</option>
-                <option value="superior">Ensino Superior</option>
-                <option value="pos">Pós-Graduação</option>
-                <option value="mestrado">Mestrado</option>
-                <option value="doutorado">Doutorado</option>
+                <option value=''>Selecione seu nível de educação</option>
+                <option value='medio'>Ensino Médio</option>
+                <option value='superior'>Ensino Superior</option>
+                <option value='pos'>Pós-Graduação</option>
+                <option value='mestrado'>Mestrado</option>
+                <option value='doutorado'>Doutorado</option>
               </select>
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Qualificações*</label>
               <input
-                type="text"
-                name="qualificacoes"
+                type='text'
+                name='qualificacoes'
                 value={formData.qualificacoes}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Certificação PMP, CRM, etc."
+                placeholder='Ex: Certificação PMP, CRM, etc.'
                 required
               />
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 3: Experiência */}
+          {/* Etapa 3: Experiência */}
           <div className={`${styles.stepContent} ${currentStep === 3 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Cursos</label>
               <input
-                type="text"
-                name="cursos"
+                type='text'
+                name='cursos'
                 value={formData.cursos}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Curso de Inglês, Excel Avançado"
+                placeholder='Ex: Curso de Inglês, Excel Avançado'
               />
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Descrição da Experiência</label>
               <textarea
-                name="descricao"
+                name='descricao'
                 value={formData.descricao}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Experiência em gestão de projetos, com foco em metodologias ágeis..."
+                placeholder='Experiência em gestão de projetos, com foco em metodologias ágeis...'
               />
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Telefone*</label>
               <input
-                type="tel"
-                name="telefone"
+                type='tel'
+                name='telefone'
                 value={formData.telefone}
                 onChange={handlePhoneChange}
                 className={styles.formInput}
-                placeholder="(00) 00000-0000"
+                placeholder='(00) 00000-0000'
                 maxLength={15}
                 required
               />
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 4: Idiomas */}
+          {/* Etapa 4: Idiomas */}
           <div className={`${styles.stepContent} ${currentStep === 4 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Habilidades Técnicas</label>
               <input
-                type="text"
-                name="habilidades"
+                type='text'
+                name='habilidades'
                 value={formData.habilidades}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Python, JavaScript, Excel, Photoshop"
+                placeholder='Ex: Python, JavaScript, Excel, Photoshop'
               />
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Idiomas</label>
               <input
-                type="text"
-                name="idiomas"
+                type='text'
+                name='idiomas'
                 value={formData.idiomas}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Ex: Inglês - Avançado, Espanhol - Intermediário"
+                placeholder='Ex: Inglês - Avançado, Espanhol - Intermediário'
               />
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 5: Finalizar */}
+          {/* Etapa 5: Finalizar */}
           <div className={`${styles.stepContent} ${currentStep === 5 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Email*</label>
               <input
-                type="email"
-                name="email"
+                type='email'
+                name='email'
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="seu.email@exemplo.com"
+                placeholder='seu.email@exemplo.com'
                 required
               />
             </div>
@@ -321,12 +321,12 @@ function RegistroCandidato() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Senha*</label>
               <input
-                type="password"
-                name="senha"
+                type='password'
+                name='senha'
                 value={formData.senha}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Mínimo 8 caracteres"
+                placeholder='Mínimo 8 caracteres'
                 minLength={8}
                 required
               />
@@ -334,10 +334,10 @@ function RegistroCandidato() {
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="submit" className={styles.buttonPrimary} disabled={loading}>
+              <button type='submit' className={styles.buttonPrimary} disabled={loading}>
                 {loading ? 'Cadastrando...' : 'Finalizar Cadastro'}
               </button>
             </div>
@@ -347,5 +347,3 @@ function RegistroCandidato() {
     </AuthLayout>
   )
 }
-
-export default RegistroCandidato

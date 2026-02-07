@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
 import styles from './CategoryFilter.module.css'
 
-function CategoryFilter({ areas, selectedCategory, onCategoryClick }) {
+export default function CategoryFilter({ areas, selectedCategory, onCategoryClick }) {
   const listRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -37,7 +37,7 @@ function CategoryFilter({ areas, selectedCategory, onCategoryClick }) {
 
   return (
     <div className={styles.categories}>
-<button
+      <button
         className={`${styles.categoryArrow} ${styles.left} ${!canScrollLeft ? styles.disabled : ''}`}
         onClick={scrollLeft}
         disabled={!canScrollLeft}
@@ -61,7 +61,7 @@ function CategoryFilter({ areas, selectedCategory, onCategoryClick }) {
         ))}
       </div>
 
-<button
+      <button
         className={`${styles.categoryArrow} ${styles.right} ${!canScrollRight ? styles.disabled : ''}`}
         onClick={scrollRight}
         disabled={!canScrollRight}
@@ -71,5 +71,3 @@ function CategoryFilter({ areas, selectedCategory, onCategoryClick }) {
     </div>
   )
 }
-
-export default CategoryFilter

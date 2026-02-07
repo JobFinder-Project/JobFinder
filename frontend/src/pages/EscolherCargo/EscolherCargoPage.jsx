@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
 import styles from './EscolherCargo.module.css'
 
-function EscolherCargo() {
+export default function EscolherCargo() {
   const navigate = useNavigate()
   const [selected, setSelected] = useState('')
 
@@ -20,7 +20,7 @@ function EscolherCargo() {
   }
 
   return (
-    <AuthLayout title="JobFinder" backTo="/home">
+    <AuthLayout title='JobFinder' backTo='/home'>
       <div className={styles.container}>
         <h1>Registro</h1>
         <p>
@@ -35,9 +35,9 @@ function EscolherCargo() {
               className={`${styles.option} ${selected === 'candidate' ? styles.selected : ''}`}
             >
               <input
-                type="radio"
-                name="user-type"
-                value="candidate"
+                type='radio'
+                name='user-type'
+                value='candidate'
                 checked={selected === 'candidate'}
                 onChange={(e) => setSelected(e.target.value)}
               />
@@ -51,9 +51,9 @@ function EscolherCargo() {
               className={`${styles.option} ${selected === 'employer' ? styles.selected : ''}`}
             >
               <input
-                type="radio"
-                name="user-type"
-                value="employer"
+                type='radio'
+                name='user-type'
+                value='employer'
                 checked={selected === 'employer'}
                 onChange={(e) => setSelected(e.target.value)}
               />
@@ -64,7 +64,7 @@ function EscolherCargo() {
             </label>
           </div>
 
-          <button type="submit" className={styles.continueButton}>
+          <button type='submit' className={styles.continueButton}>
             Continuar
           </button>
         </form>
@@ -72,5 +72,3 @@ function EscolherCargo() {
     </AuthLayout>
   )
 }
-
-export default EscolherCargo

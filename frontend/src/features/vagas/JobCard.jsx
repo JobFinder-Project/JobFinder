@@ -1,6 +1,6 @@
 import styles from './JobCard.module.css'
 
-function JobCard({ vaga, onViewDetails }) {
+export default function JobCard({ vaga, onViewDetails }) {
   return (
     <li className={styles.jobCard}>
       <img
@@ -17,5 +17,3 @@ function JobCard({ vaga, onViewDetails }) {
     </li>
   )
 }
-
-export default JobCard

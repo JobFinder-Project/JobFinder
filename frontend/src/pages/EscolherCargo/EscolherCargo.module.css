@@ -96,7 +96,7 @@
   background-color: #fffef2;
 }
 
-.option input[type="radio"] {
+.option input[type='radio'] {
   width: 20px;
   height: 20px;
   margin-right: 1rem;

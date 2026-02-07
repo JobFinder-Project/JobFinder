@@ -70,7 +70,6 @@
   font-style: italic;
 }
 
-/* Progress Bar */
 .progressContainer {
   margin-bottom: 2rem;
   padding: 1.5rem;
@@ -92,7 +91,7 @@
 }
 
 .progressStep:not(:last-child)::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 15px;
   right: -50%;
@@ -146,7 +145,6 @@
   font-weight: 600;
 }
 
-/* Form Elements */
 .formGroup {
   margin-bottom: 1.5rem;
 }
@@ -190,7 +188,6 @@ textarea.formInput {
   display: block;
 }
 
-/* Steps */
 .stepContent {
   display: none;
   animation: fadeIn 0.3s ease-out;
@@ -200,7 +197,6 @@ textarea.formInput {
   display: block;
 }
 
-/* Buttons */
 .buttonGroup {
   display: flex;
   gap: 1rem;
@@ -247,13 +243,13 @@ textarea.formInput {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Error states */
 .formInput.error {
   border-color: #dc3545;
   background-color: #fff5f5;

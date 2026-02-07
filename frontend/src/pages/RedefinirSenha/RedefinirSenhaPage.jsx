@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
-import { authService } from '../../services'
+import { authService } from '../../services/authService'
 import styles from './RedefinirSenha.module.css'
 
-function RedefinirSenha() {
+export default function RedefinirSenha() {
   const { token } = useParams()
   const navigate = useNavigate()
   const [senha, setSenha] = useState('')
@@ -45,7 +45,7 @@ function RedefinirSenha() {
 
   if (success) {
     return (
-      <AuthLayout title="Senha Redefinida" backTo="/login" showHelp={false}>
+      <AuthLayout title='Senha Redefinida' backTo='/login' showHelp={false}>
         <div className={styles.container}>
           <div className={styles.successIcon}>✓</div>
           <h1>Senha Redefinida!</h1>
@@ -58,38 +58,38 @@ function RedefinirSenha() {
   }
 
   return (
-    <AuthLayout title="Redefinir Senha" backTo="/login" showHelp={false}>
+    <AuthLayout title='Redefinir Senha' backTo='/login' showHelp={false}>
       <div className={styles.container}>
         <p>Digite sua nova senha abaixo.</p>
 
         {error && <div className={styles.errorAlert}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="senha">Nova Senha</label>
+          <label htmlFor='senha'>Nova Senha</label>
           <input
-            type="password"
-            id="senha"
-            name="senha"
+            type='password'
+            id='senha'
+            name='senha'
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            placeholder="Digite sua nova senha"
+            placeholder='Digite sua nova senha'
             minLength={8}
             required
           />
 
-          <label htmlFor="confirmarSenha">Confirmar Senha</label>
+          <label htmlFor='confirmarSenha'>Confirmar Senha</label>
           <input
-            type="password"
-            id="confirmarSenha"
-            name="confirmarSenha"
+            type='password'
+            id='confirmarSenha'
+            name='confirmarSenha'
             value={confirmarSenha}
             onChange={(e) => setConfirmarSenha(e.target.value)}
-            placeholder="Confirme sua nova senha"
+            placeholder='Confirme sua nova senha'
             minLength={8}
             required
           />
 
-          <button type="submit" disabled={loading}>
+          <button type='submit' disabled={loading}>
             {loading ? 'Redefinindo...' : 'Redefinir Senha'}
           </button>
         </form>
@@ -97,5 +97,3 @@ function RedefinirSenha() {
     </AuthLayout>
   )
 }
-
-export default RedefinirSenha

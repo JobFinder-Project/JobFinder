@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
-import { empresaService } from '../../services'
+import { empresaService } from '../../services/empresaService'
 import styles from './RegistroEmpresa.module.css'
 
-function RegistroEmpresa() {
+export default function RegistroEmpresa() {
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -29,7 +29,6 @@ function RegistroEmpresa() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }))
     }
@@ -91,12 +90,12 @@ function RegistroEmpresa() {
   }
 
   return (
-    <AuthLayout title="Cadastro de Empresa" backTo="/cargo">
+    <AuthLayout title='Cadastro de Empresa' backTo='/cargo'>
       <div className={styles.container}>
         <div className={styles.progressContainer}>
           <div className={styles.progressBar}>
             {steps.map((step) => (
-              <div 
+              <div
                 key={step.number}
                 className={`${styles.progressStep} ${currentStep >= step.number ? styles.active : ''} ${currentStep > step.number ? styles.completed : ''}`}
               >
@@ -115,17 +114,17 @@ function RegistroEmpresa() {
         <p className={styles.requiredNotice}>Campos com * são obrigatórios.</p>
 
         <form onSubmit={handleSubmit}>
-          {/* Step 1: Dados Básicos */}
+          {/* Etapa 1: Dados Básicos */}
           <div className={`${styles.stepContent} ${currentStep === 1 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Nome da Empresa*</label>
               <input
-                type="text"
-                name="nome"
+                type='text'
+                name='nome'
                 value={formData.nome}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Digite o nome da sua empresa"
+                placeholder='Digite o nome da sua empresa'
                 required
               />
               {errors.nome && <span className={styles.errorMessage}>{errors.nome}</span>}
@@ -134,12 +133,12 @@ function RegistroEmpresa() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>CNPJ*</label>
               <input
-                type="text"
-                name="cnpj"
+                type='text'
+                name='cnpj'
                 value={formData.cnpj}
                 onChange={handleCNPJChange}
                 className={styles.formInput}
-                placeholder="00.000.000/0000-00"
+                placeholder='00.000.000/0000-00'
                 required
               />
               <span className={styles.formHelper}>Digite apenas números</span>
@@ -147,84 +146,84 @@ function RegistroEmpresa() {
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 2: Contato */}
+          {/* Etapa 2: Contato */}
           <div className={`${styles.stepContent} ${currentStep === 2 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Telefone Comercial*</label>
               <input
-                type="tel"
-                name="fone"
+                type='tel'
+                name='fone'
                 value={formData.fone}
                 onChange={handlePhoneChange}
                 className={styles.formInput}
-                placeholder="(00) 00000-0000"
+                placeholder='(00) 00000-0000'
                 required
               />
               {errors.fone && <span className={styles.errorMessage}>{errors.fone}</span>}
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 3: Detalhes */}
+          {/* Etapa 3: Detalhes */}
           <div className={`${styles.stepContent} ${currentStep === 3 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Bio da Empresa</label>
               <textarea
-                name="bio"
+                name='bio'
                 value={formData.bio}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Descreva brevemente sua empresa..."
+                placeholder='Descreva brevemente sua empresa...'
               />
             </div>
 
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Site da Empresa</label>
               <input
-                type="url"
-                name="site"
+                type='url'
+                name='site'
                 value={formData.site}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="https://www.suaempresa.com"
+                placeholder='https://www.suaempresa.com'
               />
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="button" className={styles.buttonPrimary} onClick={nextStep}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
                 Próximo
               </button>
             </div>
           </div>
 
-          {/* Step 4: Credenciais */}
+          {/* Etapa 4: Credenciais */}
           <div className={`${styles.stepContent} ${currentStep === 4 ? styles.active : ''}`}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Email*</label>
               <input
-                type="email"
-                name="email"
+                type='email'
+                name='email'
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="email@suaempresa.com"
+                placeholder='email@suaempresa.com'
                 required
               />
               {errors.email && <span className={styles.errorMessage}>{errors.email}</span>}
@@ -233,12 +232,12 @@ function RegistroEmpresa() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Senha*</label>
               <input
-                type="password"
-                name="senha"
+                type='password'
+                name='senha'
                 value={formData.senha}
                 onChange={handleChange}
                 className={styles.formInput}
-                placeholder="Mínimo 8 caracteres"
+                placeholder='Mínimo 8 caracteres'
                 minLength={8}
                 required
               />
@@ -246,10 +245,10 @@ function RegistroEmpresa() {
             </div>
 
             <div className={styles.buttonGroup}>
-              <button type="button" className={styles.buttonSecondary} onClick={prevStep}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
                 Voltar
               </button>
-              <button type="submit" className={styles.buttonPrimary} disabled={loading}>
+              <button type='submit' className={styles.buttonPrimary} disabled={loading}>
                 {loading ? 'Cadastrando...' : 'Salvar Cadastro'}
               </button>
             </div>
@@ -259,5 +258,3 @@ function RegistroEmpresa() {
     </AuthLayout>
   )
 }
-
-export default RegistroEmpresa

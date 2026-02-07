@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Modal from '../../../components/ui/Modal/Modal'
-import { empresaService } from '../../../services'
+import { empresaService } from '../../../services/empresaService'
 import styles from './PerfilEmpresaModal.module.css'
 
-function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
+export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     nome: empresa?.nome || '',
@@ -169,5 +169,3 @@ function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
     </Modal>
   )
 }
-
-export default PerfilEmpresaModal

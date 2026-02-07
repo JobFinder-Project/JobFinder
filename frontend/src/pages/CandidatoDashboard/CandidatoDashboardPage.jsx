@@ -7,12 +7,12 @@ import CategoryFilter from '../../features/vagas/CategoryFilter/CategoryFilter'
 import CandidaturasModal from '../../features/candidato/CandidaturasModal/CandidaturasModal'
 import PerfilModal from '../../features/candidato/PerfilModal/PerfilModal'
 import VagaDetalhesModal from '../../features/vagas/VagaDetalhesModal/VagaDetalhesModal'
-import { candidatoService } from '../../services'
+import { candidatoService } from '../../services/candidatoService'
 import { useVagasQuery } from '../../features/vagas/useVagasQuery'
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './CandidatoDashboard.module.css'
 
-function CandidatoDashboard() {
+export default function CandidatoDashboard() {
   const navigate = useNavigate()
   const [candidatoId, setCandidatoId] = useState(null)
   const [candidato, setCandidato] = useState(null)
@@ -57,7 +57,7 @@ function CandidatoDashboard() {
     setShowVagaDetalhesModal(true)
   }
 
-  const filteredVagas = vagas 
+  const filteredVagas = vagas
 
   if (loading || isLoadingVagas) {
     return <LoadingScreen />
@@ -99,7 +99,6 @@ function CandidatoDashboard() {
 
       <Footer />
 
-      {/* Modais */}
       {showCandidaturasModal && (
         <CandidaturasModal
           candidatoId={candidatoId}
@@ -125,5 +124,3 @@ function CandidatoDashboard() {
     </div>
   )
 }
-
-export default CandidatoDashboard

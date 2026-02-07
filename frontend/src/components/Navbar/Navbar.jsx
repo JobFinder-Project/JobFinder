@@ -1,28 +1,28 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   BiListCheck,
   BiUserCircle,
   BiLeftArrowAlt,
   BiLogOut,
   BiSearch
-} from "react-icons/bi";
-import { useAuth } from "../../contexts/AuthContext";
-import styles from "./Navbar.module.css";
+} from 'react-icons/bi';
+import { useAuth } from '../../contexts/AuthContext';
+import styles from './Navbar.module.css';
 
-export default function Navbar({ 
-  onOpenCandidaturas, 
-  onOpenPerfil, 
-  disableSearch = false, 
+export default function Navbar({
+  onOpenCandidaturas,
+  onOpenPerfil,
+  disableSearch = false,
   customSearchHandler = null
 }) {
   const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || "");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
   const isEmpresa = user?.role === 'empresa';
   const isCandidato = user?.role === 'candidato';
-  const searchPlaceholder = isEmpresa ? "Buscar Candidatos" : "Buscar Vagas";
+  const searchPlaceholder = isEmpresa ? 'Buscar Candidatos' : 'Buscar Vagas';
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -43,9 +43,9 @@ export default function Navbar({
   const handleLogout = async () => {
     try {
       await logout();
-      navigate("/login"); 
+      navigate('/login');
     } catch (error) {
-      console.error("Erro no logout:", error);
+      console.error('Erro no logout:', error);
     }
   };
 
@@ -59,14 +59,14 @@ export default function Navbar({
         <div className={styles.navbarCenter}>
           <form onSubmit={handleSearch} className={styles.searchForm}>
             <input
-              type="text"
-              name="q"
+              type='text'
+              name='q'
               className={styles.searchInput}
               placeholder={searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="submit" className={styles.searchButton}>
+            <button type='submit' className={styles.searchButton}>
               <BiSearch size={20} />
             </button>
           </form>
@@ -74,14 +74,14 @@ export default function Navbar({
       )}
 
       <ul className={styles.navbarMenu}>
-        
+
         {isCandidato && (
           <>
             <li>
               <button
                 className={styles.navbarButton}
                 onClick={onOpenCandidaturas}
-                title="Minhas Candidaturas"
+                title='Minhas Candidaturas'
               >
                 <BiListCheck size={24} />
                 <span className={styles.navbarLabel}>Candidaturas</span>
@@ -91,7 +91,7 @@ export default function Navbar({
               <button
                 className={styles.navbarButton}
                 onClick={onOpenPerfil}
-                title="Meu Perfil"
+                title='Meu Perfil'
               >
                 <BiUserCircle size={24} />
                 <span className={styles.navbarLabel}>Perfil</span>
@@ -101,9 +101,9 @@ export default function Navbar({
         )}
 
         {!isAuthenticated && (
-           <li>
-             <Link to="/login" className={styles.navbarButton}>Entrar</Link>
-           </li>
+          <li>
+            <Link to='/login' className={styles.navbarButton}>Entrar</Link>
+          </li>
         )}
 
         {isAuthenticated && (
@@ -111,7 +111,7 @@ export default function Navbar({
             <button
               onClick={handleLogout}
               className={`${styles.navbarButton} ${styles.logoutBtn}`}
-              title="Sair do sistema"
+              title='Sair do sistema'
             >
               <BiLogOut size={30} />
               <span className={styles.navbarLabel}>Sair</span>

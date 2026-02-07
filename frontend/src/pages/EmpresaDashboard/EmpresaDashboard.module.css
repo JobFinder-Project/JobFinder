@@ -144,8 +144,8 @@
   color: #fff;
 }
 
-.tabsContainer{
-    margin-bottom: 20px;
+.tabsContainer {
+  margin-bottom: 20px;
 }
 
 .candidatesGrid {
@@ -163,7 +163,6 @@
   padding: 40px;
 }
 
-/* Bottom Navigation */
 .bottomNav {
   position: fixed;
   left: 50%;

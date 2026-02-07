@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { BiCheckCircle } from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
-import { candidatoService } from '../../../services'
+import { candidatoService } from '../../../services/candidatoService'
 import styles from './CandidaturasModal.module.css'
 
-function CandidaturasModal({ candidatoId, onClose }) {
+export default function CandidaturasModal({ candidatoId, onClose }) {
   const [candidaturas, setCandidaturas] = useState([])
   const [view, setView] = useState('lista')
   const [selectedCandidatura, setSelectedCandidatura] = useState(null)
@@ -136,5 +136,3 @@ function CandidaturasModal({ candidatoId, onClose }) {
     </Modal>
   )
 }
-
-export default CandidaturasModal

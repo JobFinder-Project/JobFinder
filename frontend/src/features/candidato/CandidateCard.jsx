@@ -1,6 +1,6 @@
 import styles from './CandidateCard.module.css'
 
-function CandidateCard({ candidato }) {
+export default function CandidateCard({ candidato }) {
   const handleViewProfile = () => {
     console.log('Ver perfil do candidato:', candidato._id)
   }
@@ -22,5 +22,3 @@ function CandidateCard({ candidato }) {
     </div>
   )
 }
-
-export default CandidateCard

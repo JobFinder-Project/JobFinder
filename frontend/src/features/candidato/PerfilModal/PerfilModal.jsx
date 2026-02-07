@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Modal from '../../../components/ui/Modal/Modal'
 import styles from './PerfilModal.module.css'
 
-function PerfilModal({ candidato, candidatoId, onClose }) {
+export default function PerfilModal({ candidato, candidatoId, onClose }) {
   const navigate = useNavigate()
 
   const handleEdit = () => {
@@ -10,14 +10,14 @@ function PerfilModal({ candidato, candidatoId, onClose }) {
   }
 
   return (
-    <Modal title="Meu Perfil" onClose={onClose}>
+    <Modal title='Meu Perfil' onClose={onClose}>
       {candidato?.cpf ? (
         <section className={styles.perfilInfo}>
           {candidato.imagem && (
             <div className={styles.perfilImagem}>
               <img
                 src={`data:${candidato.imagem.contentType};base64,${candidato.imagem.data}`}
-                alt="Imagem do candidato"
+                alt='Imagem do candidato'
               />
             </div>
           )}
@@ -56,5 +56,3 @@ function PerfilModal({ candidato, candidatoId, onClose }) {
     </Modal>
   )
 }
-
-export default PerfilModal
