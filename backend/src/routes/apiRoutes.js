@@ -34,81 +34,67 @@ const isEmpresaApi = (req, res, next) => {
 
 router.post('/login', async (req, res) => {
     const { email, senha } = req.body;
+
     try {
-        const user =
-            (await Candidato.findOne({ email })) ||
-            (await Empresa.findOne({ email }));
+        let user = await Candidato.findOne({ email });
+        let role = null;
+
+        if (user) {
+            role = 'candidato';
+        } else {
+            user = await Empresa.findOne({ email });
+            if (user) {
+                role = 'empresa';
+            }
+        }
 
         if (!user) {
-            return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
+            return res.status(401).json({ error: 'Email ou senha incorretos' });
         }
 
-        const isValidPassword = await bcrypt.compare(senha, user.senha);
-        if (!isValidPassword) {
-            return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
+        const senhaValida = await bcrypt.compare(senha, user.senha);
+        if (!senhaValida) {
+            return res.status(401).json({ error: 'Email ou senha incorretos' });
         }
-
-        const userType = user.constructor.modelName.toLowerCase();
 
         req.session.user = {
             id: user._id,
-            role: userType,
+            nome: user.nome,
+            email: user.email,
+            role: role
         };
 
+        const redirectUrl = role === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard';
+
         res.json({
-            success: true,
             message: 'Login bem-sucedido',
-            redirectUrl:
-                userType === 'candidato'
-                    ? '/candidato/dashboard'
-                    : '/empresa/dashboard',
+            user: req.session.user,
+            redirectUrl
         });
+
     } catch (erro) {
-        console.error(erro);
-        res
-            .status(500)
-            .json({ error: 'Erro ao processar o login. Tente novamente!' });
+        console.error("Erro no login:", erro);
+        res.status(500).json({ error: 'Erro no servidor ao realizar login' });
     }
 });
 
-router.get('/me', async (req, res) => {
-    if (!req.session || !req.session.user) {
-        return res.status(401).json({ authenticated: false });
-    }
 
+router.get('/me', (req, res) => {
     try {
-        const { id, role } = req.session.user;
-        let user = null;
 
-        if (role === 'candidato') {
-            user = await Candidato.findById(id).select(
-                '-senha -resetToken -tokenExpiration',
-            );
-        } else if (role === 'empresa') {
-            user = await Empresa.findById(id).select(
-                '-senha -resetToken -tokenExpiration',
-            );
+        if (req.session && req.session.user) {
+            return res.json({ 
+                authenticated: true, 
+                user: req.session.user 
+            });
         }
-
-        if (!user) {
-            req.session.destroy();
-            return res.status(401).json({ authenticated: false });
-        }
-
-        res.json({
-            authenticated: true,
-            user: {
-                id: user._id,
-                nome: user.nome,
-                email: user.email,
-                role,
-            },
-        });
-    } catch (erro) {
-        console.error('Erro ao verificar sessão:', erro);
-        res.status(500).json({ error: 'Erro ao verificar sessão' });
+        return res.json({ authenticated: false });
+    } catch (error) {
+        console.error('Erro na rota /me:', error);
+        return res.json({ authenticated: false });
     }
 });
+
 
 router.get('/logout', (req, res) => {
     req.session.destroy((erro) => {
@@ -477,53 +463,37 @@ router.post(
     },
 );
 
-router.get(
-    '/empresa/dashboard',
-    isAuthenticatedApi,
-    isEmpresaApi,
-    async (req, res) => {
-        try {
-            const empresaId = req.session.user.id;
-            const empresa = await Empresa.findById(empresaId, '-senha').populate(
-                'vagas',
-            );
-
-            if (!empresa) {
-                return res.status(404).json({ error: 'Empresa não encontrada' });
-            }
-
-            const candidatos = await Candidato.find({}, '-senha');
-
-            const candidatosComImagens = candidatos.map((c) => {
-                let imagemBase64 = null;
-                if (c.imagem && c.imagem.data) {
-                    imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString('base64')}`;
-                }
-                return { ...c._doc, imagem: imagemBase64 };
-            });
-
-            const vagasComImagens = empresa.vagas
-                ? empresa.vagas.map((v) => {
-                    let imagemBase64 = null;
-                    if (v.imagem && v.imagem.data) {
-                        imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
-                    }
-                    return { ...v._doc, imagem: imagemBase64 };
-                })
-                : [];
-
-            res.json({
-                user: { ...empresa._doc, _id: empresaId },
-                empresaId,
-                candidatos: candidatosComImagens,
-                vagas: vagasComImagens,
-            });
-        } catch (erro) {
-            console.error(erro);
-            res.status(500).json({ error: 'Erro ao carregar dashboard' });
+router.get('/empresa/dashboard', isEmpresaApi, async (req, res) => {
+    try {
+        const empresa = await Empresa.findOne({ email: req.session.user.email });
+        
+        if (!empresa) {
+            return res.status(404).json({ error: 'Perfil de empresa não encontrado.' });
         }
-    },
-);
+
+        const vagas = await Vaga.find({ empresa: empresa._id });
+
+        const vagasFormatadas = vagas.map(v => {
+            let imagemBase64 = null;
+            if (v.imagem && v.imagem.data) {
+                imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
+            }
+            return { ...v._doc, imagem: imagemBase64 };
+        });
+
+        let empresaFormatada = { ...empresa._doc };
+        if (empresa.imagem && empresa.imagem.data) {
+            empresaFormatada.imagem = `data:${empresa.imagem.contentType};base64,${empresa.imagem.data.toString('base64')}`;
+        }
+
+        res.json({ empresa: empresaFormatada, vagas: vagasFormatadas });
+
+    } catch (erro) {
+        console.error('Erro no Dashboard Empresa:', erro);
+        res.status(500).json({ error: 'Erro interno ao carregar dashboard' });
+    }
+});
+
 
 router.get(
     '/empresa/perfil',

@@ -144,6 +144,10 @@
   color: #fff;
 }
 
+.tabsContainer{
+    margin-bottom: 20px;
+}
+
 .candidatesGrid {
   display: flex;
   flex-wrap: wrap;

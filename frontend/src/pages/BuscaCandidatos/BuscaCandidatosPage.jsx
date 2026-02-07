@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { BiArrowBack } from 'react-icons/bi'
-import NavbarEmpresa from '../../components/Navbar/NavbarEmpresa/NavbarEmpresa'
+import Navbar from '../../components/Navbar/Navbar'
 import { empresaService } from '../../services'
 import styles from './BuscaCandidatos.module.css'
 
@@ -31,11 +31,14 @@ function BuscaCandidatos() {
     }
   }
 
+  const handleNewSearch = (newTerm) => {
+    setSearchParams({ q: newTerm });
+  };
+
   return (
     <div className={styles.page}>
-      <NavbarEmpresa initialSearchValue={query} />
+      <Navbar initialSearchValue={query} customSearchHandler={handleNewSearch} />
 
-      {/* Back Button and Info */}
       <div className={styles.headerBar}>
 <Link to="/empresa/dashboard" className={styles.backButton}>
           <BiArrowBack size={16} />
@@ -44,13 +47,13 @@ function BuscaCandidatos() {
       </div>
 
       <div className={styles.container}>
-        {/* Header */}
+
         <div className={styles.headerSection}>
           <h1>Resultados da Busca:</h1>
           {query && <p>Termo buscado: "{query}"</p>}
         </div>
 
-        {/* Candidates Grid */}
+        
         <div className={styles.candidatesGrid}>
           {loading ? (
             <div className={styles.loading}>Carregando candidatos...</div>
