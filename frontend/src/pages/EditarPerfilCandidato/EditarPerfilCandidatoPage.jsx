@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
 import { candidatoService } from '../../services'
+import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './EditarPerfilCandidato.module.css'
 
 function EditarPerfilCandidato() {
@@ -138,11 +139,7 @@ function EditarPerfilCandidato() {
   }
 
   if (loading) {
-    return (
-      <div className={styles.loadingWrapper}>
-        <p>Carregando...</p>
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return (

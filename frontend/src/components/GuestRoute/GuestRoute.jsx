@@ -1,11 +1,12 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import LoadingScreen from '../ui/LoadingScreen/LoadingScreen'
 
 export default function GuestRoute({ children }) {
   const { isAuthenticated, user, loading } = useAuth();
 
   if (loading) {
-    return <div className='loading-screen'>Carregando...</div>;
+    return <LoadingScreen />;
   }
 
   if (isAuthenticated) {

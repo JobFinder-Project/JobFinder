@@ -9,6 +9,7 @@ import PerfilModal from '../../features/candidato/PerfilModal/PerfilModal'
 import VagaDetalhesModal from '../../features/vagas/VagaDetalhesModal/VagaDetalhesModal'
 import { candidatoService } from '../../services'
 import { useVagasQuery } from '../../features/vagas/useVagasQuery'
+import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './CandidatoDashboard.module.css'
 
 function CandidatoDashboard() {
@@ -59,11 +60,7 @@ function CandidatoDashboard() {
   const filteredVagas = vagas 
 
   if (loading || isLoadingVagas) {
-    return (
-      <div className={styles.loadingWrapper}>
-        <p>Carregando...</p>
-      </div>
-    )
+    return <LoadingScreen />
   }
 
   return (
