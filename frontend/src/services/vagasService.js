@@ -11,7 +11,8 @@ export const vagasService = {
     if (params.area) queryParams.append('area', params.area);
 
     const queryString = queryParams.toString();
-    return api.get(`/vagas${queryString ? `?${queryString}` : ''}`);
+    const response = await api.get(`/vagas${queryString ? `?${queryString}` : ''}`);
+    return response.vagas || [];
   },
 };
 

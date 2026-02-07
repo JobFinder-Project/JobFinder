@@ -57,6 +57,15 @@
   align-items: center;
 }
 
+.navbarMenu {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
 .navbarButton {
   background: none;
   border: none;

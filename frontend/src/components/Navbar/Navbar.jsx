@@ -113,7 +113,7 @@ export default function Navbar({
               className={`${styles.navbarButton} ${styles.logoutBtn}`}
               title='Sair do sistema'
             >
-              <BiLogOut size={30} />
+              <BiLogOut size={24} />
               <span className={styles.navbarLabel}>Sair</span>
             </button>
           </li>
