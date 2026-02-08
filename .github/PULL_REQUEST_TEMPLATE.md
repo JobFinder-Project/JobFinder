@@ -1,6 +1,6 @@
 # 🔀 [PR] - Título do PR
 
-## 📌 Descrição
+## :memo: Descrição
 
 Descreva brevemente para que serve o PR
 
