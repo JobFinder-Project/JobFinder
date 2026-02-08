@@ -173,8 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const postResponse = await fetch(`/candidato/${candidatoId}/vagas/${vagaId}`, { method: 'POST' });
             if (!postResponse.ok) {
-                const errorData = await postResponse.json();
-                throw new Error(errorData.message || 'Erro ao realizar candidatura');
+                const contentType = postResponse.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const errorData = await postResponse.json();
+                    throw new Error(errorData.message || 'Erro ao realizar candidatura');
+                } else {
+                    const errorText = await postResponse.text();
+                    if (errorText.includes('Você já se candidatou') || errorText.includes('Já Candidatado') || errorText.includes('Duplicate Entry')) {
+                        throw new Error('Você já se candidatou a esta vaga!');
+                    }
+                    document.open();
+                    document.write(errorText);
+                    document.close();
+                    return;
+                }
             }
             
             document.getElementById('vagaDetalhesModal').style.display = 'none';
