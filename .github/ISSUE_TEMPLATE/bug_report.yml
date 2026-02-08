@@ -1,0 +1,81 @@
+name: "🐛 Reportar falha / Bug Report"
+description: "Reporte um erro encontrado na plataforma de análise de dados"
+title: "[Bug]: "
+labels: ["bug","help wanted"]
+assignees: []
+
+body:
+  - type: dropdown
+    id: tipo_bug
+    attributes:
+      label: 🐞 Tipo de Bug
+      description: Selecione a categoria do bug
+      options:
+        - Visualização / Gráficos
+        - Cálculo / Dados
+        - Performance / Carregamento
+        - Exportação / Download
+        - Interface / Usabilidade
+        - Outro
+    validations:
+      required: true
+
+  - type: markdown
+    attributes: 
+      value: "## 🔖 Versão da Plataforma:"
+  - type: input
+    id: versao
+    attributes:
+      label: 🔖 Versão
+      description: Informe a versão da plataforma (ou data da análise)
+      placeholder: "Ex: v1.2.3 ou 03/10/2025"
+    validations:
+      required: true
+    
+  - type: markdown
+    attributes: 
+      value: "## 🐞 Detalhes do Bug"
+  - type: textarea
+    id: descricao
+    attributes:
+      label: 📝 Descrição do Bug
+      description: Explique claramente qual é o erro encontrado.
+      placeholder: "Ex: O gráfico de barras não atualiza ao mudar o filtro."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## 🔄 Passos para Reproduzir"
+  - type: textarea
+    id: reproduzir
+    attributes:
+      label: 🔄 Passos para Reproduzir
+      description: Liste os passos para reproduzir o bug.
+      placeholder: "1. Abra a plataforma\n2. Aplique o filtro X\n3. Observe que o gráfico não muda"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## ✅ Comportamento Esperado"
+  - type: textarea
+    id: esperado
+    attributes:
+      label: ✅ Comportamento Esperado
+      description: O que deveria acontecer no lugar do erro?
+      placeholder: "Ex: O gráfico deveria atualizar para refletir os dados filtrados."
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## 📷 Evidências (Prints ou Logs)"
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: 📷 Evidências (Prints ou Logs)
+      description: Inclua prints, vídeos ou logs que mostrem o problema.
+      placeholder: "Arraste e solte arquivos aqui..."
+    validations:
+      required: false

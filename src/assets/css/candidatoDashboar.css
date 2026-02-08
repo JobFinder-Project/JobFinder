@@ -478,6 +478,30 @@ svg.check-ok{
     
 }
 
+/* Estilos específicos para o modal de sucesso ao editar perfil */
+#perfilSuccessModal .modal-content {
+    max-width: 420px; /* largura menor e mais focada */
+    width: 90%;
+    height: auto; /* altura automática conforme conteúdo */
+    max-height: 50vh; /* limitar a altura para não ocupar a tela inteira */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#perfilSuccessModal .modal-body {
+    padding: 10px 0 0 0;
+}
+
+/* Reduz o tamanho do ícone dentro do modal de sucesso */
+#perfilSuccessModal svg.check-ok {
+    width: 80px !important;
+    height: 80px !important;
+}
+
 /* Centraliza e destaca o nome do candidato no modal de perfil */
 #perfilModal .perfil-nome {
     text-align: center;
@@ -488,6 +512,44 @@ svg.check-ok{
     margin-bottom: 18px;
     letter-spacing: 1px;
     text-shadow: 0 2px 8px rgba(44,62,80,0.08);
+}
+
+/* Estilos para o modal de candidatura duplicada */
+#candidaturaDuplicadaModal .modal-content {
+    max-width: 450px;
+    width: 90%;
+    height: auto;
+    max-height: 60vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#candidaturaDuplicadaModal .modal-body {
+    padding: 10px 0;
+}
+
+#candidaturaDuplicadaModal svg.warning-icon {
+    width: 80px !important;
+    height: 80px !important;
+    margin-bottom: 15px;
+}
+
+#candidaturaDuplicadaModal .aviso-mensagem {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 15px 0 10px 0;
+}
+
+#candidaturaDuplicadaModal .aviso-descricao {
+    font-size: 15px;
+    color: #7f8c8d;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
 }
 
 @media (max-width: 900px) {
