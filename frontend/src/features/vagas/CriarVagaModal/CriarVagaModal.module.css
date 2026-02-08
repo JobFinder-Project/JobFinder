@@ -108,14 +108,15 @@
   cursor: not-allowed;
 }
 
-.modalSuccessContent {
+.successContent {
   background-color: #fff;
-  padding: 40px;
-  border-radius: 16px;
   width: 100%;
   max-width: 450px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .successIcon {
@@ -148,6 +149,7 @@
   color: #fff;
   border: none;
   border-radius: 8px;
+  margin-top: 10px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
