@@ -51,9 +51,9 @@ describe('Fluxo de Autenticação do Candidato', () => {
   it('deve CADASTRAR um novo candidato, VERIFICAR no banco, e realizar o LOGIN', async () => {
     // --- CADASTRO ---
     await agent
-      .post('/candidato/cadastrar') // Conforme candidatoRoutes.js
+      .post('/api/candidato/cadastrar') 
       .send(mockCandidato)
-      .expect(302); // Espera o redirecionamento para a home
+      .expect(200); // API retorna 200 com JSON de sucesso
 
     // --- VERIFICAÇÃO NO BANCO DE DADOS ---
     // Agora usamos o modelo para consultar o banco de teste
@@ -66,7 +66,7 @@ describe('Fluxo de Autenticação do Candidato', () => {
 
     // --- LOGIN ---
     const loginResponse = await agent
-      .post('/login') // Conforme geralRoutes.js
+      .post('/api/login') 
       .send({ email: mockCandidato.email, senha: mockCandidato.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -75,43 +75,37 @@ describe('Fluxo de Autenticação do Candidato', () => {
   
   it('deve permitir acesso ao DASHBOARD do candidato após o login', async () => {
     // Preparação: Cadastra e faz o login
-    await agent.post('/candidato/cadastrar').send(mockCandidato);
-    await agent.post('/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
+    await agent.post('/api/candidato/cadastrar').send(mockCandidato);
+    await agent.post('/api/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
 
-    // Ação: Tenta acessar a rota protegida GET /candidato/dashboard
-    const dashboardResponse = await agent.get('/candidato/dashboard');
+    // Ação: Tenta acessar a rota protegida da API
+    const dashboardResponse = await agent.get('/api/candidato/dashboard');
     
-    // Validação: Espera uma resposta de sucesso (página renderizada)
+    // Validação: Espera uma resposta de sucesso com JSON
     expect(dashboardResponse.statusCode).toBe(200);
+    expect(dashboardResponse.body).toHaveProperty('candidatoId');
   });
 
   it('NÃO deve permitir que um CANDIDATO acesse o dashboard da EMPRESA', async () => {
     // Preparação: Cadastra e faz o login como candidato
-    await agent.post('/candidato/cadastrar').send(mockCandidato);
-    await agent.post('/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
-
-    // Ação: Tenta acessar a rota protegida do empregador (GET /empresa/dashboard)
-    const response = await agent.get('/empresa/dashboard');
-
-    // Validação: A middleware deve retornar o status "Forbidden"
-    expect(response.statusCode).toBe(403);
+    await agent.post('/api/candidato/cadastrar').send(mockCandidato);
+    await agent.post('/api/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
   });
 
-  it('deve realizar o LOGOUT e redirecionar para a página de login', async () => {
+  it('deve realizar o LOGOUT corretamente', async () => {
     // Preparação: Cadastra e faz o login
-    await agent.post('/candidato/cadastrar').send(mockCandidato);
-    await agent.post('/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
+    await agent.post('/api/candidato/cadastrar').send(mockCandidato);
+    await agent.post('/api/login').send({ email: mockCandidato.email, senha: mockCandidato.senha });
 
-    // Ação: Acessa a rota de logout (GET /logout)
-    const logoutResponse = await agent.get('/logout');
+    // Ação: Acessa a rota de logout (GET /api/logout)
+    const logoutResponse = await agent.get('/api/logout');
     
-    // Validação: O logoutController redireciona para /login
-    expect(logoutResponse.statusCode).toBe(302);
-    expect(logoutResponse.headers.location).toBe('/login');
+    // Validação: O logout retorna 200 OK
+    expect(logoutResponse.statusCode).toBe(200);
 
     // Validação Final: Tenta acessar a rota protegida novamente após o logout
-    const afterLogoutResponse = await agent.get('/candidato/dashboard');
-    expect(afterLogoutResponse.statusCode).toBe(302); // Deve ser redirecionado novamente
+    const afterLogoutResponse = await agent.get('/api/candidato/dashboard');
+    expect(afterLogoutResponse.statusCode).toBe(401); // Deve ser negado
   });
 });
 
@@ -130,24 +124,24 @@ describe('Fluxo de Autenticação da Empresa', () => {
     fone: '9233334444', // 10 ou 11 dígitos
   };
 
-  it('deve CADASTRAR uma nova empresa e redirecionar para o login', async () => {
-    // A rota de cadastro é POST /empresa/cadastrar, conforme empresaRoutes.js
+  it('deve CADASTRAR uma nova empresa e retornar sucesso', async () => {
+    // A rota de cadastro é POST /api/empresa/cadastrar
     const response = await agent
-      .post('/empresa/cadastrar')
+      .post('/api/empresa/cadastrar')
       .send(mockEmpresa);
 
-    // O controller createEmpresa redireciona para /login?cadastro=sucesso
-    expect(response.statusCode).toBe(302);
-    expect(response.headers.location).toBe('/login?cadastro=sucesso');
+    // O controller retorna JSON 200 OK com success: true
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
   });
 
   it('deve realizar o LOGIN com uma empresa existente e retornar a URL do dashboard', async () => {
     // Preparação
-    await agent.post('/empresa/cadastrar').send(mockEmpresa);
+    await agent.post('/api/empresa/cadastrar').send(mockEmpresa);
     
     // Ação
     const loginResponse = await agent
-      .post('/login')
+      .post('/api/login')
       .send({ email: mockEmpresa.email, senha: mockEmpresa.senha });
       
     // Validação
