@@ -52,7 +52,7 @@ function App() {
               <RegistroEmpresa />
             </GuestRoute>
           } />
-          <Route path='/esqueci-senha' element={<EsqueciSenha />} />
+          <Route path='/recuperar_senha' element={<EsqueciSenha />} />
           <Route path='/redefinir-senha/:token' element={<RedefinirSenha />} />
 
           {/* Candidato Routes */}
