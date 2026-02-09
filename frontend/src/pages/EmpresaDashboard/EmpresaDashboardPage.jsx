@@ -152,7 +152,9 @@ export default function EmpresaDashboard() {
       {showPerfilModal && (
         <PerfilEmpresaModal
           empresa={empresa}
+          empresaId={empresa?._id}
           onClose={() => setShowPerfilModal(false)}
+          onUpdate={fetchDashboardData}
         />
       )}
     </div>
