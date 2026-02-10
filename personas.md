@@ -1,6 +1,12 @@
-# Personas
+# Personas do JobFinder
 
-## Persona 1
+A elicitação de requisitos foi feita com base em entrevistas e pesquisas com usuários potenciais do sistema, resultando na criação de personas que representam os perfis dos usuários finais. Essas personas ajudam a orientar o desenvolvimento do sistema, garantindo que as funcionalidades atendam às necessidades e expectativas dos usuários.
+
+--- 
+
+## Persona 1 - Candidato
+
+Este perfil representa um candidato em busca de oportunidades de emprego na área técnica, especificamente na área de saúde. Ele valoriza a facilidade de uso da aplicação e a qualidade das informações disponíveis, buscando uma experiência intuitiva e eficiente para encontrar vagas que correspondam à sua formação e localização.
 
 - **Quem**: Denise, 26 anos, Técnica em Enfermagem.
 - **Perfil**: Alegre, vaidosa e possui boa comunicação.
@@ -10,7 +16,11 @@
 - **Problemas**: Dificuldade em encontrar vagas específicas para sua profissão na sua cidade ou região.
 - **Necessidade na Aplicação**: Visualizar vagas disponíveis localmente e que correspondam à sua formação técnica. Valoriza a manutenção da qualidade das fotos postadas no perfil.
 
-## Persona 2
+---
+
+## Persona 2 - Empregador
+
+Este perfil representa um empregador que busca contratar profissionais qualificados para sua empresa. Ele valoriza a eficiência do processo de recrutamento e a qualidade dos candidatos disponíveis na plataforma, buscando ferramentas que facilitem a triagem e seleção de candidatos.
 
 - **Quem**: Carlos Mendes, 40 anos, Gerente de RH.
 - **Perfil**: Calmo, tranquilo e valoriza bastante o diálogo.
