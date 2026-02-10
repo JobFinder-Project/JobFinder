@@ -10,7 +10,7 @@ Os requisitos funcionais descrevem as funções e ações que o sistema deve exe
 
 | Identificação | Descrição                                                                                                                                             | Prioridade |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| RF01          | O sistema deve permitir que usuários realizem autenticação segura, recuperação de senha e encerramento de sessão.                                     | Essencial  |
+| RF01          | O sistema deve permitir que usuários realizem login na aplicação.                                                                                     | Essencial  |
 | RF02          | O sistema deve permitir que candidatos cadastrem, visualizem e editem seu perfil profissional, incluindo dados pessoais, experiências, cursos e foto. | Essencial  |
 | RF03          | O sistema deve permitir que empregadores realizem o cadastro da empresa com dados oficiais e gerenciem seu perfil institucional.                      | Essencial  |
 | RF04          | O sistema deve permitir que candidatos pesquisem vagas, visualizem seus detalhes e se candidatem a oportunidades disponíveis.                         | Essencial  |
@@ -18,7 +18,7 @@ Os requisitos funcionais descrevem as funções e ações que o sistema deve exe
 | RF06          | O sistema deve permitir que candidatos filtrem vagas por área de atuação ou palavras-chave.                                                           | Importante |
 | RF07          | O sistema deve permitir que empregadores filtrem e visualizem candidatos com base em qualificações e experiências específicas.                        | Importante |
 | RF08          | O sistema deve disponibilizar um painel centralizado para que empregadores gerenciem suas vagas e candidatos inscritos.                               | Importante |
-| RF09          | O sistema deve permitir que candidatos visualizem a página pública das empresas com informações institucionais e vagas ativas.                        | Importante |
+| RF09          | O sistema deve permitir que candidatos visualizem a página pública das empresas com informações institucionais e vagas ativas.                        | Desejável  |
 | RF10          | O sistema deve disponibilizar um canal de suporte para que usuários relatem problemas ou tirem dúvidas técnicas.                                      | Desejável  |
 | RF11          | O sistema deve permitir a interação entre candidatos para troca de experiências e informações profissionais.                                          | Desejável  |
 
@@ -26,18 +26,19 @@ Os requisitos funcionais descrevem as funções e ações que o sistema deve exe
 
 Os requisitos não funcionais definem os critérios de operação, qualidade e restrições técnicas (derivados dos critérios de aceitação).
 
-| Identificação | Descrição                                                                                                    | Categoria        |
-| ------------- | ------------------------------------------------------------------------------------------------------------ | ---------------- |
-| RNF01         | O sistema deve garantir autenticação segura utilizando credenciais únicas e protegidas.                      | Segurança        |
-| RNF02         | O link de recuperação de senha deve possuir tempo de validade máximo de 15 minutos.                          | Segurança        |
-| RNF03         | O sistema deve validar automaticamente o formato e a autenticidade do CNPJ informado no cadastro da empresa. | Segurança        |
-| RNF04         | O sistema deve permitir upload e exibição de fotos de perfil com tempo de resposta adequado.                 | Desempenho       |
-| RNF05         | O sistema deve apresentar o painel do candidato com informações organizadas e de fácil compreensão.          | Usabilidade      |
-| RNF06         | O sistema deve garantir consistência e integridade dos dados de vagas e candidaturas.                        | Confiabilidade   |
-| RNF07         | O dashboard do empregador deve carregar corretamente imagens e dados das vagas e candidatos.                 | Confiabilidade   |
-| RNF08         | O sistema deve permitir manutenção e evolução das funcionalidades sem impacto nas operações existentes.      | Manutenibilidade |
-| RNF9          | O sistema deve ser acessível a partir dos principais navegadores modernos.                                   | Portabilidade    |
-| RNF10         | O sistema deve proteger as interações entre candidatos contra conteúdos inadequados ou abusivos.             | Segurança        |
+| Identificação | Descrição                                                                                                           | Categoria        |
+| ------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| RNF01         | O sistema deve garantir autenticação segura utilizando credenciais únicas e protegidas.                             | Segurança        |
+| RNF02         | O link de recuperação de senha deve possuir tempo de validade máximo de 15 minutos.                                 | Segurança        |
+| RNF03         | O sistema deve validar automaticamente o formato e a autenticidade do CNPJ informado no cadastro da empresa.        | Segurança        |
+| RNF04         | O sistema deve permitir upload e exibição de fotos de perfil com tempo de resposta adequado.                        | Desempenho       |
+| RNF05         | O sistema deve garantir consistência e integridade dos dados de vagas e candidaturas.                               | Confiabilidade   |
+| RNF06         | O dashboard do empregador deve carregar corretamente imagens e dados das vagas e candidatos.                        | Confiabilidade   |
+| RNF07         | O sistema deve permitir manutenção e evolução das funcionalidades sem impacto nas operações existentes.             | Manutenibilidade |
+| RNF08         | O sistema deve ser acessível a partir dos principais navegadores modernos.                                          | Portabilidade    |
+| RNF09         | O sistema deve proteger as interações entre candidatos contra conteúdos inadequados ou abusivos.                    | Segurança        |
+| RNF10         | O sistema deve garantir a privacidade dos dados pessoais dos usuários, conforme as regulamentações aplicáveis.      | Segurança        |
+| RNF11         | O sistema deve ser responsivo, garantindo uma experiência de usuário consistente em dispositivos móveis e desktops. | Usabilidade      |
 
 ## 3. Regras de Negócio (RN)
 
