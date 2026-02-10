@@ -4,35 +4,53 @@ on:
   pull_request:
     branches:
       - develop
+
 jobs:
-  build-and-test:
+  backend-test:
+    name: Backend Tests
     runs-on: ubuntu-latest 
 
-    #services: 
-      #mongodb:
-        #image: mongo:latest
-        #ports:
-
     steps:
-      - name: 1. Checkout do Código
+      - name: Checkout do Código
         uses: actions/checkout@v3 
 
-      - name: 2. Configurar Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x' 
-          cache: 'npm' 
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
 
-      - name: 3. Instalar Dependências
+      - name: Instalar Dependências
         run: npm install
+        working-directory: ./backend
 
-      - name: 4. Executar Testes Automatizados
+      - name: Executar Testes Automatizados
         run: npm test
+        working-directory: ./backend
         env: 
-          #MONGO_URI: ${{secrets.MONGO_URI}}
           SESSION_SECRET: ${{secrets.SESSION_SECRET}} 
-          
 
-      #- name: 5. Verificar Build (se aplicável)
-        #run: npm run build --if-present
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar Dependências
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Build do Frontend
+        run: npm run build
+        working-directory: ./frontend
 

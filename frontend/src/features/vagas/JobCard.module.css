@@ -1,0 +1,66 @@
+.jobCard {
+  background-color: white;
+  color: black;
+  width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: none;
+  background: #fff;
+}
+
+.jobCard:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+}
+
+.jobImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.jobTitle {
+  font-size: 1.1rem;
+  margin: 5px 0;
+  color: #333;
+}
+
+.jobCompany {
+  margin: 0;
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.jobArea {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #95a5a6;
+}
+
+.registerButton {
+  background-color: #dbd534;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.registerButton:hover {
+  background-color: #2980b9;
+  color: #fff;
+}

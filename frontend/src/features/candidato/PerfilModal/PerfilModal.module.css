@@ -1,0 +1,62 @@
+.perfilInfo {
+  text-align: left;
+}
+
+.perfilImagem {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.perfilImagem img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fcef02;
+}
+
+.perfilNome {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.perfilInfo p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+.perfilInfo p strong {
+  color: #333;
+}
+
+.errorMessage {
+  text-align: center;
+  color: #e74c3c;
+  padding: 20px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btnEdit {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  background-color: #dbd534;
+  color: #000;
+  transition: background-color 0.2s;
+}
+
+.btnEdit:hover {
+  background-color: #c4be2e;
+}

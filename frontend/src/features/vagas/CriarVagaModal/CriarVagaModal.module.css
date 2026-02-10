@@ -1,0 +1,161 @@
+.modalOverlay {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow-y: auto;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.closeButton:hover {
+  color: #333;
+}
+
+.pageTitle {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.pageTitle h1 {
+  color: #333;
+  margin: 0;
+}
+
+.formAddVaga {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formRow label {
+  font-weight: 600;
+  color: #333;
+}
+
+.formRow input,
+.formRow select,
+.formRow textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.formRow input:focus,
+.formRow select:focus,
+.formRow textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.formRow textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btnAddVaga {
+  padding: 14px 24px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.btnAddVaga:hover {
+  background-color: #2980b9;
+}
+
+.btnAddVaga:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.successContent {
+  background-color: #fff;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  background-color: #27ae60;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 40px;
+  color: #fff;
+}
+
+.modalSuccessContent h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.modalSuccessContent p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.btnOkSuccess {
+  padding: 12px 40px;
+  background-color: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btnOkSuccess:hover {
+  background-color: #219a52;
+}

@@ -1,0 +1,349 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import AuthLayout from '../../components/Layout/AuthLayout/AuthLayout'
+import { candidatoService } from '../../services/candidatoService'
+import styles from './RegistroCandidato.module.css'
+
+export default function RegistroCandidato() {
+  const navigate = useNavigate()
+  const [currentStep, setCurrentStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    nome: '',
+    imagem: null,
+    cpf: '',
+    educacao: '',
+    qualificacoes: '',
+    cursos: '',
+    descricao: '',
+    telefone: '',
+    habilidades: '',
+    idiomas: '',
+    email: '',
+    senha: ''
+  })
+
+  const steps = [
+    { number: 1, label: 'Dados Básicos' },
+    { number: 2, label: 'Formação' },
+    { number: 3, label: 'Experiência' },
+    { number: 4, label: 'Idiomas' },
+    { number: 5, label: 'Finalizar' }
+  ]
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target
+    if (files) {
+      setFormData(prev => ({ ...prev, [name]: files[0] }))
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }))
+    }
+  }
+
+  const formatCPF = (value) => {
+    const numbers = value.replace(/\D/g, '')
+    return numbers
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1')
+  }
+
+  const formatPhone = (value) => {
+    const numbers = value.replace(/\D/g, '')
+    return numbers
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(-\d{4})\d+?$/, '$1')
+  }
+
+  const handleCPFChange = (e) => {
+    const formatted = formatCPF(e.target.value)
+    setFormData(prev => ({ ...prev, cpf: formatted }))
+  }
+
+  const handlePhoneChange = (e) => {
+    const formatted = formatPhone(e.target.value)
+    setFormData(prev => ({ ...prev, telefone: formatted }))
+  }
+
+  const nextStep = () => {
+    if (currentStep < 5) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const formDataToSend = new FormData()
+      Object.keys(formData).forEach(key => {
+        if (formData[key]) {
+          formDataToSend.append(key, formData[key])
+        }
+      })
+
+      await candidatoService.cadastrar(formDataToSend)
+      navigate('/login')
+    } catch (error) {
+      console.error('Erro:', error)
+      alert(error.data?.message || 'Erro ao cadastrar')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <AuthLayout title='Cadastro de Candidato' backTo='/cargo'>
+      <div className={styles.container}>
+        <p className={styles.formDescription}>
+          Preencha suas informações profissionais para criar seu perfil de candidato.
+          Você poderá complementar as informações posteriormente.
+        </p>
+
+        <p className={styles.requiredNotice}>Campos com * são obrigatórios.</p>
+
+        <div className={styles.progressContainer}>
+          <div className={styles.progressBar}>
+            {steps.map((step) => (
+              <div
+                key={step.number}
+                className={`${styles.progressStep} ${currentStep >= step.number ? styles.active : ''} ${currentStep > step.number ? styles.completed : ''}`}
+              >
+                <div className={styles.stepCircle}>{step.number}</div>
+                <div className={styles.stepLabel}>{step.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          {/* Etapa 1: Dados Básicos */}
+          <div className={`${styles.stepContent} ${currentStep === 1 ? styles.active : ''}`}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Nome*</label>
+              <input
+                type='text'
+                name='nome'
+                value={formData.nome}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Digite seu nome completo'
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Foto de Perfil</label>
+              <input
+                type='file'
+                name='imagem'
+                onChange={handleChange}
+                className={styles.formInput}
+                accept='image/*'
+              />
+              <span className={styles.formHelper}>Formatos aceitos: JPG, PNG, GIF</span>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>CPF*</label>
+              <input
+                type='text'
+                name='cpf'
+                value={formData.cpf}
+                onChange={handleCPFChange}
+                className={styles.formInput}
+                placeholder='000.000.000-00'
+                maxLength={14}
+                required
+              />
+              <span className={styles.formHelper}>Digite apenas números</span>
+            </div>
+
+            <div className={styles.buttonGroup}>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
+                Próximo
+              </button>
+            </div>
+          </div>
+
+          {/* Etapa 2: Formação */}
+          <div className={`${styles.stepContent} ${currentStep === 2 ? styles.active : ''}`}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Educação*</label>
+              <select
+                name='educacao'
+                value={formData.educacao}
+                onChange={handleChange}
+                className={styles.formInput}
+                required
+              >
+                <option value=''>Selecione seu nível de educação</option>
+                <option value='medio'>Ensino Médio</option>
+                <option value='superior'>Ensino Superior</option>
+                <option value='pos'>Pós-Graduação</option>
+                <option value='mestrado'>Mestrado</option>
+                <option value='doutorado'>Doutorado</option>
+              </select>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Qualificações*</label>
+              <input
+                type='text'
+                name='qualificacoes'
+                value={formData.qualificacoes}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Ex: Certificação PMP, CRM, etc.'
+                required
+              />
+            </div>
+
+            <div className={styles.buttonGroup}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
+                Voltar
+              </button>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
+                Próximo
+              </button>
+            </div>
+          </div>
+
+          {/* Etapa 3: Experiência */}
+          <div className={`${styles.stepContent} ${currentStep === 3 ? styles.active : ''}`}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Cursos</label>
+              <input
+                type='text'
+                name='cursos'
+                value={formData.cursos}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Ex: Curso de Inglês, Excel Avançado'
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Descrição da Experiência</label>
+              <textarea
+                name='descricao'
+                value={formData.descricao}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Experiência em gestão de projetos, com foco em metodologias ágeis...'
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Telefone*</label>
+              <input
+                type='tel'
+                name='telefone'
+                value={formData.telefone}
+                onChange={handlePhoneChange}
+                className={styles.formInput}
+                placeholder='(00) 00000-0000'
+                maxLength={15}
+                required
+              />
+            </div>
+
+            <div className={styles.buttonGroup}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
+                Voltar
+              </button>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
+                Próximo
+              </button>
+            </div>
+          </div>
+
+          {/* Etapa 4: Idiomas */}
+          <div className={`${styles.stepContent} ${currentStep === 4 ? styles.active : ''}`}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Habilidades Técnicas</label>
+              <input
+                type='text'
+                name='habilidades'
+                value={formData.habilidades}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Ex: Python, JavaScript, Excel, Photoshop'
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Idiomas</label>
+              <input
+                type='text'
+                name='idiomas'
+                value={formData.idiomas}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Ex: Inglês - Avançado, Espanhol - Intermediário'
+              />
+            </div>
+
+            <div className={styles.buttonGroup}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
+                Voltar
+              </button>
+              <button type='button' className={styles.buttonPrimary} onClick={nextStep}>
+                Próximo
+              </button>
+            </div>
+          </div>
+
+          {/* Etapa 5: Finalizar */}
+          <div className={`${styles.stepContent} ${currentStep === 5 ? styles.active : ''}`}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Email*</label>
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='seu.email@exemplo.com'
+                required
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Senha*</label>
+              <input
+                type='password'
+                name='senha'
+                value={formData.senha}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder='Mínimo 8 caracteres'
+                minLength={8}
+                required
+              />
+              <span className={styles.formHelper}>Mínimo 8 caracteres</span>
+            </div>
+
+            <div className={styles.buttonGroup}>
+              <button type='button' className={styles.buttonSecondary} onClick={prevStep}>
+                Voltar
+              </button>
+              <button type='submit' className={styles.buttonPrimary} disabled={loading}>
+                {loading ? 'Cadastrando...' : 'Finalizar Cadastro'}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </AuthLayout>
+  )
+}

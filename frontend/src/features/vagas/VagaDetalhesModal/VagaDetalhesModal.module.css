@@ -1,0 +1,154 @@
+.modalOverlay {
+  display: flex;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #333;
+}
+
+.closeButton {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: black;
+}
+
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.vagaInfo h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.vagaInfo p {
+  margin: 10px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+.vagaInfo p strong {
+  color: #333;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+}
+
+.candidatarBtn {
+  background-color: #dbd534;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s, box-shadow 0.2s;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+.candidatarBtn:hover {
+  background-color: #2980b9;
+  color: #fff;
+}
+
+.candidatarBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.successContent,
+.warningContent {
+  text-align: center;
+  padding: 20px;
+}
+
+.checkIcon,
+.warningIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+}
+
+.successContent h4,
+.warningContent h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.warningContent p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.btnOk {
+  background-color: #fcef02;
+  color: #000;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: opacity 0.2s;
+}
+
+.btnOk:hover {
+  opacity: 0.9;
+}

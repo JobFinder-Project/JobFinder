@@ -1,0 +1,170 @@
+.dashboardWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+
+.mainContent {
+    flex: 1;
+    margin: 5px 10%;
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.categories {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.categoryArrow {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.categoryArrow:hover {
+    background-color: #f0f0f0;
+}
+
+.categoriesList {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    flex: 1;
+    padding: 5px 0;
+}
+
+.categoriesList::-webkit-scrollbar {
+    display: none;
+}
+
+.categoryChip {
+    padding: 10px 20px;
+    background-color: #ecf0f1;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.categoryChip:hover {
+    background-color: #bdc3c7;
+}
+
+.categoryChip.active {
+    background-color: #ffe100;
+    color: #333;
+}
+
+.jobsFeed {
+    padding: 10px 0;
+}
+
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.jobCard {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.jobCard:hover {
+    transform: translateY(-5px);
+}
+
+.jobImage {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.jobCard h2 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.jobCompany {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.jobArea {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.registerButton {
+    background-color: #ffe100;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    width: 100%;
+}
+
+.registerButton:hover {
+    background-color: #ffd700;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.noData {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        margin: 5px 5%;
+        width: 90%;
+        padding: 15px;
+    }
+
+    .cardGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+}
