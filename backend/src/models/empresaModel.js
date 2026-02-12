@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import VagasSchema from "./vagasModel.js";
+import mongoose from 'mongoose';
+import VagasSchema from './vagasModel.js';
 
 const EmpresaSchema = mongoose.Schema({
   nome: {
@@ -9,7 +9,7 @@ const EmpresaSchema = mongoose.Schema({
       validator: function (v) {
         return /^[a-zA-Zá-ú0-9\-\s]+$/.test(v);
       },
-      message: 'Nome inválido'
+      message: 'Nome inválido',
     },
   },
   cnpj: {
@@ -18,10 +18,10 @@ const EmpresaSchema = mongoose.Schema({
     unique: true,
     validate: {
       validator: function (v) {
-        return /^\d{14}$/.test(v); 
+        return /^\d{14}$/.test(v);
       },
-      message: 'CNPJ inválido'
-    }
+      message: 'CNPJ inválido',
+    },
   },
   email: {
     type: String,
@@ -30,24 +30,23 @@ const EmpresaSchema = mongoose.Schema({
       validator: function (v) {
         return /\S+@\S+\.\S+/.test(v);
       },
-      message: 'Email inválido'
-    }
+      message: 'Email inválido',
+    },
   },
   senha: {
     type: String,
     required: true,
-    minlength: 8
+    minlength: 8,
   },
   fone: {
     type: String,
     required: true,
     validate: {
       validator: function (v) {
-        
         return /^\d{10,11}$/.test(v);
       },
-      message: 'Telefone inválido'
-    }
+      message: 'Telefone inválido',
+    },
   },
   bio: {
     type: String,
@@ -58,16 +57,17 @@ const EmpresaSchema = mongoose.Schema({
     required: false,
   },
   resetToken: {
-    type: String
+    type: String,
   },
   resetTokenExpiration: {
-    type: Date
+    type: Date,
   },
-  vagas: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Vagas'
-  }]
-
+  vagas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Vagas',
+    },
+  ],
 });
 
-export default mongoose.model("Empresa", EmpresaSchema);
+export default mongoose.model('Empresa', EmpresaSchema);

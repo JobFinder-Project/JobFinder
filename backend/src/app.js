@@ -1,25 +1,24 @@
-import express from'express';
-import apiRoutes from "./routes/apiRoutes.js";
-import path from'path';
-import cors from'cors';
+import express from 'express';
+import apiRoutes from './routes/apiRoutes.js';
+import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 
 const app = express();
 
-/* app.use(
+app.use(
   cors({
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-  }),
-); */
+  })
+);
 
 app.use(
   express.urlencoded({
     extended: true,
-  }),
+  })
 );
 app.use(express.json());
 
@@ -29,7 +28,7 @@ const sessionConfig = {
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
-    secure: false, 
+    secure: false,
     httpOnly: true,
     sameSite: 'lax',
   },
@@ -51,15 +50,12 @@ if (process.env.NODE_ENV === 'test') {
   try {
     app.use(session(sessionConfig));
   } catch (erro) {
-    console.error(
-      'Erro fatal ao configurar a sessão do usuário com MongoStore!',
-      erro,
-    );
+    console.error('Erro fatal ao configurar a sessão do usuário com MongoStore!', erro);
     process.exit(1);
   }
 }
 
 // Configuração das rotas
-app.use('/api', apiRoutes); 
+app.use('/api', apiRoutes);
 
 export default app;
