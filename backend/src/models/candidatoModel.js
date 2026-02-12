@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Definição do modelo de Candidato
 const candidatoSchema = mongoose.Schema({
@@ -85,4 +85,4 @@ const candidatoSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('Candidato', candidatoSchema);
+export default mongoose.model('Candidato', candidatoSchema);

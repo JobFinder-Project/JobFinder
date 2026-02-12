@@ -1,11 +1,11 @@
-const request = require('supertest');
-const http = require('http');
-const app = require('../app'); 
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+import request from 'supertest';
+import http from 'http';
+import app from '../app'; 
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-const Candidato = require('../src/models/candidatoModel');
-const Empregador = require('../src/models/empresaModel');
+import Candidato from '../src/models/candidatoModel';
+import Empregador from '../src/models/empresaModel';
 
 let mongoServer;
 let server;

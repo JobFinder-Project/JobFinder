@@ -1,5 +1,4 @@
-require('dotenv').config()
-const mongoose =require('mongoose')
+import mongoose from 'mongoose'
 
 
 // Configuração do Banco de Dados
@@ -9,4 +8,4 @@ const dbUri = process.env.MONGO_URI
 if (!dbUri) {
   throw new Error('MONGO_URI não definida no ambiente')
 }
-module.exports = () => mongoose.connect(dbUri)
+export default () => mongoose.connect(dbUri)

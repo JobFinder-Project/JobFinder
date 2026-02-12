@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Definição do modelo de uma Vaga
 const VagasSchema = new mongoose.Schema({
@@ -15,4 +15,4 @@ const VagasSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Vagas', VagasSchema);
+export default mongoose.model('Vagas', VagasSchema);

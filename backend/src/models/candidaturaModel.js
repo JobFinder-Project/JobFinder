@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 // Definição do modelo de uma Candidatura
 const relacaoSchema = new mongoose.Schema({
@@ -26,4 +26,4 @@ const relacaoSchema = new mongoose.Schema({
     timestamps: true 
 });
 
-module.exports = mongoose.model('Candidatura', relacaoSchema);
+export default mongoose.model('Candidatura', relacaoSchema);

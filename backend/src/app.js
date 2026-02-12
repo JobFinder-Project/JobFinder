@@ -1,22 +1,20 @@
-const express = require('express');
-const apiRoutes = require('./src/routes/apiRoutes');
-const path = require('path');
-const cors = require('cors');
-
-require('dotenv').config();
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+import express from'express';
+import apiRoutes from "./routes/apiRoutes.js";
+import path from'path';
+import cors from'cors';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 
 const app = express();
 
-app.use(
+/* app.use(
   cors({
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   }),
-);
+); */
 
 app.use(
   express.urlencoded({
@@ -64,4 +62,4 @@ if (process.env.NODE_ENV === 'test') {
 // Configuração das rotas
 app.use('/api', apiRoutes); 
 
-module.exports = app;
+export default app;

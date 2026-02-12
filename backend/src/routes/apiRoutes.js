@@ -1,15 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const multer = require('multer');
+import multer from 'multer';
 const upload = multer();
 
-const Candidato = require('../models/candidatoModel');
-const Empresa = require('../models/empresaModel');
-const Vaga = require('../models/vagasModel');
-const Candidatura = require('../models/candidaturaModel');
-const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
+import Candidato from "../models/candidatoModel.js";
+import Empresa from "../models/empresaModel.js";
+import Vaga from "../models/vagasModel.js";
+import Candidatura from "../models/candidaturaModel.js";
+import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 const isAuthenticatedApi = (req, res, next) => {
     if (req.session && req.session.user) {
@@ -714,4 +714,4 @@ router.get('/areas', async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

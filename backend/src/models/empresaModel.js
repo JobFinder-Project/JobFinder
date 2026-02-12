@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const VagasSchema = require('./vagasModel')
+import mongoose from 'mongoose'
+import VagasSchema from "./vagasModel.js";
 
 const EmpresaSchema = mongoose.Schema({
   nome: {
@@ -70,4 +70,4 @@ const EmpresaSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("Empresa", EmpresaSchema);
+export default mongoose.model("Empresa", EmpresaSchema);

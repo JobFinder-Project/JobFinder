@@ -1,5 +1,5 @@
 // Verifica se o usuário está autenticado
-exports.isAuthenticated = (req, res, next) => {
+export const isAuthenticated = (req, res, next) => {
     try {
         //console.log("req.session em isAuthenticated:", req.session) //print no teminal dos dados de sessao
         if (req.session && req.session.user) {
@@ -16,7 +16,7 @@ exports.isAuthenticated = (req, res, next) => {
 };
 
 // Verifica se a sessão do usuário é de Candidato
-exports.isCandidato = (req, res, next) => {
+export const isCandidato = (req, res, next) => {
     try {
         if (req.session.user && req.session.user.role === 'candidato') {
             return next();
@@ -32,7 +32,7 @@ exports.isCandidato = (req, res, next) => {
 };
 
 // Verifica se a sessão do usuário é de Empresa
-exports.isEmpresa = (req, res, next) => {
+export const isEmpresa = (req, res, next) => {
     try {
         if (req.session.user && req.session.user.role === 'empresa') {
             return next();
@@ -48,7 +48,7 @@ exports.isEmpresa = (req, res, next) => {
 };
 
 // Verifica se a sessão do usuário é de Candidato
-exports.isCandidato = (req, res, next) => {
+export const isCandidato = (req, res, next) => {
     try {
         if (req.session.user && req.session.user.role === 'candidato') {
             return next();
@@ -64,7 +64,7 @@ exports.isCandidato = (req, res, next) => {
 };
 
 // Verifica se a sessão do usuário é de Empresa
-exports.isEmpresa = (req, res, next) => {
+export const isEmpresa = (req, res, next) => {
     try {
         if (req.session.user && req.session.user.role === 'empresa') {
             return next();
