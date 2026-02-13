@@ -3,9 +3,11 @@ import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
+import Error400 from '../errors/Error400.js';
+import Error404 from '../errors/Error404.js';
 
 class AuthController {
-  static async login(req, res) {
+  static async login(req, res, next) {
     const { email, senha } = req.body;
 
     try {
@@ -22,12 +24,12 @@ class AuthController {
       }
 
       if (!user) {
-        return res.status(401).json({ error: 'Email ou senha incorretos' });
+        return next(new Error400('Email ou senha incorretos'));
       }
 
       const senhaValida = await bcrypt.compare(senha, user.senha);
       if (!senhaValida) {
-        return res.status(401).json({ error: 'Email ou senha incorretos' });
+        return next(new Error400('Email ou senha incorretos'));
       }
 
       req.session.user = {
@@ -39,52 +41,50 @@ class AuthController {
 
       const redirectUrl = role === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard';
 
-      res.json({
+      res.status(200).json({
         message: 'Login bem-sucedido',
         user: req.session.user,
         redirectUrl,
       });
     } catch (erro) {
       console.error('Erro no login:', erro);
-      res.status(500).json({ error: 'Erro no servidor ao realizar login' });
+      next(erro);
     }
   }
 
-  static async getMe(req, res) {
+  static async getMe(req, res, next) {
     try {
       if (req.session && req.session.user) {
-        return res.json({
+        return res.status(200).json({
           authenticated: true,
           user: req.session.user,
         });
       }
-      return res.json({ authenticated: false });
+      return res.status(200).json({ authenticated: false });
     } catch (error) {
       console.error('Erro na rota /me:', error);
-      return res.json({ authenticated: false });
+      next(error);
     }
   }
 
-  static async logout(req, res) {
+  static async logout(req, res, next) {
     req.session.destroy((erro) => {
       if (erro) {
-        return res.status(500).json({ error: 'Erro ao finalizar sessão' });
+        return next(erro);
       }
       res.clearCookie('connect.sid');
-      res.json({ success: true, message: 'Logout realizado com sucesso' });
+      res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
     });
   }
 
-  static async enviarRecuperarSenha(req, res) {
+  static async enviarRecuperarSenha(req, res, next) {
     try {
       const user =
         (await Candidato.findOne({ email: req.body.email })) ||
         (await Empresa.findOne({ email: req.body.email }));
 
       if (!user) {
-        return res.status(404).json({
-          error: 'O e-mail informado não consta em nossa base de dados.',
-        });
+        return next(new Error404('O e-mail informado não consta em nossa base de dados.'));
       }
 
       const transporter = nodemailer.createTransport({
@@ -119,19 +119,17 @@ class AuthController {
 
       await transporter.sendMail(mailOptions);
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: 'E-mail de recuperação enviado com sucesso!',
       });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({
-        error: 'Erro ao tentar enviar o e-mail de recuperação. Tente novamente!',
-      });
+      next(erro);
     }
   }
 
-  static async redefinirSenha(req, res) {
+  static async redefinirSenha(req, res, next) {
     try {
       const { token } = req.params;
 
@@ -146,7 +144,7 @@ class AuthController {
         }));
 
       if (!user) {
-        return res.status(404).json({ error: 'O token de redefinição é inválido ou expirou.' });
+        return next(new Error404('O token de redefinição é inválido ou expirou.'));
       }
 
       const salt = await bcrypt.genSalt(12);
@@ -155,10 +153,10 @@ class AuthController {
       user.resetTokenExpiration = undefined;
       await user.save();
 
-      res.json({ success: true, message: 'Senha redefinida com sucesso!' });
+      res.status(200).json({ success: true, message: 'Senha redefinida com sucesso!' });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao redefinir a senha. Tente novamente!' });
+      next(erro);
     }
   }
 }

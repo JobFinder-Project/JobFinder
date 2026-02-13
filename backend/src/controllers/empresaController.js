@@ -2,19 +2,21 @@ import bcrypt from 'bcrypt';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Vaga from '../models/vagasModel.js';
+import Error400 from '../errors/Error400.js';
+import Error404 from '../errors/Error404.js';
 
 class EmpresaController {
-  static async cadastrarEmpresa(req, res) {
+  static async cadastrarEmpresa(req, res, next) {
     try {
       const { email, senha } = req.body;
       const userExiste = (await Candidato.findOne({ email })) || (await Empresa.findOne({ email }));
 
       if (userExiste) {
-        return res.status(422).json({ error: 'Email já utilizado no sistema' });
+        return next(new Error400('Email já utilizado no sistema'));
       }
 
-      if (!senha || typeof senha !== 'string') {
-        return res.status(400).json({ error: 'A senha é obrigatória e deve ser texto.' });
+      if (typeof senha !== 'string') {
+        return next(new Error400('O campo senha deve ser texto.'));
       }
 
       const salt = await bcrypt.genSalt(12);
@@ -31,19 +33,19 @@ class EmpresaController {
       });
 
       await novaEmpresa.save();
-      res.json({ success: true, message: 'Empresa cadastrada com sucesso' });
+      res.status(201).json({ success: true, message: 'Empresa cadastrada com sucesso' });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao cadastrar empresa' });
+      next(erro);
     }
   }
 
-  static async acessarDashboard(req, res) {
+  static async acessarDashboard(req, res, next) {
     try {
       const empresa = await Empresa.findById(req.session.user.id);
 
       if (!empresa) {
-        return res.status(404).json({ error: 'Perfil de empresa não encontrado.' });
+        return next(new Error404('Perfil de empresa não encontrado.'));
       }
 
       const vagas = await Vaga.find({ empresa: empresa._id });
@@ -61,21 +63,21 @@ class EmpresaController {
         empresaFormatada.imagem = `data:${empresa.imagem.contentType};base64,${empresa.imagem.data.toString('base64')}`;
       }
 
-      res.json({ empresa: empresaFormatada, vagas: vagasFormatadas });
+      res.status(200).json({ empresa: empresaFormatada, vagas: vagasFormatadas });
     } catch (erro) {
       console.error('Erro no Dashboard Empresa:', erro);
-      res.status(500).json({ error: 'Erro ao carregar dashboard' });
+      next(erro);
     }
   }
 
-  static async editarPerfil(req, res) {
+  static async editarPerfil(req, res, next) {
     try {
       const empresaId = req.session.user.id;
       const { nome, email, fone, bio, site } = req.body;
 
       const empresa = await Empresa.findById(empresaId);
       if (!empresa) {
-        return res.status(404).json({ error: 'Empresa não encontrada' });
+        return next(new Error404('Empresa não encontrada.'));
       }
 
       if (nome !== undefined) empresa.nome = nome;
@@ -86,7 +88,7 @@ class EmpresaController {
 
       await empresa.save();
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: 'Perfil atualizado com sucesso',
         empresa: {
@@ -100,18 +102,18 @@ class EmpresaController {
       });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao atualizar perfil' });
+      next(erro);
     }
   }
 
-  static async criarVagas(req, res) {
+  static async criarVagas(req, res, next) {
     try {
       const empresaId = req.session.user.id;
       const { nome, area, requisitos } = req.body;
 
       const empresa = await Empresa.findById(empresaId);
       if (!empresa) {
-        return res.status(404).json({ error: 'Empresa não encontrada' });
+        return next(new Error404('Empresa não encontrada.'));
       }
 
       const dadosVaga = {
@@ -134,18 +136,18 @@ class EmpresaController {
       empresa.vagas.push(novaVaga._id);
       await empresa.save();
 
-      res.json({
+      res.status(201).json({
         success: true,
         message: 'Vaga criada com sucesso',
         vaga: novaVaga,
       });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao criar vaga' });
+      next(erro);
     }
   }
 
-  static async buscarCandidatos(req, res) {
+  static async buscarCandidatos(req, res, next) {
     try {
       const { q } = req.query;
 
@@ -168,10 +170,10 @@ class EmpresaController {
         return { ...c._doc, imagem: imagemBase64 };
       });
 
-      res.json({ candidatos: candidatosComImagens, query: q });
+      res.status(200).json({ candidatos: candidatosComImagens, query: q });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao buscar candidatos' });
+      next(erro);
     }
   }
 }

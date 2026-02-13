@@ -2,19 +2,22 @@ import bcrypt from 'bcrypt';
 import Candidato from '../models/candidatoModel.js';
 import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
+import Empresa from '../models/empresaModel.js';
+import Error400 from '../errors/Error400.js';
+import Error404 from '../errors/Error404.js';
 
 class CandidatoController {
-  static async cadastrarCandidato(req, res) {
+  static async cadastrarCandidato(req, res, next) {
     try {
       const { email, senha } = req.body;
       const userExiste = (await Candidato.findOne({ email })) || (await Empresa.findOne({ email }));
 
       if (userExiste) {
-        return res.status(422).json({ error: 'Email já utilizado no sistema' });
+        return next(new Error400('Email já utilizado no sistema'));
       }
 
-      if (!senha || typeof senha !== 'string') {
-        return res.status(400).json({ error: 'A senha é obrigatória e deve ser texto.' });
+      if (typeof senha !== 'string') {
+        return next(new Error400('Campo senha deve ser uma string'));
       }
 
       const salt = await bcrypt.genSalt(12);
@@ -41,21 +44,21 @@ class CandidatoController {
       });
 
       await novoCandidato.save();
-      res.json({ success: true, message: 'Cadastro realizado com sucesso' });
+      res.status(201).json({ success: true, message: 'Cadastro realizado com sucesso' });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao cadastrar candidato' });
+      next(erro);
     }
   }
 
-  static async acessarDashboard(req, res) {
+  static async acessarDashboard(req, res, next) {
     try {
       const candidatoId = req.session.user.id;
       const vagas = await Vaga.find().populate('empresa');
       const candidato = await Candidato.findById(candidatoId, '-senha');
 
       if (!candidato) {
-        return res.status(404).json({ error: 'Candidato não encontrado' });
+        return next(new Error404('Candidato não encontrado'));
       }
 
       const vagasComImagens = vagas.map((vaga) => {
@@ -76,7 +79,7 @@ class CandidatoController {
         };
       }
 
-      res.json({
+      res.status(200).json({
         candidatoId,
         candidato: candidatoFormatado,
         vagas: vagasComImagens,
@@ -84,11 +87,11 @@ class CandidatoController {
       });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao carregar dashboard' });
+      next(erro);
     }
   }
 
-  static async editarPerfil(req, res) {
+  static async editarPerfil(req, res, next) {
     try {
       const candidatoId = req.session.user.id;
       const {
@@ -105,7 +108,7 @@ class CandidatoController {
 
       const candidato = await Candidato.findById(candidatoId);
       if (!candidato) {
-        return res.status(404).json({ error: 'Candidato não encontrado' });
+        return next(new Error404('Candidato não encontrado'));
       }
 
       if (nome !== undefined) candidato.nome = nome;
@@ -142,17 +145,17 @@ class CandidatoController {
 
       await candidato.save();
 
-      res.json({
+      res.status(200).json({
         success: true,
         message: 'Perfil atualizado com sucesso',
       });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao atualizar perfil' });
+      next(erro);
     }
   }
 
-  static async realizarCandidatura(req, res) {
+  static async realizarCandidatura(req, res, next) {
     try {
       const candidatoId = req.session.user.id;
       const vagaId = req.params.vagaId;
@@ -163,12 +166,12 @@ class CandidatoController {
       });
 
       if (candidaturaExistente) {
-        return res.status(400).json({ error: 'Você já se candidatou a esta vaga' });
+        return next(new Error400('Você já se candidatou para esta vaga'));
       }
 
       const vaga = await Vaga.findById(vagaId);
       if (!vaga) {
-        return res.status(404).json({ error: 'Vaga não encontrada' });
+        return next(new Error404('Vaga não encontrada'));
       }
 
       const novaCandidatura = new Candidatura({
@@ -179,14 +182,14 @@ class CandidatoController {
       });
 
       await novaCandidatura.save();
-      res.json({ success: true, message: 'Candidatura realizada com sucesso' });
+      res.status(201).json({ success: true, message: 'Candidatura realizada com sucesso' });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao realizar candidatura' });
+      next(erro);
     }
   }
 
-  static async listarCandidaturas(req, res) {
+  static async listarCandidaturas(req, res, next) {
     try {
       const candidatoId = req.session.user.id;
       const candidaturas = await Candidatura.find({
@@ -208,21 +211,21 @@ class CandidatoController {
           : null,
       }));
 
-      res.json({ candidaturas: candidaturasFormatadas });
+      res.status(200).json({ candidaturas: candidaturasFormatadas });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao carregar candidaturas' });
+      next(erro);
     }
   }
 
-  static async deletarCandidatura(req, res) {
+  static async deletarCandidatura(req, res, next) {
     try {
       const { candidaturaId } = req.params;
       await Candidatura.findByIdAndDelete(candidaturaId);
-      res.json({ success: true, message: 'Candidatura deletada com sucesso' });
+      res.status(200).json({ success: true, message: 'Candidatura deletada com sucesso' });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao deletar candidatura' });
+      next(erro);
     }
   }
 }

@@ -1,7 +1,7 @@
 import Vaga from '../models/vagasModel.js';
 
 class VagasController {
-  static async buscarVagas(req, res) {
+  static async buscarVagas(req, res, next) {
     try {
       const { q, area } = req.query;
       let query = {};
@@ -27,21 +27,21 @@ class VagasController {
         return { ...v._doc, imagem: imagemBase64 };
       });
 
-      res.json({ vagas: vagasFormatadas });
+      res.status(200).json({ vagas: vagasFormatadas });
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao buscar vagas' });
+      next(erro);
     }
   }
 
-  static async listarAreas(req, res) {
+  static async listarAreas(req, res, next) {
     try {
       const vagas = await Vaga.find({}, 'area');
       const areas = [...new Set(vagas.map((v) => v.area))];
-      res.json(areas);
+      res.status(200).json(areas);
     } catch (erro) {
       console.error(erro);
-      res.status(500).json({ error: 'Erro ao buscar áreas' });
+      next(erro);
     }
   }
 }
