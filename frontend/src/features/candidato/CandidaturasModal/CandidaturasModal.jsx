@@ -37,7 +37,7 @@ export default function CandidaturasModal({ candidatoId, onClose }) {
 
   const handleConfirmarCancelamento = async () => {
     try {
-      await candidatoService.cancelarCandidatura(candidatoId, selectedCandidatura._id)
+      await candidatoService.cancelarCandidatura(selectedCandidatura._id)
       setResultMessage('Candidatura cancelada com sucesso!')
       setView('resultado')
       fetchCandidaturas()

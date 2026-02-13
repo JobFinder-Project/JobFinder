@@ -125,7 +125,7 @@ export default function EditarPerfilCandidato() {
         formDataToSend.append('imagem', formData.imagem)
       }
 
-      await candidatoService.atualizarPerfil(candidatoId, formDataToSend)
+      await candidatoService.atualizarPerfil(formDataToSend)
       alert('Perfil atualizado com sucesso!')
       navigate('/candidato/dashboard')
     } catch (error) {
@@ -144,7 +144,7 @@ export default function EditarPerfilCandidato() {
     <AuthLayout title='Editar Perfil' backTo='/candidato/dashboard' showHelp={false}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          
+
           <div className={styles.imageSection}>
             {previewImage && (
               <img src={previewImage} alt='Preview' className={styles.previewImage} />

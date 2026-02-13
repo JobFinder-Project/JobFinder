@@ -1,5 +1,5 @@
 import express from 'express';
-import apiRoutes from './routes/apiRoutes.js';
+import routes from './routes/index.js';
 import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
@@ -14,13 +14,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
-app.use(express.json());
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'fallback-key',
@@ -56,6 +49,6 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 // Configuração das rotas
-app.use('/api', apiRoutes);
+routes(app, '/api');
 
 export default app;
