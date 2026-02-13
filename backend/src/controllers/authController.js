@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
-import Candidato from '../models/Candidato.js';
-import Empresa from '../models/Empresa.js';
+import Candidato from '../models/candidatoModel.js';
+import Empresa from '../models/empresaModel.js';
 
 class AuthController {
   static async login(req, res) {
