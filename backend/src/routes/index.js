@@ -10,9 +10,9 @@ const routes = (app, basePath = '/api') => {
   app.use(express.urlencoded({ extended: true }));
 
   app.use(`${basePath}`, authRoutes);
-  app.use(`${basePath}`, vagasRoutes);
   app.use(`${basePath}/candidato`, candidatoRoutes);
   app.use(`${basePath}/empresa`, empresaRoutes);
+  app.use(`${basePath}`, vagasRoutes);
 
   app.use(notFound);
   app.use(globalError);
