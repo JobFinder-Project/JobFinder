@@ -60,7 +60,7 @@ export const empresaPaths = {
       requestBody: {
         required: true,
         content: {
-          'multipart/form-data': {
+          'application/json': {
             schema: { $ref: '#/components/schemas/VagaCriarFormData' },
           },
         },

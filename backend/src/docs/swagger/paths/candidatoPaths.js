@@ -6,7 +6,7 @@ export const candidatoPaths = {
       requestBody: {
         required: true,
         content: {
-          'multipart/form-data': {
+          'application/json': {
             schema: { $ref: '#/components/schemas/CandidatoCadastroFormData' },
           },
         },
@@ -39,7 +39,7 @@ export const candidatoPaths = {
       requestBody: {
         required: true,
         content: {
-          'multipart/form-data': {
+          'application/json': {
             schema: { $ref: '#/components/schemas/CandidatoEditarFormData' },
           },
         },
