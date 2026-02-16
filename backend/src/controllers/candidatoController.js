@@ -5,6 +5,7 @@ import Candidatura from '../models/candidaturaModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { toCandidaturaDTO, toCandidatoDTO, toVagaDTO } from '../dtos/index.js';
 
 class CandidatoController {
   static async cadastrarCandidato(req, res, next) {
@@ -61,28 +62,12 @@ class CandidatoController {
         return next(new Error404('Candidato não encontrado'));
       }
 
-      const vagasComImagens = vagas.map((vaga) => {
-        let imagemBase64 = null;
-        if (vaga.imagem && vaga.imagem.data) {
-          imagemBase64 = `data:${vaga.imagem.contentType};base64,${vaga.imagem.data.toString('base64')}`;
-        }
-        return { ...vaga._doc, imagem: imagemBase64 };
-      });
-
       const areas = [...new Set(vagas.map((vaga) => vaga.area))];
-
-      let candidatoFormatado = candidato.toObject();
-      if (candidato.imagem && candidato.imagem.data) {
-        candidatoFormatado.imagem = {
-          contentType: candidato.imagem.contentType,
-          data: candidato.imagem.data.toString('base64'),
-        };
-      }
 
       res.status(200).json({
         candidatoId,
-        candidato: candidatoFormatado,
-        vagas: vagasComImagens,
+        candidato: toCandidatoDTO(candidato),
+        vagas: vagas.map(toVagaDTO),
         areas,
       });
     } catch (erro) {
@@ -182,7 +167,11 @@ class CandidatoController {
       });
 
       await novaCandidatura.save();
-      res.status(201).json({ success: true, message: 'Candidatura realizada com sucesso' });
+      res.status(201).json({
+        success: true,
+        message: 'Candidatura realizada com sucesso',
+        candidatura: toCandidaturaDTO(novaCandidatura),
+      });
     } catch (erro) {
       console.error(erro);
       next(erro);
@@ -199,19 +188,9 @@ class CandidatoController {
         populate: { path: 'empresa' },
       });
 
-      const candidaturasFormatadas = candidaturas.map((c) => ({
-        ...c._doc,
-        vaga: c.vaga
-          ? {
-              ...c.vaga._doc,
-              imagem: c.vaga.imagem?.data
-                ? `data:${c.vaga.imagem.contentType};base64,${c.vaga.imagem.data.toString('base64')}`
-                : null,
-            }
-          : null,
-      }));
-
-      res.status(200).json({ candidaturas: candidaturasFormatadas });
+      res.status(200).json({
+        candidaturas: candidaturas.map(toCandidaturaDTO),
+      });
     } catch (erro) {
       console.error(erro);
       next(erro);

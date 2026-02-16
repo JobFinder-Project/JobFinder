@@ -1,4 +1,5 @@
 import Vaga from '../models/vagasModel.js';
+import { toVagaDTO } from '../dtos/index.js';
 
 class VagasController {
   static async buscarVagas(req, res, next) {
@@ -18,16 +19,7 @@ class VagasController {
       }
 
       const vagas = await Vaga.find(query).populate('empresa');
-
-      const vagasFormatadas = vagas.map((v) => {
-        let imagemBase64 = null;
-        if (v.imagem && v.imagem.data) {
-          imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
-        }
-        return { ...v._doc, imagem: imagemBase64 };
-      });
-
-      res.status(200).json({ vagas: vagasFormatadas });
+      res.status(200).json({ vagas: vagas.map(toVagaDTO) });
     } catch (erro) {
       console.error(erro);
       next(erro);

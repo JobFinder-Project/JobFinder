@@ -4,6 +4,7 @@ import Empresa from '../models/empresaModel.js';
 import Vaga from '../models/vagasModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO } from '../dtos/index.js';
 
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
@@ -50,20 +51,10 @@ class EmpresaController {
 
       const vagas = await Vaga.find({ empresa: empresa._id });
 
-      const vagasFormatadas = vagas.map((v) => {
-        let imagemBase64 = null;
-        if (v.imagem && v.imagem.data) {
-          imagemBase64 = `data:${v.imagem.contentType};base64,${v.imagem.data.toString('base64')}`;
-        }
-        return { ...v._doc, imagem: imagemBase64 };
+      res.status(200).json({
+        empresa: toEmpresaDTO(empresa),
+        vagas: vagas.map(toVagaDTO),
       });
-
-      let empresaFormatada = { ...empresa._doc };
-      if (empresa.imagem && empresa.imagem.data) {
-        empresaFormatada.imagem = `data:${empresa.imagem.contentType};base64,${empresa.imagem.data.toString('base64')}`;
-      }
-
-      res.status(200).json({ empresa: empresaFormatada, vagas: vagasFormatadas });
     } catch (erro) {
       console.error('Erro no Dashboard Empresa:', erro);
       next(erro);
@@ -82,7 +73,7 @@ class EmpresaController {
 
       if (nome !== undefined) empresa.nome = nome;
       if (email !== undefined) empresa.email = email;
-      if (fone !== undefined) empresa.fone = fone.replace(/\D/g, '');
+      if (fone !== undefined) empresa.fone = fone;
       if (bio !== undefined) empresa.bio = bio;
       if (site !== undefined) empresa.site = site;
 
@@ -91,14 +82,7 @@ class EmpresaController {
       res.status(200).json({
         success: true,
         message: 'Perfil atualizado com sucesso',
-        empresa: {
-          _id: empresa._id,
-          nome: empresa.nome,
-          email: empresa.email,
-          fone: empresa.fone,
-          bio: empresa.bio,
-          site: empresa.site,
-        },
+        empresa: toEmpresaDTO(empresa),
       });
     } catch (erro) {
       console.error(erro);
@@ -139,7 +123,7 @@ class EmpresaController {
       res.status(201).json({
         success: true,
         message: 'Vaga criada com sucesso',
-        vaga: novaVaga,
+        vaga: toVagaDTO(novaVaga),
       });
     } catch (erro) {
       console.error(erro);
@@ -162,15 +146,9 @@ class EmpresaController {
         '-senha'
       );
 
-      const candidatosComImagens = candidatos.map((c) => {
-        let imagemBase64 = null;
-        if (c.imagem && c.imagem.data) {
-          imagemBase64 = `data:${c.imagem.contentType};base64,${c.imagem.data.toString('base64')}`;
-        }
-        return { ...c._doc, imagem: imagemBase64 };
+      res.status(200).json({
+        candidatos: candidatos.map(toCandidatoPublicDTO),
       });
-
-      res.status(200).json({ candidatos: candidatosComImagens, query: q });
     } catch (erro) {
       console.error(erro);
       next(erro);

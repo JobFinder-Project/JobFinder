@@ -5,6 +5,7 @@ import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { toLoginResponseDTO, toAuthUserDTO } from '../dtos/index.js';
 
 class AuthController {
   static async login(req, res, next) {
@@ -39,13 +40,7 @@ class AuthController {
         role: role,
       };
 
-      const redirectUrl = role === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard';
-
-      res.status(200).json({
-        message: 'Login bem-sucedido',
-        user: req.session.user,
-        redirectUrl,
-      });
+      res.status(200).json(toLoginResponseDTO({ user, role }));
     } catch (erro) {
       console.error('Erro no login:', erro);
       next(erro);
@@ -57,7 +52,7 @@ class AuthController {
       if (req.session && req.session.user) {
         return res.status(200).json({
           authenticated: true,
-          user: req.session.user,
+          user: toAuthUserDTO(req.session.user),
         });
       }
       return res.status(200).json({ authenticated: false });
