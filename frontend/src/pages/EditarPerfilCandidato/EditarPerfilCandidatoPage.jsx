@@ -41,7 +41,7 @@ export default function EditarPerfilCandidato() {
           email: candidato.email || '',
           telefone: candidato.telefone || '',
           educacao: candidato.educacao || '',
-          qualificacao: candidato.qualificacao || '',
+          qualificacoes: candidato.qualificacoes || '',
           cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
           descricao: candidato.descricao || '',
           habilidadesTecnicas: candidato.habilidadesTecnicas || '',
@@ -257,7 +257,7 @@ export default function EditarPerfilCandidato() {
               <label className={styles.formLabel}>Qualificações</label>
               <textarea
                 name='qualificacao'
-                value={formData.qualificacao}
+                value={formData.qualificacoes}
                 onChange={handleChange}
                 className={styles.formTextarea}
                 placeholder='Descreva suas qualificações profissionais'

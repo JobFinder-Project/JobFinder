@@ -11,10 +11,10 @@ export const toCandidatoDTO = (candidatoDoc) => {
     email: c.email,
     telefone: c.telefone,
     educacao: c.educacao,
-    qualificacoes: c.qualificacoes ?? c.qualificacao,
+    qualificacoes: c.qualificacao,
     cursos: c.cursos,
     descricao: c.descricao,
-    habilidades: c.habilidades ?? c.habilidadesTecnicas,
+    habilidadesTecnicas: c.habilidades ?? c.habilidadesTecnicas,
     idiomas: c.idiomas,
     imagem: c.imagem?.data
       ? {
@@ -38,7 +38,7 @@ export const toCandidatoPublicDTO = (candidatoDoc) => {
     qualificacoes: c.qualificacoes ?? c.qualificacao,
     cursos: c.cursos,
     descricao: c.descricao,
-    habilidades: c.habilidades ?? c.habilidadesTecnicas,
+    habilidadesTecnicas: c.habilidades ?? c.habilidadesTecnicas,
     idiomas: c.idiomas,
     imagem: toImageDataUrl(c.imagem),
   });

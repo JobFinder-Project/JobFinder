@@ -26,7 +26,7 @@ export default function BuscaVagas() {
   const fetchVagas = async () => {
     try {
       const data = await vagasService.buscar({ q: query, area: selectedCategory })
-      setVagas(data.vagas || [])
+      setVagas(data || [])
     } catch (error) {
       console.error('Erro ao buscar vagas:', error)
     } finally {
