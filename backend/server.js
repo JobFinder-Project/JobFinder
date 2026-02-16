@@ -11,7 +11,7 @@ connectDb()
     console.log(' >> Banco de dados conectado com sucesso:\n');
     app
       .listen(PORT, () => {
-        console.log(`>> Servidor rodando na porta http://localhost:${PORT}/home\n`);
+        console.log(`>> Servidor rodando na porta http://localhost:${PORT}/api/docs/\n`);
       })
       .on('error', (err) => console.log('Erro ao ligar o servidor:\n', err));
   })

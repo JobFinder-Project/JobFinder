@@ -3,6 +3,7 @@ import routes from './routes/index.js';
 import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import { setupSwagger } from './docs/swagger.js';
 
 const app = express();
 
@@ -47,6 +48,9 @@ if (process.env.NODE_ENV === 'test') {
     process.exit(1);
   }
 }
+
+// Configuração da documentação Swagger
+setupSwagger(app);
 
 // Configuração das rotas
 routes(app, '/api');
