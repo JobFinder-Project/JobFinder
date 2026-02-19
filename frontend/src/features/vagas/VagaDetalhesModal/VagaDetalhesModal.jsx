@@ -13,7 +13,7 @@ export default function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
     setLoading(true)
 
     try {
-      await candidatoService.candidatarVaga(candidatoId, vaga._id)
+      await candidatoService.candidatarVaga(vaga._id)
       setShowSuccessModal(true)
     } catch (error) {
       console.error('Erro ao candidatar:', error)

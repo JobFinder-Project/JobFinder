@@ -1,11 +1,9 @@
-const express = require('express');
-const apiRoutes = require('./src/routes/apiRoutes');
-const path = require('path');
-const cors = require('cors');
-
-require('dotenv').config();
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+import express from 'express';
+import routes from './routes/index.js';
+import cors from 'cors';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
+import { setupSwagger } from './docs/swagger.js';
 
 const app = express();
 
@@ -15,15 +13,8 @@ app.use(
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-  }),
+  })
 );
-
-app.use(
-  express.urlencoded({
-    extended: true,
-  }),
-);
-app.use(express.json());
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'fallback-key',
@@ -31,7 +22,7 @@ const sessionConfig = {
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
-    secure: false, 
+    secure: false,
     httpOnly: true,
     sameSite: 'lax',
   },
@@ -53,15 +44,15 @@ if (process.env.NODE_ENV === 'test') {
   try {
     app.use(session(sessionConfig));
   } catch (erro) {
-    console.error(
-      'Erro fatal ao configurar a sessão do usuário com MongoStore!',
-      erro,
-    );
+    console.error('Erro fatal ao configurar a sessão do usuário com MongoStore!', erro);
     process.exit(1);
   }
 }
 
-// Configuração das rotas
-app.use('/api', apiRoutes); 
+// Configuração da documentação Swagger
+setupSwagger(app);
 
-module.exports = app;
+// Configuração das rotas
+routes(app, '/api');
+
+export default app;

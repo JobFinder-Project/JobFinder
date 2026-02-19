@@ -41,7 +41,7 @@ export default function EditarPerfilCandidato() {
           email: candidato.email || '',
           telefone: candidato.telefone || '',
           educacao: candidato.educacao || '',
-          qualificacao: candidato.qualificacao || '',
+          qualificacoes: candidato.qualificacoes || '',
           cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
           descricao: candidato.descricao || '',
           habilidadesTecnicas: candidato.habilidadesTecnicas || '',
@@ -125,7 +125,7 @@ export default function EditarPerfilCandidato() {
         formDataToSend.append('imagem', formData.imagem)
       }
 
-      await candidatoService.atualizarPerfil(candidatoId, formDataToSend)
+      await candidatoService.atualizarPerfil(formDataToSend)
       alert('Perfil atualizado com sucesso!')
       navigate('/candidato/dashboard')
     } catch (error) {
@@ -144,7 +144,7 @@ export default function EditarPerfilCandidato() {
     <AuthLayout title='Editar Perfil' backTo='/candidato/dashboard' showHelp={false}>
       <div className={styles.container}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          
+
           <div className={styles.imageSection}>
             {previewImage && (
               <img src={previewImage} alt='Preview' className={styles.previewImage} />
@@ -257,7 +257,7 @@ export default function EditarPerfilCandidato() {
               <label className={styles.formLabel}>Qualificações</label>
               <textarea
                 name='qualificacao'
-                value={formData.qualificacao}
+                value={formData.qualificacoes}
                 onChange={handleChange}
                 className={styles.formTextarea}
                 placeholder='Descreva suas qualificações profissionais'

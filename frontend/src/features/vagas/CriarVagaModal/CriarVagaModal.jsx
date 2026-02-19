@@ -48,7 +48,7 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
         data.append('imagem', imagem)
       }
 
-      await empresaService.criarVaga(empresaId, data)
+      await empresaService.criarVaga(data)
       setShowSuccess(true)
     } catch (error) {
       console.error('Erro ao criar vaga:', error)

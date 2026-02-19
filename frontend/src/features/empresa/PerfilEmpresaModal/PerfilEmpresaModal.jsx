@@ -25,7 +25,7 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
     setLoading(true)
 
     try {
-      await empresaService.atualizarPerfil(empresaId, formData)
+      await empresaService.atualizarPerfil(formData)
       alert('Perfil atualizado com sucesso!')
       setIsEditing(false)
       onUpdate()

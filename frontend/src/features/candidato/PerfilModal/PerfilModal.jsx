@@ -26,7 +26,7 @@ export default function PerfilModal({ candidato, candidatoId, onClose }) {
           <p><strong>Email:</strong> {candidato.email}</p>
           <p><strong>Telefone:</strong> {candidato.telefone}</p>
           <p><strong>Educação:</strong> {candidato.educacao}</p>
-          <p><strong>Qualificações:</strong> {candidato.qualificacao}</p>
+          <p><strong>Qualificações:</strong> {candidato.qualificacoes}</p>
           <p>
             <strong>Cursos:</strong>{' '}
             {candidato.cursos?.length > 0
