@@ -8,19 +8,19 @@ Este documento detalha os requisitos técnicos, qualidades de sistema e normas o
 
 Os requisitos funcionais descrevem as funções e ações que o sistema deve executar.
 
-| Identificação | Descrição                                                                                                                                             | Prioridade |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| RF01          | O sistema deve permitir que usuários realizem login na aplicação.                                                                                     | Essencial  |
-| RF02          | O sistema deve permitir que candidatos cadastrem, visualizem e editem seu perfil profissional, incluindo dados pessoais, experiências, cursos e foto. | Essencial  |
-| RF03          | O sistema deve permitir que empregadores realizem o cadastro da empresa com dados oficiais e gerenciem seu perfil institucional.                      | Essencial  |
-| RF04          | O sistema deve permitir que candidatos pesquisem vagas, visualizem seus detalhes e se candidatem a oportunidades disponíveis.                         | Essencial  |
-| RF05          | O sistema deve permitir que empregadores publiquem vagas, visualizem candidatos inscritos e gerenciem o status das candidaturas.                      | Essencial  |
-| RF06          | O sistema deve permitir que candidatos filtrem vagas por área de atuação ou palavras-chave.                                                           | Importante |
-| RF07          | O sistema deve permitir que empregadores filtrem e visualizem candidatos com base em qualificações e experiências específicas.                        | Importante |
-| RF08          | O sistema deve disponibilizar um painel centralizado para que empregadores gerenciem suas vagas e candidatos inscritos.                               | Importante |
-| RF09          | O sistema deve permitir que candidatos visualizem a página pública das empresas com informações institucionais e vagas ativas.                        | Desejável  |
-| RF10          | O sistema deve disponibilizar um canal de suporte para que usuários relatem problemas ou tirem dúvidas técnicas.                                      | Desejável  |
-| RF11          | O sistema deve permitir a interação entre candidatos para troca de experiências e informações profissionais.                                          | Desejável  |
+| Identificação | Descrição                                                                                                                                             | Prioridade | Escopo |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------ |
+| RF01          | O sistema deve permitir que usuários realizem login na aplicação.                                                                                     | Essencial  | Geral  |
+| RF02          | O sistema deve permitir que candidatos cadastrem, visualizem e editem seu perfil profissional, incluindo dados pessoais, experiências, cursos e foto. | Essencial  | Geral  |
+| RF03          | O sistema deve permitir que empregadores realizem o cadastro da empresa com dados oficiais e gerenciem seu perfil institucional.                      | Essencial  | Geral  |
+| RF04          | O sistema deve permitir que candidatos autenticados pesquisem vagas, visualizem seus detalhes e se candidatem a oportunidades disponíveis.            | Essencial  | Geral  |
+| RF05          | O sistema deve permitir que empregadores publiquem vagas, visualizem candidatos inscritos e gerenciem o status das candidaturas.                      | Essencial  | Geral  |
+| RF06          | O sistema deve permitir que candidatos filtrem vagas por área de atuação ou palavras-chave.                                                           | Importante | Geral  |
+| RF07          | O sistema deve permitir que empregadores filtrem e visualizem candidatos com base em qualificações e experiências específicas.                        | Importante | Geral  |
+| RF08          | O sistema deve disponibilizar um painel centralizado para que empregadores gerenciem suas vagas e candidatos inscritos.                               | Importante | Geral  |
+| RF09          | O sistema deve permitir que candidatos visualizem a página pública das empresas com informações institucionais e vagas ativas.                        | Desejável  | Futuro |
+| RF10          | O sistema deve disponibilizar um canal de suporte para que usuários relatem problemas ou tirem dúvidas técnicas.                                      | Desejável  | Futuro |
+| RF11          | O sistema deve permitir a interação entre candidatos para troca de experiências e informações profissionais.                                          | Desejável  | Futuro |
 
 ## 2. Requisitos Não Funcionais (RNF)
 
