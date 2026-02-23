@@ -151,6 +151,35 @@ class EmpresaController {
     }
   }
 
+  static async atualizarStatusCandidatura(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+      const { candidaturaId } = req.params;
+      const { status } = req.body;
+
+      const candidatura = await Candidatura.findById(candidaturaId).populate('vaga');
+      if (!candidatura) {
+        return next(new Error404('Candidatura não encontrada.'));
+      }
+
+      if (candidatura.vaga.empresa.toString() !== empresaId) {
+        return next(new Error400('A vaga desta candidatura não pertence à empresa autenticada.'));
+      }
+
+      candidatura.status = status;
+      await candidatura.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Status da candidatura atualizado com sucesso',
+        candidatura: toCandidaturaDTO(candidatura),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
   static async buscarCandidatos(req, res, next) {
     try {
       const { q } = req.query;

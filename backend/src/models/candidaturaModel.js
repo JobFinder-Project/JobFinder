@@ -21,7 +21,7 @@ const candidaturaSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: {
-        values: ['Pendente', 'Aceito', 'Rejeitado'],
+        values: ['Pendente', 'Aceita', 'Rejeitada'],
         message: 'O status {VALUE} é inválido',
       },
       default: 'Pendente',

@@ -87,6 +87,37 @@ export const empresaPaths = {
     },
   },
 
+  '/empresa/candidatura/{candidaturaId}': {
+    put: {
+      tags: ['Empresa'],
+      summary: 'Atualizar status de uma candidatura',
+      security: [{ sessionAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'candidaturaId',
+          required: true,
+          schema: { type: 'string' },
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/CandidaturaStatusUpdateRequest' },
+          },
+        },
+      },
+      responses: {
+        200: { description: 'Status da candidatura atualizado' },
+        400: { description: 'Dados inválidos ou vaga não pertence à empresa' },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+        404: { description: 'Candidatura não encontrada' },
+      },
+    },
+  },
+
   '/empresa/candidatos/buscar': {
     get: {
       tags: ['Empresa'],
