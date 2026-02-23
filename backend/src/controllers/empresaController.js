@@ -2,9 +2,10 @@ import bcrypt from 'bcrypt';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Vaga from '../models/vagasModel.js';
+import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
-import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO } from '../dtos/index.js';
+import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO, toCandidaturaDTO } from '../dtos/index.js';
 
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
@@ -124,6 +125,25 @@ class EmpresaController {
         success: true,
         message: 'Vaga criada com sucesso',
         vaga: toVagaDTO(novaVaga),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async buscarCandidaturas(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+
+      const vagas = await Vaga.find({ empresa: empresaId }).select('_id');
+      const vagasIds = vagas.map((vaga) => vaga._id);
+
+      const candidaturas = await Candidatura.find({ vaga: { $in: vagasIds } })
+        .populate('candidato', '-senha')
+        .populate('vaga', 'nome area requisitos');
+      res.status(200).json({
+        candidaturas: candidaturas.map(toCandidaturaDTO),
       });
     } catch (erro) {
       console.error(erro);

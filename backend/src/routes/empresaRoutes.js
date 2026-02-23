@@ -13,6 +13,7 @@ router.use(isAuthenticated, isEmpresa);
 router.get('/dashboard', EmpresaController.acessarDashboard);
 router.put('/editar', EmpresaController.editarPerfil);
 router.post('/vagas/criar', upload.single('imagem'), EmpresaController.criarVagas);
+router.get('/candidaturas', EmpresaController.buscarCandidaturas);
 router.get('/candidatos/buscar', EmpresaController.buscarCandidatos);
 
 export default router;

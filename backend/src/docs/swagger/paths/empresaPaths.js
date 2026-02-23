@@ -74,6 +74,19 @@ export const empresaPaths = {
     },
   },
 
+  '/empresa/candidaturas': {
+    get: {
+      tags: ['Empresa'],
+      summary: 'Buscar candidaturas das vagas da empresa',
+      security: [{ sessionAuth: [] }],
+      responses: {
+        200: { description: 'Candidaturas encontradas' },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+      },
+    },
+  },
+
   '/empresa/candidatos/buscar': {
     get: {
       tags: ['Empresa'],
