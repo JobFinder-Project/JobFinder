@@ -75,6 +75,19 @@ const loginAsCandidato = async () => {
   return { candidateAgent, candidato };
 };
 
+const loginAsEmpresa = async () => {
+  const empresa = buildMockEmpresa();
+  const companyAgent = request.agent(app);
+
+  await companyAgent.post('/api/empresa/cadastrar').send(empresa);
+  const loginResponse = await companyAgent
+    .post('/api/login')
+    .send({ email: empresa.email, senha: empresa.senha });
+
+  expect(loginResponse.statusCode).toBe(200);
+  return { companyAgent, empresa };
+};
+
 const createVagaAsEmpresa = async () => {
   const empresa = buildMockEmpresa();
   const companyAgent = request.agent(app);
@@ -94,6 +107,22 @@ const createVagaAsEmpresa = async () => {
   expect(createVagaResponse.body?.vaga?._id).toBeDefined();
 
   return { companyAgent, empresa, vagaId: createVagaResponse.body.vaga._id };
+};
+
+const createCandidaturaForStatusUpdate = async () => {
+  const { candidateAgent } = await loginAsCandidato();
+  const { companyAgent, vagaId } = await createVagaAsEmpresa();
+
+  const candidaturaResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+  expect(candidaturaResponse.statusCode).toBe(201);
+  expect(candidaturaResponse.body?.candidatura?._id).toBeDefined();
+
+  return {
+    candidateAgent,
+    companyAgent,
+    vagaId,
+    candidaturaId: candidaturaResponse.body.candidatura._id,
+  };
 };
 
 beforeAll(async () => {
@@ -204,5 +233,75 @@ describe('Fluxo de Candidaturas', () => {
     const listAfterDelete = await candidateAgent.get('/api/candidato/candidaturas');
     expect(listAfterDelete.statusCode).toBe(200);
     expect(listAfterDelete.body.candidaturas).toHaveLength(0);
+  });
+});
+
+describe('Fluxo de alteração de status de candidatura', () => {
+  it('deve atualizar status para Aceita pela empresa dona da vaga', async () => {
+    const { companyAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
+
+    const response = await companyAgent
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Aceita' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.success).toBe(true);
+    expect(response.body.candidatura.status).toBe('Aceita');
+
+    const candidaturaNoDb = await Candidatura.findById(candidaturaId);
+    expect(candidaturaNoDb).not.toBeNull();
+    expect(candidaturaNoDb.status).toBe('Aceita');
+  });
+
+  it('deve falhar ao enviar status inválido', async () => {
+    const { companyAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
+
+    const response = await companyAgent
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Em análise' });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('deve retornar 404 para candidatura inexistente', async () => {
+    const { companyAgent } = await loginAsEmpresa();
+    const candidaturaInexistenteId = new mongoose.Types.ObjectId();
+
+    const response = await companyAgent
+      .put(`/api/empresa/candidatura/${candidaturaInexistenteId}`)
+      .send({ status: 'Aceita' });
+
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('deve impedir atualização por empresa que não é dona da vaga', async () => {
+    const { candidaturaId } = await createCandidaturaForStatusUpdate();
+    const { companyAgent: outraEmpresaAgent } = await loginAsEmpresa();
+
+    const response = await outraEmpresaAgent
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Rejeitada' });
+
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('deve bloquear atualização sem autenticação (401)', async () => {
+    const { candidaturaId } = await createCandidaturaForStatusUpdate();
+
+    const response = await request(app)
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Aceita' });
+
+    expect(response.statusCode).toBe(401);
+  });
+
+  it('deve bloquear candidato tentando atualizar status (403)', async () => {
+    const { candidateAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
+
+    const response = await candidateAgent
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Aceita' });
+
+    expect(response.statusCode).toBe(403);
   });
 });

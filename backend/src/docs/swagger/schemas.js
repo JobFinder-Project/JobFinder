@@ -95,6 +95,14 @@ export const schemas = {
     },
   },
 
+  CandidaturaStatusUpdateRequest: {
+    type: 'object',
+    required: ['status'],
+    properties: {
+      status: { type: 'string', enum: ['Pendente', 'Aceita', 'Rejeitada'] },
+    },
+  },
+
   VagaCriarFormData: {
     type: 'object',
     required: ['nome', 'area', 'requisitos'],
