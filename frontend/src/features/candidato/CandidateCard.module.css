@@ -1,6 +1,3 @@
-/* =========================================
-   ESTILOS DO CARD
-   ========================================= */
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -11,7 +8,7 @@
   transition: all 0.2s ease-in-out;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   height: 100%;
-  min-width: 0; /* Essencial para o ellipsis funcionar no flex-child */
+  min-width: 0;
 }
 
 .card:hover {
@@ -63,7 +60,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  width: 100%; /* Para o truncamento funcionar */
+  width: 100%;
 }
 
 .name {
@@ -76,7 +73,6 @@
   text-overflow: ellipsis;
 }
 
-/* Container do cargo e ícone */
 .roleWrapper {
   display: flex;
   align-items: center;
@@ -90,7 +86,6 @@
   flex-shrink: 0;
 }
 
-/* O texto do cargo que será cortado se for grande */
 .roleText {
   font-size: 0.875rem;
   color: #64748b;
@@ -117,7 +112,6 @@
   width: 100%;
 }
 
-/* Tags com limite de largura e ellipsis */
 .skillTag {
   background-color: #f1f5f9;
   color: #475569;
@@ -173,10 +167,6 @@
 .btnProfile:hover {
   background-color: #eff6ff;
 }
-
-/* =========================================
-   ESTILOS DO MODAL DE PERFIL
-   ========================================= */
 
 .modalContent {
   display: flex;

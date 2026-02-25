@@ -1,4 +1,3 @@
-/* Layout Geral */
 .viewMode, .editMode {
   display: flex;
   flex-direction: column;
@@ -214,10 +213,6 @@
   resize: vertical;
   min-height: 100px;
 }
-
-/* ================================
-   BOTÕES E FOOTER
-   ================================ */
 
 .actionsFooter {
   display: flex;

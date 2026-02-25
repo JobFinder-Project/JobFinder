@@ -9,7 +9,6 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
     nome: '',
     area: '',
     requisitos: '',
-    // Campos visuais para bater com o protótipo (preparados pro futuro)
     localizacao: '',
     tipo: 'Tempo Integral',
     salario: '',

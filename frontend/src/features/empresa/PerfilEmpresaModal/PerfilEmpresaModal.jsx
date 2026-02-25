@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BiBuilding, BiMailSend, BiPhone, BiGlobe, BiEditAlt, BiX } from 'react-icons/bi'
+import { BiMailSend, BiPhone, BiGlobe, BiEditAlt } from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
 import { empresaService } from '../../../services/empresaService'
 import styles from './PerfilEmpresaModal.module.css'
@@ -7,7 +7,6 @@ import styles from './PerfilEmpresaModal.module.css'
 export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false)
 
-  // Garantimos que o telefone inicial já tente vir formatado, caso exista
   const [formData, setFormData] = useState({
     nome: empresa?.nome || '',
     cnpj: empresa?.cnpj || '',
@@ -20,7 +19,6 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
 
-  // Máscara de Telefone: (XX) XXXXX-XXXX
   const formatPhone = (value) => {
     const numbers = value.replace(/\D/g, '')
     return numbers
@@ -32,7 +30,6 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
   const handleChange = (e) => {
     const { name, value } = e.target
 
-    // Aplica a máscara se o campo for o telefone
     if (name === 'fone') {
       setFormData((prev) => ({ ...prev, [name]: formatPhone(value) }))
     } else {
@@ -48,7 +45,7 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
     try {
       await empresaService.atualizarPerfil(formData)
       setIsEditing(false)
-      onUpdate() // Recarrega os dados no Dashboard
+      onUpdate()
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error)
       setErrorMsg(error.data?.error || error.message || 'Erro ao atualizar perfil. Verifique os dados.')
@@ -63,7 +60,6 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
       <Modal title={modalTitle} onClose={onClose} size='lg'>
         <Modal.Body>
 
-          {/* MODO DE VISUALIZAÇÃO */}
           {!isEditing ? (
               <div className={styles.viewMode}>
                 <div className={styles.headerProfile}>
@@ -124,7 +120,6 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
               </div>
           ) : (
 
-              /* MODO DE EDIÇÃO */
               <form onSubmit={handleSubmit} className={styles.editMode}>
 
                 <p className={styles.formSubtitle}>
@@ -161,7 +156,7 @@ export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpda
                           value={formData.cnpj}
                           onChange={handleChange}
                           className={styles.input}
-                          disabled // Geralmente CNPJ não se edita facilmente, mas se precisar, tire o disabled
+                          disabled
                           title="O CNPJ não pode ser alterado por aqui"
                       />
                     </div>

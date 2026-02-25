@@ -23,14 +23,12 @@ export default function EmpresaDashboard() {
   const [searchParams, setSearchParams] = useSearchParams()
   const { user, isAuthenticated, logout } = useAuth()
 
-  // Estados Reais da API
   const [empresa, setEmpresa] = useState(null)
   const [candidatos, setCandidatos] = useState([])
   const [vagas, setVagas] = useState([])
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(false)
 
-  // Controle de Modais (Preservando a arquitetura original)
   const [showVagasModal, setShowVagasModal] = useState(false)
   const [showCriarVagaModal, setShowCriarVagaModal] = useState(false)
   const [showPerfilModal, setShowPerfilModal] = useState(false)
@@ -57,7 +55,6 @@ export default function EmpresaDashboard() {
       setEmpresa(data.empresa)
       setVagas(data.vagas || [])
 
-      // Busca os candidatos reais da API
       const candidatosData = await empresaService.buscarCandidatos('')
       setCandidatos(candidatosData.candidatos || [])
 
@@ -81,9 +78,7 @@ export default function EmpresaDashboard() {
     return <LoadingScreen />
   }
 
-  // Cálculos baseados em dados reais
   const vagasAtivas = vagas.filter(v => v.status !== 'Fechada' && v.status !== 'Encerrada')
-  const viewsDoPerfil = empresa?.visualizacoes || 0
 
   return (
       <DashboardLayout
@@ -102,13 +97,11 @@ export default function EmpresaDashboard() {
               </div>
           ) : (
               <>
-                {/* Header de Boas-vindas */}
                 <header className={styles.header}>
                   <h1 className={styles.title}>Bem-vindo de volta, {empresa.nome || 'Empresa'}!</h1>
                   <p className={styles.subtitle}>Aqui está uma visão geral da sua atividade de contratação.</p>
                 </header>
 
-                {/* Grid de Estatísticas */}
                 <div className={styles.statsGrid}>
                   <div className={styles.statCard}>
                     <div className={styles.statHeader}>
@@ -153,10 +146,8 @@ export default function EmpresaDashboard() {
                   </div>
                 </div>
 
-                {/* Layout Principal: Listas e Ações */}
                 <div className={styles.mainGrid}>
 
-                  {/* Vagas Ativas (Ocupa 2 colunas no Desktop) */}
                   <div className={styles.jobsSection}>
                     <div className={styles.card}>
                       <div className={styles.cardHeader}>
@@ -180,7 +171,6 @@ export default function EmpresaDashboard() {
                                 <div key={vaga._id} className={styles.jobItem}>
                                   <div className={styles.jobInfo}>
                                     <div>
-                                      {/* CORREÇÃO AQUI: Usando vaga.nome e vaga.area */}
                                       <h3 className={styles.jobTitle}>{vaga.nome}</h3>
                                       <p className={styles.jobLocation}>{vaga.area}</p>
                                     </div>
@@ -200,10 +190,8 @@ export default function EmpresaDashboard() {
                     </div>
                   </div>
 
-                  {/* Ações Rápidas e Candidatos Recentes (Ocupa 1 coluna) */}
                   <div className={styles.sideSection}>
 
-                    {/* Ações Rápidas integradas aos Modais existentes */}
                     <div className={styles.card}>
                       <div className={styles.cardHeader}>
                         <h2 className={styles.cardTitle}>Ações Rápidas</h2>
@@ -239,7 +227,6 @@ export default function EmpresaDashboard() {
                       </div>
                     </div>
 
-                    {/* Candidatos Recentes */}
                     <div className={styles.card}>
                       <div className={styles.cardHeader}>
                         <h2 className={styles.cardTitle}>Candidatos Recentes</h2>
@@ -249,7 +236,6 @@ export default function EmpresaDashboard() {
                             <p className={styles.emptyState}>Nenhum candidato recente.</p>
                         ) : (
                             candidatos.slice(0, 3).map((candidato) => {
-                                // Mesma lógica de validação dupla
                                 const imgSrc = typeof candidato.imagem === 'string'
                                     ? candidato.imagem
                                     : (candidato.imagem?.data ? `data:${candidato.imagem.contentType};base64,${candidato.imagem.data}` : null);
@@ -292,7 +278,6 @@ export default function EmpresaDashboard() {
           )}
         </div>
 
-        {/* Renderização Condicional dos Modais */}
         {showVagasModal && (
             <VagasModal
                 vagas={vagas}

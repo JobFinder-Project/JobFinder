@@ -9,7 +9,6 @@ import styles from './CandidateCard.module.css'
 export default function CandidateCard({ candidato }) {
     const [showModal, setShowModal] = useState(false)
 
-    // Função inteligente que descobre se a imagem é string ou objeto
     const getImagemSrc = (imagem) => {
         if (!imagem) return null;
         if (typeof imagem === 'string') return imagem;
@@ -21,7 +20,6 @@ export default function CandidateCard({ candidato }) {
 
     const imgSrc = getImagemSrc(candidato.imagem);
 
-    // FUNÇÃO DE LIMPEZA DE LISTAS (Garante que [""] ou " , " vire array vazio)
     const parseList = (data) => {
         if (!data) return [];
         if (Array.isArray(data)) return data.filter(item => item && typeof item === 'string' && item.trim() !== '');
@@ -29,25 +27,21 @@ export default function CandidateCard({ candidato }) {
         return [];
     }
 
-    // Tratativa de Habilidades
     const habilidadesArray = parseList(candidato.habilidadesTecnicas || candidato.habilidades);
     const topHabilidades = habilidadesArray.slice(0, 3);
     const hasMoreHabilidades = habilidadesArray.length > 3;
 
-    // Tratativa da Qualificação (Evita o "undefined" literal ou vazio)
     let qualificacao = candidato.qualificacoes || candidato.qualificacao;
     if (!qualificacao || qualificacao === 'undefined' || String(qualificacao).trim() === '') {
         qualificacao = 'Profissional';
     }
 
-    // Listas limpas para o Modal
     const cursos = parseList(candidato.cursos);
     const idiomas = parseList(candidato.idiomas);
     const descricao = parseList(candidato.descricao).join('\n'); // Junta caso seja um array com vários parágrafos válidos
 
     return (
         <>
-            {/* O CARD VISÍVEL NA TELA */}
             <div className={styles.card}>
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
@@ -93,13 +87,11 @@ export default function CandidateCard({ candidato }) {
                 </div>
             </div>
 
-            {/* O MODAL DE PERFIL COMPLETO (Renderizado apenas se clicar no botão) */}
             {showModal && (
                 <Modal title="Perfil do Candidato" onClose={() => setShowModal(false)} size="lg">
                     <Modal.Body>
                         <div className={styles.modalContent}>
 
-                            {/* Header do Modal */}
                             <div className={styles.modalHeader}>
                                 {imgSrc ? (
                                     <img src={imgSrc} alt={candidato.nome} className={styles.modalAvatar} />
@@ -114,7 +106,6 @@ export default function CandidateCard({ candidato }) {
                                 </div>
                             </div>
 
-                            {/* Contato Rápido */}
                             <div className={styles.modalGrid}>
                                 <div className={styles.contactItem}>
                                     <BiEnvelope size={20} className={styles.sectionIcon} />
@@ -128,7 +119,6 @@ export default function CandidateCard({ candidato }) {
 
                             <hr className={styles.divider} />
 
-                            {/* Apresentação / Descrição */}
                             <div className={styles.modalSection}>
                                 <h3 className={styles.sectionTitle}><BiUser className={styles.sectionIcon} /> Sobre</h3>
                                 {descricao ? (
@@ -138,7 +128,6 @@ export default function CandidateCard({ candidato }) {
                                 )}
                             </div>
 
-                            {/* Educação */}
                             <div className={styles.modalSection}>
                                 <h3 className={styles.sectionTitle}><BiBookOpen className={styles.sectionIcon} /> Nível de Escolaridade</h3>
                                 <p className={styles.modalText} style={{ textTransform: 'capitalize' }}>
@@ -148,7 +137,6 @@ export default function CandidateCard({ candidato }) {
 
                             <hr className={styles.divider} />
 
-                            {/* Habilidades, Idiomas e Cursos no mesmo Grid */}
                             <div className={styles.modalGrid}>
 
                                 <div className={styles.modalSection}>

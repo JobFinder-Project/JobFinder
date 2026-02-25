@@ -277,7 +277,6 @@
   color: #64748b;
 }
 
-/* Action Buttons (Quick Actions) */
 .actionButtons {
   padding: 1.5rem;
   display: flex;
@@ -326,7 +325,6 @@
   background-color: #f8fafc;
 }
 
-/* Recent Candidates */
 .candidateItem {
   display: flex;
   align-items: center;
