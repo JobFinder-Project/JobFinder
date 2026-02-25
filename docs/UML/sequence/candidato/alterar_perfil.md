@@ -2,5 +2,5 @@
 
 ## Alterar perfil
 
-![](../../images/AlterarPerfil.png)
+![](../../images/sequence/Diagrama de Sequência - Acesso a Dashboard candidato.png)
 

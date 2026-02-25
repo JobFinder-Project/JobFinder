@@ -2,4 +2,4 @@
 
 ## Realizar candidatura
 
-![](../../images/RealizarCandidatura.png)
+![](../../images/sequence/Diagrama de Sequência - Realizar Candidatura.png)

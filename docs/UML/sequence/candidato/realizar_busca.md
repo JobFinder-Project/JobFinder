@@ -2,5 +2,5 @@
 
 ## Realizar busca
 
-![](../../images/RealizarBusca.png)
+![](../../images/sequence/Diagrama de Sequência — Filtrar Candidatos (RF07).png)
 

@@ -2,4 +2,4 @@
 
 ## Realizar login
 
-![](../../images/RealizarLogin1.png)
+![](../../images/sequence/Fluxo = Login - POST login via authRoutes.js -.png)
