@@ -1,262 +1,303 @@
-.page {
-  background-color: #f5f5f5;
+.pageWrapper {
   min-height: 100vh;
+  background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  font-family: inherit;
 }
 
 .header {
-  width: 100%;
-  padding: 1rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #ffffff;
+}
+
+.headerContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+}
+
+.logoGroup {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.logoIcon {
+  height: 1.75rem;
+  width: 1.75rem;
+  color: #2563eb;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.textCenter {
+  text-align: center;
   margin-bottom: 2rem;
 }
 
-.navigation {
+.pageTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+  color: #475569;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.backButton,
-.helpButton {
-  background: none;
+.backButton {
+  background: transparent;
   border: none;
+  color: #64748b;
   cursor: pointer;
-  color: #333;
   padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
 }
 
-.backButton:hover,
-.helpButton:hover {
-  background-color: #f0f0f0;
+.backButton:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-  text-align: center;
-  flex-grow: 1;
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0f172a;
 }
 
-.container {
-  max-width: 600px;
-  width: 100%;
-  padding: 2rem;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 1rem 2rem;
-}
-
-.formDescription {
-  margin-bottom: 1rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-.requiredNotice {
+.cardDescription {
   font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 1rem;
-  font-style: italic;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.cardContent {
+  padding: 1.5rem;
 }
 
 .progressContainer {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #eee;
-}
-
-.progressBar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
-.progressStep {
+.progressStepWrapper {
+  display: flex;
+  align-items: center;
   flex: 1;
-  text-align: center;
-  position: relative;
 }
 
-.progressStep:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 15px;
-  right: -50%;
-  width: 100%;
-  height: 2px;
-  background-color: #ddd;
-  z-index: 1;
+.progressStepWrapper:last-child {
+  flex: 0;
 }
 
-.progressStep.active:not(:last-child)::after,
-.progressStep.completed:not(:last-child)::after {
-  background-color: #ffe100;
-}
-
-.stepCircle {
-  width: 30px;
-  height: 30px;
+.progressCircle {
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
-  background-color: #ddd;
-  color: white;
+  background-color: #e2e8f0;
+  color: #64748b;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  font-weight: bold;
-  font-size: 14px;
-  position: relative;
-  z-index: 2;
-  transition: all 0.2s ease;
-}
-
-.progressStep.active .stepCircle {
-  background-color: #ffe100;
-  color: #333;
-}
-
-.progressStep.completed .stepCircle {
-  background-color: #28a745;
-}
-
-.stepLabel {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #666;
-  font-weight: 400;
-}
-
-.progressStep.active .stepLabel,
-.progressStep.completed .stepLabel {
-  color: #333;
   font-weight: 600;
-}
-
-.formGroup {
-  margin-bottom: 1.5rem;
-}
-
-.formLabel {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
-}
-
-.formInput {
-  width: 100%;
-  padding: 0.8rem;
-  border: 2px solid #eee;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.formInput:focus {
-  outline: none;
-  border-color: #ffe100;
-  box-shadow: 0 0 0 3px rgba(255, 225, 0, 0.1);
-}
-
-.formInput::placeholder {
-  color: #999;
-}
-
-textarea.formInput {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.formHelper {
   font-size: 0.875rem;
-  color: #666;
-  margin-top: 0.5rem;
-  display: block;
+  z-index: 2;
+  transition: all 0.3s;
+}
+
+.activeCircle {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.progressLine {
+  flex: 1;
+  height: 2px;
+  background-color: #e2e8f0;
+  margin: 0 0.5rem;
+  transition: all 0.3s;
+}
+
+.activeLine {
+  background-color: #2563eb;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .stepContent {
-  display: none;
-  animation: fadeIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.stepContent.active {
-  display: block;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #0f172a;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.input:focus, .textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px #2563eb;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.termsGroup {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox {
+  margin-top: 0.25rem;
+}
+
+.termsText {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.termsText a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.termsText a:hover {
+  text-decoration: underline;
 }
 
 .buttonGroup {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
-.buttonPrimary,
-.buttonSecondary {
+.btnPrimary {
   flex: 1;
-  padding: 1rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 0.375rem;
   font-weight: 500;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s;
 }
 
-.buttonPrimary {
-  background-color: #ffe100;
-  color: #333;
+.btnPrimary:hover:not(:disabled) {
+  background-color: #1d4ed8;
 }
 
-.buttonSecondary {
-  background-color: #eee;
-  color: #333;
-}
-
-.buttonPrimary:hover:not(:disabled) {
-  background-color: #ffd700;
-}
-
-.buttonSecondary:hover {
-  background-color: #e0e0e0;
-}
-
-.buttonPrimary:disabled {
+.btnPrimary:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.btnOutline {
+  flex: 1;
+  background-color: transparent;
+  color: #475569;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.formInput.error {
-  border-color: #dc3545;
-  background-color: #fff5f5;
+.btnOutline:hover {
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
-.errorMessage {
-  color: #dc3545;
+.footerLink {
+  margin-top: 1.5rem;
+  text-align: center;
   font-size: 0.875rem;
-  margin-top: 0.5rem;
-  display: block;
+  color: #475569;
+}
+
+.footerLink a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.footerLink a:hover {
+  color: #1d4ed8;
 }
