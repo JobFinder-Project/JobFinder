@@ -1,227 +1,369 @@
-.dashboardWrapper {
-  min-height: 100vh;
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+/* Error State */
+.errorState {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.errorState h2 {
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+.errorState p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.btnPrimary {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnPrimary:hover {
+  background-color: #1d4ed8;
+}
+
+/* Header */
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.875rem;
+  }
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+@media (min-width: 640px) {
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.statCard {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.statHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.statDescription {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* Main Grid Layout */
+.mainGrid {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .jobsSection {
+    grid-column: span 2;
+  }
+}
+
+.sideSection {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9f9;
+  gap: 1.5rem;
 }
 
-.loadingWrapper {
+/* Generic Card */
+.card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  font-size: 1.2rem;
-  color: #666;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
-.navbar {
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.cardSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.emptyState {
+  color: #64748b;
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* Buttons inside cards */
+.btnGhost {
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.btnGhost:hover {
+  background-color: #f8fafc;
+  border-radius: 0.375rem;
+}
+
+.btnGhostFull {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.btnGhostFull:hover {
+  background-color: #f1f5f9;
+  border-radius: 0.375rem;
+}
+
+/* Job Item */
+.jobItem {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.jobItem:hover {
+  border-color: #86efac;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.jobInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.jobTitle {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.jobLocation {
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.statusBadge {
+  font-size: 0.75rem;
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.jobMeta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #2c3e50;
-  color: #fff;
-  padding: 10px 20px;
-  box-sizing: border-box;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  font-size: 0.875rem;
 }
 
-.navbar h1 {
-  font-size: 24px;
-  margin: 0;
+.jobDate {
+  color: #64748b;
 }
 
-.searchContainer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.searchContainer form {
-  display: flex;
-  gap: 10px;
-}
-
-.searchInput {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  min-width: 250px;
-}
-
-.searchButton {
-  padding: 10px 20px;
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.searchButton:hover {
-  background-color: #2980b9;
-}
-
-.navbarMenu {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  gap: 20px;
-}
-
-.logoutLink {
-  color: #fff;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.logoutLink:hover {
-  background-color: #c0c0c0;
-}
-
-.logoutButton {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.logoutButton:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.mainContent {
-  background: #f8fafc;
-  margin-top: 5px;
-  margin-left: auto;
-  margin-right: auto;
-  width: calc(100% - 80px);
-  max-width: 1200px;
-  padding: 20px;
-  box-sizing: border-box;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-  flex: 1;
-  margin-bottom: 120px;
-}
-
-.categoryTabs {
-  margin-bottom: 32px;
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.tab {
-  padding: 10px 20px;
-  background-color: #ecf0f1;
-  transition: background-color 0.3s, box-shadow 0.2s;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.tab:hover {
-  background-color: #bdc3c7;
-}
-
-.tab.active {
-  background-color: #3498db;
-  color: #fff;
-}
-
-.tabsContainer {
-  margin-bottom: 20px;
-}
-
-.candidatesGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
-  margin-bottom: 48px;
-}
-
-.noData {
-  text-align: center;
-  color: #666;
-  font-size: 1.1rem;
-  padding: 40px;
-}
-
-.bottomNav {
-  position: fixed;
-  left: 50%;
-  bottom: 32px;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f5f7fa;
-  padding: 16px 12px;
-  border-radius: 28px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-  max-width: 700px;
-  gap: 24px;
-  z-index: 100;
-}
-
-.navBtn {
+/* Action Buttons (Quick Actions) */
+.actionButtons {
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+}
+
+.iconPurple {
+  color: #a855f7;
+}
+
+.actionBtn, .actionBtnOutline {
+  display: flex;
   align-items: center;
-  text-decoration: none;
-  color: #fff;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  font-size: 1.15em;
-  transition: background 0.2s, box-shadow 0.2s;
-  padding: 22px 32px;
-  border-radius: 28px;
-  background: #1976d2;
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
   cursor: pointer;
+  transition: all 0.2s;
+  justify-content: flex-start;
+}
+
+.actionBtn {
   border: none;
 }
 
-.navBtn:hover {
-  background: #0d47a1;
-  box-shadow: 0 4px 16px rgba(13, 71, 161, 0.25);
+.btnGreen {
+  background-color: #16a34a;
+  color: #ffffff;
 }
 
-.navIcon {
-  margin-bottom: 10px;
+.btnGreen:hover {
+  background-color: #15803d;
+}
+
+.actionBtnOutline {
+  background-color: transparent;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+}
+
+.actionBtnOutline:hover {
+  background-color: #f8fafc;
+}
+
+/* Recent Candidates */
+.candidateItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.candidateAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #dbeafe;
+  color: #2563eb;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
 }
 
-@media (max-width: 768px) {
-  .mainContent {
-    width: calc(100% - 20px);
-    padding: 15px;
-  }
+.candidateInfo {
+  flex: 1;
+  min-width: 0;
+}
 
-  .bottomNav {
-    padding: 12px 8px;
-    gap: 12px;
-  }
+.candidateName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .navBtn {
-    padding: 15px 20px;
-    font-size: 1em;
-  }
+.candidateRole {
+  font-size: 0.75rem;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
