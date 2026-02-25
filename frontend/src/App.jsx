@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AuthProvider from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import SignupPage from './pages/Signup/SignupPage';
+import GestaoCandidaturasPage from './pages/GestaoCandidaturas/GestaoCandidaturasPage';
+import SuportePage from './pages/Suporte/SuportePage';
 
 const queryClient = new QueryClient()
 
@@ -9,6 +12,7 @@ import GuestRoute from './components/GuestRoute/GuestRoute'
 
 import Home from './pages/Home/HomePage'
 import Login from './pages/Login/LoginPage'
+import GerenciarVagasPage from './pages/GerenciarVagas/GerenciarVagasPage';
 import CandidatoDashboard from './pages/CandidatoDashboard/CandidatoDashboardPage'
 import EmpresaDashboard from './pages/EmpresaDashboard/EmpresaDashboardPage'
 import RegistroCandidato from './pages/RegistroCandidato/RegistroCandidatoPage'
@@ -30,6 +34,11 @@ function App() {
           {/* Public Routes */}
           <Route path='/' element={<Home />} />
           <Route path='/home' element={<Home />} />
+            <Route path="/empresa/suporte" element={
+              <ProtectedRoute allowedRole="empresa">
+                <SuportePage />
+              </ProtectedRoute>
+            } />
           
           {/* redireciona se já logado */}
           <Route path='/login' element={
@@ -42,16 +51,8 @@ function App() {
               <EscolherCargo />
             </GuestRoute>
           } />
-          <Route path='/candidato/cadastrar' element={
-            <GuestRoute>
-              <RegistroCandidato />
-            </GuestRoute>
-          } />
-          <Route path='/empresa/cadastrar' element={
-            <GuestRoute>
-              <RegistroEmpresa />
-            </GuestRoute>
-          } />
+          <Route path='/candidato/cadastrar' element={<SignupPage />} />
+          <Route path='/empresa/cadastrar' element={<SignupPage />} />
           <Route path='/recuperar_senha' element={<EsqueciSenha />} />
           <Route path='/redefinir-senha/:token' element={<RedefinirSenha />} />
 
@@ -73,16 +74,28 @@ function App() {
           } />
 
           {/* Empresa Routes */}
+            <Route path='/empresa/vagas' element={
+              <ProtectedRoute allowedRole='empresa'>
+                <GerenciarVagasPage />
+              </ProtectedRoute>
+            } />
           <Route path='/empresa/dashboard' element={
             <ProtectedRoute allowedRole='empresa'>
               <EmpresaDashboard />
             </ProtectedRoute>
           } />
+
           <Route path='/empresa/candidatos/buscar' element={
             <ProtectedRoute allowedRole='empresa'>
               <BuscaCandidatos />
             </ProtectedRoute>
           } />
+
+            <Route path="/empresa/candidaturas" element={
+              <ProtectedRoute allowedRole="empresa">
+                <GestaoCandidaturasPage />
+              </ProtectedRoute>
+            } />
 
           {/* 404 */}
           <Route path='*' element={<PaginaErro />} />
