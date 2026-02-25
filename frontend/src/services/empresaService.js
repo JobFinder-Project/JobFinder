@@ -13,12 +13,22 @@ export const empresaService = {
 		return api.put(`/empresa/editar`, dados);
 	},
 
-	buscarCandidatos: async (query) => {
-		return api.get(`/empresa/candidatos/buscar?q=${encodeURIComponent(query)}`);
+	buscarCandidatos: async (query, vagaId) => {
+		let url = `/empresa/candidatos/buscar?q=${encodeURIComponent(query || '')}`;
+		if (vagaId) {
+			url += `&vagaId=${vagaId}`;
+		}
+		return api.get(url);
 	},
 
 	criarVaga: async (formData) => {
 		return api.post(`/empresa/vagas/criar`, formData);
+	},
+	getCandidaturas: async () => {
+		return api.get(`/empresa/candidaturas`);
+	},
+	atualizarStatusCandidatura: async (candidaturaId, status) => {
+		return api.put(`/empresa/candidatura/${candidaturaId}`, { status });
 	},
 };
 

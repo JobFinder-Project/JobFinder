@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BiUpload, BiInfoCircle } from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
 import { empresaService } from '../../../services/empresaService'
 import styles from './CriarVagaModal.module.css'
@@ -8,10 +9,16 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
     nome: '',
     area: '',
     requisitos: '',
+    localizacao: '',
+    tipo: 'Tempo Integral',
+    salario: '',
+    descricao: ''
   })
+
   const [imagem, setImagem] = useState(null)
+  const [preview, setPreview] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [showSuccess, setShowSuccess] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   const areas = [
     'Comercial/Vendas',
@@ -32,12 +39,19 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
   }
 
   const handleImageChange = (e) => {
-    setImagem(e.target.files[0])
+    const file = e.target.files[0]
+    if (file) {
+      setImagem(file)
+      const reader = new FileReader()
+      reader.onloadend = () => setPreview(reader.result)
+      reader.readAsDataURL(file)
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    setErrorMsg('')
 
     try {
       const data = new FormData()
@@ -48,99 +62,188 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
         data.append('imagem', imagem)
       }
 
-      await empresaService.criarVaga(data)
-      setShowSuccess(true)
-    } catch (error) {
-      console.error('Erro ao criar vaga:', error)
-      alert(error.data?.error || 'Erro ao criar vaga. Tente novamente.')
+      const response = await empresaService.criarVaga(data)
+      if (response.success) {
+        onSuccess(response.vaga)
+      }
+    } catch (err) {
+      console.error('Erro ao criar vaga:', err)
+      setErrorMsg(err.message || 'Erro ao publicar a vaga. Verifique os dados.')
     } finally {
-      setLoading(true)
+      setLoading(false)
     }
   }
 
-  const handleSuccessOk = () => {
-    setShowSuccess(false)
-    onSuccess()
-  }
-
-  if (showSuccess) {
-    return (
-      <Modal title='Sucesso' onClose={handleSuccessOk} size='sm' hideHeader>
+  return (
+      <Modal title="Publicar Nova Vaga" onClose={onClose} size="lg">
         <Modal.Body>
-          <div className={styles.successContent}>
-            <div className={styles.successIcon}>✓</div>
-            <h2>Vaga Publicada com Sucesso!</h2>
-            <p>
-              Sua vaga foi criada e está disponível para candidatos se inscreverem.
-              Você pode visualizá-la na seção 'Vagas' ou criar uma nova vaga.
+          <div className={styles.modalHeader}>
+            <p className={styles.modalSubtitle}>
+              Preencha os detalhes abaixo para encontrar o candidato ideal para sua equipe.
             </p>
-            <button className={styles.btnOkSuccess} onClick={handleSuccessOk}>
-              OK
-            </button>
           </div>
+
+          {errorMsg && (
+              <div className={styles.alertError}>
+                <BiInfoCircle size={20} />
+                <span>{errorMsg}</span>
+              </div>
+          )}
+
+          <form onSubmit={handleSubmit} className={styles.formContainer}>
+
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>Informações Básicas</h3>
+
+              <div className={styles.grid2Col}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="nome" className={styles.label}>Título da Vaga *</label>
+                  <input
+                      type="text"
+                      id="nome"
+                      name="nome"
+                      className={styles.input}
+                      placeholder="Ex: Desenvolvedor Frontend Sênior"
+                      value={formData.nome}
+                      onChange={handleChange}
+                      required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="area" className={styles.label}>Área / Categoria *</label>
+                  <select
+                      id="area"
+                      name="area"
+                      className={styles.select}
+                      value={formData.area}
+                      onChange={handleChange}
+                      required
+                  >
+                    <option value="">Selecione uma área</option>
+                    {areas.map((area) => (
+                        <option key={area} value={area}>{area}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="localizacao" className={styles.label}>Localização</label>
+                  <input
+                      type="text"
+                      id="localizacao"
+                      name="localizacao"
+                      className={styles.input}
+                      placeholder="Ex: São Paulo, SP (ou Remoto)"
+                      value={formData.localizacao}
+                      onChange={handleChange}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="tipo" className={styles.label}>Tipo de Vaga</label>
+                  <select
+                      id="tipo"
+                      name="tipo"
+                      className={styles.select}
+                      value={formData.tipo}
+                      onChange={handleChange}
+                  >
+                    <option value="Tempo Integral">Tempo Integral</option>
+                    <option value="Meio Período">Meio Período</option>
+                    <option value="Contrato">Contrato PJ</option>
+                    <option value="Estágio">Estágio</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <hr className={styles.divider} />
+
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>Detalhes e Requisitos</h3>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="descricao" className={styles.label}>Descrição da Vaga</label>
+                <textarea
+                    id="descricao"
+                    name="descricao"
+                    className={styles.textarea}
+                    placeholder="Descreva o dia a dia da vaga, cultura da empresa e benefícios..."
+                    value={formData.descricao}
+                    onChange={handleChange}
+                    rows={3}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="requisitos" className={styles.label}>Requisitos Exigidos *</label>
+                <textarea
+                    id="requisitos"
+                    name="requisitos"
+                    className={styles.textarea}
+                    placeholder="Liste as habilidades técnicas e experiências exigidas para o cargo..."
+                    value={formData.requisitos}
+                    onChange={handleChange}
+                    rows={4}
+                    required
+                />
+              </div>
+            </div>
+
+            <hr className={styles.divider} />
+
+            <div className={styles.formSection}>
+              <h3 className={styles.sectionTitle}>Imagem de Destaque</h3>
+              <p className={styles.sectionSubtitle}>
+                Adicione uma imagem para chamar a atenção dos candidatos (opcional).
+              </p>
+
+              <div className={styles.uploadArea}>
+                <input
+                    type="file"
+                    id="imagem"
+                    name="imagem"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className={styles.fileInputHidden}
+                />
+                <label htmlFor="imagem" className={styles.uploadLabel}>
+                  {preview ? (
+                      <img src={preview} alt="Preview da Vaga" className={styles.imagePreview} />
+                  ) : (
+                      <div className={styles.uploadContent}>
+                        <div className={styles.uploadIconWrapper}>
+                          <BiUpload size={24} />
+                        </div>
+                        <span className={styles.uploadTextPrimary}>Clique para selecionar uma imagem</span>
+                        <span className={styles.uploadTextSecondary}>SVG, PNG, JPG ou GIF (Max 2MB)</span>
+                      </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            <div className={styles.formActions}>
+              <button
+                  type="button"
+                  className={styles.btnCancel}
+                  onClick={onClose}
+                  disabled={loading}
+              >
+                Cancelar
+              </button>
+              <button
+                  type="submit"
+                  className={styles.btnSubmit}
+                  disabled={loading}
+              >
+                {loading ? 'Publicando...' : 'Publicar Vaga'}
+              </button>
+            </div>
+
+          </form>
         </Modal.Body>
       </Modal>
-    )
-  }
-
-  return (
-    <Modal title='Criar Nova Vaga' onClose={onClose} size='lg'>
-      <Modal.Body>
-        <form className={styles.formAddVaga} onSubmit={handleSubmit}>
-          <div className={styles.formRow}>
-            <label htmlFor='nome'>Nome da Vaga:</label>
-            <input
-              type='text'
-              id='nome'
-              name='nome'
-              value={formData.nome}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.formRow}>
-            <label htmlFor='area'>Área *</label>
-            <select
-              id='area'
-              name='area'
-              value={formData.area}
-              onChange={handleChange}
-              required
-            >
-              <option value=''>Selecione</option>
-              {areas.map((area) => (
-                <option key={area} value={area}>
-                  {area}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.formRow}>
-            <label htmlFor='requisitos'>Requisitos *:</label>
-            <textarea
-              id='requisitos'
-              name='requisitos'
-              rows='4'
-              value={formData.requisitos}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.formRow}>
-            <label htmlFor='imagem'>Imagem da Vaga:</label>
-            <input
-              type='file'
-              id='imagem'
-              name='imagem'
-              accept='image/*'
-              onChange={handleImageChange}
-            />
-          </div>
-          <button type='submit' className={styles.btnAddVaga} disabled={loading}>
-            {loading ? 'Salvando...' : 'Salvar Vaga'}
-          </button>
-        </form>
-      </Modal.Body>
-    </Modal>
   )
 }

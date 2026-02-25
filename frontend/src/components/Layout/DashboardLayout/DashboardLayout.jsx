@@ -1,27 +1,24 @@
-import Navbar from '../../Navbar/Navbar'
-import Footer from '../../Footer/Footer'
-import PageLayout from '../PageLayout/PageLayout'
+import Sidebar from '../../Sidebar/Sidebar'
 import styles from './DashboardLayout.module.css'
 
 export default function DashboardLayout({
-    children,
-    onOpenCandidaturas,
-    onOpenPerfil,
-    className = ''
-}) {
+                                            children,
+                                            userType = 'employer',
+                                            onOpenCriarVaga,
+                                            onOpenVagas,
+                                            className = ''
+                                        }) {
     return (
-        <PageLayout
-            header={
-                <Navbar
-                    inDashboard={true}
-                    onOpenCandidaturas={onOpenCandidaturas}
-                    onOpenPerfil={onOpenPerfil}
-                />
-            }
-            footer={<Footer />}
-            className={`${styles.dashboardLayout} ${className}`}
-        >
-            {children}
-        </PageLayout>
+        <div className={`${styles.dashboardWrapper} ${className}`}>
+            <Sidebar
+                userType={userType}
+                onOpenCriarVaga={onOpenCriarVaga}
+                onOpenVagas={onOpenVagas}
+            />
+
+            <div className={styles.mainContent}>
+                {children}
+            </div>
+        </div>
     )
 }

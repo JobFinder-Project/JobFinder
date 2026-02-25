@@ -1,153 +1,203 @@
-.page {
-    min-height: 100vh;
-    background-color: #f5f5f5;
-}
-
-.headerBar {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.backButton {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-}
-
-.backButton:hover {
-    background-color: #f0f0f0;
-}
-
-.searchButton {
-    background-color: #ffe100;
-    color: #333;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
-}
-
-.searchButton:hover {
-    background-color: #ffd700;
-}
-
 .container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
 }
 
-.headerSection {
-    margin-bottom: 20px;
+@media (min-width: 640px) {
+    .container {
+        padding: 2rem 1.5rem;
+    }
 }
 
-.headerSection h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 5px;
+@media (min-width: 1024px) {
+    .container {
+        padding: 2rem;
+    }
 }
 
-.headerSection p {
-    color: #666;
+/* Page Header */
+.pageHeader {
+    margin-bottom: 2rem;
 }
 
+.pageTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+    color: #475569;
+    font-size: 1rem;
+}
+
+/* Search Section */
+.searchSection {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .searchForm {
+        flex-direction: row;
+        align-items: stretch;
+    }
+}
+
+.searchWrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1rem;
+    color: #94a3b8;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+}
+
+.searchBtn {
+    position: absolute;
+    right: 0.5rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.searchBtn:hover {
+    background-color: #1d4ed8;
+}
+
+.filterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.filterBtn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+/* Results Info */
+.resultsInfo {
+    margin-bottom: 1.5rem;
+    color: #475569;
+    font-size: 0.875rem;
+}
+
+.boldText {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+/* Grid Layout */
 .candidatesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-.candidateCard {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.2s ease;
+/* States */
+.loadingState, .emptyState {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
 }
 
-.candidateCard:hover {
-    transform: translateY(-5px);
-}
-
-.candidateImage {
-    width: 80px;
-    height: 80px;
+.spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563eb;
     border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
 }
 
-.candidateCard h2 {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 8px;
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
 
-.candidateCard p {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 5px;
+.emptyIconWrapper {
+    color: #cbd5e1;
+    margin-bottom: 1rem;
 }
 
-.viewProfileButton {
-    background-color: #ffe100;
-    color: #333;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
+.emptyTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.emptyText {
+    color: #64748b;
+    text-align: center;
+    max-width: 24rem;
+    margin-bottom: 1.5rem;
+}
+
+.clearBtn {
+    background-color: transparent;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
     font-weight: 500;
-    margin-top: 10px;
-    transition: background-color 0.2s ease;
-    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.viewProfileButton:hover {
-    background-color: #ffd700;
-}
-
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    grid-column: 1 / -1;
-}
-
-.noData {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    background-color: white;
-    border-radius: 8px;
-    grid-column: 1 / -1;
-}
-
-@media (max-width: 768px) {
-    .searchContainer {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .searchForm {
-        width: 100%;
-        margin: 0;
-    }
-
-    .backButton {
-        align-self: flex-start;
-    }
+.clearBtn:hover {
+    background-color: #eff6ff;
 }
