@@ -1,0 +1,253 @@
+.wrapper {
+    min-height: 100vh;
+    background-color: #f8fafc; /* bg-slate-50 */
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 56rem; /* max-w-4xl */
+    padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* Back Button */
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #475569; /* text-slate-600 */
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+.backButton:hover {
+    color: #0f172a; /* text-slate-900 */
+}
+
+/* Page Header */
+.pageHeader {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700;
+    color: #0f172a; /* text-slate-900 */
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #475569; /* text-slate-600 */
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Main Content Card */
+.mainCard {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.mainCardHeader {
+    text-align: center;
+    padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.mainIconWrapper {
+    width: 4rem;
+    height: 4rem;
+    background-color: #dbeafe; /* bg-blue-100 */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.mainIcon {
+    color: #2563eb; /* text-blue-600 */
+}
+
+.mainCardTitle {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.mainCardDesc {
+    font-size: 1rem;
+    color: #475569;
+    max-width: 42rem;
+    margin: 0 auto;
+}
+
+.mainCardContent {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.btnPrimaryLg {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.75rem 2rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnPrimaryLg:hover {
+    background-color: #1d4ed8;
+}
+
+/* Info Grid */
+.infoGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .infoGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.infoCard {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.infoCardContent {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.infoIconWrapper {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem auto;
+}
+
+.bgGreen { background-color: #dcfce7; }
+.textGreen { color: #16a34a; }
+
+.bgAmber { background-color: #fef3c7; }
+.textAmber { color: #d97706; }
+
+.bgPurple { background-color: #f3e8ff; }
+.textPurple { color: #9333ea; }
+
+.infoCardTitle {
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+}
+
+.infoCardDesc {
+    font-size: 0.875rem;
+    color: #475569;
+    margin: 0;
+}
+
+/* ====================================
+   MODAL DE ESCOLHA RÁPIDA
+   ==================================== */
+
+.modalContent {
+    padding: 0.5rem 0;
+}
+
+.modalText {
+    color: #475569;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.supportOptionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.supportCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    background-color: #ffffff;
+}
+
+.supportCard:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.iconWrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.iconGithub {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+.iconEmail {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.supportCardInfo h4 {
+    margin: 0 0 0.5rem 0;
+    color: #0f172a;
+    font-size: 1.125rem;
+}
+
+.supportCardInfo p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
