@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { BiBriefcase, BiShow, BiHide, BiErrorCircle } from 'react-icons/bi'; // Importamos o ícone de erro
+import { BiBriefcase, BiShow, BiHide, BiErrorCircle } from 'react-icons/bi';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './Login.module.css';
 
@@ -13,11 +13,10 @@ export default function Login() {
   const [senha, setSenha] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(''); // Novo estado para controlar a mensagem de erro
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     if (searchParams.get('cadastro') === 'sucesso') {
-      // Aqui ainda mantemos o alert pois é um redirecionamento de sucesso externo, mas pode ser trocado por um Toast futuramente
       alert('Cadastro realizado com sucesso! Faça login para acessar sua conta.');
       navigate('/login', { replace: true });
     }
@@ -42,7 +41,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg(''); // Limpa os erros anteriores ao tentar novamente
+    setErrorMsg('');
 
     try {
       const result = await login({ email, senha });
@@ -50,12 +49,10 @@ export default function Login() {
       if (result.success) {
         navigate(result.data.redirectUrl || '/');
       } else {
-        // Em vez de alert, setamos o erro no estado
         setErrorMsg('Email ou senha incorretos.');
       }
     } catch (err) {
       console.error('Erro no login:', err);
-      // Em vez de alert, setamos o erro no estado
       setErrorMsg(err.message || 'Ocorreu um erro inesperado. Tente novamente.');
     } finally {
       setLoading(false);
@@ -88,7 +85,6 @@ export default function Login() {
 
               <div className={styles.cardContent}>
 
-                {/* ALERTA DE ERRO RENDERIZADO AQUI */}
                 {errorMsg && (
                     <div className={styles.errorAlert}>
                       <BiErrorCircle size={20} className={styles.errorIcon} />
@@ -107,7 +103,7 @@ export default function Login() {
                         value={email}
                         onChange={(e) => {
                           setEmail(e.target.value);
-                          setErrorMsg(''); // Limpa o erro quando o usuário começa a digitar de novo
+                          setErrorMsg('');
                         }}
                         required
                         className={styles.input}
@@ -124,7 +120,7 @@ export default function Login() {
                           value={senha}
                           onChange={(e) => {
                             setSenha(e.target.value);
-                            setErrorMsg(''); // Limpa o erro quando o usuário começa a digitar de novo
+                            setErrorMsg('');
                           }}
                           required
                           className={`${styles.input} ${styles.inputPassword}`}
