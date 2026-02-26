@@ -276,7 +276,21 @@ Este documento apresenta os diagramas de caso de uso do JobFinder mapeados diret
 
 ---
 
-## RF09 — Visualizar página pública da empresa e vagas ativas (Futuro)
+## RF09 — Acessar canal de suporte
+
+### Diagrama: Acessar suporte técnico/funcional
+
+![alt text](../images/use-case-image/acessarSuporte-UseCase.png)
+
+- **Objetivo**: registrar chamado de suporte técnico/funcional.
+- **Ator principal**: Candidato ou Empregador.
+- **Pré-condição**: canal de suporte disponível
+- **Fluxo principal**: acessar suporte -> relatar bug/feature ou enviar email -> enviar solicitação.
+- **Pós-condição**: redirecionamento para o repositório do projeto ou caixa de email de suporte.
+
+---
+
+## RF10 — Visualizar página pública da empresa e vagas ativas (Futuro)
 
 ### Diagrama a ser criado: Página pública da empresa
 
@@ -285,18 +299,6 @@ Este documento apresenta os diagramas de caso de uso do JobFinder mapeados diret
 - **Pré-condição sugerida**: empresa com perfil público habilitado.
 - **Fluxo principal sugerido**: buscar empresa -> abrir página pública -> visualizar dados e vagas ativas.
 - **Pós-condição sugerida**: candidato obtém contexto da empresa antes de candidatar-se.
-
----
-
-## RF10 — Canal de suporte para dúvidas e problemas (Futuro)
-
-### Diagrama a ser criado: Abrir solicitação de suporte
-
-- **Objetivo sugerido**: registrar chamado de suporte técnico/funcional.
-- **Ator principal**: Candidato ou Empregador.
-- **Pré-condição sugerida**: usuário autenticado (ou fluxo anônimo, se definido em regra).
-- **Fluxo principal sugerido**: acessar suporte -> descrever problema -> enviar solicitação -> receber protocolo.
-- **Pós-condição sugerida**: solicitação registrada para atendimento.
 
 ---
 
