@@ -61,7 +61,7 @@ export default function MinhasCandidaturasPage() {
         try {
             await candidatoService.cancelarCandidatura(candidaturaToCancel._id);
             setCandidaturaToCancel(null);
-            setShowSuccessModal(true); // Abre o Check verde
+            setShowSuccessModal(true);
             fetchCandidaturas();
         } catch (error) {
             console.error('Erro ao cancelar:', error);
@@ -144,7 +144,7 @@ export default function MinhasCandidaturasPage() {
                     </span>
                                     )}
                                     <span className={styles.metaItem}>
-                    <BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura)}
+                    {/*<BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura)}*/}
                   </span>
                                 </div>
 
