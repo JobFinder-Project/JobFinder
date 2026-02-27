@@ -85,11 +85,23 @@ export default function PerfilPage() {
     setSuccessMsg('');
 
     try {
-      await candidatoService.atualizarPerfil(formData);
+      const dataToSend = new FormData();
+
+      Object.keys(formData).forEach(key => {
+        if (key !== 'imagem' && formData[key] !== null && formData[key] !== undefined) {
+          dataToSend.append(key, formData[key]);
+        }
+      });
+
+      if (formData.imagem instanceof File) {
+        dataToSend.append('imagem', formData.imagem);
+      }
+
+      await candidatoService.atualizarPerfil(dataToSend);
+
       setSuccessMsg('Perfil atualizado com sucesso!');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Esconde a mensagem de sucesso após 3 segundos
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
@@ -119,7 +131,6 @@ export default function PerfilPage() {
 
           <form onSubmit={handleSubmit} className={styles.formLayout}>
 
-            {/* COLUNA ESQUERDA: FOTO DE PERFIL */}
             <div className={styles.profileSidebar}>
               <div className={styles.card}>
                 <div className={styles.cardContent}>
@@ -153,10 +164,8 @@ export default function PerfilPage() {
               </div>
             </div>
 
-            {/* COLUNA DIREITA: FORMULÁRIOS */}
             <div className={styles.mainContent}>
 
-              {/* SEÇÃO: DADOS PESSOAIS */}
               <div className={styles.card}>
                 <div className={styles.cardHeader}>
                   <h2 className={styles.cardTitle}>Dados Pessoais</h2>
@@ -183,7 +192,6 @@ export default function PerfilPage() {
                 </div>
               </div>
 
-              {/* SEÇÃO: RESUMO PROFISSIONAL */}
               <div className={styles.card}>
                 <div className={styles.cardHeader}>
                   <h2 className={styles.cardTitle}>Resumo Profissional</h2>
@@ -203,7 +211,6 @@ export default function PerfilPage() {
                 </div>
               </div>
 
-              {/* SEÇÃO: FORMAÇÃO E HABILIDADES */}
               <div className={styles.card}>
                 <div className={styles.cardHeader}>
                   <h2 className={styles.cardTitle}>Formação e Habilidades</h2>
@@ -234,7 +241,6 @@ export default function PerfilPage() {
                 </div>
               </div>
 
-              {/* BOTÃO SALVAR */}
               <div className={styles.actionsContainer}>
                 <button type="submit" className={styles.btnPrimary} disabled={saving}>
                   <BiSave size={20} />
