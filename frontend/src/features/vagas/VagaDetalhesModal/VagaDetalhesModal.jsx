@@ -1,27 +1,70 @@
-import { useState } from 'react';
-import { BiBuilding, BiMap, BiMoney, BiBriefcase, BiCheckCircle } from 'react-icons/bi';
+import { useState, useEffect } from 'react';
+import { BiBuilding, BiMap, BiMoney, BiBriefcase } from 'react-icons/bi';
 import Modal from '../../../components/ui/Modal/Modal';
 import { candidatoService } from '../../../services/candidatoService';
 import styles from './VagaDetalhesModal.module.css';
 
 export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancelRequest }) {
   const [loading, setLoading] = useState(false);
-  const [applied, setApplied] = useState(false);
   const [error, setError] = useState('');
 
+  const [localCandidatura, setLocalCandidatura] = useState(candidatura || null);
+  const [checkingStatus, setCheckingStatus] = useState(!candidatura);
+
   if (!vaga) return null;
+
+  useEffect(() => {
+    if (candidatura) {
+      setCheckingStatus(false);
+      return;
+    }
+
+    const fetchStatus = async () => {
+      try {
+        const data = await candidatoService.getCandidaturas();
+        const found = data.candidaturas?.find(c => c.vaga?._id === vaga._id);
+        if (found) {
+          setLocalCandidatura(found);
+        }
+      } catch (err) {
+        console.error('Erro ao verificar status da vaga:', err);
+      } finally {
+        setCheckingStatus(false);
+      }
+    };
+
+    fetchStatus();
+  }, [vaga._id, candidatura]);
 
   const handleApply = async () => {
     setLoading(true);
     setError('');
     try {
       await candidatoService.candidatarVaga(vaga._id);
-      setApplied(true);
+      setLocalCandidatura({ status: 'Pendente', vaga });
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.error || err.message || 'Erro ao se candidatar. Tente novamente.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCancelLocal = async () => {
+    if (onCancelRequest) {
+      onCancelRequest(localCandidatura);
+    } else {
+      if (window.confirm('Tem certeza que deseja cancelar sua candidatura para esta vaga?')) {
+        setLoading(true);
+        try {
+          await candidatoService.cancelarCandidatura(localCandidatura._id);
+          setLocalCandidatura(null); // O botão volta a ser "Candidatar-se"
+        } catch (err) {
+          setError('Erro ao cancelar candidatura.');
+        } finally {
+          setLoading(false);
+        }
+      }
     }
   };
 
@@ -35,8 +78,7 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
   };
 
   const imageSrc = getImagemSrc(vaga.imagem);
-
-  const isPending = candidatura?.status?.toLowerCase().includes('pendente');
+  const isPending = localCandidatura?.status?.toLowerCase().includes('pendente');
 
   return (
       <Modal title="Detalhes da Vaga" onClose={onClose} size="lg">
@@ -68,31 +110,28 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
               <div className={styles.actionContainer}>
                 {error && <p className={styles.errorText}>{error}</p>}
 
-                {candidatura ? (
+                {checkingStatus ? (
+                    <button className={styles.btnApply} disabled>
+                      Verificando status...
+                    </button>
+                ) : localCandidatura ? (
                     isPending ? (
                         <button
                             className={styles.btnDanger}
-                            onClick={() => onCancelRequest(candidatura)}
+                            onClick={handleCancelLocal}
+                            disabled={loading}
                         >
-                          Cancelar Candidatura
+                          {loading ? 'Processando...' : 'Cancelar Candidatura'}
                         </button>
                     ) : (
                         <div className={styles.statusBadgeGlobal}>
-                          Status atual: <strong>{candidatura.status}</strong>
+                          Status atual: <strong>{localCandidatura.status}</strong>
                         </div>
                     )
                 ) : (
-
-                    applied ? (
-                        <div className={styles.successBadge}>
-                          <BiCheckCircle size={22} />
-                          Candidatura enviada!
-                        </div>
-                    ) : (
-                        <button className={styles.btnApply} onClick={handleApply} disabled={loading}>
-                          {loading ? 'Processando...' : 'Candidatar-se'}
-                        </button>
-                    )
+                    <button className={styles.btnApply} onClick={handleApply} disabled={loading}>
+                      {loading ? 'Processando...' : 'Candidatar-se'}
+                    </button>
                 )}
               </div>
             </div>
