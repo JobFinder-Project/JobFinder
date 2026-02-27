@@ -18,7 +18,7 @@ import RedefinirSenha from './pages/RedefinirSenha/RedefinirSenhaPage'
 import BuscaVagas from './pages/BuscaVagas/BuscaVagasPage'
 import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
 import MinhasCandidaturasPage from './pages/MinhasCandidaturas/MinhasCandidaturasPage';
-import EditarPerfilCandidato from './pages/EditarPerfilCandidato/EditarPerfilCandidatoPage'
+import PerfilPage from './pages/Perfil/PerfilPage'
 import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 
 const queryClient = new QueryClient()
@@ -70,9 +70,9 @@ function App() {
                   <MinhasCandidaturasPage />
                 </ProtectedRoute>
               } />
-              <Route path='/candidato/perfil/:candidatoId/editar' element={
+              <Route path='/candidato/perfil' element={
                 <ProtectedRoute allowedRole='candidato'>
-                  <EditarPerfilCandidato />
+                  <PerfilPage />
                 </ProtectedRoute>
               } />
 

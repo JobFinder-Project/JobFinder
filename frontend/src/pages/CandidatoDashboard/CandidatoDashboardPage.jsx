@@ -5,7 +5,6 @@ import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLa
 import JobCard from '../../features/vagas/JobCard';
 import CategoryFilter from '../../features/vagas/CategoryFilter/CategoryFilter';
 import CandidaturasModal from '../../features/candidato/CandidaturasModal/CandidaturasModal';
-import PerfilModal from '../../features/candidato/PerfilModal/PerfilModal';
 import VagaDetalhesModal from '../../features/vagas/VagaDetalhesModal/VagaDetalhesModal';
 import { candidatoService } from '../../services/candidatoService';
 import { useVagasQuery } from '../../features/vagas/useVagasQuery';
@@ -31,7 +30,6 @@ export default function CandidatoDashboard() {
   );
 
   const [showCandidaturasModal, setShowCandidaturasModal] = useState(false);
-  const [showPerfilModal, setShowPerfilModal] = useState(false);
   const [showVagaDetalhesModal, setShowVagaDetalhesModal] = useState(false);
   const [selectedVaga, setSelectedVaga] = useState(null);
 
@@ -98,7 +96,7 @@ export default function CandidatoDashboard() {
               </div>
             </div>
 
-            <div className={styles.statCard} onClick={() => setShowPerfilModal(true)} role="button">
+            <div className={styles.statCard} onClick={() => navigate('/candidato/perfil')} role="button">
               <div className={styles.statContent}>
                 <div>
                   <p className={styles.statLabel}>Atualizar Currículo</p>
@@ -199,9 +197,6 @@ export default function CandidatoDashboard() {
 
         {showCandidaturasModal && (
             <CandidaturasModal candidatoId={candidatoId} onClose={() => setShowCandidaturasModal(false)} />
-        )}
-        {showPerfilModal && (
-            <PerfilModal candidato={candidato} candidatoId={candidatoId} onClose={() => setShowPerfilModal(false)} />
         )}
         {showVagaDetalhesModal && selectedVaga && (
             <VagaDetalhesModal vaga={selectedVaga} candidatoId={candidatoId} onClose={() => setShowVagaDetalhesModal(false)} />
