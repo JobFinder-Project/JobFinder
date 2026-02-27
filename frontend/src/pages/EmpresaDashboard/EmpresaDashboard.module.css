@@ -16,7 +16,6 @@
   }
 }
 
-/* Error State */
 .errorState {
   text-align: center;
   padding: 4rem 1rem;
@@ -50,7 +49,6 @@
   background-color: #1d4ed8;
 }
 
-/* Header */
 .header {
   margin-bottom: 2rem;
 }
@@ -79,7 +77,6 @@
   }
 }
 
-/* Stats Grid */
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -127,7 +124,6 @@
   margin-top: 0.25rem;
 }
 
-/* Main Grid Layout */
 .mainGrid {
   display: grid;
   gap: 2rem;
@@ -149,7 +145,6 @@
   gap: 1.5rem;
 }
 
-/* Generic Card */
 .card {
   background-color: #ffffff;
   border-radius: 0.5rem;
@@ -192,7 +187,6 @@
   padding: 1rem 0;
 }
 
-/* Buttons inside cards */
 .btnGhost {
   background: transparent;
   border: none;
@@ -227,7 +221,6 @@
   border-radius: 0.375rem;
 }
 
-/* Job Item */
 .jobItem {
   padding: 1rem;
   border-radius: 0.5rem;

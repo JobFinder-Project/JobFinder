@@ -114,7 +114,6 @@
     border-top: 1px solid #eee;
 }
 
-/* Subcomponentes customizáveis */
 .customHeader {
     margin-bottom: 16px;
 }
@@ -123,7 +122,6 @@
     flex: 1;
 }
 
-/* Responsividade */
 @media (max-width: 480px) {
     .modalContent {
         padding: 16px;

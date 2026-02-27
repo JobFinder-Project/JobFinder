@@ -14,10 +14,7 @@
 }
 
 .mainContent {
-    margin-top: 5px;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-bottom: 30px;
+    margin: 5px 10% 30px;
     width: 80%;
     padding: 20px;
     box-sizing: border-box;
