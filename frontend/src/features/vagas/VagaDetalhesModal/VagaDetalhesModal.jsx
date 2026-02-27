@@ -4,7 +4,7 @@ import Modal from '../../../components/ui/Modal/Modal';
 import { candidatoService } from '../../../services/candidatoService';
 import styles from './VagaDetalhesModal.module.css';
 
-export default function VagaDetalhesModal({ vaga, onClose }) {
+export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancelRequest }) {
   const [loading, setLoading] = useState(false);
   const [applied, setApplied] = useState(false);
   const [error, setError] = useState('');
@@ -36,6 +36,8 @@ export default function VagaDetalhesModal({ vaga, onClose }) {
 
   const imageSrc = getImagemSrc(vaga.imagem);
 
+  const isPending = candidatura?.status?.toLowerCase().includes('pendente');
+
   return (
       <Modal title="Detalhes da Vaga" onClose={onClose} size="lg">
         <Modal.Body>
@@ -43,7 +45,6 @@ export default function VagaDetalhesModal({ vaga, onClose }) {
 
             <div className={styles.header}>
               <div className={styles.headerMain}>
-
                 <div className={styles.imageContainer}>
                   {imageSrc ? (
                       <img src={imageSrc} alt={vaga.nome} className={styles.jobImage} />
@@ -62,25 +63,36 @@ export default function VagaDetalhesModal({ vaga, onClose }) {
                     {vaga.tipo && <span className={`${styles.badge} ${styles.badgeGreen}`}>{vaga.tipo}</span>}
                   </div>
                 </div>
-
               </div>
 
               <div className={styles.actionContainer}>
                 {error && <p className={styles.errorText}>{error}</p>}
 
-                {applied ? (
-                    <div className={styles.successBadge}>
-                      <BiCheckCircle size={22} />
-                      Candidatura enviada!
-                    </div>
+                {candidatura ? (
+                    isPending ? (
+                        <button
+                            className={styles.btnDanger}
+                            onClick={() => onCancelRequest(candidatura)}
+                        >
+                          Cancelar Candidatura
+                        </button>
+                    ) : (
+                        <div className={styles.statusBadgeGlobal}>
+                          Status atual: <strong>{candidatura.status}</strong>
+                        </div>
+                    )
                 ) : (
-                    <button
-                        className={styles.btnApply}
-                        onClick={handleApply}
-                        disabled={loading}
-                    >
-                      {loading ? 'Processando...' : 'Candidatar-se Agora'}
-                    </button>
+
+                    applied ? (
+                        <div className={styles.successBadge}>
+                          <BiCheckCircle size={22} />
+                          Candidatura enviada!
+                        </div>
+                    ) : (
+                        <button className={styles.btnApply} onClick={handleApply} disabled={loading}>
+                          {loading ? 'Processando...' : 'Candidatar-se'}
+                        </button>
+                    )
                 )}
               </div>
             </div>
@@ -136,7 +148,6 @@ export default function VagaDetalhesModal({ vaga, onClose }) {
                   </div>
                 </div>
             )}
-
           </div>
         </Modal.Body>
       </Modal>

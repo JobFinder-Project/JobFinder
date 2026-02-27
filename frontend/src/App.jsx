@@ -17,6 +17,7 @@ import EsqueciSenha from './pages/EsqueciSenha/EsqueciSenhaPage'
 import RedefinirSenha from './pages/RedefinirSenha/RedefinirSenhaPage'
 import BuscaVagas from './pages/BuscaVagas/BuscaVagasPage'
 import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
+import MinhasCandidaturasPage from './pages/MinhasCandidaturas/MinhasCandidaturasPage';
 import EditarPerfilCandidato from './pages/EditarPerfilCandidato/EditarPerfilCandidatoPage'
 import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 
@@ -28,8 +29,10 @@ function App() {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthProvider>
             <Routes>
+              {/* Rotas Públicas */}
               <Route path='/' element={<Home />} />
               <Route path='/home' element={<Home />} />
+              <Route path='/suporte' element={<SuportePage />} />
 
               <Route path='/login' element={
                 <GuestRoute>
@@ -62,6 +65,11 @@ function App() {
                   <BuscaVagas />
                 </ProtectedRoute>
               } />
+              <Route path='/candidato/candidaturas' element={
+                <ProtectedRoute allowedRole='candidato'>
+                  <MinhasCandidaturasPage />
+                </ProtectedRoute>
+              } />
               <Route path='/candidato/perfil/:candidatoId/editar' element={
                 <ProtectedRoute allowedRole='candidato'>
                   <EditarPerfilCandidato />
@@ -87,11 +95,6 @@ function App() {
               <Route path="/empresa/candidaturas" element={
                 <ProtectedRoute allowedRole="empresa">
                   <GestaoCandidaturasPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/empresa/suporte" element={
-                <ProtectedRoute allowedRole="empresa">
-                  <SuportePage />
                 </ProtectedRoute>
               } />
 

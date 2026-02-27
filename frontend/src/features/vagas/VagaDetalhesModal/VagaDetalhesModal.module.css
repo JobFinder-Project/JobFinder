@@ -7,7 +7,7 @@
 
 .header {
   display: flex;
-  flex-direction: column;
+  margin-top: 10px;
   gap: 1.5rem;
 }
 
@@ -241,4 +241,31 @@
 .emptyText {
   font-style: italic;
   color: #94a3b8;
+}
+
+.btnDanger {
+  background-color: #ef4444;
+  color: #ffffff;
+  padding: 14px 12px;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+}
+
+.btnDanger:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+.statusBadgeGlobal {
+  padding: 0.875rem 1.5rem;
+  background-color: #f8fafc;
+  color: #475569;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
 }

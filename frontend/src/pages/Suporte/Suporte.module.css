@@ -244,3 +244,18 @@
     font-size: 0.9rem;
     line-height: 1.5;
 }
+
+.publicPageWrapper {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+}
+
+.publicContentWrapper {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
+}
