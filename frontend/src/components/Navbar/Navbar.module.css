@@ -1,101 +1,69 @@
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #2c3e50; 
-  color: #fff;
-  padding: 0 20px;
-  height: 70px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.nav {
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #ffffff;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 50;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #fff;
-  /* color: #ffcb00; */
-  margin: 0;
-}
-
-.navbarCenter {
-  flex: 1;
+.navContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
   display: flex;
-  justify-content: center;
-  margin: 0 110px 0 0;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
 }
 
-.searchForm {
+.logoGroup {
   display: flex;
-  width: 100%;
-  max-width: 500px;
-  position: relative;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
 }
 
-.searchInput {
-  width: 100%;
-  padding: 10px 15px;
-  padding-right: 45px;
-  border-radius: 20px;
-  border: none;
-  font-size: 1rem;
-  outline: none;
+.logoIcon {
+  height: 1.75rem;
+  width: 1.75rem;
+  color: #2563eb;
 }
 
-.searchButton {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: #334155;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navLink:hover {
+  color: #0f172a;
+}
+
+.btnPrimary {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: 500;
   border: none;
   cursor: pointer;
-  color: #666;
-  display: flex;
-  align-items: center;
+  transition: background-color 0.2s;
 }
 
-.navbarMenu {
-  display: flex;
-  list-style: none;
-  gap: 30px;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-}
-
-.navbarButton {
-  background: none;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.navbarButton:hover {
-  opacity: 0.8;
-  color: #ffcb00;
-}
-
-.logoutBtn:hover {
-  color: #000000; 
-}
-
-.navbarLabel {
-  margin-top: 2px;
-  font-size: 14px;
-}
-
-@media (max-width: 768px) {
-  .navbarLabel {
-    display: none; 
-  }
-  
-  .navbarCenter {
-    display: none; 
-  }
+.btnPrimary:hover {
+  background-color: #1d4ed8;
 }
