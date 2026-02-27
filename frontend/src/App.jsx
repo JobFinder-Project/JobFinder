@@ -17,7 +17,8 @@ import EsqueciSenha from './pages/EsqueciSenha/EsqueciSenhaPage'
 import RedefinirSenha from './pages/RedefinirSenha/RedefinirSenhaPage'
 import BuscaVagas from './pages/BuscaVagas/BuscaVagasPage'
 import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
-import EditarPerfilCandidato from './pages/EditarPerfilCandidato/EditarPerfilCandidatoPage'
+import MinhasCandidaturasPage from './pages/MinhasCandidaturas/MinhasCandidaturasPage';
+import PerfilPage from './pages/Perfil/PerfilPage'
 import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 
 const queryClient = new QueryClient()
@@ -28,8 +29,10 @@ function App() {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthProvider>
             <Routes>
+              {/* Rotas Públicas */}
               <Route path='/' element={<Home />} />
               <Route path='/home' element={<Home />} />
+              <Route path='/suporte' element={<SuportePage />} />
 
               <Route path='/login' element={
                 <GuestRoute>
@@ -62,9 +65,14 @@ function App() {
                   <BuscaVagas />
                 </ProtectedRoute>
               } />
-              <Route path='/candidato/perfil/:candidatoId/editar' element={
+              <Route path='/candidato/candidaturas' element={
                 <ProtectedRoute allowedRole='candidato'>
-                  <EditarPerfilCandidato />
+                  <MinhasCandidaturasPage />
+                </ProtectedRoute>
+              } />
+              <Route path='/candidato/perfil' element={
+                <ProtectedRoute allowedRole='candidato'>
+                  <PerfilPage />
                 </ProtectedRoute>
               } />
 
@@ -87,11 +95,6 @@ function App() {
               <Route path="/empresa/candidaturas" element={
                 <ProtectedRoute allowedRole="empresa">
                   <GestaoCandidaturasPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/empresa/suporte" element={
-                <ProtectedRoute allowedRole="empresa">
-                  <SuportePage />
                 </ProtectedRoute>
               } />
 

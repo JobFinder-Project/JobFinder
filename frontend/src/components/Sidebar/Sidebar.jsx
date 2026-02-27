@@ -34,7 +34,7 @@ export default function Sidebar({
         { path: '/candidato/dashboard', label: 'Dashboard', icon: BiHomeAlt },
         { path: '/candidato/vagas', label: 'Buscar Vagas', icon: BiSearch },
         { path: '/candidato/candidaturas', label: 'Candidaturas', icon: BiFile },
-        { path: '/candidato/suporte', label: 'Suporte', icon: BsHeadphones },
+        { path: '/suporte', label: 'Suporte', icon: BsHeadphones },
     ];
 
     const employerLinks = [
@@ -42,7 +42,7 @@ export default function Sidebar({
         { action: onOpenCriarVaga, modalQuery: 'criarVaga', label: 'Publicar Vaga', icon: BiPlus },
         { path: '/empresa/vagas', label: 'Minhas Vagas', icon: BiBriefcase },
         { path: '/empresa/candidatos/buscar', label: 'Candidatos', icon: BiGroup },
-        { path: '/empresa/suporte', label: 'Suporte', icon: BsHeadphones },
+        { path: '/suporte', label: 'Suporte', icon: BsHeadphones },
     ];
 
     const links = userType === 'candidate' ? candidateLinks : employerLinks;

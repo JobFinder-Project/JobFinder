@@ -134,14 +134,12 @@
     color: #0f172a;
 }
 
-/* Grid Layout */
 .candidatesGrid {
     display: grid;
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
-/* States */
 .loadingState, .emptyState {
     grid-column: 1 / -1;
     display: flex;

@@ -1,170 +1,212 @@
-.dashboardWrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #ffffff;
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
 }
 
-.mainContent {
-    flex: 1;
-    margin: 5px 10%;
-    width: 80%;
-    padding: 20px;
-    box-sizing: border-box;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+@media (min-width: 640px) {
+    .container {
+        padding: 2rem 1.5rem;
+    }
 }
 
-.categories {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    margin-top: 10px;
+.header {
+    margin-bottom: 2rem;
 }
 
-.categoryArrow {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    flex-shrink: 0;
+.title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
 }
 
-.categoryArrow:hover {
-    background-color: #f0f0f0;
-}
-
-.categoriesList {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    flex: 1;
-    padding: 5px 0;
-}
-
-.categoriesList::-webkit-scrollbar {
-    display: none;
-}
-
-.categoryChip {
-    padding: 10px 20px;
-    background-color: #ecf0f1;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-}
-
-.categoryChip:hover {
-    background-color: #bdc3c7;
-}
-
-.categoryChip.active {
-    background-color: #ffe100;
-    color: #333;
-}
-
-.jobsFeed {
-    padding: 10px 0;
-}
-
-.cardGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    list-style: none;
-    padding: 0;
+.subtitle {
+    color: #475569;
+    font-size: 1rem;
     margin: 0;
 }
 
-.jobCard {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    text-align: center;
-    transition: transform 0.2s ease;
+.searchCard {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.jobCard:hover {
-    transform: translateY(-5px);
+.searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.jobImage {
+.searchGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .searchGrid {
+        grid-template-columns: 2fr 1fr 1fr;
+    }
+}
+
+.inputGroup {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.inputIcon {
+    position: absolute;
+    left: 1rem;
+    color: #94a3b8;
+    font-size: 1.25rem;
+}
+
+.input, .select {
     width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    height: 3.25rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+    color: #0f172a;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
 }
 
-.jobCard h2 {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 8px;
+.input {
+    padding: 0 1rem 0 2.75rem;
 }
 
-.jobCompany {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 4px;
-}
-
-.jobArea {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 12px;
-}
-
-.registerButton {
-    background-color: #ffe100;
-    color: #333;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+.select {
+    padding: 0 1rem 0 2.75rem;
+    appearance: none;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.2s ease;
+}
+
+.input:focus, .select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+}
+
+.actionsRow {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btnSearch {
+    height: 3rem;
     width: 100%;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.registerButton:hover {
-    background-color: #ffd700;
-}
-
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-}
-
-.noData {
-    text-align: center;
-    padding: 40px;
-    color: #666;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-}
-
-@media (max-width: 768px) {
-    .mainContent {
-        margin: 5px 5%;
-        width: 90%;
-        padding: 15px;
+@media (min-width: 768px) {
+    .btnSearch {
+        width: auto;
+        padding: 0 2rem;
     }
+}
 
-    .cardGrid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-    }
+.btnSearch:hover {
+    background-color: #1d4ed8;
+}
+
+.resultsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.resultsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resultsTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+.jobGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+@media (min-width: 768px) {
+    .jobGrid { grid-template-columns: repeat(1, 1fr); }
+}
+
+@media (min-width: 1024px) {
+    .jobGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+
+.emptyIconWrapper {
+    color: #94a3b8;
+    margin-bottom: 1.25rem;
+    background-color: #f1f5f9;
+    padding: 1.5rem;
+    border-radius: 50%;
+}
+
+.emptyState h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.emptyState p {
+    color: #64748b;
+    margin: 0 0 1.5rem 0;
+    max-width: 450px;
+}
+
+.btnClear {
+    background-color: #ffffff;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btnClear:hover {
+    background-color: #eff6ff;
 }

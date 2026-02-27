@@ -1,13 +1,13 @@
 .wrapper {
     min-height: 100vh;
-    background-color: #f8fafc; /* bg-slate-50 */
+    background-color: #f8fafc;
     display: flex;
     justify-content: center;
 }
 
 .container {
     width: 100%;
-    max-width: 56rem; /* max-w-4xl */
+    max-width: 56rem;
     padding: 1.5rem 1rem;
 }
 
@@ -17,14 +17,13 @@
     }
 }
 
-/* Back Button */
 .backButton {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     background: transparent;
     border: none;
-    color: #475569; /* text-slate-600 */
+    color: #475569;
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
@@ -34,28 +33,26 @@
 }
 
 .backButton:hover {
-    color: #0f172a; /* text-slate-900 */
+    color: #0f172a;
 }
 
-/* Page Header */
 .pageHeader {
     margin-bottom: 2rem;
 }
 
 .title {
-    font-size: 1.875rem; /* text-3xl */
+    font-size: 1.875rem;
     font-weight: 700;
-    color: #0f172a; /* text-slate-900 */
+    color: #0f172a;
     margin-bottom: 0.5rem;
 }
 
 .subtitle {
-    color: #475569; /* text-slate-600 */
+    color: #475569;
     font-size: 1rem;
     margin: 0;
 }
 
-/* Main Content Card */
 .mainCard {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -73,7 +70,7 @@
 .mainIconWrapper {
     width: 4rem;
     height: 4rem;
-    background-color: #dbeafe; /* bg-blue-100 */
+    background-color: #dbeafe;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -82,11 +79,11 @@
 }
 
 .mainIcon {
-    color: #2563eb; /* text-blue-600 */
+    color: #2563eb;
 }
 
 .mainCardTitle {
-    font-size: 1.5rem; /* text-2xl */
+    font-size: 1.5rem;
     font-weight: 600;
     color: #0f172a;
     margin: 0 0 0.5rem 0;
@@ -124,7 +121,6 @@
     background-color: #1d4ed8;
 }
 
-/* Info Grid */
 .infoGrid {
     display: grid;
     grid-template-columns: 1fr;
@@ -181,9 +177,6 @@
     margin: 0;
 }
 
-/* ====================================
-   MODAL DE ESCOLHA RÁPIDA
-   ==================================== */
 
 .modalContent {
     padding: 0.5rem 0;
@@ -250,4 +243,19 @@
     color: #64748b;
     font-size: 0.9rem;
     line-height: 1.5;
+}
+
+.publicPageWrapper {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+}
+
+.publicContentWrapper {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
 }

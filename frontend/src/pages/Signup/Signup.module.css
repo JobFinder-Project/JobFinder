@@ -227,7 +227,6 @@
     background-color: #ffffff;
 }
 
-/* Deixa o input de arquivo mais bonitinho removendo o preenchimento de altura padrão */
 .fileInput {
     padding: 0.625rem 1rem;
     cursor: pointer;

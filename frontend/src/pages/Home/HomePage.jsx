@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiBriefcase, BiSearch, BiFile, BiBarChartAlt2, BiUser, BiBuildings } from 'react-icons/bi';
 import EscolherCargoModal from '../../features/auth/EscolherCargoModal/EscolherCargoModal';
+import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './Home.module.css';
 
@@ -34,23 +35,7 @@ export default function Home() {
   return (
       <div className={styles.wrapper}>
 
-        <nav className={styles.nav}>
-          <div className={styles.navContainer}>
-            <Link to="/" className={styles.logoGroup}>
-              <BiBriefcase className={styles.logoIcon} />
-              <span className={styles.logoText}>JobFinder</span>
-            </Link>
-
-            <div className={styles.navLinks}>
-              <Link to="/" className={styles.navLink}>Início</Link>
-              <a href="/login" onClick={handleLoginClick} className={styles.navLink}>Entrar</a>
-
-              <button onClick={handleCadastrarClick} className={styles.navButtonPrimary}>
-                Cadastrar
-              </button>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
 
         <section id="cadastro" className={styles.heroSection}>
           <div className={styles.heroContainer}>

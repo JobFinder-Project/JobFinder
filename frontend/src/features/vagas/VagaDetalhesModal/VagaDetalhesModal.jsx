@@ -1,84 +1,194 @@
-import { useState } from 'react'
-import { BiCheckCircle, BiInfoCircle } from 'react-icons/bi'
-import Modal from '../../../components/ui/Modal/Modal'
-import { candidatoService } from '../../../services/candidatoService'
-import styles from './VagaDetalhesModal.module.css'
+import { useState, useEffect } from 'react';
+import { BiBuilding, BiMap, BiMoney, BiBriefcase } from 'react-icons/bi';
+import Modal from '../../../components/ui/Modal/Modal';
+import { candidatoService } from '../../../services/candidatoService';
+import styles from './VagaDetalhesModal.module.css';
 
-export default function VagaDetalhesModal({ vaga, candidatoId, onClose }) {
-  const [loading, setLoading] = useState(false)
-  const [showDuplicadaModal, setShowDuplicadaModal] = useState(false)
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
+export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancelRequest }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleCandidatar = async () => {
-    setLoading(true)
+  const [localCandidatura, setLocalCandidatura] = useState(candidatura || null);
+  const [checkingStatus, setCheckingStatus] = useState(!candidatura);
 
-    try {
-      await candidatoService.candidatarVaga(vaga._id)
-      setShowSuccessModal(true)
-    } catch (error) {
-      console.error('Erro ao candidatar:', error)
-      if (error.status === 400 && error.data?.error?.includes('já')) {
-        setShowDuplicadaModal(true)
-      } else {
-        alert(error.data?.error || 'Erro ao realizar candidatura. Tente novamente.')
-      }
-    } finally {
-      setLoading(false)
+  if (!vaga) return null;
+
+  useEffect(() => {
+    if (candidatura) {
+      setCheckingStatus(false);
+      return;
     }
-  }
 
-  if (showDuplicadaModal) {
-    return (
-      <Modal title='Candidatura Existente' onClose={onClose} size='sm'>
-        <Modal.Body>
-          <div className={styles.warningContent}>
-            <BiInfoCircle className={styles.warningIcon} size={64} color='#FFA94D' />
-            <h4>Você já se candidatou a esta vaga!</h4>
-            <p>Não é possível enviar uma nova candidatura para uma vaga em que você já está inscrito.</p>
-            <button className={styles.btnOk} onClick={onClose}>Entendi</button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    )
-  }
+    const fetchStatus = async () => {
+      try {
+        const data = await candidatoService.getCandidaturas();
+        const found = data.candidaturas?.find(c => c.vaga?._id === vaga._id);
+        if (found) {
+          setLocalCandidatura(found);
+        }
+      } catch (err) {
+        console.error('Erro ao verificar status da vaga:', err);
+      } finally {
+        setCheckingStatus(false);
+      }
+    };
 
-  if (showSuccessModal) {
-    return (
-      <Modal title='Candidatura Enviada' onClose={onClose} size='sm'>
-        <Modal.Body>
-          <div className={styles.successContent}>
-            <BiCheckCircle className={styles.checkIcon} size={64} color='#63E6BE' />
-            <h4>Candidatura enviada com sucesso!</h4>
-            <button className={styles.btnOk} onClick={onClose}>OK</button>
-          </div>
-        </Modal.Body>
-      </Modal>
-    )
-  }
+    fetchStatus();
+  }, [vaga._id, candidatura]);
+
+  const handleApply = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await candidatoService.candidatarVaga(vaga._id);
+      setLocalCandidatura({ status: 'Pendente', vaga });
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.error || err.message || 'Erro ao se candidatar. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelLocal = async () => {
+    if (onCancelRequest) {
+      onCancelRequest(localCandidatura);
+    } else {
+      if (window.confirm('Tem certeza que deseja cancelar sua candidatura para esta vaga?')) {
+        setLoading(true);
+        try {
+          await candidatoService.cancelarCandidatura(localCandidatura._id);
+          setLocalCandidatura(null); // O botão volta a ser "Candidatar-se"
+        } catch (err) {
+          setError('Erro ao cancelar candidatura.');
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+  };
+
+  const getImagemSrc = (imagem) => {
+    if (!imagem) return null;
+    if (typeof imagem === 'string') return imagem;
+    if (imagem.data && imagem.contentType) {
+      return `data:${imagem.contentType};base64,${imagem.data}`;
+    }
+    return null;
+  };
+
+  const imageSrc = getImagemSrc(vaga.imagem);
+  const isPending = localCandidatura?.status?.toLowerCase().includes('pendente');
 
   return (
-    <Modal title='Detalhes da Vaga' onClose={onClose}>
-      <Modal.Body>
-        <div className={styles.vagaInfo}>
-          <h3>{vaga.nome}</h3>
-          <p><strong>Empresa:</strong> {vaga.empresa?.nome}</p>
-          <p><strong>Área:</strong> {vaga.area}</p>
-          <p><strong>Descrição:</strong> {vaga.descricao}</p>
-          <p><strong>Requisitos:</strong> {vaga.requisitos}</p>
-          <p><strong>Benefícios:</strong> {vaga.beneficios}</p>
-          <p><strong>Salário:</strong> {vaga.salario || 'A combinar'}</p>
-          <p><strong>Localização:</strong> {vaga.localizacao}</p>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <button
-          className={styles.candidatarBtn}
-          onClick={handleCandidatar}
-          disabled={loading}
-        >
-          {loading ? 'Enviando...' : 'Candidatar-se'}
-        </button>
-      </Modal.Footer>
-    </Modal>
-  )
+      <Modal title="Detalhes da Vaga" onClose={onClose} size="lg">
+        <Modal.Body>
+          <div className={styles.container}>
+
+            <div className={styles.header}>
+              <div className={styles.headerMain}>
+                <div className={styles.imageContainer}>
+                  {imageSrc ? (
+                      <img src={imageSrc} alt={vaga.nome} className={styles.jobImage} />
+                  ) : (
+                      <div className={styles.placeholderImage}>
+                        <BiBuilding size={40} />
+                      </div>
+                  )}
+                </div>
+
+                <div className={styles.titleContent}>
+                  <h1 className={styles.jobTitle}>{vaga.nome}</h1>
+                  <p className={styles.companyName}>{vaga.empresa?.nome || 'Empresa confidencial'}</p>
+                  <div className={styles.badges}>
+                    {vaga.area && <span className={`${styles.badge} ${styles.badgeBlue}`}>{vaga.area}</span>}
+                    {vaga.tipo && <span className={`${styles.badge} ${styles.badgeGreen}`}>{vaga.tipo}</span>}
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.actionContainer}>
+                {error && <p className={styles.errorText}>{error}</p>}
+
+                {checkingStatus ? (
+                    <button className={styles.btnApply} disabled>
+                      Verificando status...
+                    </button>
+                ) : localCandidatura ? (
+                    isPending ? (
+                        <button
+                            className={styles.btnDanger}
+                            onClick={handleCancelLocal}
+                            disabled={loading}
+                        >
+                          {loading ? 'Processando...' : 'Cancelar Candidatura'}
+                        </button>
+                    ) : (
+                        <div className={styles.statusBadgeGlobal}>
+                          Status atual: <strong>{localCandidatura.status}</strong>
+                        </div>
+                    )
+                ) : (
+                    <button className={styles.btnApply} onClick={handleApply} disabled={loading}>
+                      {loading ? 'Processando...' : 'Candidatar-se'}
+                    </button>
+                )}
+              </div>
+            </div>
+
+            <hr className={styles.divider} />
+
+            <div className={styles.quickInfoGrid}>
+              <div className={styles.infoItem}>
+                <div className={styles.infoIconWrapper}><BiBriefcase size={22} /></div>
+                <div>
+                  <span className={styles.infoLabel}>Área de Atuação</span>
+                  <span className={styles.infoValue}>{vaga.area || 'Não informada'}</span>
+                </div>
+              </div>
+
+              {vaga.localizacao && (
+                  <div className={styles.infoItem}>
+                    <div className={styles.infoIconWrapper}><BiMap size={22} /></div>
+                    <div>
+                      <span className={styles.infoLabel}>Localização</span>
+                      <span className={styles.infoValue}>{vaga.localizacao}</span>
+                    </div>
+                  </div>
+              )}
+
+              {vaga.salario && (
+                  <div className={styles.infoItem}>
+                    <div className={styles.infoIconWrapper}><BiMoney size={22} /></div>
+                    <div>
+                      <span className={styles.infoLabel}>Salário</span>
+                      <span className={styles.infoValue}>{vaga.salario}</span>
+                    </div>
+                  </div>
+              )}
+            </div>
+
+            <div className={styles.contentSection}>
+              <h2 className={styles.sectionTitle}>Sobre a Vaga</h2>
+              <div className={styles.textContent}>
+                {vaga.descricao ? (
+                    <p>{vaga.descricao}</p>
+                ) : (
+                    <p className={styles.emptyText}>O recrutador não forneceu uma descrição detalhada para esta vaga.</p>
+                )}
+              </div>
+            </div>
+
+            {vaga.requisitos && (
+                <div className={styles.contentSection}>
+                  <h2 className={styles.sectionTitle}>Requisitos</h2>
+                  <div className={styles.textContent}>
+                    <p>{vaga.requisitos}</p>
+                  </div>
+                </div>
+            )}
+          </div>
+        </Modal.Body>
+      </Modal>
+  );
 }
