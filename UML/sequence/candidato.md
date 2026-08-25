@@ -1,35 +1,21 @@
 # Diagramas de Sequência — Candidato
 
-Este documento reúne e explica os principais diagramas de sequência relacionados às ações do candidato no sistema JobFinder.
+Este documento reúne os principais diagramas de sequência relacionados às ações do candidato no JobFinder.
 
----
+## Acesso ao Dashboard
 
-## 1. Alterar Perfil
+![Acesso ao Dashboard do candidato](../images/sequence/Diagrama%20de%20Sequência%20-%20Acesso%20a%20Dashboard%20candidato.png)
 
-O diagrama mostra o fluxo para o candidato atualizar suas informações pessoais, experiências, cursos e foto de perfil. O candidato acessa o painel, solicita a alteração, o sistema valida os dados e atualiza o perfil.
+## Realizar Candidatura
 
-![Alterar Perfil](../images/AlterarPerfil.png)
+![Realizar candidatura](../images/sequence/Diagrama%20de%20Sequência%20-%20Realizar%20Candidatura.png)
 
----
+## Realizar Login
 
-## 2. Realizar Busca
+![Realizar login](../images/sequence/Fluxo%20=%20Login%20-%20POST%20login%20via%20authRoutes.js%20-.png)
 
-Representa o processo de busca de vagas pelo candidato. O usuário insere termos ou seleciona áreas, o sistema filtra e retorna as vagas correspondentes, permitindo ao candidato visualizar detalhes.
+## Funcionalidades futuras
 
-![Realizar Busca](../images/RealizarBusca.png)
+### Interação entre candidatos — RF11
 
----
-
-## 3. Realizar Candidatura
-
-Mostra o fluxo de candidatura a uma vaga. O candidato seleciona uma vaga, visualiza os requisitos, confirma a inscrição e o sistema registra a candidatura, atualizando o status.
-
-![Realizar Candidatura](../images/RealizarCandidatura.png)
-
----
-
-## 4. Realizar Login
-
-Descreve o processo de autenticação do candidato. O usuário informa e-mail e senha, o sistema valida as credenciais e direciona ao painel do candidato.
-
-![Realizar Login](../images/RealizarLogin1.png)
+![Interação entre candidatos](../images/sequence/RF11%20—%20Interação%20entre%20Candidatos%20%28Futuro%29.png)

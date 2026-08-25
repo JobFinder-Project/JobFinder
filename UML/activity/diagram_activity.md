@@ -1,51 +1,57 @@
-# Diagramas de Atividade - JobFinder
+# Diagramas de Atividade — JobFinder
 
-Este documento apresenta e explica os principais diagramas de atividade do sistema JobFinder, detalhando o fluxo de cada funcionalidade.
+Este documento reúne os principais diagramas de atividade dos fluxos do candidato e do empregador.
 
----
+## Fluxos do Candidato
 
-## Efetuar Login
+### Cadastro
 
-O fluxo de login inicia com o usuário acessando a tela de autenticação. Ele informa e-mail e senha, e o sistema valida as credenciais. Se forem válidas, o usuário é direcionado ao painel correspondente (candidato ou empregador). Caso contrário, uma mensagem de erro é exibida e o usuário pode tentar novamente.
+![Cadastro do candidato](../images/atividade/Diagrama%20de%20Atividade%20-%20Cadastro%20Candidato.png)
 
-![](../images/Diagrama%20de%20Atividade%20-%20Efetuar%20Login.png)
+### Login
 
----
+![Login](../images/atividade/Diagrama%20de%20Atividade%20-%20Login.png)
 
-## Realizar Cadastro
+### Acesso ao Dashboard
 
-O usuário escolhe entre cadastrar-se como candidato ou empregador. Após preencher os dados obrigatórios (nome, e-mail, senha, etc.), o sistema valida as informações. Se tudo estiver correto, o cadastro é concluído e o usuário pode acessar o sistema. Em caso de erro, o sistema solicita correção dos dados.
+![Acesso ao Dashboard do candidato](../images/atividade/Diagrama%20de%20Atividade%20-%20Acesso%20a%20Dashboard%20candidato%20Sincronizado.png)
 
-![](../images/Diagrama%20de%20Atividade%20-%20Realizar%20Cadastro.png)
+### Candidatura a uma Vaga
 
----
+![Candidatura a uma vaga](../images/atividade/Diagrama%20de%20Atividade%20-%20Candidatura%20a%20Vaga.png)
 
-## Verificar Vagas
+## Fluxos do Empregador
 
-O candidato acessa a área de vagas, onde o sistema exibe todas as oportunidades disponíveis. Ao selecionar uma vaga, os detalhes são apresentados, permitindo análise dos requisitos e informações da empresa.
+### Publicar Vaga — RF05
 
-![](../images/diagrama%20de%20atividade%20Verificar%20Vagas.png)
+![Publicar vaga](../images/atividade/Atividade%20—%20Publicar%20Vaga%20%28RF05%29.png)
 
----
+### Listar Candidatos de uma Vaga — RF05
 
-## Cadastrar Vagas
+![Listar candidatos de uma vaga](../images/atividade/Atividade%20—%20Listar%20Candidatos%20de%20uma%20Vaga%20%28RF05%29.png)
 
-O empregador acessa o painel de vagas e opta por cadastrar uma nova oportunidade. Ele preenche os dados da vaga (título, área, requisitos, imagem). O sistema valida as informações e, se estiverem corretas, publica a vaga para candidatos visualizarem e se candidatarem.
+### Alterar Status da Candidatura — RF05
 
-![](../images/atividade/CadstrarVagas.png)
+![Alterar status da candidatura](../images/atividade/Atividade%20—%20Alterar%20Status%20da%20Candidatura%20%28RF05%29.png)
 
----
+### Filtrar Candidatos — RF07
 
-## Buscar Vagas
+![Filtrar candidatos](../images/atividade/Atividade%20—%20Filtrar%20Candidatos%20%28RF07%29.png)
 
-O candidato utiliza filtros ou barra de busca para encontrar vagas de interesse. O sistema processa os critérios e retorna uma lista de vagas correspondentes. O usuário pode então visualizar detalhes ou se candidatar diretamente.
+### Dashboard do Empregador — RF08
 
-![](../images/atividade/BuscarVagas.png)
+![Dashboard do empregador](../images/atividade/Atividade%20—%20Dashboard%20do%20Empregador%20%28RF08%29.png)
 
----
+## Funcionalidades futuras
 
-## Realizar Candidatura
+### Página Pública da Empresa — RF09
 
-O candidato seleciona uma vaga e opta por se candidatar. O sistema verifica se o candidato já está inscrito e, caso não esteja, registra a candidatura.
+![Página pública da empresa](../images/atividade/Atividade%20—%20Página%20Pública%20da%20Empresa%20%28RF09%20-%20Futuro%29.png)
 
-![](../images/atividade/Candidatar.png)
+### Canal de Suporte — RF10
+
+![Canal de suporte](../images/atividade/Atividade%20—%20Canal%20de%20Suporte%20%28RF10%20-%20Futuro%29.png)
+
+### Interação entre Candidatos — RF11
+
+![Interação entre candidatos](../images/atividade/Atividade%20—%20Interação%20entre%20Candidatos%20%28RF11%20-%20Futuro%29.png)
