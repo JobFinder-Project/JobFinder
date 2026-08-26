@@ -1,0 +1,201 @@
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 2rem;
+    }
+}
+
+/* Page Header */
+.pageHeader {
+    margin-bottom: 2rem;
+}
+
+.pageTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.pageSubtitle {
+    color: #475569;
+    font-size: 1rem;
+}
+
+/* Search Section */
+.searchSection {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .searchForm {
+        flex-direction: row;
+        align-items: stretch;
+    }
+}
+
+.searchWrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1rem;
+    color: #94a3b8;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+}
+
+.searchBtn {
+    position: absolute;
+    right: 0.5rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.searchBtn:hover {
+    background-color: #1d4ed8;
+}
+
+.filterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    color: #475569;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.filterBtn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+/* Results Info */
+.resultsInfo {
+    margin-bottom: 1.5rem;
+    color: #475569;
+    font-size: 0.875rem;
+}
+
+.boldText {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.candidatesGrid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.loadingState, .emptyState {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid #e2e8f0;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.emptyIconWrapper {
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+}
+
+.emptyTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.emptyText {
+    color: #64748b;
+    text-align: center;
+    max-width: 24rem;
+    margin-bottom: 1.5rem;
+}
+
+.clearBtn {
+    background-color: transparent;
+    color: #2563eb;
+    border: 1px solid #2563eb;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.clearBtn:hover {
+    background-color: #eff6ff;
+}

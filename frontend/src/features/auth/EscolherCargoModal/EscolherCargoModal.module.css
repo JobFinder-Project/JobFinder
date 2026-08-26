@@ -1,0 +1,151 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+}
+
+.description {
+    color: #475569;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+.optionsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.optionCard {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.optionCard:hover {
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
+}
+
+.optionCard.selected {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+/* Custom Radio Button */
+.radioWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radioOuter {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.radioOuterSelected {
+    border-color: #2563eb;
+}
+
+.radioInner {
+    width: 0.625rem;
+    height: 0.625rem;
+    background-color: #2563eb;
+    border-radius: 50%;
+}
+
+.iconWrapper {
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.optionCard.selected .iconWrapper {
+    color: #2563eb;
+}
+
+.optionInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.optionInfo h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.optionInfo p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #475569;
+    line-height: 1.4;
+}
+
+/* Footer Actions */
+.footerActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.btnCancel {
+    padding: 0.625rem 1.25rem;
+    background-color: transparent;
+    color: #475569;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnCancel:hover {
+    background-color: #f1f5f9;
+}
+
+.btnPrimary {
+    padding: 0.625rem 1.5rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnPrimary:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.btnPrimary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

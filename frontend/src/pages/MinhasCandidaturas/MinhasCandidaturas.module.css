@@ -1,0 +1,388 @@
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 2rem 1.5rem;
+    }
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.subtitle {
+    color: #475569;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .statsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.statCard {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: #475569;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+}
+
+.statValue {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.textWarning {
+    color: #d97706;
+}
+
+.textSuccess {
+    color: #16a34a;
+}
+
+.tabsContainer {
+    display: flex;
+    gap: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+}
+
+.tabBtn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.75rem 0.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tabBtn:hover {
+    color: #0f172a;
+}
+
+.activeTab {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.appCard {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.appCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-color: #cbd5e1;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.jobTitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.25rem 0;
+}
+
+.companyName {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.95rem;
+    color: #475569;
+    margin: 0;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.badgeWarning {
+    background-color: #fef3c7;
+    color: #b45309;
+    border-color: #fde68a;
+}
+
+.badgeSuccess {
+    background-color: #dcfce7;
+    color: #15803d;
+    border-color: #bbf7d0;
+}
+
+.badgeDanger {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.badgeNeutral {
+    background-color: #f1f5f9;
+    color: #475569;
+    border-color: #e2e8f0;
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.cardFooter {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.btnOutline {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.btnOutline:hover {
+    background-color: #f8fafc;
+}
+
+.btnCancel {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btnCancel:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 1rem;
+    background-color: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+
+.emptyIcon {
+    color: #cbd5e1;
+    margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+    font-size: 1.25rem;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.emptyState p {
+    color: #64748b;
+    margin: 0 0 1.5rem 0;
+}
+
+.btnPrimary {
+    background-color: #2563eb;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.btnPrimary:hover {
+    background-color: #1d4ed8;
+}
+
+.btnOutline {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #0f172a;
+    transition: background 0.2s;
+    text-align: center;
+    background: transparent;
+    cursor: pointer;
+}
+
+.btnOutline:hover {
+    background-color: #f8fafc;
+}
+
+.btnCancelText {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.btnCancelText:hover {
+    color: #b91c1c;
+    text-decoration: underline;
+}
+
+/* --- Estilos dos Modais --- */
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.modalTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+}
+
+.modalText {
+    color: #475569;
+    margin: 0 0 1.5rem 0;
+    line-height: 1.5;
+}
+
+.modalActions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.btnCancelConfirm {
+    background-color: #ef4444;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnCancelConfirm:hover:not(:disabled) {
+    background-color: #dc2626;
+}
+
+.btnCancelConfirm:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btnBack {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btnBack:hover:not(:disabled) {
+    background-color: #e2e8f0;
+}
+
+.successIcon {
+    color: #10b981;
+    margin-bottom: 1rem;
+}

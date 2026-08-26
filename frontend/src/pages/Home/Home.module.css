@@ -1,0 +1,297 @@
+.wrapper {
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: inherit;
+}
+
+.nav {
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navContainer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+.logoGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.logoIcon {
+  height: 1.75rem;
+  width: 1.75rem;
+  color: #2563eb;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: #334155;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navLink:hover {
+  color: #0f172a;
+}
+
+.navButtonPrimary {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: none;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.navButtonPrimary:hover {
+  background-color: #1d4ed8;
+}
+
+.heroSection {
+  background: linear-gradient(to bottom, #eff6ff, #ffffff);
+  padding: 5rem 1rem;
+}
+
+.heroContainer {
+  max-width: 56rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1.5rem;
+}
+
+.heroSubtitle {
+  font-size: 16px;
+  color: #475569;
+  margin-bottom: 3rem;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.ctaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .ctaGroup {
+    flex-direction: row;
+  }
+}
+
+.ctaButtonPrimary, .ctaButtonOutline {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ctaButtonPrimary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 2px solid #2563eb;
+}
+
+.ctaButtonPrimary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.ctaButtonOutline {
+  background-color: transparent;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+}
+
+.ctaButtonOutline:hover {
+  background-color: #eff6ff;
+}
+
+.heroNote {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.featuresSection {
+  padding: 5rem 1rem;
+  background-color: #ffffff;
+}
+
+.featuresContainer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.featuresHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.sectionTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 16px;
+  color: #475569;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.featuresGrid {
+  display: grid;
+  gap: 25px;
+}
+
+@media (min-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.featureCard {
+  text-align: center;
+}
+
+.featureIconWrapper {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+}
+
+.iconBlue { background-color: #dbeafe; color: #2563eb; }
+.iconGreen { background-color: #dcfce7; color: #16a34a; }
+.iconPurple { background-color: #f3e8ff; color: #9333ea; }
+
+.featureIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.featureTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+}
+
+.featureText {
+  color: #475569;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.heroActionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .heroActionButtons {
+    flex-direction: row;
+  }
+}
+
+.heroActionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .heroActionButtons {
+    flex-direction: row;
+  }
+}
+
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+}
+
+.btnBlue {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btnBlue:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.btnWhite {
+  background-color: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.btnWhite:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}

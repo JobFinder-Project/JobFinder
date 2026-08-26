@@ -1,39 +1,29 @@
 {
-    "name": "api",
-    "version": "1.0.0",
-    "main": "server.js",
-    "type": "commonjs",
-    "scripts": {
-        "test": "jest --forceExit",
-        "start": "nodemon server.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bcrypt": "^5.1.1",
-        "body-parser": "^1.20.3",
-        "connect-mongo": "^5.1.0",
-        "cors": "^2.8.5",
-        "crypto": "^1.0.1",
-        "dotenv": "^16.4.5",
-        "express": "^4.21.2",
-        "express-handlebars": "^8.0.1",
-        "express-session": "^1.18.1",
-        "jsonwebtoken": "^9.0.2",
-        "jwt-decode": "^4.0.0",
-        "mongodb": "^6.20.0",
-        "mongoose": "^8.12.1",
-        "multer": "^1.4.5-lts.1",
-        "node": "^23.9.0",
-        "nodemailer": "^6.9.16",
-        "nodemon": "^3.1.10",
-        "sweetalert2": "^11.14.5"
-    },
-    "description": "",
-    "devDependencies": {
-        "jest": "^30.2.0",
-        "mongodb-memory-server": "^10.2.3",
-        "supertest": "^7.1.4"
-    }
+  "name": "jobfinder",
+  "version": "1.0.0",
+  "description": "JobFinder - Plataforma de conexão entre candidatos e empresas",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm start",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "test": "npm run test:backend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:all": "npm run test:backend && npm run test:frontend",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "start": "cd backend && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JobFinder-Project/JobFinder.git"
+  },
+  "license": "MIT"
 }

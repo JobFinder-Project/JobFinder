@@ -1,0 +1,179 @@
+.modalOverlay {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 700px;
+  min-height: 60vh;
+  max-height: 90vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.closeButton:hover {
+  color: #333;
+}
+
+.pageTitle {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.pageTitle h1 {
+  color: #333;
+  margin: 0;
+}
+
+.vagasListScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 16px 0;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.vagaCardRow {
+  background: #f5f5f7;
+  border-radius: 18px;
+  padding: 24px 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.2s;
+}
+
+.vagaCardRow:hover {
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.13);
+}
+
+.jobImage {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.vagaCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.jobTitle {
+  margin: 0;
+  font-size: 1.3em;
+  color: #222;
+  font-weight: 700;
+}
+
+.jobCompany {
+  color: #1976d2;
+  font-weight: 500;
+  font-size: 1.05em;
+}
+
+.vagaInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.jobArea {
+  color: #666;
+  font-size: 0.95em;
+}
+
+.viewJobButton {
+  padding: 8px 16px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.viewJobButton:hover {
+  background-color: #2980b9;
+}
+
+.noData {
+  text-align: center;
+  color: #666;
+  padding: 40px;
+}
+
+.vagaDetalhes {
+  text-align: center;
+  padding: 20px;
+}
+
+.vagaImageLarge {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 20px;
+}
+
+.vagaDetalhes h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.vagaDetalhes p {
+  margin: 10px 0;
+  color: #555;
+}
+
+.backButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ecf0f1;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.backButton:hover {
+  background-color: #bdc3c7;
+}

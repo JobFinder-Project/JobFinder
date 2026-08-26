@@ -1,0 +1,225 @@
+.mobileOpenBtn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 40;
+    background-color: #0f172a;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+}
+
+.mobileOpenBtn.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 45;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.overlayVisible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (min-width: 1024px) {
+    .mobileOpenBtn, .overlay {
+        display: none;
+    }
+}
+
+.sidebarSpacer {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .sidebarSpacer {
+        display: block;
+        width: 80px;
+        flex-shrink: 0;
+    }
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #0f172a;
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease;
+    overflow-x: hidden;
+    white-space: nowrap;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.collapsed {
+    width: 260px;
+    transform: translateX(-100%);
+}
+
+.sidebar.expanded {
+    width: 260px;
+    transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+    .sidebar.collapsed {
+        transform: translateX(0);
+        width: 80px;
+    }
+
+    .sidebar.expanded {
+        transform: translateX(0);
+        width: 260px;
+    }
+}
+
+.toggleBar {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .toggleBar {
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem 0 0.5rem 0;
+        transition: justify-content 0.3s;
+    }
+
+    .sidebar.expanded .toggleBar {
+        justify-content: flex-end;
+        padding-right: 1.5rem;
+    }
+
+    .desktopToggleBtn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+        transition: transform 0.4s ease, color 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .desktopToggleBtn:hover {
+        color: #ffffff;
+    }
+
+    .desktopToggleBtn.rotated {
+        transform: rotate(180deg);
+    }
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    padding: 1rem 28px;
+    text-decoration: none;
+    margin-bottom: 1rem;
+}
+
+.logoIcon {
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-left: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.expanded .logoText {
+    opacity: 1;
+}
+
+.nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+.nav::-webkit-scrollbar {
+    width: 4px;
+}
+.nav::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 28px;
+    color: #cbd5e1;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    text-align: left;
+}
+
+.navItem:hover {
+    background-color: #1e293b;
+    color: #ffffff;
+}
+
+.navItem.active {
+    color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-right: 3px solid #3b82f6;
+}
+
+.navIcon {
+    flex-shrink: 0;
+}
+
+.navLabel {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-left: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.expanded .navLabel {
+    opacity: 1;
+}
+
+
+.footer {
+    padding: 1rem 0;
+    border-top: 1px solid #1e293b;
+}
+
+.logoutBtn:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+}
