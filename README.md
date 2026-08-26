@@ -110,7 +110,7 @@ Responsabilidades do frontend:
 | Autenticação | Cookie de sessão com autorização por perfil |
 | Email | Nodemailer com Gmail para recuperação de senha |
 | Documentação de API | Swagger / OpenAPI 3 |
-| Testes | Jest, Supertest, MongoDB Memory Server |
+| Testes | Jest, Supertest, MongoDB Memory Server, Vitest, React Testing Library, jsdom |
 | Ferramentas | ESLint, Prettier, GitHub Actions |
 
 ## Estrutura do Repositório
@@ -215,7 +215,10 @@ Na raiz do repositório:
 | `npm run dev:backend` | Inicia a API Express a partir de `backend/`. |
 | `npm run dev:frontend` | Inicia o Vite a partir de `frontend/`. |
 | `npm run build` | Gera o build do frontend. |
-| `npm run test` | Executa os testes do backend. |
+| `npm test` | Executa os testes do backend. |
+| `npm run test:backend` | Executa os testes do backend. |
+| `npm run test:frontend` | Executa os testes do frontend. |
+| `npm run test:all` | Executa testes de backend e frontend em sequência. |
 | `npm run install:all` | Instala dependências de backend e frontend. |
 | `npm run start` | Inicia o servidor backend. |
 
@@ -226,6 +229,14 @@ Comandos específicos do backend:
 | `npm test` | Executa Jest com MongoDB Memory Server. |
 | `npm run lint` | Executa ESLint. |
 | `npm run lint:fix` | Executa ESLint com correção automática. |
+
+Comandos específicos do frontend:
+
+| Comando | Descrição |
+| --- | --- |
+| `npm test` | Executa Vitest em modo run. |
+| `npm run test:watch` | Executa Vitest em modo watch. |
+| `npm run test:coverage` | Executa Vitest com relatório de cobertura. |
 
 ## Visão Geral da API
 
@@ -247,10 +258,13 @@ O repositório inclui workflows do GitHub Actions:
 
 - CI em pull requests direcionados para `develop`.
 - Job de testes do backend com Node.js 22 e `npm test`.
+- Job de testes do frontend com Node.js 22 e `npm test`.
 - Job de build do frontend com Node.js 22 e `npm run build`.
 - CD em pushes para `main`, atualmente configurado para acionar um deploy hook do Render.
 
-A suíte de testes do backend cobre fluxo de autenticação, fluxo de candidaturas e validações Mongoose.
+A suíte de testes do backend cobre autenticação, permissões por perfil, vagas, candidaturas, recuperação de senha, tratamento de erros e validações Mongoose. A suíte do frontend cobre contexto de autenticação, guards de rota, services, componentes principais e renderização de páginas críticas.
+
+A meta inicial de cobertura do frontend está configurada em `frontend/vite.config.js` com 35% para linhas e statements, 30% para funções e 45% para branches.
 
 ## 📄 Documentação
 
