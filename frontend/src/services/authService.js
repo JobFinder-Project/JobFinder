@@ -23,7 +23,7 @@ export const authService = {
   },
 
   redefinirSenha: async (token, novaSenha) => {
-    return api.post(`/redefinir_senha/${token}`, { novaSenha });
+    return api.post(`/redefinir_senha/${token}`, { senha: novaSenha });
   },
 };
 
