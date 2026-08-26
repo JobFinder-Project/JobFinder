@@ -1,117 +1,47 @@
-/* eslint-disable no-undef */
 import request from 'supertest';
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
+} from '@jest/globals';
 
 import app from '../src/app.js';
-import Candidato from '../src/models/candidatoModel.js';
-import Empresa from '../src/models/empresaModel.js';
-import Vaga from '../src/models/vagasModel.js';
 import Candidatura from '../src/models/candidaturaModel.js';
+import {
+  createVagaAsEmpresa,
+  registerAndLoginCandidato,
+  registerAndLoginEmpresa,
+} from './helpers/auth.js';
+import { clearTestDatabase, startTestDatabase, stopTestDatabase } from './helpers/database.js';
 
 let mongoServer;
-let uniqueId = 0;
 
-const nextId = () => {
-  uniqueId += 1;
-  return uniqueId;
-};
-
-const generateValidCPF = (seed = 0) => {
-  const n = Array.from({ length: 9 }, (_, idx) => ((seed + idx * 7) % 9) + 1);
-
-  const calcDigit = (baseDigits, factorStart) => {
-    const sum = baseDigits.reduce((acc, digit, idx) => acc + digit * (factorStart - idx), 0);
-    const rest = (sum * 10) % 11;
-    return rest === 10 ? 0 : rest;
-  };
-
-  const d1 = calcDigit(n, 10);
-  const d2 = calcDigit([...n, d1], 11);
-  const digits = [...n, d1, d2].join('');
-
-  return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
-};
-
-const buildMockCandidato = () => {
-  const id = nextId();
-  return {
-    nome: `Candidato Fluxo ${id}`,
-    cpf: generateValidCPF(id),
-    email: `candidato.fluxo.${id}@teste.com`,
-    senha: 'senhaforte123',
-    telefone: '(92) 99999-9999',
-    educacao: 'Ensino Superior Completo',
-  };
-};
-
-const buildMockEmpresa = () => {
-  const id = nextId();
-  return {
-    nome: `Empresa Fluxo ${id}`,
-    cnpj: `12345678000${String(100 + id).padStart(3, '0')}`,
-    email: `empresa.fluxo.${id}@teste.com`,
-    senha: 'senhaempresaforte',
-    fone: '(92) 99999-9999',
-  };
-};
-
-const buildMockVaga = () => ({
-  nome: 'Desenvolvedor Full Stack',
-  area: 'TI - Tecnologia da Informação',
-  requisitos: 'Experiência com Node.js, React, testes automatizados e boas práticas.',
+beforeAll(async () => {
+  mongoServer = await startTestDatabase();
 });
 
-const loginAsCandidato = async () => {
-  const candidato = buildMockCandidato();
-  const candidateAgent = request.agent(app);
+beforeEach(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
 
-  await candidateAgent.post('/api/candidato/cadastrar').send(candidato);
-  const loginResponse = await candidateAgent
-    .post('/api/login')
-    .send({ email: candidato.email, senha: candidato.senha });
+afterEach(async () => {
+  jest.restoreAllMocks();
+  await clearTestDatabase();
+});
 
-  expect(loginResponse.statusCode).toBe(200);
-  return { candidateAgent, candidato };
-};
-
-const loginAsEmpresa = async () => {
-  const empresa = buildMockEmpresa();
-  const companyAgent = request.agent(app);
-
-  await companyAgent.post('/api/empresa/cadastrar').send(empresa);
-  const loginResponse = await companyAgent
-    .post('/api/login')
-    .send({ email: empresa.email, senha: empresa.senha });
-
-  expect(loginResponse.statusCode).toBe(200);
-  return { companyAgent, empresa };
-};
-
-const createVagaAsEmpresa = async () => {
-  const empresa = buildMockEmpresa();
-  const companyAgent = request.agent(app);
-
-  await companyAgent.post('/api/empresa/cadastrar').send(empresa);
-  const loginResponse = await companyAgent
-    .post('/api/login')
-    .send({ email: empresa.email, senha: empresa.senha });
-
-  expect(loginResponse.statusCode).toBe(200);
-
-  const createVagaResponse = await companyAgent
-    .post('/api/empresa/vagas/criar')
-    .send(buildMockVaga());
-
-  expect(createVagaResponse.statusCode).toBe(201);
-  expect(createVagaResponse.body?.vaga?._id).toBeDefined();
-
-  return { companyAgent, empresa, vagaId: createVagaResponse.body.vaga._id };
-};
+afterAll(async () => {
+  await stopTestDatabase(mongoServer);
+});
 
 const createCandidaturaForStatusUpdate = async () => {
-  const { candidateAgent } = await loginAsCandidato();
-  const { companyAgent, vagaId } = await createVagaAsEmpresa();
+  const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+  const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
   const candidaturaResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
   expect(candidaturaResponse.statusCode).toBe(201);
@@ -125,30 +55,10 @@ const createCandidaturaForStatusUpdate = async () => {
   };
 };
 
-beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-
-  await Candidato.init();
-  await Empresa.init();
-  await Vaga.init();
-  await Candidatura.init();
-});
-
-afterEach(async () => {
-  const collections = mongoose.connection.collections;
-  await Promise.all(Object.values(collections).map((collection) => collection.deleteMany({})));
-});
-
-afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
-});
-
-describe('Fluxo de Candidaturas', () => {
+describe('Fluxo de candidaturas do candidato', () => {
   it('deve realizar candidatura com sucesso', async () => {
-    const { candidateAgent } = await loginAsCandidato();
-    const { vagaId } = await createVagaAsEmpresa();
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+    const { vagaId } = await createVagaAsEmpresa(app);
 
     const candidaturaResponse = await candidateAgent
       .post(`/api/candidato/vagas/${vagaId}`)
@@ -156,29 +66,33 @@ describe('Fluxo de Candidaturas', () => {
 
     expect(candidaturaResponse.statusCode).toBe(201);
     expect(candidaturaResponse.body.success).toBe(true);
+    expect(candidaturaResponse.body.candidatura.status).toBe('Pendente');
 
     const candidaturaNoDb = await Candidatura.findOne({ vaga: vagaId });
     expect(candidaturaNoDb).not.toBeNull();
     expect(candidaturaNoDb.status).toBe('Pendente');
   });
 
-  it('deve listar candidaturas do candidato autenticado', async () => {
-    const { candidateAgent } = await loginAsCandidato();
-    const { vagaId } = await createVagaAsEmpresa();
+  it('deve listar apenas candidaturas do candidato autenticado', async () => {
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+    const { agent: outroCandidateAgent } = await registerAndLoginCandidato(app);
+    const { vagaId } = await createVagaAsEmpresa(app);
 
     await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
 
-    const listResponse = await candidateAgent.get('/api/candidato/candidaturas');
+    const responseCandidato = await candidateAgent.get('/api/candidato/candidaturas');
+    expect(responseCandidato.statusCode).toBe(200);
+    expect(responseCandidato.body.candidaturas).toHaveLength(1);
+    expect(String(responseCandidato.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
 
-    expect(listResponse.statusCode).toBe(200);
-    expect(Array.isArray(listResponse.body.candidaturas)).toBe(true);
-    expect(listResponse.body.candidaturas).toHaveLength(1);
-    expect(String(listResponse.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
+    const responseOutroCandidato = await outroCandidateAgent.get('/api/candidato/candidaturas');
+    expect(responseOutroCandidato.statusCode).toBe(200);
+    expect(responseOutroCandidato.body.candidaturas).toHaveLength(0);
   });
 
   it('deve impedir candidatura duplicada na mesma vaga', async () => {
-    const { candidateAgent } = await loginAsCandidato();
-    const { vagaId } = await createVagaAsEmpresa();
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+    const { vagaId } = await createVagaAsEmpresa(app);
 
     const firstResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
     expect(firstResponse.statusCode).toBe(201);
@@ -188,7 +102,7 @@ describe('Fluxo de Candidaturas', () => {
   });
 
   it('deve retornar 404 ao candidatar em vaga inexistente', async () => {
-    const { candidateAgent } = await loginAsCandidato();
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
     const vagaInexistenteId = new mongoose.Types.ObjectId();
 
     const response = await candidateAgent
@@ -198,25 +112,21 @@ describe('Fluxo de Candidaturas', () => {
     expect(response.statusCode).toBe(404);
   });
 
-  it('deve bloquear candidatura sem autenticação (401)', async () => {
-    const { vagaId } = await createVagaAsEmpresa();
+  it('deve bloquear candidatura sem autenticação ou feita por empresa', async () => {
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
-    const response = await request(app).post(`/api/candidato/vagas/${vagaId}`).send({});
+    const unauthenticatedResponse = await request(app)
+      .post(`/api/candidato/vagas/${vagaId}`)
+      .send({});
+    expect(unauthenticatedResponse.statusCode).toBe(401);
 
-    expect(response.statusCode).toBe(401);
+    const companyResponse = await companyAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    expect(companyResponse.statusCode).toBe(403);
   });
 
-  it('deve bloquear empresa tentando candidatar-se (403)', async () => {
-    const { companyAgent, vagaId } = await createVagaAsEmpresa();
-
-    const response = await companyAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
-
-    expect(response.statusCode).toBe(403);
-  });
-
-  it('deve deletar candidatura existente', async () => {
-    const { candidateAgent } = await loginAsCandidato();
-    const { vagaId } = await createVagaAsEmpresa();
+  it('deve cancelar candidatura existente', async () => {
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+    const { vagaId } = await createVagaAsEmpresa(app);
 
     await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
 
@@ -236,7 +146,22 @@ describe('Fluxo de Candidaturas', () => {
   });
 });
 
-describe('Fluxo de alteração de status de candidatura', () => {
+describe('Fluxo de gestão de candidaturas pela empresa', () => {
+  it('deve listar candidaturas recebidas nas vagas da empresa autenticada', async () => {
+    const { agent: candidateAgent } = await registerAndLoginCandidato(app);
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
+    await createVagaAsEmpresa(app);
+
+    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+
+    const response = await companyAgent.get('/api/empresa/candidaturas');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.candidaturas).toHaveLength(1);
+    expect(response.body.candidaturas[0].status).toBe('Pendente');
+    expect(String(response.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
+  });
+
   it('deve atualizar status para Aceita pela empresa dona da vaga', async () => {
     const { companyAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
 
@@ -264,7 +189,7 @@ describe('Fluxo de alteração de status de candidatura', () => {
   });
 
   it('deve retornar 404 para candidatura inexistente', async () => {
-    const { companyAgent } = await loginAsEmpresa();
+    const { agent: companyAgent } = await registerAndLoginEmpresa(app);
     const candidaturaInexistenteId = new mongoose.Types.ObjectId();
 
     const response = await companyAgent
@@ -276,7 +201,7 @@ describe('Fluxo de alteração de status de candidatura', () => {
 
   it('deve impedir atualização por empresa que não é dona da vaga', async () => {
     const { candidaturaId } = await createCandidaturaForStatusUpdate();
-    const { companyAgent: outraEmpresaAgent } = await loginAsEmpresa();
+    const { agent: outraEmpresaAgent } = await registerAndLoginEmpresa(app);
 
     const response = await outraEmpresaAgent
       .put(`/api/empresa/candidatura/${candidaturaId}`)
@@ -285,23 +210,17 @@ describe('Fluxo de alteração de status de candidatura', () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it('deve bloquear atualização sem autenticação (401)', async () => {
-    const { candidaturaId } = await createCandidaturaForStatusUpdate();
-
-    const response = await request(app)
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
-      .send({ status: 'Aceita' });
-
-    expect(response.statusCode).toBe(401);
-  });
-
-  it('deve bloquear candidato tentando atualizar status (403)', async () => {
+  it('deve bloquear atualização sem autenticação ou feita por candidato', async () => {
     const { candidateAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
 
-    const response = await candidateAgent
+    const unauthenticatedResponse = await request(app)
       .put(`/api/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Aceita' });
+    expect(unauthenticatedResponse.statusCode).toBe(401);
 
-    expect(response.statusCode).toBe(403);
+    const candidateResponse = await candidateAgent
+      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .send({ status: 'Aceita' });
+    expect(candidateResponse.statusCode).toBe(403);
   });
 });
