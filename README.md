@@ -154,7 +154,7 @@ A documentação extensa de produto e modelagem vive na branch `documents`.
 
 ### Pré-requisitos
 
-- Node.js 18 ou superior. A CI atualmente usa Node.js 22.
+- Node.js 20.19 ou superior. A CI atualmente usa Node.js 22.
 - npm.
 - Uma instância MongoDB local ou hospedada.
 - Credenciais de app do Gmail se o fluxo de recuperação de senha for testado localmente.
@@ -191,7 +191,6 @@ Crie o arquivo `backend/.env`:
 NODE_ENV=development
 MONGO_URI=mongodb://localhost:27017/JobFinder
 SESSION_SECRET=replace-with-a-local-secret
-HOST_FRONTEND=localhost:5173
 
 # Necessário apenas para emails de recuperação de senha
 APP_EMAIL=your_email@gmail.com
@@ -202,7 +201,6 @@ Observações:
 
 - `MONGO_URI` é obrigatória fora do ambiente de testes.
 - `SESSION_SECRET` é usada pelo `express-session`.
-- `HOST_FRONTEND` é usada para gerar links de redefinição de senha.
 - `APP_EMAIL` e `APP_PASS` são necessárias ao executar o fluxo de recuperação de senha.
 
 ## Scripts
@@ -219,7 +217,7 @@ Na raiz do repositório:
 | `npm run test:backend` | Executa os testes do backend. |
 | `npm run test:frontend` | Executa os testes do frontend. |
 | `npm run test:all` | Executa testes de backend e frontend em sequência. |
-| `npm run install:all` | Instala dependências de backend e frontend. |
+| `npm run install:all` | Instala dependências da raiz, backend e frontend. |
 | `npm run start` | Inicia o servidor backend. |
 
 Comandos específicos do backend:
@@ -261,6 +259,15 @@ O repositório inclui workflows do GitHub Actions:
 - Job de testes do frontend com Node.js 22 e `npm test`.
 - Job de build do frontend com Node.js 22 e `npm run build`.
 - CD em pushes para `main`, atualmente configurado para acionar um deploy hook do Render.
+
+Para um web service único no Render, use:
+
+| Campo | Valor |
+| --- | --- |
+| Build Command | `npm run install:all && npm run build` |
+| Start Command | `npm start` |
+
+O backend usa `process.env.PORT` e serve o build em `frontend/dist` quando ele existe, então a URL raiz do serviço entrega a SPA React e as requisições `/api` continuam no Express.
 
 A suíte de testes do backend cobre autenticação, permissões por perfil, vagas, candidaturas, recuperação de senha, tratamento de erros e validações Mongoose. A suíte do frontend cobre contexto de autenticação, guards de rota, services, componentes principais e renderização de páginas críticas.
 
