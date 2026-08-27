@@ -1,39 +1,29 @@
 {
-    "name": "api",
-    "version": "1.0.0",
-    "main": "server.js",
-    "type": "commonjs",
-    "scripts": {
-        "test": "jest --forceExit",
-        "start": "nodemon server.js"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bcrypt": "^5.1.1",
-        "body-parser": "^1.20.3",
-        "connect-mongo": "^5.1.0",
-        "cors": "^2.8.5",
-        "crypto": "^1.0.1",
-        "dotenv": "^16.4.5",
-        "express": "^4.21.2",
-        "express-handlebars": "^8.0.1",
-        "express-session": "^1.18.1",
-        "jsonwebtoken": "^9.0.2",
-        "jwt-decode": "^4.0.0",
-        "mongodb": "^6.20.0",
-        "mongoose": "^8.12.1",
-        "multer": "^1.4.5-lts.1",
-        "node": "^23.9.0",
-        "nodemailer": "^6.9.16",
-        "nodemon": "^3.1.10",
-        "sweetalert2": "^11.14.5"
-    },
-    "description": "",
-    "devDependencies": {
-        "jest": "^30.2.0",
-        "mongodb-memory-server": "^10.2.3",
-        "supertest": "^7.1.4"
-    }
+  "name": "jobfinder",
+  "version": "1.0.0",
+  "description": "JobFinder - Plataforma de conexão entre candidatos e empresas",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "npm run test:backend",
+    "test:backend": "npm --prefix backend test",
+    "test:frontend": "npm --prefix frontend test",
+    "test:all": "npm run test:backend && npm run test:frontend",
+    "install:all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "start": "npm --prefix backend start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JobFinder-Project/JobFinder.git"
+  },
+  "license": "MIT"
 }

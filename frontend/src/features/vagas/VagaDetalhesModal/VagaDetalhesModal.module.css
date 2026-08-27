@@ -1,0 +1,271 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  margin-top: 10px;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.headerMain {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .headerMain {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}
+
+.imageContainer {
+  width: 5.5rem;
+  height: 5.5rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8fafc;
+}
+
+.jobImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.titleContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.jobTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+}
+
+.companyName {
+  font-size: 1.05rem;
+  color: #475569;
+  margin: 0 0 0.75rem 0;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badgeBlue {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.badgeGreen {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .actionContainer {
+    align-items: flex-end;
+  }
+}
+
+.btnApply {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.btnApply:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.btnApply:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.successBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background-color: #dcfce7;
+  color: #16a34a;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid #bbf7d0;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin: 0;
+  max-width: 250px;
+  text-align: right;
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 0;
+}
+
+.quickInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .quickInfoGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid #f1f5f9;
+}
+
+.infoIconWrapper {
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eff6ff;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.infoLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 0.125rem;
+}
+
+.infoValue {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+}
+
+.textContent {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.textContent p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.emptyText {
+  font-style: italic;
+  color: #94a3b8;
+}
+
+.btnDanger {
+  background-color: #ef4444;
+  color: #ffffff;
+  padding: 14px 12px;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+}
+
+.btnDanger:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+.statusBadgeGlobal {
+  padding: 0.875rem 1.5rem;
+  background-color: #f8fafc;
+  color: #475569;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+}
