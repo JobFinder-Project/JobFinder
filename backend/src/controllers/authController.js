@@ -97,7 +97,8 @@ class AuthController {
       user.resetTokenExpiration = tokenExpiration;
       await user.save();
 
-      const linkReset = `${req.protocol}://${process.env.HOST_FRONTEND}/redefinir-senha/${token}`;
+      const frontendUrl = req.get('origin') || `${req.protocol}://${req.get('host')}`;
+      const linkReset = `${frontendUrl.replace(/\/$/, '')}/redefinir-senha/${token}`;
 
       const mailOptions = {
         from: process.env.APP_EMAIL,

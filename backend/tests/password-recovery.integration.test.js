@@ -22,7 +22,6 @@ let mongoServer;
 beforeAll(async () => {
   process.env.APP_EMAIL = 'jobfinder@teste.com';
   process.env.APP_PASS = 'senha-de-app';
-  process.env.HOST_FRONTEND = 'localhost:5173';
 
   mongoServer = await startTestDatabase();
 });
@@ -44,6 +43,7 @@ describe('Recuperação de senha', () => {
 
     const response = await request(app)
       .post('/api/recuperar_senha')
+      .set('Origin', 'https://app.example.com')
       .send({ email: candidato.email });
 
     expect(response.statusCode).toBe(200);
@@ -61,7 +61,9 @@ describe('Recuperação de senha', () => {
       to: candidato.email,
       subject: 'Recuperar senha - App JobFinder',
     });
-    expect(sendMailMock.mock.calls[0][0].html).toContain('localhost:5173/redefinir-senha/');
+    expect(sendMailMock.mock.calls[0][0].html).toContain(
+      'https://app.example.com/redefinir-senha/'
+    );
 
     const candidatoNoDb = await Candidato.findOne({ email: candidato.email });
     expect(candidatoNoDb.resetToken).toBeDefined();

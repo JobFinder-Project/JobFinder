@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
 import routes from './routes/index.js';
 import cors from 'cors';
@@ -6,6 +9,10 @@ import MongoStore from 'connect-mongo';
 import { setupSwagger } from './docs/swagger.js';
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const frontendDistPath = path.resolve(__dirname, '../../frontend/dist');
+const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 
 app.use(
   cors({
@@ -54,5 +61,12 @@ setupSwagger(app);
 
 // Configuração das rotas
 routes(app, '/api');
+
+if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
+  app.use(express.static(frontendDistPath));
+  app.get('*', (req, res) => {
+    res.sendFile(frontendIndexPath);
+  });
+}
 
 export default app;

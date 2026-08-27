@@ -15,4 +15,7 @@ connectDb()
       })
       .on('error', (err) => console.log('Erro ao ligar o servidor:\n', err));
   })
-  .catch((err) => console.log('Nao foi possivel conectar ao Banco de Dados:\n', err));
+  .catch((err) => {
+    console.log('Nao foi possivel conectar ao Banco de Dados:\n', err);
+    process.exit(1);
+  });
