@@ -28,7 +28,7 @@ body:
     attributes:
       label: "🎯 Critérios de aceite"
       description: Liste o que deve estar funcionando para considerar a feature concluída.
-      placeholder: "- [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
+      placeholder: "Ex: - [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
     validations:
       required: true
 

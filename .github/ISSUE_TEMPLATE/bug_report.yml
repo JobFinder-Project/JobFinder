@@ -62,7 +62,7 @@ body:
     attributes:
       label: 🎯 Comportamento esperado
       description: O que deveria acontecer no lugar do erro?
-      placeholder: "Ex: O sistema deveria aceitar apenas imagens válidas de até 2 MB e exibir uma mensagem de erro para arquivos inválidos."
+      placeholder: "Ex: - [] O sistema deveria aceitar apenas imagens válidas de até 2 MB e exibir uma mensagem de erro para arquivos inválidos."
     validations:
       required: true
 

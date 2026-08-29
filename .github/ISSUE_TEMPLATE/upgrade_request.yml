@@ -53,6 +53,6 @@ body:
     attributes:
       label: 🎯 Passos para validação
       description: Explique como verificar que a atualização foi aplicada corretamente.
-      placeholder: "Ex: rodar testes do backend e frontend, validar login, criação de vaga, candidatura e deploy."
+      placeholder: "Ex: - [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
     validations:
       required: true
