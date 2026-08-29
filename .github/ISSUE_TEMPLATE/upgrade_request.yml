@@ -9,57 +9,50 @@ body:
     id: impacto
     attributes:
       label: 🔍 Impacto
-      description: Marque os pontos afetados
+      description: Marque as partes do projeto que podem ser afetadas.
       options:
-        - label: Interface
-        - label: Backend
-        - label: API
-        - label: Banco de Dados
+        - label: Frontend / Interface
+        - label: Backend / API
+        - label: Banco de dados
+        - label: Autenticação / Sessão
+        - label: Upload / Arquivos
+        - label: Dependências
+        - label: CI-CD / Deploy
+        - label: Documentação / Swagger
+        - label: Testes
 
-  - type: markdown
-    attributes:
-      value: "## 📦 Componente a ser atualizado"
   - type: input
     id: componente
     attributes:
       label: 📦 O que será atualizado?
       description: Especifique o componente, dependência ou infraestrutura.
-      placeholder: "Ex: Node.js 18 → 20"
+      placeholder: "Ex: Node.js 20 para 22, React, Express, Mongoose, workflow de CI"
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## ❓ Motivo da Atualização"
   - type: textarea
     id: motivo
     attributes:
-      label: ❓ Motivo da Atualização
+      label: ❓ Motivo da atualização
       description: Por que essa atualização é necessária?
-      placeholder: "Ex: correção de vulnerabilidade, compatibilidade, novas features"
+      placeholder: "Ex: corrigir vulnerabilidade, manter compatibilidade, remover API depreciada ou habilitar melhoria necessária no projeto."
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## ⚠️ Riscos"
   - type: textarea
     id: riscos
     attributes:
       label: ⚠️ Riscos
       description: Liste possíveis riscos ao aplicar esse upgrade.
-      placeholder: "Ex: Quebra de compatibilidade com API antiga"
+      placeholder: "Ex: quebra no login, criação de vagas, upload de imagens, rotas protegidas ou testes automatizados."
     validations:
       required: false 
         
-  - type: markdown
-    attributes:
-      value: "## ✅ Passos para Validação"
   - type: textarea
     id: validacao
     attributes:
-      label: ✅ Passos para Validação
+      label: 🎯 Passos para validação
       description: Explique como verificar que a atualização foi aplicada corretamente.
-      placeholder: "Ex: Rodar testes unitários, validar deploy no ambiente de staging"
+      placeholder: "Ex: - [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
     validations:
       required: true
