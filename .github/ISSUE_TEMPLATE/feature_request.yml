@@ -1,54 +1,41 @@
 name: "✨ Nova funcionalidade / Feature Request"
-description: "Sugestão de nova funcionalidade ou melhoria no sistema"
+description: "Sugestão de nova funcionalidade ou melhoria no JobFinder"
 title: "[Feature]: "
 labels: ["enhancement"]
 assignees: []
 
 body:
-  - type: markdown
-    attributes:
-      value: "## 📝 Descrição da Feature"
   - type: textarea
     id: descricao
     attributes:
       label: "📝 Descrição da Feature"
       description: Explique de forma clara e objetiva qual é a funcionalidade desejada.
-      placeholder: "Ex: Permitir exportar relatórios em PDF..."
+      placeholder: "Ex: Permitir que empresas salvem uma vaga como rascunho antes de publicar."
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## ❓ Problema Relacionado"
   - type: textarea
     id: problema
     attributes:
-      label: "❓ Problema Relacionado"
+      label: "❓ Problema relacionado"
       description: Existe algum problema atual que essa feature resolve?
-      placeholder: "Ex: Atualmente só é possível exportar em CSV..."
+      placeholder: "Ex: Hoje a empresa precisa preencher e publicar a vaga de uma vez, sem poder revisar depois."
     validations:
       required: false
 
-
-  - type: markdown
-    attributes:
-      value: "## ✅ Critérios de Aceitação"
   - type: textarea
     id: criterios
     attributes:
-      label: "✅ Critérios de Aceite"
+      label: "🎯 Critérios de aceite"
       description: Liste o que deve estar funcionando para considerar a feature concluída.
-      placeholder: "- [ ] O usuário consegue exportar em PDF\n- [ ] O layout segue padrão da UI"
+      placeholder: "- [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## 📎 Contexto Adicional"
   - type: textarea
     id: contexto
     attributes:
-      label: "📎 Contexto Adicional"
+      label: "📎 Contexto adicional"
       description: Inclua prints, diagramas ou links que ajudem na implementação.
       placeholder: "Links, prints, diagramas..."
     validations:

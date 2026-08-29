@@ -1,5 +1,5 @@
 name: "🐛 Reportar falha / Bug Report"
-description: "Reporte um erro encontrado na plataforma de análise de dados"
+description: "Reporte um erro encontrado no JobFinder"
 title: "[Bug]: "
 labels: ["bug","help wanted"]
 assignees: []
@@ -8,73 +8,68 @@ body:
   - type: dropdown
     id: tipo_bug
     attributes:
-      label: 🐞 Tipo de Bug
-      description: Selecione a categoria do bug
+      label: 🐞 Tipo de bug
+      description: Selecione a categoria que melhor descreve a causa ou o comportamento principal do bug.
       options:
-        - Visualização / Gráficos
-        - Cálculo / Dados
-        - Performance / Carregamento
-        - Exportação / Download
-        - Interface / Usabilidade
-        - Outro
+        - Sintaxe
+        - Lógica
+        - Runtime / Erro em execução
+        - Concorrência / Condição de corrida
+        - Performance / Lentidão
+        - Segurança
+        - Dependência vulnerável
+        - Validação de dados / arquivos
+        - Regra de negócio / Requisito funcional
+        - Autenticação / Autorização
+        - Integração / API
+        - Persistência / Banco de dados
+        - Interface / Usabilidade / Acessibilidade
+        - Configuração / Ambiente
+        - Testes / CI-CD
+        - Outro / Não sei classificar
     validations:
       required: true
 
-  - type: markdown
-    attributes: 
-      value: "## 🔖 Versão da Plataforma:"
   - type: input
     id: versao
     attributes:
       label: 🔖 Versão
-      description: Informe a versão da plataforma (ou data da análise)
-      placeholder: "Ex: v1.2.3 ou 03/10/2025"
+      description: Informe a versão da aplicação e branch em que o bug foi encontrado.
+      placeholder: "Ex: v1.2.3, develop"
     validations:
-      required: true
+      required: false
     
-  - type: markdown
-    attributes: 
-      value: "## 🐞 Detalhes do Bug"
   - type: textarea
     id: descricao
     attributes:
-      label: 📝 Descrição do Bug
+      label: 📝 Descrição do bug
       description: Explique claramente qual é o erro encontrado.
-      placeholder: "Ex: O gráfico de barras não atualiza ao mudar o filtro."
+      placeholder: "Ex: A criação de vaga aceita PDF, vídeo ou imagem acima de 2 MB, mesmo informando que apenas imagens de até 2 MB são permitidas."
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## 🔄 Passos para Reproduzir"
   - type: textarea
     id: reproduzir
     attributes:
-      label: 🔄 Passos para Reproduzir
+      label: 🔄 Passos para reproduzir
       description: Liste os passos para reproduzir o bug.
-      placeholder: "1. Abra a plataforma\n2. Aplique o filtro X\n3. Observe que o gráfico não muda"
+      placeholder: "1. Entre como empresa\n2. Abra a criação de vaga\n3. Envie um PDF ou uma imagem acima de 2 MB\n4. Observe que o arquivo é aceito"
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## ✅ Comportamento Esperado"
   - type: textarea
     id: esperado
     attributes:
-      label: ✅ Comportamento Esperado
+      label: 🎯 Comportamento esperado
       description: O que deveria acontecer no lugar do erro?
-      placeholder: "Ex: O gráfico deveria atualizar para refletir os dados filtrados."
+      placeholder: "Ex: O sistema deveria aceitar apenas imagens válidas de até 2 MB e exibir uma mensagem de erro para arquivos inválidos."
     validations:
       required: true
 
-  - type: markdown
-    attributes:
-      value: "## 📷 Evidências (Prints ou Logs)"
   - type: textarea
     id: evidencias
     attributes:
-      label: 📷 Evidências (Prints ou Logs)
+      label: 📷 Evidências
       description: Inclua prints, vídeos ou logs que mostrem o problema.
       placeholder: "Arraste e solte arquivos aqui..."
     validations:
