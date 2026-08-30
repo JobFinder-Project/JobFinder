@@ -110,6 +110,23 @@ describe('services', () => {
     );
   });
 
+  it('deve atualizar o status de uma vaga pelo endpoint da empresa', async () => {
+    fetchMock.mockResolvedValueOnce(
+      createJsonResponse({ success: true, vaga: { _id: 'vaga-1', status: 'Fechada' } })
+    );
+
+    await empresaService.atualizarStatusVaga('vaga-1', 'Fechada');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/empresa/vagas/vaga-1/status',
+      expect.objectContaining({
+        method: 'PATCH',
+        credentials: 'include',
+        body: JSON.stringify({ status: 'Fechada' }),
+      })
+    );
+  });
+
   it('deve propagar status e payload quando a API retornar erro', async () => {
     fetchMock.mockResolvedValueOnce(
       createJsonResponse(

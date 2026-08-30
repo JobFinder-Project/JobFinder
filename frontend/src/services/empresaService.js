@@ -24,6 +24,9 @@ export const empresaService = {
 	criarVaga: async (formData) => {
 		return api.post(`/empresa/vagas/criar`, formData);
 	},
+	atualizarStatusVaga: async (vagaId, status) => {
+		return api.patch(`/empresa/vagas/${vagaId}/status`, { status });
+	},
 	getCandidaturas: async () => {
 		return api.get(`/empresa/candidaturas`);
 	},

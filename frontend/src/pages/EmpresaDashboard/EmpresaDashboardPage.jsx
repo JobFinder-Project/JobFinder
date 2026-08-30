@@ -13,6 +13,7 @@ import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLa
 import VagasModal from '../../features/vagas/VagasModal/VagasModal'
 import CriarVagaModal from '../../features/vagas/CriarVagaModal/CriarVagaModal'
 import PerfilEmpresaModal from '../../features/empresa/PerfilEmpresaModal/PerfilEmpresaModal'
+import VagaEmpresaDetalhesModal from '../../features/vagas/VagaEmpresaDetalhesModal/VagaEmpresaDetalhesModal'
 import { empresaService } from '../../services/empresaService'
 import { useAuth } from '../../contexts/AuthContext'
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
@@ -32,6 +33,7 @@ export default function EmpresaDashboard() {
   const [showVagasModal, setShowVagasModal] = useState(false)
   const [showCriarVagaModal, setShowCriarVagaModal] = useState(false)
   const [showPerfilModal, setShowPerfilModal] = useState(false)
+  const [vagaSelecionada, setVagaSelecionada] = useState(null)
 
   useEffect(() => {
     const modalToOpen = searchParams.get('open');
@@ -79,6 +81,14 @@ export default function EmpresaDashboard() {
   }
 
   const vagasAtivas = vagas.filter(v => v.status !== 'Fechada' && v.status !== 'Encerrada')
+  const vagasAtivasOcultas = Math.max(vagasAtivas.length - 3, 0)
+
+  const handleStatusChange = async (vaga, status) => {
+    const response = await empresaService.atualizarStatusVaga(vaga._id, status)
+    const vagaAtualizada = response.vaga
+    setVagas(current => current.map(item => item._id === vagaAtualizada._id ? vagaAtualizada : item))
+    setVagaSelecionada(vagaAtualizada)
+  }
 
   return (
       <DashboardLayout
@@ -153,7 +163,7 @@ export default function EmpresaDashboard() {
                       <div className={styles.cardHeader}>
                         <div>
                           <h2 className={styles.cardTitle}>Vagas Ativas</h2>
-                          <p className={styles.cardSubtitle}>Suas vagas tualmente abertas</p>
+                          <p className={styles.cardSubtitle}>Prévia das suas vagas atualmente abertas</p>
                         </div>
                         <button
                             className={styles.btnGhost}
@@ -168,7 +178,13 @@ export default function EmpresaDashboard() {
                             <p className={styles.emptyState}>Você não possui vagas ativas no momento.</p>
                         ) : (
                             vagasAtivas.slice(0, 3).map((vaga) => (
-                                <div key={vaga._id} className={styles.jobItem}>
+                                <button
+                                    key={vaga._id}
+                                    type="button"
+                                    className={styles.jobItem}
+                                    onClick={() => setVagaSelecionada(vaga)}
+                                    aria-label={`Ver detalhes da vaga ${vaga.nome}`}
+                                >
                                   <div className={styles.jobInfo}>
                                     <div>
                                       <h3 className={styles.jobTitle}>{vaga.nome}</h3>
@@ -180,11 +196,24 @@ export default function EmpresaDashboard() {
                                   </div>
                                   <div className={styles.jobMeta}>
                                     <span className={styles.jobDate}>
-                                      Publicado em {new Date(vaga.createdAt || Date.now()).toLocaleDateString('pt-BR')}
+                                      {vaga.createdAt
+                                        ? `Publicado em ${new Date(vaga.createdAt).toLocaleDateString('pt-BR')}`
+                                        : 'Data de publicação não informada'}
                                     </span>
                                   </div>
-                                </div>
+                                </button>
                             ))
+                        )}
+
+                        {vagasAtivasOcultas > 0 && (
+                          <button
+                              type="button"
+                              className={styles.moreJobs}
+                              onClick={() => navigate('/empresa/vagas')}
+                          >
+                            + {vagasAtivasOcultas} {vagasAtivasOcultas === 1 ? 'vaga ativa' : 'vagas ativas'} — Ver todas as vagas
+                            <BiRightArrowAlt size={20} />
+                          </button>
                         )}
                       </div>
                     </div>
@@ -304,6 +333,15 @@ export default function EmpresaDashboard() {
                 onClose={() => setShowPerfilModal(false)}
                 onUpdate={fetchDashboardData}
             />
+        )}
+
+        {vagaSelecionada && (
+          <VagaEmpresaDetalhesModal
+              vaga={vagaSelecionada}
+              onClose={() => setVagaSelecionada(null)}
+              onStatusChange={handleStatusChange}
+              onViewCandidates={(vaga) => navigate(`/empresa/candidaturas?vagaId=${vaga._id}`)}
+          />
         )}
       </DashboardLayout>
   )

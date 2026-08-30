@@ -222,9 +222,15 @@
 }
 
 .jobItem {
+  width: 100%;
   padding: 1rem;
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0;
+  background: #ffffff;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
   transition: all 0.2s;
 }
 
@@ -357,4 +363,35 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.jobItem:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+  border-color: #2563eb;
+}
+
+.moreJobs {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed #93c5fd;
+  border-radius: 0.5rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.moreJobs:hover {
+  background: #dbeafe;
+}
+
+.moreJobs:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
 }
