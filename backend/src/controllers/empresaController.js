@@ -109,6 +109,16 @@ class EmpresaController {
       };
 
       if (req.file) {
+        const allowedMimeTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+        
+        if (!allowedMimeTypes.includes(req.file.mimetype)) {
+          return next(new Error400('Formato de arquivo inválido. Apenas SVG, PNG ou JPG são permitidos.'));
+        }
+        
+        if (req.file.size > 10 * 1024 * 1024) {
+          return next(new Error400('A imagem excede o limite máximo de 10MB.'));
+        }
+
         dadosVaga.imagem = {
           data: req.file.buffer,
           contentType: req.file.mimetype,
