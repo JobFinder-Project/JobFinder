@@ -84,7 +84,7 @@ class CandidatoController {
         email,
         telefone,
         educacao,
-        qualificacao,
+        qualificacoes,
         cursos,
         descricao,
         habilidadesTecnicas,
@@ -100,7 +100,7 @@ class CandidatoController {
       if (email !== undefined) candidato.email = email;
       if (telefone !== undefined) candidato.telefone = telefone;
       if (educacao !== undefined) candidato.educacao = educacao;
-      if (qualificacao !== undefined) candidato.qualificacao = qualificacao;
+      if (qualificacoes !== undefined) candidato.qualificacao = qualificacoes;
       if (descricao !== undefined) candidato.descricao = descricao;
       if (habilidadesTecnicas !== undefined) candidato.habilidadesTecnicas = habilidadesTecnicas;
       if (cursos !== undefined) {
