@@ -40,12 +40,28 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      setImagem(file)
-      const reader = new FileReader()
-      reader.onloadend = () => setPreview(reader.result)
-      reader.readAsDataURL(file)
+    if (!file) return;
+
+    const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
+    const maxSize = 10 * 1024 * 1024;
+
+    if (!validTypes.includes(file.type)) {
+      setErrorMsg('Formato inválido. Apenas SVG, PNG ou JPG são permitidos.');
+      e.target.value = '';
+      return;
     }
+
+    if (file.size > maxSize) {
+      setErrorMsg('A imagem excede o limite máximo de 10MB.');
+      e.target.value = '';
+      return;
+    }
+
+    setErrorMsg(''); 
+    setImagem(file)
+    const reader = new FileReader()
+    reader.onloadend = () => setPreview(reader.result)
+    reader.readAsDataURL(file)
   }
 
   const handleSubmit = async (e) => {
@@ -204,7 +220,7 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
                     type="file"
                     id="imagem"
                     name="imagem"
-                    accept="image/*"
+                    accept=".svg, .png, .jpg, .jpeg"
                     onChange={handleImageChange}
                     className={styles.fileInputHidden}
                 />
@@ -217,7 +233,7 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
                           <BiUpload size={24} />
                         </div>
                         <span className={styles.uploadTextPrimary}>Clique para selecionar uma imagem</span>
-                        <span className={styles.uploadTextSecondary}>SVG, PNG, JPG ou GIF (Max 2MB)</span>
+                        <span className={styles.uploadTextSecondary}>SVG, PNG ou JPG (Max 10MB)</span>
                       </div>
                   )}
                 </label>
