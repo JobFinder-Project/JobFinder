@@ -145,6 +145,53 @@ A interface envia um campo com um nome diferente do esperado pelo backend. Como 
 
 https://private-user-images.githubusercontent.com/68167990/643037183-d94d93c3-8d4d-476f-95cd-4266465a1d54.webm?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODgwMzA1MzksIm5iZiI6MTc4ODAzMDIzOSwicGF0aCI6Ii82ODE2Nzk5MC82NDMwMzcxODMtZDk0ZDkzYzMtOGQ0ZC00NzZmLTk1Y2QtNDI2NjQ2NWExZDU0LndlYm0_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwODI5JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDgyOVQxOTAzNTlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT00ZmVkYjA3Zjc5NTk3Yzc5ODExMmQ4MTQ1Y2IzYjNhYWVhYTIxNjhhNTA1MmU4YjgzOWVlNjBjZGVjY2FiNTYyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9dmlkZW8lMkZ3ZWJtIn0.DydccdzeS-2piVf0rxoS0q7NrM38AwejsIawhIiw3FY
 
+
+## 4. Bug: Vagas ativas do dashboard não abrem detalhes ao clicar
+
+### Classificação
+- Tipo: Interface / Usabilidade / Acessibilidade
+- Severidade: Média
+- Prioridade: Alta
+- Impacto: Média
+
+### Descrição
+
+Na tela principal do dashboard da empresa, existe um card de Vagas Ativas que exibe apenas três sub-cards de vagas. Porém, esses sub-cards não são clicáveis e não possuem botão de detalhes, impedindo que a empresa acesse os detalhes das vagas diretamente a partir do dashboard.
+
+Além disso, quando existem mais de três vagas ativas, a interface não deixa claro que a lista exibida é apenas um resumo. Não há uma indicação visual próxima ao fim da lista informando que existem mais vagas, como `Ver outras vagas`, `Ver todas as vagas` ou uma contagem do tipo `+ X vagas ativas`.
+
+### Local de ocorrência
+
+- Tela principal do dashboard da empresa
+- Card de **Vagas Ativas** no dashboard
+- Componente de renderização de vagas ativas (`frontend/src/pages/EmpresaDashboard/EmpresaDashboardPage.jsx`)
+- Modal de detalhes da vaga em **Gerenciar Vagas** (`frontend/src/pages/GerenciarVagas/GerenciarVagasPage.jsx`)
+
+### Pontos afetados
+
+- Interatividade dos sub-cards de vagas ativas
+- Falta de botão ou link para abrir detalhes da vaga
+- Indicação de que existe uma lista completa de vagas além das três exibidas
+- Consistência de experiência entre o dashboard e a tela de gerenciamento
+- Fluxo de navegação para acesso às vagas
+
+### Causa provável
+
+Os sub-cards de vagas no dashboard usam elementos `div` sem manipulador `onClick` e sem botões de ação. A lista está limitada a três itens com `vagasAtivas.slice(0, 3)`, mas não há indicação visual dessa limitação. O modal de detalhes já existe em **Gerenciar Vagas**, mas não é reutilizado no dashboard.
+
+### Impactos esperados
+
+- Experiência de usuário prejudicada, dificultando o acesso às vagas
+- Falta de clareza sobre a disponibilidade de mais vagas além das três exibidas
+- Necessidade de navegar para outra tela para visualizar detalhes de uma vaga
+- Inconsistência entre o comportamento esperado (clicar para abrir detalhes) e o comportamento real (nada acontece)
+= Redução de eficiência no gerenciamento de vagas pelo usuário empresa
+- Pequeno erro textual em "Suas vagas tualmente abertas" (falta de "a" em "atualmente")
+
+### Evidências
+
+https://private-user-images.githubusercontent.com/68167990/643158383-91faf843-37d1-4a12-b728-33765a364910.webm?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3ODgxNzk1NzgsIm5iZiI6MTc4ODE3OTI3OCwicGF0aCI6Ii82ODE2Nzk5MC82NDMxNTgzODMtOTFmYWY4NDMtMzdkMS00YTEyLWI3MjgtMzM3NjVhMzY0OTEwLndlYm0_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwODMxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDgzMVQxMjI3NThaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1mYzM3NzYzMDYzOTUwYjE0ODRhNzM0Yjc3ZDdiNzZmMjk0ODg4ZDBjNzAyN2Y3OGM5OGFiYjdjOThkMmMwMDA5JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9dmlkZW8lMkZ3ZWJtIn0.14iBFFKMtP1LDjwiL1zAx73QcGrnMMWYDblVVSN35BI
+
 ---
 
 ## 4. Resumo da classificação
@@ -154,11 +201,12 @@ https://private-user-images.githubusercontent.com/68167990/643037183-d94d93c3-8d
 | Upload de imagem da vaga | Lógica / validação | Alta | Cadastro de vagas e upload de arquivos | Arquivos inválidos são aceitos |
 | Dependências vulneráveis | Segurança | Crítica | Dependências do projeto | Pacotes com falhas conhecidas continuam em uso |
 | Falha ao atualizar qualificação do candidato | Lógica / persistência | Alta | Perfil do candidato | Alteração é ignorada e mensagem de sucesso é falsa |
+| Vagas ativas do dashboard não abrem detalhes ao clicar | Interface / usabilidade | Média | Dashboard da empresa | Sub-cards não são clicáveis e sem indicação de mais vagas |
 
 ---
 
 ## 5. Conclusão
 
-Os três defeitos possuem natureza distinta, mas todos afetam diretamente a confiabilidade do sistema. O primeiro compromete a regra de negócio e a qualidade dos dados de vagas; o segundo representa um risco relevante de segurança para a aplicação e para seus usuários; e o terceiro compromete a integridade do perfil do candidato e a experiência do usuário ao sugerir uma alteração que não foi persistida.
+Os quatro defeitos possuem natureza distinta, mas todos afetam diretamente a confiabilidade e usabilidade do sistema. O primeiro compromete a regra de negócio e a qualidade dos dados de vagas; o segundo representa um risco crítico de segurança; o terceiro afeta a integridade dos dados do candidato; e o quarto prejudica a experiência do usuário no dashboard.
 
-A classificação indica que os itens exigem atenção imediata, com prioridade para correção de segurança, validação de entrada e sincronização de contratos entre frontend e backend.
+A classificação indica que os itens exigem atenção imediata, com prioridade para correção de segurança, validação de entrada, sincronização de contratos entre frontend e backend, e melhorias de usabilidade e acessibilidade na interface.
