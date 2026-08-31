@@ -1,0 +1,140 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.image,
+.imagePlaceholder {
+  width: 100%;
+  height: 180px;
+  border-radius: 0.75rem;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.imagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.title {
+  margin: 0 0 0.75rem;
+  color: #0f172a;
+  font-size: 1.5rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.open {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.closed {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.section h4 {
+  margin: 0 0 0.5rem;
+  color: #0f172a;
+}
+
+.section p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.secondaryButton,
+.closeButton,
+.reopenButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondaryButton {
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+}
+
+.closeButton {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.reopenButton {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.secondaryButton:hover { background: #f8fafc; }
+.closeButton:hover { background: #ffe4e6; }
+.reopenButton:hover { background: #dcfce7; }
+
+.secondaryButton:focus-visible,
+.closeButton:focus-visible,
+.reopenButton:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+}
+
+.secondaryButton:disabled,
+.closeButton:disabled,
+.reopenButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (max-width: 520px) {
+  .actions > button {
+    width: 100%;
+  }
+}

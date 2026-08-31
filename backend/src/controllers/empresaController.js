@@ -132,6 +132,35 @@ class EmpresaController {
     }
   }
 
+  static async atualizarStatusVaga(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+      const { vagaId } = req.params;
+      const { status } = req.body;
+
+      if (!['Aberta', 'Fechada'].includes(status)) {
+        return next(new Error400('Status de vaga inválido. Use Aberta ou Fechada.'));
+      }
+
+      const vaga = await Vaga.findOne({ _id: vagaId, empresa: empresaId });
+      if (!vaga) {
+        return next(new Error404('Vaga não encontrada.'));
+      }
+
+      vaga.status = status;
+      await vaga.save();
+
+      res.status(200).json({
+        success: true,
+        message: `Vaga ${status === 'Aberta' ? 'reaberta' : 'encerrada'} com sucesso`,
+        vaga: toVagaDTO(vaga),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
   static async buscarCandidaturas(req, res, next) {
     try {
       const empresaId = req.session.user.id;
