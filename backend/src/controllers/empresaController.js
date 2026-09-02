@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import path from 'node:path';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Vaga from '../models/vagasModel.js';
@@ -6,6 +7,50 @@ import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
 import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO, toCandidaturaDTO } from '../dtos/index.js';
+
+const allowedImageExtensionsByMimeType = {
+  'image/svg+xml': ['.svg'],
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/jpg': ['.jpg', '.jpeg'],
+};
+
+const isAllowedVagaImageMetadata = (file) => {
+  const allowedExtensions = allowedImageExtensionsByMimeType[file.mimetype];
+  const fileExtension = path.extname(file.originalname || '').toLowerCase();
+
+  return Boolean(allowedExtensions?.includes(fileExtension));
+};
+
+const hasPngSignature = (buffer) =>
+  buffer.length >= 8 &&
+  buffer[0] === 0x89 &&
+  buffer[1] === 0x50 &&
+  buffer[2] === 0x4e &&
+  buffer[3] === 0x47 &&
+  buffer[4] === 0x0d &&
+  buffer[5] === 0x0a &&
+  buffer[6] === 0x1a &&
+  buffer[7] === 0x0a;
+
+const hasJpegSignature = (buffer) =>
+  buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+
+const hasSvgSignature = (buffer) => {
+  const content = buffer.toString('utf8', 0, Math.min(buffer.length, 1024)).trimStart();
+
+  return content.startsWith('<svg') || (content.startsWith('<?xml') && content.includes('<svg'));
+};
+
+const isAllowedVagaImageContent = (file) => {
+  if (!file.buffer) return false;
+
+  if (file.mimetype === 'image/png') return hasPngSignature(file.buffer);
+  if (['image/jpeg', 'image/jpg'].includes(file.mimetype)) return hasJpegSignature(file.buffer);
+  if (file.mimetype === 'image/svg+xml') return hasSvgSignature(file.buffer);
+
+  return false;
+};
 
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
@@ -109,12 +154,12 @@ class EmpresaController {
       };
 
       if (req.file) {
-        const allowedMimeTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
-        
-        if (!allowedMimeTypes.includes(req.file.mimetype)) {
-          return next(new Error400('Formato de arquivo inválido. Apenas SVG, PNG ou JPG são permitidos.'));
+        if (!isAllowedVagaImageMetadata(req.file) || !isAllowedVagaImageContent(req.file)) {
+          return next(
+            new Error400('Formato de arquivo inválido. Apenas SVG, PNG ou JPG são permitidos.')
+          );
         }
-        
+
         if (req.file.size > 10 * 1024 * 1024) {
           return next(new Error400('A imagem excede o limite máximo de 10MB.'));
         }

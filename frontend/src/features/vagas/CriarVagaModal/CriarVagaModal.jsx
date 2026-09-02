@@ -4,6 +4,26 @@ import Modal from '../../../components/ui/Modal/Modal'
 import { empresaService } from '../../../services/empresaService'
 import styles from './CriarVagaModal.module.css'
 
+const allowedImageExtensionsByType = {
+  'image/svg+xml': ['.svg'],
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/jpg': ['.jpg', '.jpeg'],
+}
+
+const getFileExtension = (fileName = '') => {
+  const dotIndex = fileName.toLowerCase().lastIndexOf('.')
+
+  return dotIndex === -1 ? '' : fileName.toLowerCase().slice(dotIndex)
+}
+
+const isAllowedVagaImageFile = (file) => {
+  const allowedExtensions = allowedImageExtensionsByType[file.type]
+  const fileExtension = getFileExtension(file.name)
+
+  return Boolean(allowedExtensions?.includes(fileExtension))
+}
+
 export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     nome: '',
@@ -42,22 +62,25 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
     const file = e.target.files[0]
     if (!file) return;
 
-    const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
     const maxSize = 10 * 1024 * 1024;
 
-    if (!validTypes.includes(file.type)) {
+    if (!isAllowedVagaImageFile(file)) {
       setErrorMsg('Formato inválido. Apenas SVG, PNG ou JPG são permitidos.');
+      setImagem(null);
+      setPreview(null);
       e.target.value = '';
       return;
     }
 
     if (file.size > maxSize) {
       setErrorMsg('A imagem excede o limite máximo de 10MB.');
+      setImagem(null);
+      setPreview(null);
       e.target.value = '';
       return;
     }
 
-    setErrorMsg(''); 
+    setErrorMsg('');
     setImagem(file)
     const reader = new FileReader()
     reader.onloadend = () => setPreview(reader.result)
