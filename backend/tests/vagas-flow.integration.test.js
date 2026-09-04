@@ -41,7 +41,9 @@ describe('Fluxo de vagas', () => {
       nome: vagaPayload.nome,
       area: vagaPayload.area,
       requisitos: vagaPayload.requisitos,
+      status: 'Aberta',
     });
+    expect(createResponse.body.vaga.createdAt).toBeDefined();
 
     const vagaNoDb = await Vaga.findById(createResponse.body.vaga._id);
     expect(vagaNoDb).not.toBeNull();
@@ -50,6 +52,28 @@ describe('Fluxo de vagas', () => {
     expect(dashboardResponse.statusCode).toBe(200);
     expect(dashboardResponse.body.vagas).toHaveLength(1);
     expect(dashboardResponse.body.vagas[0].nome).toBe(vagaPayload.nome);
+  });
+
+  it('deve permitir que a empresa encerre e reabra apenas as próprias vagas', async () => {
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
+    const { agent: otherCompanyAgent } = await registerAndLoginEmpresa(app);
+
+    const forbiddenResponse = await otherCompanyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Fechada' });
+    expect(forbiddenResponse.statusCode).toBe(404);
+
+    const closeResponse = await companyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Fechada' });
+    expect(closeResponse.statusCode).toBe(200);
+    expect(closeResponse.body.vaga.status).toBe('Fechada');
+
+    const reopenResponse = await companyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Aberta' });
+    expect(reopenResponse.statusCode).toBe(200);
+    expect(reopenResponse.body.vaga.status).toBe('Aberta');
   });
 
   it('deve bloquear criação de vaga para candidato ou usuário anônimo', async () => {
