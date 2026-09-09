@@ -41,15 +41,40 @@ describe('Fluxo de vagas', () => {
       nome: vagaPayload.nome,
       area: vagaPayload.area,
       requisitos: vagaPayload.requisitos,
+      status: 'Aberta',
     });
+    expect(createResponse.body.vaga.createdAt).toBeDefined();
 
     const vagaNoDb = await Vaga.findById(createResponse.body.vaga._id);
     expect(vagaNoDb).not.toBeNull();
 
     const dashboardResponse = await companyAgent.get('/api/empresa/dashboard');
     expect(dashboardResponse.statusCode).toBe(200);
+    expect(dashboardResponse.body.empresa).not.toHaveProperty('_id');
     expect(dashboardResponse.body.vagas).toHaveLength(1);
     expect(dashboardResponse.body.vagas[0].nome).toBe(vagaPayload.nome);
+  });
+
+  it('deve permitir que a empresa encerre e reabra apenas as próprias vagas', async () => {
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
+    const { agent: otherCompanyAgent } = await registerAndLoginEmpresa(app);
+
+    const forbiddenResponse = await otherCompanyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Fechada' });
+    expect(forbiddenResponse.statusCode).toBe(404);
+
+    const closeResponse = await companyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Fechada' });
+    expect(closeResponse.statusCode).toBe(200);
+    expect(closeResponse.body.vaga.status).toBe('Fechada');
+
+    const reopenResponse = await companyAgent
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
+      .send({ status: 'Aberta' });
+    expect(reopenResponse.statusCode).toBe(200);
+    expect(reopenResponse.body.vaga.status).toBe('Aberta');
   });
 
   it('deve bloquear criação de vaga para candidato ou usuário anônimo', async () => {
@@ -87,11 +112,43 @@ describe('Fluxo de vagas', () => {
     expect(keywordResponse.statusCode).toBe(200);
     expect(keywordResponse.body.vagas).toHaveLength(1);
     expect(keywordResponse.body.vagas[0].nome).toBe('Desenvolvedor React');
+    expect(keywordResponse.body.vagas[0].empresa).toMatchObject({
+      nome: expect.any(String),
+    });
+    expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('_id');
+    expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('cnpj');
+    expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('email');
+    expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('fone');
 
     const areaResponse = await candidateAgent.get('/api/vagas?area=Administrativa');
     expect(areaResponse.statusCode).toBe(200);
     expect(areaResponse.body.vagas).toHaveLength(1);
     expect(areaResponse.body.vagas[0].area).toBe('Administrativa');
+  });
+
+  it('deve ocultar identificadores e contatos de outra empresa na listagem de vagas', async () => {
+    const { empresa: empresaDona } = await createVagaAsEmpresa(app, {
+      empresaOverrides: { nome: 'Empresa Dona da Vaga' },
+      vagaOverrides: { nome: 'Vaga Pública Segura' },
+    });
+    const { agent: outraEmpresaAgent } = await registerAndLoginEmpresa(app, {
+      nome: 'Empresa Consultante',
+    });
+
+    const response = await outraEmpresaAgent.get('/api/vagas?q=Vaga%20Pública%20Segura');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.vagas).toHaveLength(1);
+    expect(response.body.vagas[0].empresa).toMatchObject({
+      nome: empresaDona.nome,
+      bio: empresaDona.bio,
+      site: empresaDona.site,
+    });
+    expect(response.body.vagas[0].empresa).not.toHaveProperty('_id');
+    expect(response.body.vagas[0].empresa).not.toHaveProperty('id');
+    expect(response.body.vagas[0].empresa).not.toHaveProperty('cnpj');
+    expect(response.body.vagas[0].empresa).not.toHaveProperty('email');
+    expect(response.body.vagas[0].empresa).not.toHaveProperty('fone');
   });
 
   it('deve listar áreas únicas disponíveis', async () => {
@@ -137,10 +194,56 @@ describe('Busca de candidatos pela empresa', () => {
     expect(byNameResponse.body.candidatos).toHaveLength(1);
     expect(byNameResponse.body.candidatos[0].nome).toBe(candidato.nome);
     expect(byNameResponse.body.candidatos[0].senha).toBeUndefined();
+    expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('_id');
+    expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('cpf');
+    expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('email');
+    expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('telefone');
 
     const byEducationResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=Superior');
     expect(byEducationResponse.statusCode).toBe(200);
     expect(byEducationResponse.body.candidatos).toHaveLength(1);
+  });
+
+  it('deve rejeitar busca global vazia ou com termo curto', async () => {
+    const { agent: companyAgent } = await registerAndLoginEmpresa(app);
+    await request(app).post('/api/candidato/cadastrar').send(buildCandidato());
+
+    const emptyResponse = await companyAgent.get('/api/empresa/candidatos/buscar');
+    expect(emptyResponse.statusCode).toBe(400);
+
+    const whitespaceResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=%20%20');
+    expect(whitespaceResponse.statusCode).toBe(400);
+
+    const shortResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=a');
+    expect(shortResponse.statusCode).toBe(400);
+  });
+
+  it('deve permitir busca vazia somente para candidatos vinculados a uma vaga da empresa', async () => {
+    const { agent: candidateAgent, candidato } = await registerAndLoginCandidato(app, {
+      nome: 'Candidata Vinculada',
+    });
+    await registerAndLoginCandidato(app, { nome: 'Candidato Sem Vínculo' });
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
+
+    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+
+    const response = await companyAgent.get(`/api/empresa/candidatos/buscar?vagaId=${vagaId}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.candidatos).toHaveLength(1);
+    expect(response.body.candidatos[0].nome).toBe(candidato.nome);
+    expect(response.body.candidatos[0]).not.toHaveProperty('_id');
+    expect(response.body.candidatos[0]).not.toHaveProperty('email');
+    expect(response.body.candidatos[0]).not.toHaveProperty('telefone');
+  });
+
+  it('deve impedir que a empresa consulte vínculos de uma vaga que não lhe pertence', async () => {
+    const { vagaId } = await createVagaAsEmpresa(app);
+    const { agent: otherCompanyAgent } = await registerAndLoginEmpresa(app);
+
+    const response = await otherCompanyAgent.get(`/api/empresa/candidatos/buscar?vagaId=${vagaId}`);
+
+    expect(response.statusCode).toBe(404);
   });
 
   it('deve bloquear busca de candidatos para candidato ou usuário anônimo', async () => {

@@ -36,6 +36,14 @@ const VagasSchema = new mongoose.Schema({
     minlength: [10, 'Os requisitos devem ter no mínimo 10 caracteres'],
     maxlength: [1000, 'Os requisitos devem ter no máximo 1000 caracteres'],
   },
+  status: {
+    type: String,
+    enum: {
+      values: ['Aberta', 'Fechada'],
+      message: 'O status {VALUE} é inválido',
+    },
+    default: 'Aberta',
+  },
   imagem: {
     data: Buffer,
     contentType: String,
@@ -45,6 +53,6 @@ const VagasSchema = new mongoose.Schema({
     ref: 'Empresa',
     required: [true, 'A empresa é obrigatória'],
   },
-});
+}, { timestamps: true });
 
 export default mongoose.model('Vagas', VagasSchema);

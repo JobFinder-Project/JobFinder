@@ -4,7 +4,7 @@ import Modal from '../../../components/ui/Modal/Modal'
 import { empresaService } from '../../../services/empresaService'
 import styles from './PerfilEmpresaModal.module.css'
 
-export default function PerfilEmpresaModal({ empresa, empresaId, onClose, onUpdate }) {
+export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
   const [isEditing, setIsEditing] = useState(false)
 
   const [formData, setFormData] = useState({

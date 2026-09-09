@@ -103,7 +103,7 @@ export default function GestaoCandidaturas() {
                     </div>
                     <div className={styles.candidateInfo}>
                         <h4 className={styles.candidateName} title={candidato.nome}>{candidato.nome}</h4>
-                        <p className={styles.candidateRole}>{candidato.qualificacao || 'Candidato'}</p>
+                        <p className={styles.candidateRole}>{candidato.qualificacoes || candidato.qualificacao || 'Candidato'}</p>
                     </div>
                 </div>
 

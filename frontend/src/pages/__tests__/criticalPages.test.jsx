@@ -155,7 +155,6 @@ beforeEach(() => {
   useVagasQuery.mockReturnValue({ data: vagas, isLoading: false });
   candidatoService.cadastrar.mockResolvedValue({ success: true });
   candidatoService.getDashboard.mockResolvedValue({
-    candidatoId: 'candidato-1',
     candidato: { nome: 'Ana Souza' },
     areas: ['Administrativa', 'TI - Tecnologia da Informação'],
   });
@@ -165,16 +164,14 @@ beforeEach(() => {
   empresaService.getDashboard.mockResolvedValue({
     empresa: { _id: 'empresa-1', nome: 'Tech Norte' },
     vagas,
-  });
-  empresaService.buscarCandidatos.mockResolvedValue({
-    candidatos: [candidatura.candidato],
+    candidatosRecentes: [candidatura.candidato],
+    totalCandidatos: 1,
   });
   empresaService.getCandidaturas.mockResolvedValue({
     candidaturas: [candidatura],
   });
   empresaService.atualizarStatusCandidatura.mockResolvedValue({ success: true });
 });
-
 describe('páginas críticas', () => {
   it('deve renderizar login e navegar após autenticação bem-sucedida', async () => {
     const loginMock = vi.fn().mockResolvedValue({
@@ -305,6 +302,7 @@ describe('páginas críticas', () => {
     expect(screen.getAllByText('Vagas Ativas').length).toBeGreaterThan(0);
     expect(screen.getByText('Candidatos Recentes')).toBeInTheDocument();
     expect(screen.getByText('Desenvolvedor React')).toBeInTheDocument();
+    expect(empresaService.buscarCandidatos).not.toHaveBeenCalled();
   });
 
   it('deve renderizar página de candidaturas do candidato', async () => {
@@ -322,6 +320,7 @@ describe('páginas críticas', () => {
     await waitFor(() => expect(screen.getByText('Gestão de Candidaturas')).toBeInTheDocument());
     expect(screen.getByText('Novos / Pendentes')).toBeInTheDocument();
     expect(screen.getByText('Ana Souza')).toBeInTheDocument();
+    expect(screen.getByText('Frontend')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTitle('Aprovar'));
 

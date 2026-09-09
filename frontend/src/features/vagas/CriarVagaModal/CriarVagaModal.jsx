@@ -4,7 +4,26 @@ import Modal from '../../../components/ui/Modal/Modal'
 import { empresaService } from '../../../services/empresaService'
 import styles from './CriarVagaModal.module.css'
 
-export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
+const allowedImageExtensionsByType = {
+  'image/svg+xml': ['.svg'],
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/jpg': ['.jpg', '.jpeg'],
+}
+const getFileExtension = (fileName = '') => {
+  const dotIndex = fileName.toLowerCase().lastIndexOf('.')
+
+  return dotIndex === -1 ? '' : fileName.toLowerCase().slice(dotIndex)
+}
+
+const isAllowedVagaImageFile = (file) => {
+  const allowedExtensions = allowedImageExtensionsByType[file.type]
+  const fileExtension = getFileExtension(file.name)
+
+  return Boolean(allowedExtensions?.includes(fileExtension))
+}
+
+export default function CriarVagaModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     nome: '',
     area: '',
@@ -40,12 +59,31 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      setImagem(file)
-      const reader = new FileReader()
-      reader.onloadend = () => setPreview(reader.result)
-      reader.readAsDataURL(file)
+    if (!file) return;
+
+    const maxSize = 10 * 1024 * 1024;
+
+    if (!isAllowedVagaImageFile(file)) {
+      setErrorMsg('Formato inválido. Apenas SVG, PNG ou JPG são permitidos.');
+      setImagem(null);
+      setPreview(null);
+      e.target.value = '';
+      return;
     }
+
+    if (file.size > maxSize) {
+      setErrorMsg('A imagem excede o limite máximo de 10MB.');
+      setImagem(null);
+      setPreview(null);
+      e.target.value = '';
+      return;
+    }
+
+    setErrorMsg('');
+    setImagem(file)
+    const reader = new FileReader()
+    reader.onloadend = () => setPreview(reader.result)
+    reader.readAsDataURL(file)
   }
 
   const handleSubmit = async (e) => {
@@ -204,7 +242,7 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
                     type="file"
                     id="imagem"
                     name="imagem"
-                    accept="image/*"
+                    accept=".svg, .png, .jpg, .jpeg"
                     onChange={handleImageChange}
                     className={styles.fileInputHidden}
                 />
@@ -217,7 +255,7 @@ export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
                           <BiUpload size={24} />
                         </div>
                         <span className={styles.uploadTextPrimary}>Clique para selecionar uma imagem</span>
-                        <span className={styles.uploadTextSecondary}>SVG, PNG, JPG ou GIF (Max 2MB)</span>
+                        <span className={styles.uploadTextSecondary}>SVG, PNG ou JPG (Max 10MB)</span>
                       </div>
                   )}
                 </label>

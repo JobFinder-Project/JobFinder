@@ -1,5 +1,5 @@
 import Vaga from '../models/vagasModel.js';
-import { toVagaDTO } from '../dtos/index.js';
+import { toVagaPublicDTO } from '../dtos/index.js';
 
 class VagasController {
   static async buscarVagas(req, res, next) {
@@ -19,7 +19,7 @@ class VagasController {
       }
 
       const vagas = await Vaga.find(query).populate('empresa');
-      res.status(200).json({ vagas: vagas.map(toVagaDTO) });
+      res.status(200).json({ vagas: vagas.map(toVagaPublicDTO) });
     } catch (erro) {
       console.error(erro);
       next(erro);

@@ -1,11 +1,66 @@
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+import path from 'node:path';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
-import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO, toCandidaturaDTO } from '../dtos/index.js';
+import {
+  toCandidatoPublicDTO,
+  toCandidatoResumoDTO,
+  toEmpresaDTO,
+  toVagaDTO,
+  toCandidaturaDTO,
+  toCandidaturaEmpresaDTO,
+} from '../dtos/index.js';
+
+const allowedImageExtensionsByMimeType = {
+  'image/svg+xml': ['.svg'],
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/jpg': ['.jpg', '.jpeg'],
+};
+
+const isAllowedVagaImageMetadata = (file) => {
+  const allowedExtensions = allowedImageExtensionsByMimeType[file.mimetype];
+  const fileExtension = path.extname(file.originalname || '').toLowerCase();
+
+  return Boolean(allowedExtensions?.includes(fileExtension));
+};
+
+const hasPngSignature = (buffer) =>
+  buffer.length >= 8 &&
+  buffer[0] === 0x89 &&
+  buffer[1] === 0x50 &&
+  buffer[2] === 0x4e &&
+  buffer[3] === 0x47 &&
+  buffer[4] === 0x0d &&
+  buffer[5] === 0x0a &&
+  buffer[6] === 0x1a &&
+  buffer[7] === 0x0a;
+
+const hasJpegSignature = (buffer) =>
+  buffer.length >= 3 && buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+
+const hasSvgSignature = (buffer) => {
+  const content = buffer.toString('utf8', 0, Math.min(buffer.length, 1024)).trimStart();
+
+  return content.startsWith('<svg') || (content.startsWith('<?xml') && content.includes('<svg'));
+};
+
+const isAllowedVagaImageContent = (file) => {
+  if (!file.buffer) return false;
+
+  if (file.mimetype === 'image/png') return hasPngSignature(file.buffer);
+  if (['image/jpeg', 'image/jpg'].includes(file.mimetype)) return hasJpegSignature(file.buffer);
+  if (file.mimetype === 'image/svg+xml') return hasSvgSignature(file.buffer);
+
+  return false;
+};
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
@@ -51,10 +106,31 @@ class EmpresaController {
       }
 
       const vagas = await Vaga.find({ empresa: empresa._id });
+      const vagasIds = vagas.map((vaga) => vaga._id);
+      const candidaturas = vagasIds.length
+        ? await Candidatura.find({ vaga: { $in: vagasIds } })
+            .sort({ createdAt: -1 })
+            .populate('candidato', 'nome qualificacao imagem')
+        : [];
+
+      const candidatosVinculados = [];
+      const candidatosIds = new Set();
+
+      for (const candidatura of candidaturas) {
+        const candidato = candidatura.candidato;
+        const candidatoId = candidato?._id?.toString();
+
+        if (candidatoId && !candidatosIds.has(candidatoId)) {
+          candidatosIds.add(candidatoId);
+          candidatosVinculados.push(toCandidatoResumoDTO(candidato));
+        }
+      }
 
       res.status(200).json({
         empresa: toEmpresaDTO(empresa),
         vagas: vagas.map(toVagaDTO),
+        candidatosRecentes: candidatosVinculados.slice(0, 3),
+        totalCandidatos: candidatosIds.size,
       });
     } catch (erro) {
       console.error('Erro no Dashboard Empresa:', erro);
@@ -109,6 +185,16 @@ class EmpresaController {
       };
 
       if (req.file) {
+        if (!isAllowedVagaImageMetadata(req.file) || !isAllowedVagaImageContent(req.file)) {
+          return next(
+            new Error400('Formato de arquivo inválido. Apenas SVG, PNG ou JPG são permitidos.')
+          );
+        }
+
+        if (req.file.size > 10 * 1024 * 1024) {
+          return next(new Error400('A imagem excede o limite máximo de 10MB.'));
+        }
+
         dadosVaga.imagem = {
           data: req.file.buffer,
           contentType: req.file.mimetype,
@@ -132,6 +218,35 @@ class EmpresaController {
     }
   }
 
+  static async atualizarStatusVaga(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+      const { vagaId } = req.params;
+      const { status } = req.body;
+
+      if (!['Aberta', 'Fechada'].includes(status)) {
+        return next(new Error400('Status de vaga inválido. Use Aberta ou Fechada.'));
+      }
+
+      const vaga = await Vaga.findOne({ _id: vagaId, empresa: empresaId });
+      if (!vaga) {
+        return next(new Error404('Vaga não encontrada.'));
+      }
+
+      vaga.status = status;
+      await vaga.save();
+
+      res.status(200).json({
+        success: true,
+        message: `Vaga ${status === 'Aberta' ? 'reaberta' : 'encerrada'} com sucesso`,
+        vaga: toVagaDTO(vaga),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
   static async buscarCandidaturas(req, res, next) {
     try {
       const empresaId = req.session.user.id;
@@ -140,10 +255,13 @@ class EmpresaController {
       const vagasIds = vagas.map((vaga) => vaga._id);
 
       const candidaturas = await Candidatura.find({ vaga: { $in: vagasIds } })
-        .populate('candidato', '-senha')
-        .populate('vaga', 'nome area requisitos');
+        .populate(
+          'candidato',
+          'nome email telefone educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
+        )
+        .populate('vaga', 'nome');
       res.status(200).json({
-        candidaturas: candidaturas.map(toCandidaturaDTO),
+        candidaturas: candidaturas.map(toCandidaturaEmpresaDTO),
       });
     } catch (erro) {
       console.error(erro);
@@ -182,17 +300,55 @@ class EmpresaController {
 
   static async buscarCandidatos(req, res, next) {
     try {
-      const { q } = req.query;
+      const empresaId = req.session.user.id;
+      const { q, vagaId } = req.query;
 
-      const candidatos = await Candidato.find(
-        {
-          $or: [
-            { qualificacao: { $regex: q || '', $options: 'i' } },
-            { educacao: { $regex: q || '', $options: 'i' } },
-            { nome: { $regex: q || '', $options: 'i' } },
-          ],
-        },
-        '-senha'
+      if ((q !== undefined && typeof q !== 'string') || (vagaId && typeof vagaId !== 'string')) {
+        return next(new Error400('Parâmetros de busca inválidos.'));
+      }
+
+      const termo = q?.trim() || '';
+
+      if (!vagaId && termo.length < 2) {
+        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
+      }
+
+      if (termo && termo.length < 2) {
+        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
+      }
+
+      if (termo.length > 80) {
+        return next(new Error400('O termo de busca deve ter no máximo 80 caracteres.'));
+      }
+
+      const query = {};
+
+      if (termo) {
+        const termoSeguro = escapeRegex(termo);
+        query.$or = [
+          { qualificacao: { $regex: termoSeguro, $options: 'i' } },
+          { educacao: { $regex: termoSeguro, $options: 'i' } },
+          { nome: { $regex: termoSeguro, $options: 'i' } },
+          { habilidadesTecnicas: { $regex: termoSeguro, $options: 'i' } },
+        ];
+      }
+
+      if (vagaId) {
+        if (!mongoose.isValidObjectId(vagaId)) {
+          return next(new Error400('Identificador de vaga inválido.'));
+        }
+
+        const vaga = await Vaga.findOne({ _id: vagaId, empresa: empresaId }).select('_id');
+        if (!vaga) {
+          return next(new Error404('Vaga não encontrada.'));
+        }
+
+        const candidatosIds = await Candidatura.find({ vaga: vaga._id }).distinct('candidato');
+        query._id = { $in: candidatosIds };
+      }
+
+      const candidatos = await Candidato.find(query).select(
+        'nome educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
       );
 
       res.status(200).json({
