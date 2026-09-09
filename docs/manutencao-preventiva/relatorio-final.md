@@ -13,7 +13,7 @@ As intervenções foram realizadas em duas frentes:
 
 Documento de diagnóstico relacionado:
 
-- `docs/diagnostico-manutencao-preventiva.md`
+- `docs/manutencao-preventiva/diagnostico-manutencao-preventiva.md`
 
 Documentação desta manutenção:
 
