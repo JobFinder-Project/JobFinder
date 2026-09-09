@@ -312,13 +312,14 @@ Este projeto é mantido e desenvolvido pelos seguintes autores:
 *   **Felipe William** ([@FelipeWilliam-dev](https://github.com/FelipeWilliam-dev))
 *   **João Carlos** ([@JoaoCarlos22](https://github.com/JoaoCarlos22))
 *   **Reyner Alegria** ([@reyneralegria13](https://github.com/reyneralegria13))
+*   **Mayro Sa** ([@mayro5a](https://github.com/mayro5a))
+*   **Luiz Rauber** ([@luisrauber](https://github.com/luisrauber))
 
 ## 🤝 Contribuições 
 
 Este projeto já contou com a contribuições das seguintes pessoas:
 
 *   **João Paulo** ([@joaoreboucas05](https://github.com/joaoreboucas05))
-*   **Mayro Sa** ([@mayro5a](https://github.com/mayro5a))
 *   **Calil Lima** ([@Kallicco](https://github.com/Kallicco))
 *   **Nicolas Oliveira** ([@NicolasOliveira72](https://github.com/NicolasOliveira72))
 
