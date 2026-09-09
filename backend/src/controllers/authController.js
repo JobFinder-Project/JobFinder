@@ -7,6 +7,8 @@ import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
 import { toLoginResponseDTO, toAuthUserDTO } from '../dtos/index.js';
 
+const hashResetToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
+
 class AuthController {
   static async login(req, res, next) {
     const { email, senha } = req.body;
@@ -91,9 +93,10 @@ class AuthController {
       });
 
       const token = crypto.randomBytes(20).toString('hex');
-      const tokenExpiration = Date.now() + 15 * 60 * 1000;
+      const tokenHash = hashResetToken(token);
+      const tokenExpiration = new Date(Date.now() + 15 * 60 * 1000);
 
-      user.resetToken = token;
+      user.resetToken = tokenHash;
       user.resetTokenExpiration = tokenExpiration;
       await user.save();
 
@@ -128,15 +131,16 @@ class AuthController {
   static async redefinirSenha(req, res, next) {
     try {
       const { token } = req.params;
+      const tokenHash = hashResetToken(token);
 
       const user =
         (await Candidato.findOne({
-          resetToken: token,
-          resetTokenExpiration: { $gt: Date.now() },
+          resetToken: tokenHash,
+          resetTokenExpiration: { $gt: new Date() },
         })) ||
         (await Empresa.findOne({
-          resetToken: token,
-          resetTokenExpiration: { $gt: Date.now() },
+          resetToken: tokenHash,
+          resetTokenExpiration: { $gt: new Date() },
         }));
 
       if (!user) {

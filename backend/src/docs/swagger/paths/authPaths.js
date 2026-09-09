@@ -43,7 +43,7 @@ export const authPaths = {
   '/recuperar_senha': {
     post: {
       tags: ['Auth'],
-      summary: 'Enviar e-mail de recuperação de senha',
+      summary: 'Enviar e-mail de recuperação de senha (token seguro)',
       requestBody: {
         required: true,
         content: {
@@ -81,7 +81,7 @@ export const authPaths = {
       },
       responses: {
         200: { description: 'Senha redefinida com sucesso' },
-        404: { description: 'Token inválido ou expirado' },
+        404: { description: 'Token inválido, alterado ou expirado' },
       },
     },
   },
