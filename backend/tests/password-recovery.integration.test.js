@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import request from 'supertest';
 import { afterAll, afterEach, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
@@ -16,6 +17,13 @@ const { default: Candidato } = await import('../src/models/candidatoModel.js');
 const { clearTestDatabase, startTestDatabase, stopTestDatabase } =
   await import('./helpers/database.js');
 const { buildCandidato } = await import('./helpers/factories.js');
+
+const extractTokenFromResetEmail = (html) => {
+  const matched = html.match(/\/redefinir-senha\/([a-f0-9]+)/i);
+  return matched?.[1];
+};
+
+const hashToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
 let mongoServer;
 
@@ -37,7 +45,7 @@ afterAll(async () => {
 });
 
 describe('Recuperação de senha', () => {
-  it('deve enviar email de recuperação e armazenar token temporário', async () => {
+  it('deve enviar email de recuperação e armazenar apenas hash do token temporário', async () => {
     const candidato = buildCandidato();
     await request(app).post('/api/candidato/cadastrar').send(candidato);
 
@@ -65,8 +73,14 @@ describe('Recuperação de senha', () => {
       'https://app.example.com/redefinir-senha/'
     );
 
+    const rawToken = extractTokenFromResetEmail(sendMailMock.mock.calls[0][0].html);
+    expect(rawToken).toBeDefined();
+
     const candidatoNoDb = await Candidato.findOne({ email: candidato.email });
     expect(candidatoNoDb.resetToken).toBeDefined();
+    expect(candidatoNoDb.resetToken).toHaveLength(64);
+    expect(candidatoNoDb.resetToken).not.toBe(rawToken);
+    expect(candidatoNoDb.resetToken).toBe(hashToken(rawToken));
     expect(candidatoNoDb.resetTokenExpiration.getTime()).toBeGreaterThan(Date.now());
   });
 
@@ -84,11 +98,11 @@ describe('Recuperação de senha', () => {
     await request(app).post('/api/candidato/cadastrar').send(candidato);
     await request(app).post('/api/recuperar_senha').send({ email: candidato.email });
 
-    const candidatoComToken = await Candidato.findOne({ email: candidato.email });
+    const rawToken = extractTokenFromResetEmail(sendMailMock.mock.calls[0][0].html);
     const novaSenha = 'novaSenhaForte123';
 
     const response = await request(app)
-      .post(`/api/redefinir_senha/${candidatoComToken.resetToken}`)
+      .post(`/api/redefinir_senha/${rawToken}`)
       .send({ senha: novaSenha });
 
     expect(response.statusCode).toBe(200);
@@ -101,15 +115,16 @@ describe('Recuperação de senha', () => {
   });
 
   it('deve rejeitar token inexistente ou expirado', async () => {
+    const expiredRawToken = 'token-expirado';
     const candidato = new Candidato({
       ...buildCandidato(),
-      resetToken: 'token-expirado',
+      resetToken: hashToken(expiredRawToken),
       resetTokenExpiration: new Date(Date.now() - 1000),
     });
     await candidato.save();
 
     const expiredResponse = await request(app)
-      .post('/api/redefinir_senha/token-expirado')
+      .post(`/api/redefinir_senha/${expiredRawToken}`)
       .send({ senha: 'novaSenhaForte123' });
     expect(expiredResponse.statusCode).toBe(404);
 

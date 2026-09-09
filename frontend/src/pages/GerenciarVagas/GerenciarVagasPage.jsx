@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BiSearch, BiFilterAlt, BiBriefcase, BiUser, BiCalendar, BiInfoCircle, BiPlus } from 'react-icons/bi'
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout'
-import Modal from '../../components/ui/Modal/Modal'
 import CriarVagaModal from '../../features/vagas/CriarVagaModal/CriarVagaModal'
+import VagaEmpresaDetalhesModal from '../../features/vagas/VagaEmpresaDetalhesModal/VagaEmpresaDetalhesModal'
 import { empresaService } from '../../services/empresaService'
 import styles from './GerenciarVagas.module.css'
 
 export default function GerenciarVagas() {
     const navigate = useNavigate()
-    const [empresa, setEmpresa] = useState(null)
     const [vagas, setVagas] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -27,12 +26,18 @@ export default function GerenciarVagas() {
         try {
             const data = await empresaService.getDashboard()
             setVagas(data.vagas || [])
-            setEmpresa(data.empresa || null)
         } catch (error) {
             console.error('Erro ao buscar vagas:', error)
         } finally {
             setLoading(false)
         }
+    }
+
+    const handleStatusChange = async (vaga, status) => {
+        const response = await empresaService.atualizarStatusVaga(vaga._id, status)
+        const vagaAtualizada = response.vaga
+        setVagas(current => current.map(item => item._id === vagaAtualizada._id ? vagaAtualizada : item))
+        setVagaSelecionada(vagaAtualizada)
     }
 
     const vagasFiltradas = vagas.filter((vaga) => {
@@ -138,7 +143,11 @@ export default function GerenciarVagas() {
                                 <div className={styles.jobCardBody}>
                                     <div className={styles.infoRow}>
                                         <BiCalendar size={18} className={styles.infoIcon} />
-                                        <span>Publicada em: {new Date(vaga.createdAt || Date.now()).toLocaleDateString('pt-BR')}</span>
+                                        <span>
+                                            {vaga.createdAt
+                                                ? `Publicada em: ${new Date(vaga.createdAt).toLocaleDateString('pt-BR')}`
+                                                : 'Data de publicação não informada'}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -170,39 +179,16 @@ export default function GerenciarVagas() {
             </div>
 
             {vagaSelecionada && (
-                <Modal
-                    title="Detalhes da Vaga"
+                <VagaEmpresaDetalhesModal
+                    vaga={vagaSelecionada}
                     onClose={() => setVagaSelecionada(null)}
-                    size="lg"
-                >
-                    <Modal.Body>
-                        <div className={styles.modalContent}>
-                            {vagaSelecionada.imagem && (
-                                <img
-                                    src={vagaSelecionada.imagem}
-                                    alt={vagaSelecionada.nome}
-                                    className={styles.modalImage}
-                                />
-                            )}
-                            <h2 className={styles.modalTitle}>{vagaSelecionada.nome}</h2>
-                            <div className={styles.modalTags}>
-                                <span className={styles.tag}>{vagaSelecionada.area}</span>
-                                <span className={styles.tag}>{vagaSelecionada.status || 'Aberta'}</span>
-                            </div>
-
-                            <div className={styles.modalSection}>
-                                <h4>Requisitos</h4>
-                                <p>{vagaSelecionada.requisitos}</p>
-                            </div>
-
-                        </div>
-                    </Modal.Body>
-                </Modal>
+                    onStatusChange={handleStatusChange}
+                    onViewCandidates={(vaga) => navigate(`/empresa/candidaturas?vagaId=${vaga._id}`)}
+                />
             )}
 
             {showCriarVagaModal && (
                 <CriarVagaModal
-                    empresaId={empresa?._id}
                     onClose={() => setShowCriarVagaModal(false)}
                     onSuccess={(novaVaga) => {
                         setVagas([...vagas, novaVaga]);

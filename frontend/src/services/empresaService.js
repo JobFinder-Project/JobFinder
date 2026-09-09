@@ -14,15 +14,19 @@ export const empresaService = {
 	},
 
 	buscarCandidatos: async (query, vagaId) => {
-		let url = `/empresa/candidatos/buscar?q=${encodeURIComponent(query || '')}`;
-		if (vagaId) {
-			url += `&vagaId=${vagaId}`;
-		}
-		return api.get(url);
+		const params = [];
+		if (query?.trim()) params.push(`q=${encodeURIComponent(query.trim())}`);
+		if (vagaId) params.push(`vagaId=${encodeURIComponent(vagaId)}`);
+
+		const queryString = params.join('&');
+		return api.get(`/empresa/candidatos/buscar${queryString ? `?${queryString}` : ''}`);
 	},
 
 	criarVaga: async (formData) => {
 		return api.post(`/empresa/vagas/criar`, formData);
+	},
+	atualizarStatusVaga: async (vagaId, status) => {
+		return api.patch(`/empresa/vagas/${vagaId}/status`, { status });
 	},
 	getCandidaturas: async () => {
 		return api.get(`/empresa/candidaturas`);

@@ -13,7 +13,6 @@ const createJsonResponse = (body, { ok = true, status = 200 } = {}) => ({
   },
   json: async () => body,
 });
-
 let fetchMock;
 
 beforeEach(() => {
@@ -107,6 +106,34 @@ describe('services', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
+  it('deve omitir o parâmetro q vazio ao filtrar candidatos por vaga', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ candidatos: [] }));
+
+    await empresaService.buscarCandidatos('', 'vaga-1');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/empresa/candidatos/buscar?vagaId=vaga-1',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
+  it('deve atualizar o status de uma vaga pelo endpoint da empresa', async () => {
+    fetchMock.mockResolvedValueOnce(
+      createJsonResponse({ success: true, vaga: { _id: 'vaga-1', status: 'Fechada' } })
+    );
+
+    await empresaService.atualizarStatusVaga('vaga-1', 'Fechada');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/empresa/vagas/vaga-1/status',
+      expect.objectContaining({
+        method: 'PATCH',
+        credentials: 'include',
+        body: JSON.stringify({ status: 'Fechada' }),
+      })
     );
   });
 

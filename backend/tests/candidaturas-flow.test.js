@@ -84,6 +84,12 @@ describe('Fluxo de candidaturas do candidato', () => {
     expect(responseCandidato.statusCode).toBe(200);
     expect(responseCandidato.body.candidaturas).toHaveLength(1);
     expect(String(responseCandidato.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
+    expect(responseCandidato.body.candidaturas[0]).not.toHaveProperty('candidato');
+    expect(responseCandidato.body.candidaturas[0]).not.toHaveProperty('empresa');
+    expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('_id');
+    expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('cnpj');
+    expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('email');
+    expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('fone');
 
     const responseOutroCandidato = await outroCandidateAgent.get('/api/candidato/candidaturas');
     expect(responseOutroCandidato.statusCode).toBe(200);
@@ -160,6 +166,34 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     expect(response.body.candidaturas).toHaveLength(1);
     expect(response.body.candidaturas[0].status).toBe('Pendente');
     expect(String(response.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
+    expect(response.body.candidaturas[0]).not.toHaveProperty('empresa');
+    expect(response.body.candidaturas[0].candidato).toMatchObject({
+      nome: expect.any(String),
+      email: expect.any(String),
+      telefone: expect.any(String),
+    });
+    expect(response.body.candidaturas[0].candidato).not.toHaveProperty('_id');
+    expect(response.body.candidaturas[0].candidato).not.toHaveProperty('cpf');
+  });
+
+  it('deve resumir no dashboard somente candidatos vinculados às vagas da empresa', async () => {
+    const { agent: candidateAgent, candidato } = await registerAndLoginCandidato(app, {
+      nome: 'Candidata do Dashboard',
+    });
+    await registerAndLoginCandidato(app, { nome: 'Candidato Sem Candidatura' });
+    const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
+
+    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+
+    const response = await companyAgent.get('/api/empresa/dashboard');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.totalCandidatos).toBe(1);
+    expect(response.body.candidatosRecentes).toHaveLength(1);
+    expect(response.body.candidatosRecentes[0].nome).toBe(candidato.nome);
+    expect(response.body.candidatosRecentes[0]).not.toHaveProperty('_id');
+    expect(response.body.candidatosRecentes[0]).not.toHaveProperty('email');
+    expect(response.body.candidatosRecentes[0]).not.toHaveProperty('telefone');
   });
 
   it('deve atualizar status para Aceita pela empresa dona da vaga', async () => {

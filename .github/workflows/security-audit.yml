@@ -1,0 +1,55 @@
+name: Security Audit
+
+on:
+  pull_request:
+    branches: [develop, main, release]
+  schedule:
+    - cron: '0 0 1,16 * *' # A cada 15 dias
+  workflow_dispatch:
+
+jobs:
+  audit-frontend:
+    name: Audit Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run audit
+        run: npm audit --audit-level=high
+
+  audit-backend:
+    name: Audit Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run audit
+        run: npm audit --audit-level=high
