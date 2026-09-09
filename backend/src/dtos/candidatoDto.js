@@ -5,7 +5,6 @@ export const toCandidatoDTO = (candidatoDoc) => {
   if (!c) return null;
 
   return pickDefined({
-    _id: c._id,
     nome: c.nome,
     cpf: c.cpf,
     email: c.email,
@@ -30,10 +29,7 @@ export const toCandidatoPublicDTO = (candidatoDoc) => {
   if (!c) return null;
 
   return pickDefined({
-    _id: c._id,
     nome: c.nome,
-    email: c.email,
-    telefone: c.telefone,
     educacao: c.educacao,
     qualificacoes: c.qualificacoes ?? c.qualificacao,
     cursos: c.cursos,
@@ -41,5 +37,27 @@ export const toCandidatoPublicDTO = (candidatoDoc) => {
     habilidadesTecnicas: c.habilidades ?? c.habilidadesTecnicas,
     idiomas: c.idiomas,
     imagem: toImageDataUrl(c.imagem),
+  });
+};
+
+export const toCandidatoResumoDTO = (candidatoDoc) => {
+  const c = toPlainObject(candidatoDoc);
+  if (!c) return null;
+
+  return pickDefined({
+    nome: c.nome,
+    qualificacoes: c.qualificacoes ?? c.qualificacao,
+    imagem: toImageDataUrl(c.imagem),
+  });
+};
+
+export const toCandidatoContatoDTO = (candidatoDoc) => {
+  const c = toPlainObject(candidatoDoc);
+  if (!c) return null;
+
+  return pickDefined({
+    ...toCandidatoPublicDTO(c),
+    email: c.email,
+    telefone: c.telefone,
   });
 };

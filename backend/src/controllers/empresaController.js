@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 import path from 'node:path';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
@@ -6,7 +7,14 @@ import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
-import { toCandidatoPublicDTO, toEmpresaDTO, toVagaDTO, toCandidaturaDTO } from '../dtos/index.js';
+import {
+  toCandidatoPublicDTO,
+  toCandidatoResumoDTO,
+  toEmpresaDTO,
+  toVagaDTO,
+  toCandidaturaDTO,
+  toCandidaturaEmpresaDTO,
+} from '../dtos/index.js';
 
 const allowedImageExtensionsByMimeType = {
   'image/svg+xml': ['.svg'],
@@ -52,6 +60,8 @@ const isAllowedVagaImageContent = (file) => {
   return false;
 };
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
     try {
@@ -96,10 +106,31 @@ class EmpresaController {
       }
 
       const vagas = await Vaga.find({ empresa: empresa._id });
+      const vagasIds = vagas.map((vaga) => vaga._id);
+      const candidaturas = vagasIds.length
+        ? await Candidatura.find({ vaga: { $in: vagasIds } })
+            .sort({ createdAt: -1 })
+            .populate('candidato', 'nome qualificacao imagem')
+        : [];
+
+      const candidatosVinculados = [];
+      const candidatosIds = new Set();
+
+      for (const candidatura of candidaturas) {
+        const candidato = candidatura.candidato;
+        const candidatoId = candidato?._id?.toString();
+
+        if (candidatoId && !candidatosIds.has(candidatoId)) {
+          candidatosIds.add(candidatoId);
+          candidatosVinculados.push(toCandidatoResumoDTO(candidato));
+        }
+      }
 
       res.status(200).json({
         empresa: toEmpresaDTO(empresa),
         vagas: vagas.map(toVagaDTO),
+        candidatosRecentes: candidatosVinculados.slice(0, 3),
+        totalCandidatos: candidatosIds.size,
       });
     } catch (erro) {
       console.error('Erro no Dashboard Empresa:', erro);
@@ -224,10 +255,13 @@ class EmpresaController {
       const vagasIds = vagas.map((vaga) => vaga._id);
 
       const candidaturas = await Candidatura.find({ vaga: { $in: vagasIds } })
-        .populate('candidato', '-senha')
-        .populate('vaga', 'nome area requisitos');
+        .populate(
+          'candidato',
+          'nome email telefone educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
+        )
+        .populate('vaga', 'nome');
       res.status(200).json({
-        candidaturas: candidaturas.map(toCandidaturaDTO),
+        candidaturas: candidaturas.map(toCandidaturaEmpresaDTO),
       });
     } catch (erro) {
       console.error(erro);
@@ -266,17 +300,55 @@ class EmpresaController {
 
   static async buscarCandidatos(req, res, next) {
     try {
-      const { q } = req.query;
+      const empresaId = req.session.user.id;
+      const { q, vagaId } = req.query;
 
-      const candidatos = await Candidato.find(
-        {
-          $or: [
-            { qualificacao: { $regex: q || '', $options: 'i' } },
-            { educacao: { $regex: q || '', $options: 'i' } },
-            { nome: { $regex: q || '', $options: 'i' } },
-          ],
-        },
-        '-senha'
+      if ((q !== undefined && typeof q !== 'string') || (vagaId && typeof vagaId !== 'string')) {
+        return next(new Error400('Parâmetros de busca inválidos.'));
+      }
+
+      const termo = q?.trim() || '';
+
+      if (!vagaId && termo.length < 2) {
+        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
+      }
+
+      if (termo && termo.length < 2) {
+        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
+      }
+
+      if (termo.length > 80) {
+        return next(new Error400('O termo de busca deve ter no máximo 80 caracteres.'));
+      }
+
+      const query = {};
+
+      if (termo) {
+        const termoSeguro = escapeRegex(termo);
+        query.$or = [
+          { qualificacao: { $regex: termoSeguro, $options: 'i' } },
+          { educacao: { $regex: termoSeguro, $options: 'i' } },
+          { nome: { $regex: termoSeguro, $options: 'i' } },
+          { habilidadesTecnicas: { $regex: termoSeguro, $options: 'i' } },
+        ];
+      }
+
+      if (vagaId) {
+        if (!mongoose.isValidObjectId(vagaId)) {
+          return next(new Error400('Identificador de vaga inválido.'));
+        }
+
+        const vaga = await Vaga.findOne({ _id: vagaId, empresa: empresaId }).select('_id');
+        if (!vaga) {
+          return next(new Error404('Vaga não encontrada.'));
+        }
+
+        const candidatosIds = await Candidatura.find({ vaga: vaga._id }).distinct('candidato');
+        query._id = { $in: candidatosIds };
+      }
+
+      const candidatos = await Candidato.find(query).select(
+        'nome educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
       );
 
       res.status(200).json({

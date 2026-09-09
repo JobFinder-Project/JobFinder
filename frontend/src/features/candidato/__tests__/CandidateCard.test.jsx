@@ -17,7 +17,7 @@ const candidato = {
 };
 
 describe('CandidateCard', () => {
-  it('deve renderizar resumo do candidato e abrir perfil completo', async () => {
+  it('deve renderizar o perfil profissional sem expor dados de contato', async () => {
     render(<CandidateCard candidato={candidato} />);
 
     expect(screen.getByText('Marina Souza')).toBeInTheDocument();
@@ -26,11 +26,11 @@ describe('CandidateCard', () => {
     expect(screen.getByText('Figma')).toBeInTheDocument();
     expect(screen.getByText('+1')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('button', { name: /ver perfil completo/i }));
+    await userEvent.click(screen.getByRole('button', { name: /ver perfil profissional/i }));
 
-    const modal = screen.getByRole('dialog', { name: /perfil do candidato/i });
-    expect(within(modal).getByText('marina@teste.com')).toBeInTheDocument();
-    expect(within(modal).getByText('(92) 99999-9999')).toBeInTheDocument();
+    const modal = screen.getByRole('dialog', { name: /perfil profissional/i });
+    expect(within(modal).queryByText('marina@teste.com')).not.toBeInTheDocument();
+    expect(within(modal).queryByText('(92) 99999-9999')).not.toBeInTheDocument();
     expect(within(modal).getByText('Pesquisa com usuários e melhoria de jornada.')).toBeInTheDocument();
     expect(within(modal).getByText('Product Discovery')).toBeInTheDocument();
   });

@@ -107,6 +107,8 @@ beforeEach(() => {
   empresaService.getDashboard.mockResolvedValue({
     empresa: { _id: 'empresa-1', nome: 'Tech Norte' },
     vagas,
+    candidatosRecentes: [],
+    totalCandidatos: 0,
   });
   empresaService.buscarCandidatos.mockResolvedValue({ candidatos: [] });
   empresaService.atualizarStatusVaga.mockImplementation(async (vagaId, status) => ({
@@ -114,7 +116,6 @@ beforeEach(() => {
     vaga: { ...vagas.find((vaga) => vaga._id === vagaId), status },
   }));
 });
-
 describe('dashboard de vagas da empresa', () => {
   it('deve exibir uma prévia de três vagas e abrir os detalhes do card selecionado', async () => {
     renderPage('/empresa/dashboard', <EmpresaDashboard />);

@@ -5,7 +5,12 @@ import Candidatura from '../models/candidaturaModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
-import { toCandidaturaDTO, toCandidatoDTO, toVagaDTO } from '../dtos/index.js';
+import {
+  toCandidaturaDTO,
+  toCandidaturaCandidatoDTO,
+  toCandidatoDTO,
+  toVagaPublicDTO,
+} from '../dtos/index.js';
 
 class CandidatoController {
   static async cadastrarCandidato(req, res, next) {
@@ -65,9 +70,8 @@ class CandidatoController {
       const areas = [...new Set(vagas.map((vaga) => vaga.area))];
 
       res.status(200).json({
-        candidatoId,
         candidato: toCandidatoDTO(candidato),
-        vagas: vagas.map(toVagaDTO),
+        vagas: vagas.map(toVagaPublicDTO),
         areas,
       });
     } catch (erro) {
@@ -189,7 +193,7 @@ class CandidatoController {
       });
 
       res.status(200).json({
-        candidaturas: candidaturas.map(toCandidaturaDTO),
+        candidaturas: candidaturas.map(toCandidaturaCandidatoDTO),
       });
     } catch (erro) {
       console.error(erro);
