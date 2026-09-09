@@ -9,7 +9,6 @@ import styles from './GerenciarVagas.module.css'
 
 export default function GerenciarVagas() {
     const navigate = useNavigate()
-    const [empresa, setEmpresa] = useState(null)
     const [vagas, setVagas] = useState([])
     const [loading, setLoading] = useState(true)
     const [searchTerm, setSearchTerm] = useState('')
@@ -27,7 +26,6 @@ export default function GerenciarVagas() {
         try {
             const data = await empresaService.getDashboard()
             setVagas(data.vagas || [])
-            setEmpresa(data.empresa || null)
         } catch (error) {
             console.error('Erro ao buscar vagas:', error)
         } finally {
@@ -191,7 +189,6 @@ export default function GerenciarVagas() {
 
             {showCriarVagaModal && (
                 <CriarVagaModal
-                    empresaId={empresa?._id}
                     onClose={() => setShowCriarVagaModal(false)}
                     onSuccess={(novaVaga) => {
                         setVagas([...vagas, novaVaga]);

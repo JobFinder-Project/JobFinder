@@ -11,7 +11,14 @@ export const vagasPaths = {
         { in: 'query', name: 'area', schema: { type: 'string', enum: areasEnum } },
       ],
       responses: {
-        200: { description: 'Lista de vagas' },
+        200: {
+          description: 'Lista de vagas com dados públicos da empresa',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/VagasResponse' },
+            },
+          },
+        },
         401: { description: 'Não autenticado' },
       },
     },

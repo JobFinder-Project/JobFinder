@@ -1,5 +1,4 @@
-export const toAuthUserDTO = ({ id, nome, email, role }) => ({
-  id,
+export const toAuthUserDTO = ({ nome, email, role }) => ({
   nome,
   email,
   role,
@@ -9,7 +8,6 @@ export const toLoginResponseDTO = ({ user, role }) => ({
   success: true,
   message: 'Login realizado com sucesso',
   user: toAuthUserDTO({
-    id: user._id,
     nome: user.nome,
     email: user.email,
     role,

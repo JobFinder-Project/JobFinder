@@ -40,6 +40,7 @@ describe('Edição de perfil do candidato', () => {
 
     const dashboardResponse = await agent.get('/api/candidato/dashboard');
     expect(dashboardResponse.statusCode).toBe(200);
+    expect(dashboardResponse.body.candidato).not.toHaveProperty('_id');
     expect(dashboardResponse.body.candidato.qualificacoes).toBe('Desenvolvedor Backend Sênior');
   });
 

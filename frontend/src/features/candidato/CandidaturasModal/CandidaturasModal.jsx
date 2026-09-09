@@ -4,7 +4,7 @@ import Modal from '../../../components/ui/Modal/Modal'
 import { candidatoService } from '../../../services/candidatoService'
 import styles from './CandidaturasModal.module.css'
 
-export default function CandidaturasModal({ candidatoId, onClose }) {
+export default function CandidaturasModal({ onClose }) {
   const [candidaturas, setCandidaturas] = useState([])
   const [view, setView] = useState('lista')
   const [selectedCandidatura, setSelectedCandidatura] = useState(null)
@@ -13,7 +13,7 @@ export default function CandidaturasModal({ candidatoId, onClose }) {
 
   useEffect(() => {
     fetchCandidaturas()
-  }, [candidatoId])
+  }, [])
 
   const fetchCandidaturas = async () => {
     try {

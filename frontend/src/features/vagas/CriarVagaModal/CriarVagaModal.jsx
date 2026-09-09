@@ -10,7 +10,6 @@ const allowedImageExtensionsByType = {
   'image/jpeg': ['.jpg', '.jpeg'],
   'image/jpg': ['.jpg', '.jpeg'],
 }
-
 const getFileExtension = (fileName = '') => {
   const dotIndex = fileName.toLowerCase().lastIndexOf('.')
 
@@ -24,7 +23,7 @@ const isAllowedVagaImageFile = (file) => {
   return Boolean(allowedExtensions?.includes(fileExtension))
 }
 
-export default function CriarVagaModal({ empresaId, onClose, onSuccess }) {
+export default function CriarVagaModal({ onClose, onSuccess }) {
   const [formData, setFormData] = useState({
     nome: '',
     area: '',

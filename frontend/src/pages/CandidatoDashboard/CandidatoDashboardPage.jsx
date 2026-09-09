@@ -16,8 +16,6 @@ export default function CandidatoDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [candidatoId, setCandidatoId] = useState(null);
-  const [candidato, setCandidato] = useState(null);
   const [areas, setAreas] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -40,8 +38,6 @@ export default function CandidatoDashboard() {
   const fetchDashboardData = async () => {
     try {
       const data = await candidatoService.getDashboard();
-      setCandidatoId(data.candidatoId);
-      setCandidato(data.candidato);
       setAreas(data.areas || []);
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error);
@@ -196,10 +192,10 @@ export default function CandidatoDashboard() {
         </div>
 
         {showCandidaturasModal && (
-            <CandidaturasModal candidatoId={candidatoId} onClose={() => setShowCandidaturasModal(false)} />
+            <CandidaturasModal onClose={() => setShowCandidaturasModal(false)} />
         )}
         {showVagaDetalhesModal && selectedVaga && (
-            <VagaDetalhesModal vaga={selectedVaga} candidatoId={candidatoId} onClose={() => setShowVagaDetalhesModal(false)} />
+            <VagaDetalhesModal vaga={selectedVaga} onClose={() => setShowVagaDetalhesModal(false)} />
         )}
       </DashboardLayout>
   );
