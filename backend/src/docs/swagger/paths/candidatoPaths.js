@@ -24,7 +24,14 @@ export const candidatoPaths = {
       summary: 'Dashboard do candidato',
       security: [{ sessionAuth: [] }],
       responses: {
-        200: { description: 'Dashboard carregado' },
+        200: {
+          description: 'Dashboard carregado com perfil próprio e vagas públicas',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidatoDashboardResponse' },
+            },
+          },
+        },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },
       },
@@ -58,7 +65,14 @@ export const candidatoPaths = {
       summary: 'Listar candidaturas do candidato autenticado',
       security: [{ sessionAuth: [] }],
       responses: {
-        200: { description: 'Lista de candidaturas' },
+        200: {
+          description: 'Lista de candidaturas sem dados internos do candidato ou da empresa',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidaturasCandidatoResponse' },
+            },
+          },
+        },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },
       },
@@ -79,7 +93,14 @@ export const candidatoPaths = {
         },
       ],
       responses: {
-        201: { description: 'Candidatura realizada' },
+        201: {
+          description: 'Candidatura realizada',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidaturaMutationResponse' },
+            },
+          },
+        },
         400: { description: 'Já candidatado ou dados inválidos' },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },

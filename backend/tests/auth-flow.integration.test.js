@@ -58,6 +58,7 @@ describe('Fluxo de autenticação', () => {
       email: candidato.email,
       role: 'candidato',
     });
+    expect(loginResponse.body.user).not.toHaveProperty('id');
 
     const meResponse = await agent.get('/api/me');
     expect(meResponse.statusCode).toBe(200);
@@ -88,6 +89,7 @@ describe('Fluxo de autenticação', () => {
       email: empresa.email,
       role: 'empresa',
     });
+    expect(loginResponse.body.user).not.toHaveProperty('id');
   });
 
   it('deve rejeitar login com email inexistente ou senha inválida', async () => {

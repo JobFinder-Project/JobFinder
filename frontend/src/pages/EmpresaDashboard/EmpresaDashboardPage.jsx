@@ -26,6 +26,7 @@ export default function EmpresaDashboard() {
 
   const [empresa, setEmpresa] = useState(null)
   const [candidatos, setCandidatos] = useState([])
+  const [totalCandidatos, setTotalCandidatos] = useState(0)
   const [vagas, setVagas] = useState([])
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState(false)
@@ -56,9 +57,8 @@ export default function EmpresaDashboard() {
 
       setEmpresa(data.empresa)
       setVagas(data.vagas || [])
-
-      const candidatosData = await empresaService.buscarCandidatos('')
-      setCandidatos(candidatosData.candidatos || [])
+      setCandidatos(data.candidatosRecentes || [])
+      setTotalCandidatos(data.totalCandidatos || 0)
 
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error)
@@ -136,8 +136,8 @@ export default function EmpresaDashboard() {
                       <span className={styles.statLabel}>Candidatos</span>
                       <BiTrendingUp className={styles.statIcon} color="#22c55e" />
                     </div>
-                    <div className={styles.statValue}>{candidatos.length}</div>
-                    <p className={styles.statDescription}>No seu banco de talentos</p>
+                    <div className={styles.statValue}>{totalCandidatos}</div>
+                    <p className={styles.statDescription}>Vinculados às suas vagas</p>
                   </div>
 
                   <div className={styles.statCard}>
@@ -264,13 +264,13 @@ export default function EmpresaDashboard() {
                         {candidatos.length === 0 ? (
                             <p className={styles.emptyState}>Nenhum candidato recente.</p>
                         ) : (
-                            candidatos.slice(0, 3).map((candidato) => {
+                            candidatos.map((candidato, index) => {
                                 const imgSrc = typeof candidato.imagem === 'string'
                                     ? candidato.imagem
                                     : (candidato.imagem?.data ? `data:${candidato.imagem.contentType};base64,${candidato.imagem.data}` : null);
 
                                 return (
-                                    <div key={candidato._id} className={styles.candidateItem}>
+                                    <div key={`${candidato.nome}-${index}`} className={styles.candidateItem}>
                                       <div className={styles.candidateAvatar}>
                                         {imgSrc ? (
                                             <img
@@ -285,7 +285,7 @@ export default function EmpresaDashboard() {
 
                                       <div className={styles.candidateInfo}>
                                         <p className={styles.candidateName}>{candidato.nome}</p>
-                                        <p className={styles.candidateRole}>{candidato.profissao || 'Candidato'}</p>
+                                        <p className={styles.candidateRole}>{candidato.qualificacoes || 'Candidato'}</p>
                                       </div>
                                     </div>
                                 );
@@ -316,7 +316,6 @@ export default function EmpresaDashboard() {
 
         {showCriarVagaModal && (
             <CriarVagaModal
-                empresaId={empresa?._id}
                 onClose={() => setShowCriarVagaModal(false)}
                 onSuccess={(novaVaga) => {
                   setVagas([...vagas, novaVaga]);
@@ -329,7 +328,6 @@ export default function EmpresaDashboard() {
         {showPerfilModal && (
             <PerfilEmpresaModal
                 empresa={empresa}
-                empresaId={empresa?._id}
                 onClose={() => setShowPerfilModal(false)}
                 onUpdate={fetchDashboardData}
             />

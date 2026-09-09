@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-    BiUser, BiBriefcase, BiEnvelope, BiPhone,
+    BiUser, BiBriefcase,
     BiBookOpen, BiCertification, BiCodeAlt, BiGlobe
 } from 'react-icons/bi'
 import Modal from '../../components/ui/Modal/Modal.jsx'
@@ -82,13 +82,13 @@ export default function CandidateCard({ candidato }) {
 
                 <div className={styles.footer}>
                     <button className={styles.btnProfile} onClick={() => setShowModal(true)}>
-                        <BiUser size={18} /> Ver Perfil Completo
+                        <BiUser size={18} /> Ver Perfil Profissional
                     </button>
                 </div>
             </div>
 
             {showModal && (
-                <Modal title="Perfil do Candidato" onClose={() => setShowModal(false)} size="lg">
+                <Modal title="Perfil Profissional" onClose={() => setShowModal(false)} size="lg">
                     <Modal.Body>
                         <div className={styles.modalContent}>
 
@@ -105,19 +105,6 @@ export default function CandidateCard({ candidato }) {
                                     <p className={styles.modalRole}>{qualificacao}</p>
                                 </div>
                             </div>
-
-                            <div className={styles.modalGrid}>
-                                <div className={styles.contactItem}>
-                                    <BiEnvelope size={20} className={styles.sectionIcon} />
-                                    <span>{candidato.email || 'Email não informado'}</span>
-                                </div>
-                                <div className={styles.contactItem}>
-                                    <BiPhone size={20} className={styles.sectionIcon} />
-                                    <span>{candidato.telefone || 'Telefone não informado'}</span>
-                                </div>
-                            </div>
-
-                            <hr className={styles.divider} />
 
                             <div className={styles.modalSection}>
                                 <h3 className={styles.sectionTitle}><BiUser className={styles.sectionIcon} /> Sobre</h3>

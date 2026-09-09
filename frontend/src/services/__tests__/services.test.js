@@ -13,7 +13,6 @@ const createJsonResponse = (body, { ok = true, status = 200 } = {}) => ({
   },
   json: async () => body,
 });
-
 let fetchMock;
 
 beforeEach(() => {
@@ -106,6 +105,17 @@ describe('services', () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       '/api/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
+  it('deve omitir o parâmetro q vazio ao filtrar candidatos por vaga', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ candidatos: [] }));
+
+    await empresaService.buscarCandidatos('', 'vaga-1');
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/empresa/candidatos/buscar?vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
