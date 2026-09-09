@@ -1,5 +1,7 @@
 # Relatório Final da Manutenção Preventiva de Segurança
 
+Responsáveis: Felipe William, João Carlos, Reyner Alegrial, Mayro Sá e Luis Rauber
+
 ## 1. Visão Geral
 
 Este relatório consolida as manutenções preventivas de segurança realizadas no JobFinder para reduzir riscos e facilitar mudanças futuras relacionadas a privacidade, exposição de dados e recuperação de conta.
