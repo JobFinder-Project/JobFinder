@@ -36,7 +36,7 @@ body:
     id: contexto
     attributes:
       label: "📎 Contexto adicional"
-      description: Inclua prints, diagramas ou links que ajudem na implementação.
-      placeholder: "Links, prints, diagramas..."
+      description: Informações adicionais que podem ser úteis para a implementação da nova feature.
+      placeholder: "Ex: Arquivos e componentes que poderão ser afetados:\n- backend/package.json\n- backend/src/routes/vagas.js\n- backend/src/controllers/vagasController.js"
     validations:
       required: false
