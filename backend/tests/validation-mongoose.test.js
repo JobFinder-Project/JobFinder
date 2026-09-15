@@ -21,6 +21,10 @@ afterAll(async () => {
   await stopTestDatabase(mongoServer);
 });
 
+const expectValidationError = async (document, field) => {
+  await expect(document.validate()).rejects.toHaveProperty(`errors.${field}`);
+};
+
 describe('Validações de candidato', () => {
   it('deve salvar um candidato válido', async () => {
     const candidato = new Candidato(buildCandidato());
@@ -28,36 +32,30 @@ describe('Validações de candidato', () => {
     await expect(candidato.save()).resolves.toBeDefined();
   });
 
-  it('deve falhar com email inválido', () => {
+  it('deve falhar com email inválido', async () => {
     const candidato = new Candidato(buildCandidato({ email: 'email-invalido' }));
-    const error = candidato.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.email).toBeDefined();
+    await expectValidationError(candidato, 'email');
   });
 
-  it('deve falhar com CPF inválido ou repetido', () => {
+  it('deve falhar com CPF inválido ou repetido', async () => {
     const cpfSemChecksum = new Candidato(buildCandidato({ cpf: '123.456.789-00' }));
     const cpfRepetido = new Candidato(buildCandidato({ cpf: '111.111.111-11' }));
 
-    expect(cpfSemChecksum.validateSync().errors.cpf).toBeDefined();
-    expect(cpfRepetido.validateSync().errors.cpf).toBeDefined();
+    await expectValidationError(cpfSemChecksum, 'cpf');
+    await expectValidationError(cpfRepetido, 'cpf');
   });
 
-  it('deve falhar com telefone fora do formato brasileiro esperado', () => {
+  it('deve falhar com telefone fora do formato brasileiro esperado', async () => {
     const candidato = new Candidato(buildCandidato({ telefone: '92999999999' }));
-    const error = candidato.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.telefone).toBeDefined();
+    await expectValidationError(candidato, 'telefone');
   });
 
-  it('deve falhar com senha menor que oito caracteres', () => {
+  it('deve falhar com senha menor que oito caracteres', async () => {
     const candidato = new Candidato(buildCandidato({ senha: '1234567' }));
-    const error = candidato.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.senha).toBeDefined();
+    await expectValidationError(candidato, 'senha');
   });
 
   it('deve falhar ao duplicar email por índice único', async () => {
@@ -78,44 +76,34 @@ describe('Validações de empresa', () => {
     await expect(empresa.save()).resolves.toBeDefined();
   });
 
-  it('deve falhar com CNPJ inválido', () => {
+  it('deve falhar com CNPJ inválido', async () => {
     const empresa = new Empresa(buildEmpresa({ cnpj: '123' }));
-    const error = empresa.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.cnpj).toBeDefined();
+    await expectValidationError(empresa, 'cnpj');
   });
 
-  it('deve falhar com email inválido', () => {
+  it('deve falhar com email inválido', async () => {
     const empresa = new Empresa(buildEmpresa({ email: 'email-invalido' }));
-    const error = empresa.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.email).toBeDefined();
+    await expectValidationError(empresa, 'email');
   });
 
-  it('deve falhar com telefone inválido', () => {
+  it('deve falhar com telefone inválido', async () => {
     const empresa = new Empresa(buildEmpresa({ fone: '123' }));
-    const error = empresa.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.fone).toBeDefined();
+    await expectValidationError(empresa, 'fone');
   });
 
-  it('deve falhar com site inválido', () => {
+  it('deve falhar com site inválido', async () => {
     const empresa = new Empresa(buildEmpresa({ site: 'site_invalido' }));
-    const error = empresa.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.site).toBeDefined();
+    await expectValidationError(empresa, 'site');
   });
 
-  it('deve falhar com senha menor que oito caracteres', () => {
+  it('deve falhar com senha menor que oito caracteres', async () => {
     const empresa = new Empresa(buildEmpresa({ senha: '1234567' }));
-    const error = empresa.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.senha).toBeDefined();
+    await expectValidationError(empresa, 'senha');
   });
 });
 
@@ -130,27 +118,21 @@ describe('Validações de vaga', () => {
   it('deve falhar com área inválida', async () => {
     const empresa = await new Empresa(buildEmpresa()).save();
     const vaga = new Vaga(buildVaga(empresa._id, { area: 'Área inexistente' }));
-    const error = vaga.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.area).toBeDefined();
+    await expectValidationError(vaga, 'area');
   });
 
   it('deve falhar com requisitos muito curtos', async () => {
     const empresa = await new Empresa(buildEmpresa()).save();
     const vaga = new Vaga(buildVaga(empresa._id, { requisitos: 'curto' }));
-    const error = vaga.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.requisitos).toBeDefined();
+    await expectValidationError(vaga, 'requisitos');
   });
 
-  it('deve falhar sem empresa vinculada', () => {
+  it('deve falhar sem empresa vinculada', async () => {
     const vaga = new Vaga(buildVaga(undefined, { empresa: undefined }));
-    const error = vaga.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.empresa).toBeDefined();
+    await expectValidationError(vaga, 'empresa');
   });
 });
 
@@ -172,12 +154,10 @@ describe('Validações de candidatura', () => {
     expect(saved.status).toBe('Pendente');
   });
 
-  it('deve falhar com status inválido', () => {
+  it('deve falhar com status inválido', async () => {
     const candidatura = new Candidatura(buildCandidatura({ status: 'Em análise' }));
-    const error = candidatura.validateSync();
 
-    expect(error).toBeDefined();
-    expect(error.errors.status).toBeDefined();
+    await expectValidationError(candidatura, 'status');
   });
 
   it('deve falhar ao duplicar candidatura para o mesmo candidato e vaga', async () => {
