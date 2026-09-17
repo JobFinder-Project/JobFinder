@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.20",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-icons": "^5.5.0",
     "react-loading-indicators": "^1.0.1",
     "react-router-dom": "^7.18.2"
