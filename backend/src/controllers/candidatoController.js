@@ -5,6 +5,7 @@ import Candidatura from '../models/candidaturaModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import {
   toCandidaturaDTO,
   toCandidaturaCandidatoDTO,
@@ -214,6 +215,31 @@ class CandidatoController {
       res.status(200).json({
         candidaturas: candidaturas.map(toCandidaturaCandidatoDTO),
       });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async excluirConta(req, res, next) {
+    try {
+      const candidatoId = req.session.user.id;
+
+      const candidato = await Candidato.findById(candidatoId);
+      if (!candidato) {
+        return next(new Error404('Candidato não encontrado'));
+      }
+
+      const erroSenha = await validarSenhaDeConfirmacao(req.body?.senha, candidato.senha);
+      if (erroSenha) {
+        return next(erroSenha);
+      }
+
+      await Candidatura.deleteMany({ candidato: candidato._id });
+      await Candidato.deleteOne({ _id: candidato._id });
+
+      await encerrarSessao(req, res);
+      res.status(200).json({ success: true, message: 'Conta excluída com sucesso' });
     } catch (erro) {
       console.error(erro);
       next(erro);

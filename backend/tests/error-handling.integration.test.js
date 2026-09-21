@@ -89,7 +89,7 @@ describe('Tratamento de erros da API', () => {
     });
   });
 
-  it('deve retornar 404 quando o perfil autenticado não existir mais no banco', async () => {
+  it('deve retornar 401 e encerrar a sessão quando o perfil autenticado não existir mais no banco', async () => {
     const { agent, empresa } = await registerAndLoginEmpresa(app);
     await agent.post('/auth/logout');
 
@@ -98,6 +98,9 @@ describe('Tratamento de erros da API', () => {
     await clearTestDatabase();
 
     const response = await freshAgent.get('/api/empresa/dashboard');
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(401);
+
+    const me = await freshAgent.get('/api/me');
+    expect(me.body.authenticated).toBe(false);
   });
 });

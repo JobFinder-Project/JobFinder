@@ -1,16 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BiUser, BiCamera, BiSave, BiCheckCircle } from 'react-icons/bi';
+import { BiUser, BiCamera, BiSave, BiCheckCircle, BiTrash } from 'react-icons/bi';
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout';
+import ExcluirContaModal from '../../features/conta/ExcluirContaModal/ExcluirContaModal';
+import { useAuth } from '../../contexts/AuthContext';
 import { candidatoService } from '../../services/candidatoService';
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
 import styles from './Perfil.module.css';
 
 export default function PerfilPage() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const fileInputRef = useRef(null);
 
   const [loading, setLoading] = useState(true);
+  const [showExcluirConta, setShowExcluirConta] = useState(false);
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
@@ -109,6 +113,12 @@ export default function PerfilPage() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleExcluirConta = async (senha) => {
+    await candidatoService.excluirConta(senha);
+    await logout();
+    navigate('/', { replace: true });
   };
 
   if (loading) return <LoadingScreen />;
@@ -248,8 +258,36 @@ export default function PerfilPage() {
                 </button>
               </div>
 
+              <div className={`${styles.card} ${styles.dangerCard}`}>
+                <div className={styles.cardHeader}>
+                  <h2 className={styles.dangerTitle}>Zona de Perigo</h2>
+                </div>
+                <div className={`${styles.cardContent} ${styles.dangerContent}`}>
+                  <p className={styles.dangerText}>
+                    Excluir sua conta remove seu perfil e todas as suas candidaturas de forma permanente.
+                    Essa ação não pode ser desfeita.
+                  </p>
+                  <button
+                      type="button"
+                      className={styles.btnDanger}
+                      onClick={() => setShowExcluirConta(true)}
+                  >
+                    <BiTrash size={20} />
+                    Excluir minha conta
+                  </button>
+                </div>
+              </div>
+
             </div>
           </form>
+
+          {showExcluirConta && (
+              <ExcluirContaModal
+                  tipo="candidato"
+                  onConfirm={handleExcluirConta}
+                  onClose={() => setShowExcluirConta(false)}
+              />
+          )}
 
         </div>
       </DashboardLayout>

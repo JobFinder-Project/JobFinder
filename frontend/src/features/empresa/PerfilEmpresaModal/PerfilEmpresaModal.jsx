@@ -1,11 +1,17 @@
 import { useState } from 'react'
-import { BiMailSend, BiPhone, BiGlobe, BiEditAlt } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+import { BiMailSend, BiPhone, BiGlobe, BiEditAlt, BiTrash } from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
+import ExcluirContaModal from '../../conta/ExcluirContaModal/ExcluirContaModal'
+import { useAuth } from '../../../contexts/AuthContext'
 import { empresaService } from '../../../services/empresaService'
 import styles from './PerfilEmpresaModal.module.css'
 
 export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
+  const navigate = useNavigate()
+  const { logout } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
+  const [showExcluirConta, setShowExcluirConta] = useState(false)
 
   const [formData, setFormData] = useState({
     nome: empresa?.nome || '',
@@ -54,9 +60,16 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
     }
   }
 
+  const handleExcluirConta = async (senha) => {
+    await empresaService.excluirConta(senha)
+    await logout()
+    navigate('/', { replace: true })
+  }
+
   const modalTitle = isEditing ? 'Editar Perfil da Empresa' : 'Perfil da Empresa'
 
   return (
+    <>
       <Modal title={modalTitle} onClose={onClose} size='lg'>
         <Modal.Body>
 
@@ -107,6 +120,22 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                   <p className={styles.bioText}>
                     {empresa?.bio || 'Nenhuma descrição fornecida ainda. Edite seu perfil para contar mais sobre sua empresa!'}
                   </p>
+                </div>
+
+                <div className={styles.dangerZone}>
+                  <div>
+                    <h3 className={styles.dangerTitle}>Excluir conta</h3>
+                    <p className={styles.dangerText}>
+                      Remove o perfil da empresa, todas as vagas publicadas e as candidaturas recebidas. Não pode ser desfeito.
+                    </p>
+                  </div>
+                  <button
+                      type="button"
+                      className={styles.btnDanger}
+                      onClick={() => setShowExcluirConta(true)}
+                  >
+                    <BiTrash size={18} /> Excluir conta
+                  </button>
                 </div>
 
                 <div className={styles.actionsFooter}>
@@ -248,5 +277,14 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
 
         </Modal.Body>
       </Modal>
+
+      {showExcluirConta && (
+          <ExcluirContaModal
+              tipo='empresa'
+              onConfirm={handleExcluirConta}
+              onClose={() => setShowExcluirConta(false)}
+          />
+      )}
+    </>
   )
 }

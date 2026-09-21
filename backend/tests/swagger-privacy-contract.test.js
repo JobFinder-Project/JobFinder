@@ -38,6 +38,24 @@ describe('Contrato Swagger de exposição de dados', () => {
     expect(operation.responses[404]).toBeDefined();
   });
 
+  it('documenta a exclusão da própria conta sem identificadores e com confirmação de senha', () => {
+    const operations = [paths['/candidato/conta'].delete, paths['/empresa/conta'].delete];
+
+    operations.forEach((operation) => {
+      expect(operation.security).toEqual([{ sessionAuth: [] }]);
+      expect(operation.parameters).toBeUndefined();
+      expect(operation.requestBody.content['application/json'].schema.$ref).toBe(
+        '#/components/schemas/ExclusaoContaRequest'
+      );
+      expect(operation.responses[400]).toBeDefined();
+      expect(operation.responses[401]).toBeDefined();
+      expect(operation.responses[403]).toBeDefined();
+    });
+
+    expect(schemas.ExclusaoContaRequest.required).toEqual(['senha']);
+    expect(Object.keys(schemas.ExclusaoContaRequest.properties)).toEqual(['senha']);
+  });
+
   it('referencia DTOs específicos nas listagens de vagas e candidaturas', () => {
     expect(paths['/vagas'].get.responses[200].content['application/json'].schema.$ref).toBe(
       '#/components/schemas/VagasResponse'

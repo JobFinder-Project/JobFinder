@@ -57,7 +57,10 @@ class AuthController {
       if (req.session && req.session.user) {
         const usuario = await buscarUsuarioDaSessao(req);
         if (!usuario) {
-          return res.status(200).json({ authenticated: false });
+          return req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.status(200).json({ authenticated: false });
+          });
         }
 
         const consentimentosPendentes = obterConsentimentosPendentes(usuario);

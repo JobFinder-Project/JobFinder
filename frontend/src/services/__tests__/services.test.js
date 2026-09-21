@@ -172,6 +172,35 @@ describe('services', () => {
     );
   });
 
+  it.each([
+    ['candidato', candidatoService, '/api/candidato/conta'],
+    ['empresa', empresaService, '/api/empresa/conta'],
+  ])(
+    'deve solicitar a exclusão da própria conta de %s enviando apenas a senha',
+    async (_perfil, service, endpoint) => {
+      fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+      await service.excluirConta('senhaForte123');
+
+      expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha: 'senhaForte123' }),
+      });
+    }
+  );
+
+  it('deve manter DELETE sem corpo quando nenhum payload for informado', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await candidatoService.cancelarCandidatura('candidatura-1');
+
+    const [, config] = fetchMock.mock.calls[0];
+    expect(config.method).toBe('DELETE');
+    expect(config).not.toHaveProperty('body');
+  });
+
   it('deve propagar status e payload quando a API retornar erro', async () => {
     fetchMock.mockResolvedValueOnce(
       createJsonResponse(
