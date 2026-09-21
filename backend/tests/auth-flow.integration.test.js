@@ -123,11 +123,11 @@ describe('Fluxo de autenticação', () => {
   ])('deve invalidar a sessão após logout de %s', async (_role, registerAndLogin, dashboardPath) => {
     const { agent } = await registerAndLogin(app);
 
-    const logoutResponse = await candidatoAgent.post('/auth/logout');
+    const logoutResponse = await agent.post('/auth/logout');
     expect(logoutResponse.statusCode).toBe(200);
     expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await candidatoAgent.get('/auth/me');
+    const meResponse = await agent.get('/auth/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(false);
 
@@ -199,8 +199,8 @@ describe('Permissões por perfil', () => {
     const candidato = buildCandidato({ aceiteTermosUso: false });
     const empresa = buildEmpresa({ aceitePoliticaPrivacidade: false });
 
-    const candidatoResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
-    const empresaResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+    const candidatoResponse = await agent.post('/candidato/cadastrar').send(candidato);
+    const empresaResponse = await agent.post('/empresa/cadastrar').send(empresa);
 
     expect(candidatoResponse.statusCode).toBe(400);
     expect(candidatoResponse.body.message).toMatch(/Termos de Uso/);
@@ -210,7 +210,7 @@ describe('Permissões por perfil', () => {
 
   it('deve bloquear usuário antigo até registrar os consentimentos vigentes', async () => {
     const candidato = buildCandidato();
-    await agent.post('/api/candidato/cadastrar').send(candidato);
+    await agent.post('/candidato/cadastrar').send(candidato);
     await Candidato.updateOne(
       { email: candidato.email },
       {
@@ -233,11 +233,11 @@ describe('Permissões por perfil', () => {
       'politicaPrivacidade',
     ]);
 
-    const bloqueado = await agent.get('/api/candidato/dashboard');
+    const bloqueado = await agent.get('/candidato/dashboard');
     expect(bloqueado.statusCode).toBe(428);
     expect(bloqueado.body.codigo).toBe('CONSENTIMENTOS_PENDENTES');
 
-    const aceite = await agent.post('/api/consentimentos/aceitar').send({
+    const aceite = await agent.post('/consentimentos/aceitar').send({
       aceiteTermosUso: true,
       aceitePoliticaPrivacidade: true,
       termosUsoVersao: 'versao-forjada',
@@ -250,7 +250,7 @@ describe('Permissões por perfil', () => {
     expect(atualizado.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
     expect(atualizado.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
 
-    const liberado = await agent.get('/api/candidato/dashboard');
+    const liberado = await agent.get('/candidato/dashboard');
     expect(liberado.statusCode).toBe(200);
   });
 });

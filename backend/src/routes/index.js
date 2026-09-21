@@ -10,17 +10,8 @@ const routes = (app, basePath = '') => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  app.use('/api', notFound);
   app.use('/auth', authRoutes);
-  app.all(
-    [
-      `${basePath}/login`,
-      `${basePath}/me`,
-      `${basePath}/logout`,
-      `${basePath}/recuperar_senha`,
-      `${basePath}/redefinir_senha/:token`,
-    ],
-    notFound
-  );
   app.use(`${basePath}`, consentimentoRoutes);
   app.use(`${basePath}/auth`, notFound);
   app.use(`${basePath}/candidato`, candidatoRoutes);

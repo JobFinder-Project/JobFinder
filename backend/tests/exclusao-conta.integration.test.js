@@ -28,7 +28,7 @@ afterAll(async () => {
 });
 
 const candidatar = async (agent, vagaId) => {
-  const response = await agent.post(`/api/candidato/vagas/${vagaId}`);
+  const response = await agent.post(`/candidato/vagas/${vagaId}`);
   expect(response.statusCode).toBe(201);
 };
 
@@ -45,7 +45,7 @@ describe('Exclusão da própria conta de candidato', () => {
     await candidatar(agent, vagaId);
     await candidatar(agenteOutro, vagaId);
 
-    const response = await agent.delete('/api/candidato/conta').send({ senha: candidato.senha });
+    const response = await agent.delete('/candidato/conta').send({ senha: candidato.senha });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
@@ -57,13 +57,13 @@ describe('Exclusão da própria conta de candidato', () => {
     await expect(Candidatura.countDocuments()).resolves.toBe(1);
     await expect(Vaga.countDocuments()).resolves.toBe(1);
 
-    const me = await agent.get('/api/me');
+    const me = await agent.get('/auth/me');
     expect(me.body.authenticated).toBe(false);
-    const dashboard = await agent.get('/api/candidato/dashboard');
+    const dashboard = await agent.get('/candidato/dashboard');
     expect(dashboard.statusCode).toBe(401);
 
     const login = await request(app)
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
     expect(login.statusCode).toBe(400);
   });
@@ -71,13 +71,13 @@ describe('Exclusão da própria conta de candidato', () => {
   it('deve rejeitar senha incorreta sem excluir a conta nem encerrar a sessão', async () => {
     const { agent, candidato } = await registerAndLoginCandidato(app);
 
-    const response = await agent.delete('/api/candidato/conta').send({ senha: 'senhaerrada123' });
+    const response = await agent.delete('/candidato/conta').send({ senha: 'senhaerrada123' });
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toMatch(/Senha incorreta/i);
     await expect(Candidato.findOne({ email: candidato.email })).resolves.not.toBeNull();
 
-    const dashboard = await agent.get('/api/candidato/dashboard');
+    const dashboard = await agent.get('/candidato/dashboard');
     expect(dashboard.statusCode).toBe(200);
   });
 
@@ -88,7 +88,7 @@ describe('Exclusão da própria conta de candidato', () => {
   ])('deve exigir a senha de confirmação (%s)', async (_descricao, corpo) => {
     const { agent, candidato } = await registerAndLoginCandidato(app);
 
-    const pedido = agent.delete('/api/candidato/conta');
+    const pedido = agent.delete('/candidato/conta');
     const response = await (corpo ? pedido.send(corpo) : pedido);
 
     expect(response.statusCode).toBe(400);
@@ -97,7 +97,7 @@ describe('Exclusão da própria conta de candidato', () => {
 
   it('deve exigir autenticação', async () => {
     const response = await request(app)
-      .delete('/api/candidato/conta')
+      .delete('/candidato/conta')
       .send({ senha: 'qualquer123' });
 
     expect(response.statusCode).toBe(401);
@@ -107,15 +107,15 @@ describe('Exclusão da própria conta de candidato', () => {
     const { agent, candidato } = await registerAndLoginCandidato(app);
     const outroDispositivo = request.agent(app);
     await outroDispositivo
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
-    expect((await outroDispositivo.get('/api/candidato/dashboard')).statusCode).toBe(200);
+    expect((await outroDispositivo.get('/candidato/dashboard')).statusCode).toBe(200);
 
-    await agent.delete('/api/candidato/conta').send({ senha: candidato.senha });
+    await agent.delete('/candidato/conta').send({ senha: candidato.senha });
 
-    const dashboard = await outroDispositivo.get('/api/candidato/dashboard');
+    const dashboard = await outroDispositivo.get('/candidato/dashboard');
     expect(dashboard.statusCode).toBe(401);
-    const me = await outroDispositivo.get('/api/me');
+    const me = await outroDispositivo.get('/auth/me');
     expect(me.body.authenticated).toBe(false);
   });
 });
@@ -128,7 +128,7 @@ describe('Exclusão da própria conta de empresa', () => {
     await candidatar(agenteCandidato, vagaId);
     await candidatar(agenteCandidato, vagaDeOutraEmpresaId);
 
-    const response = await agent.delete('/api/empresa/conta').send({ senha: empresa.senha });
+    const response = await agent.delete('/empresa/conta').send({ senha: empresa.senha });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
@@ -142,33 +142,33 @@ describe('Exclusão da própria conta de empresa', () => {
     await expect(Candidatura.countDocuments({ vaga: vagaDeOutraEmpresaId })).resolves.toBe(1);
     await expect(Candidato.findOne({ email: candidato.email })).resolves.not.toBeNull();
 
-    expect((await agent.get('/api/me')).body.authenticated).toBe(false);
-    expect((await agent.get('/api/empresa/dashboard')).statusCode).toBe(401);
+    expect((await agent.get('/auth/me')).body.authenticated).toBe(false);
+    expect((await agent.get('/empresa/dashboard')).statusCode).toBe(401);
   });
 
   it('deve rejeitar senha incorreta sem excluir a conta nem as vagas', async () => {
     const { agent, empresa, vagaId } = await createVagaAsEmpresa(app);
 
-    const response = await agent.delete('/api/empresa/conta').send({ senha: 'senhaerrada123' });
+    const response = await agent.delete('/empresa/conta').send({ senha: 'senhaerrada123' });
 
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toMatch(/Senha incorreta/i);
     await expect(Empresa.findOne({ email: empresa.email })).resolves.not.toBeNull();
     await expect(Vaga.findById(vagaId)).resolves.not.toBeNull();
-    expect((await agent.get('/api/empresa/dashboard')).statusCode).toBe(200);
+    expect((await agent.get('/empresa/dashboard')).statusCode).toBe(200);
   });
 
   it('deve exigir a senha de confirmação', async () => {
     const { agent, empresa } = await registerAndLoginEmpresa(app);
 
-    const response = await agent.delete('/api/empresa/conta').send({});
+    const response = await agent.delete('/empresa/conta').send({});
 
     expect(response.statusCode).toBe(400);
     await expect(Empresa.findOne({ email: empresa.email })).resolves.not.toBeNull();
   });
 
   it('deve exigir autenticação', async () => {
-    const response = await request(app).delete('/api/empresa/conta').send({ senha: 'qualquer123' });
+    const response = await request(app).delete('/empresa/conta').send({ senha: 'qualquer123' });
 
     expect(response.statusCode).toBe(401);
   });
@@ -180,10 +180,10 @@ describe('Exclusão de conta: bloqueios entre usuários', () => {
     const { agent: agenteCandidato, candidato } = await registerAndLoginCandidato(app);
 
     const empresaExcluindoCandidato = await agenteEmpresa
-      .delete('/api/candidato/conta')
+      .delete('/candidato/conta')
       .send({ senha: candidato.senha });
     const candidatoExcluindoEmpresa = await agenteCandidato
-      .delete('/api/empresa/conta')
+      .delete('/empresa/conta')
       .send({ senha: empresa.senha });
 
     expect(empresaExcluindoCandidato.statusCode).toBe(403);
@@ -198,7 +198,7 @@ describe('Exclusão de conta: bloqueios entre usuários', () => {
     const alvoNoDb = await Candidato.findOne({ email: alvo.email });
 
     const comIdNoCorpoENaQuery = await agent
-      .delete(`/api/candidato/conta?id=${alvoNoDb._id}&candidatoId=${alvoNoDb._id}`)
+      .delete(`/candidato/conta?id=${alvoNoDb._id}&candidatoId=${alvoNoDb._id}`)
       .send({ senha: candidato.senha, id: alvoNoDb._id, candidatoId: alvoNoDb._id });
 
     expect(comIdNoCorpoENaQuery.statusCode).toBe(200);
@@ -207,7 +207,7 @@ describe('Exclusão de conta: bloqueios entre usuários', () => {
 
     const { agent: outroAgente, candidato: outro } = await registerAndLoginCandidato(app);
     const porUrl = await outroAgente
-      .delete(`/api/candidato/conta/${alvoNoDb._id}`)
+      .delete(`/candidato/conta/${alvoNoDb._id}`)
       .send({ senha: outro.senha });
 
     expect(porUrl.statusCode).toBe(404);
@@ -221,7 +221,7 @@ describe('Exclusão de conta: bloqueios entre usuários', () => {
     const alvoNoDb = await Empresa.findOne({ email: alvo.email });
 
     const response = await agent
-      .delete(`/api/empresa/conta?id=${alvoNoDb._id}&empresaId=${alvoNoDb._id}`)
+      .delete(`/empresa/conta?id=${alvoNoDb._id}&empresaId=${alvoNoDb._id}`)
       .send({ senha: empresa.senha, id: alvoNoDb._id, empresaId: alvoNoDb._id });
 
     expect(response.statusCode).toBe(200);
@@ -231,7 +231,7 @@ describe('Exclusão de conta: bloqueios entre usuários', () => {
 
     const { agent: outroAgente, empresa: outra } = await registerAndLoginEmpresa(app);
     const porUrl = await outroAgente
-      .delete(`/api/empresa/conta/${alvoNoDb._id}`)
+      .delete(`/empresa/conta/${alvoNoDb._id}`)
       .send({ senha: outra.senha });
 
     expect(porUrl.statusCode).toBe(404);
