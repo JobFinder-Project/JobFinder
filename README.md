@@ -17,8 +17,14 @@ O objetivo é manter a documentação do projeto separada das branches de desenv
 │   ├── manutencao-corretiva/
 │   │   ├── bugs-e-classificacao.md
 │   │   └── relatorio-final.md
-│   └── manutencao-preventiva/
-│       ├── diagnostico-manutencao-preventiva.md
+│   ├── manutencao-preventiva/
+│   │   ├── diagnostico-manutencao-preventiva.md
+│   │   └── relatorio-final.md
+│   └── manutenção-adaptativa/
+│       ├── plano-estrategia.md
+│       ├── evidencia-1.md
+│       ├── evidencia-2.md
+│       ├── evidencia-3.md
 │       └── relatorio-final.md
 └── UML/
     ├── activity/
@@ -65,6 +71,18 @@ Use esta pasta para documentos relacionados a correções de defeitos já observ
 
 Use esta pasta para documentos relacionados a mudanças feitas para reduzir riscos futuros, preparar o sistema para evolução e diminuir o impacto de possíveis mudanças em requisitos de segurança ou privacidade.
 
+### Manutenção Adaptativa
+
+| Arquivo | Conteúdo |
+| :-- | :-- |
+| `docs/manutenção-adaptativa/plano-estrategia.md` | Plano de estratégia adaptativa, com problema, justificativa, frentes de atuação e rastreabilidade das tasks. |
+| `docs/manutenção-adaptativa/evidencia-1.md` | Evidências da estratégia de mudança de dependências e ambiente tecnológico. |
+| `docs/manutenção-adaptativa/evidencia-2.md` | Evidências da estratégia de mudança de regulamentação e política de uso. |
+| `docs/manutenção-adaptativa/evidencia-3.md` | Evidências da estratégia de migração do contrato HTTP da API. |
+| `docs/manutenção-adaptativa/relatorio-final.md` | Síntese final das adaptações realizadas, componentes impactados, comparação antes/depois e pendências de evidência. |
+
+Use esta pasta para documentos relacionados a adaptações feitas em resposta a mudanças externas ao sistema, como atualização de dependências, políticas de privacidade/uso, regulamentação e contratos de API consumidos por outros clientes.
+
 ## Artefatos UML
 
 A pasta `UML/` contém os documentos Markdown que apresentam os diagramas e os arquivos de imagem usados por esses documentos.
@@ -107,13 +125,14 @@ As imagens são mantidas junto dos documentos porque fazem parte do material ver
 5. `UML/user_case/diagrama_user_case.md`
 6. `UML/class/diagram_class.md`
 7. Demais diagramas em `UML/`, conforme o fluxo analisado.
-8. Documentos de manutenção em `docs/manutencao-corretiva/` ou `docs/manutencao-preventiva/`, conforme o tipo de análise.
+8. Documentos de manutenção em `docs/manutencao-corretiva/`, `docs/manutencao-preventiva/` ou `docs/manutenção-adaptativa/`, conforme o tipo de análise.
 
 ## Convenções de Organização
 
 - Documentos gerais do produto devem ficar em `docs/` ou na raiz, quando forem artefatos centrais já existentes da branch.
 - Documentos de manutenção corretiva devem ficar em `docs/manutencao-corretiva/`.
 - Documentos de manutenção preventiva devem ficar em `docs/manutencao-preventiva/`.
+- Documentos de manutenção adaptativa devem ficar em `docs/manutenção-adaptativa/`.
 - Novos diagramas devem ter um arquivo Markdown de referência dentro da pasta UML correspondente.
 - Imagens exportadas de diagramas devem ficar em `UML/images/` ou em uma subpasta coerente com o tipo do diagrama.
 - Materiais temporários, rascunhos locais, PDFs de apoio e arquivos que não fazem parte da documentação final não devem ser adicionados à branch.
