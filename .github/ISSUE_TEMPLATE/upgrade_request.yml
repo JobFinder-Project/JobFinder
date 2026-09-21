@@ -56,3 +56,12 @@ body:
       placeholder: "Ex: - [ ] A empresa consegue salvar uma vaga como rascunho\n- [ ] A vaga em rascunho não aparece para candidatos\n- [ ] A empresa consegue publicar o rascunho depois"
     validations:
       required: true
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "📎 Contexto adicional"
+      description: Informações adicionais que podem ser úteis para a implementação da atualização.
+      placeholder: "Ex: Arquivos e componentes que poderão ser afetados:\n- backend/package.json\n- backend/src/routes/vagas.js\n- backend/src/controllers/vagasController.js"
+    validations:
+      required: false

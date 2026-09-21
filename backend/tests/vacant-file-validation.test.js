@@ -65,7 +65,7 @@ const validImageFiles = [
 
 const postVagaWithImage = (agent, file) =>
   agent
-    .post('/api/empresa/vagas/criar')
+    .post('/empresa/vagas/criar')
     .field('nome', 'Analista Administrativo')
     .field('area', 'Administrativa')
     .field('requisitos', 'Experiência com rotinas administrativas')
@@ -161,7 +161,7 @@ describe('Integração: Validação de Upload de Arquivos na Criação de Vagas'
     const imagemGigante = Buffer.alloc(11 * 1024 * 1024, 'a');
 
     const response = await agent
-      .post('/api/empresa/vagas/criar')
+      .post('/empresa/vagas/criar')
       .field('nome', 'Analista de Suporte')
       .field('area', 'TI - Tecnologia da Informação')
       .field('requisitos', 'Experiência com redes e suporte técnico')

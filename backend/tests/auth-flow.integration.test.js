@@ -29,7 +29,7 @@ afterAll(async () => {
 
 describe('Fluxo de autenticação', () => {
   it('deve informar sessão anônima quando não houver usuário autenticado', async () => {
-    const response = await agent.get('/api/me');
+    const response = await agent.get('/me');
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ authenticated: false });
@@ -38,7 +38,7 @@ describe('Fluxo de autenticação', () => {
   it('deve cadastrar candidato, salvar senha com hash e autenticar sessão', async () => {
     const candidato = buildCandidato();
 
-    const cadastroResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
+    const cadastroResponse = await agent.post('/candidato/cadastrar').send(candidato);
     expect(cadastroResponse.statusCode).toBe(201);
     expect(cadastroResponse.body.success).toBe(true);
 
@@ -48,7 +48,7 @@ describe('Fluxo de autenticação', () => {
     expect(candidatoNoDb.senha).not.toBe(candidato.senha);
 
     const loginResponse = await agent
-      .post('/api/login')
+      .post('/login')
       .send({ email: candidato.email, senha: candidato.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -60,7 +60,7 @@ describe('Fluxo de autenticação', () => {
     });
     expect(loginResponse.body.user).not.toHaveProperty('id');
 
-    const meResponse = await agent.get('/api/me');
+    const meResponse = await agent.get('/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(true);
     expect(meResponse.body.user.role).toBe('candidato');
@@ -69,7 +69,7 @@ describe('Fluxo de autenticação', () => {
   it('deve cadastrar empresa, salvar senha com hash e autenticar sessão', async () => {
     const empresa = buildEmpresa();
 
-    const cadastroResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+    const cadastroResponse = await agent.post('/empresa/cadastrar').send(empresa);
     expect(cadastroResponse.statusCode).toBe(201);
     expect(cadastroResponse.body.success).toBe(true);
 
@@ -79,7 +79,7 @@ describe('Fluxo de autenticação', () => {
     expect(empresaNoDb.senha).not.toBe(empresa.senha);
 
     const loginResponse = await agent
-      .post('/api/login')
+      .post('/login')
       .send({ email: empresa.email, senha: empresa.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -94,31 +94,34 @@ describe('Fluxo de autenticação', () => {
 
   it('deve rejeitar login com email inexistente ou senha inválida', async () => {
     const candidato = buildCandidato();
-    await agent.post('/api/candidato/cadastrar').send(candidato);
+    await agent.post('/candidato/cadastrar').send(candidato);
 
     const senhaInvalida = await agent
-      .post('/api/login')
+      .post('/login')
       .send({ email: candidato.email, senha: 'senhaerrada123' });
     expect(senhaInvalida.statusCode).toBe(400);
 
     const emailInexistente = await agent
-      .post('/api/login')
+      .post('/login')
       .send({ email: 'inexistente@teste.com', senha: candidato.senha });
     expect(emailInexistente.statusCode).toBe(400);
   });
 
-  it('deve invalidar a sessão após logout', async () => {
-    const { agent: candidatoAgent } = await registerAndLoginCandidato(app);
+  it.each([
+    ['candidato', registerAndLoginCandidato, '/candidato/dashboard'],
+    ['empresa', registerAndLoginEmpresa, '/empresa/dashboard'],
+  ])('deve invalidar a sessão após logout de %s', async (_role, registerAndLogin, dashboardPath) => {
+    const { agent } = await registerAndLogin(app);
 
-    const logoutResponse = await candidatoAgent.get('/api/logout');
+    const logoutResponse = await agent.get('/logout');
     expect(logoutResponse.statusCode).toBe(200);
     expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await candidatoAgent.get('/api/me');
+    const meResponse = await agent.get('/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(false);
 
-    const dashboardResponse = await candidatoAgent.get('/api/candidato/dashboard');
+    const dashboardResponse = await agent.get(dashboardPath);
     expect(dashboardResponse.statusCode).toBe(401);
   });
 });
@@ -127,28 +130,28 @@ describe('Permissões por perfil', () => {
   it('deve permitir candidato acessar apenas rotas de candidato', async () => {
     const { agent: candidatoAgent } = await registerAndLoginCandidato(app);
 
-    const candidatoDashboard = await candidatoAgent.get('/api/candidato/dashboard');
+    const candidatoDashboard = await candidatoAgent.get('/candidato/dashboard');
     expect(candidatoDashboard.statusCode).toBe(200);
 
-    const empresaDashboard = await candidatoAgent.get('/api/empresa/dashboard');
+    const empresaDashboard = await candidatoAgent.get('/empresa/dashboard');
     expect(empresaDashboard.statusCode).toBe(403);
   });
 
   it('deve permitir empresa acessar apenas rotas de empresa', async () => {
     const { agent: empresaAgent } = await registerAndLoginEmpresa(app);
 
-    const empresaDashboard = await empresaAgent.get('/api/empresa/dashboard');
+    const empresaDashboard = await empresaAgent.get('/empresa/dashboard');
     expect(empresaDashboard.statusCode).toBe(200);
 
-    const candidatoDashboard = await empresaAgent.get('/api/candidato/dashboard');
+    const candidatoDashboard = await empresaAgent.get('/candidato/dashboard');
     expect(candidatoDashboard.statusCode).toBe(403);
   });
 
   it('deve exigir autenticação para rotas internas', async () => {
     const responses = await Promise.all([
-      request(app).get('/api/candidato/dashboard'),
-      request(app).get('/api/empresa/dashboard'),
-      request(app).get('/api/vagas'),
+      request(app).get('/candidato/dashboard'),
+      request(app).get('/empresa/dashboard'),
+      request(app).get('/vagas'),
     ]);
 
     responses.forEach((response) => {
@@ -160,10 +163,10 @@ describe('Permissões por perfil', () => {
     const candidato = buildCandidato();
     const empresa = buildEmpresa({ email: candidato.email });
 
-    const candidatoResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
+    const candidatoResponse = await agent.post('/candidato/cadastrar').send(candidato);
     expect(candidatoResponse.statusCode).toBe(201);
 
-    const empresaResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+    const empresaResponse = await agent.post('/empresa/cadastrar').send(empresa);
     expect(empresaResponse.statusCode).toBe(400);
   });
 });

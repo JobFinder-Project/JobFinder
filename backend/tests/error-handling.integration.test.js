@@ -36,7 +36,7 @@ afterAll(async () => {
 describe('Tratamento de erros da API', () => {
   it('deve retornar 400 para dados inválidos', async () => {
     const response = await request(app)
-      .post('/api/login')
+      .post('/login')
       .send({ email: 'nao-existe@teste.com', senha: 'senhaerrada123' });
 
     expect(response.statusCode).toBe(400);
@@ -47,7 +47,7 @@ describe('Tratamento de erros da API', () => {
   });
 
   it('deve retornar 401 para rota protegida sem sessão', async () => {
-    const response = await request(app).get('/api/vagas');
+    const response = await request(app).get('/vagas');
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toMatchObject({
@@ -58,7 +58,7 @@ describe('Tratamento de erros da API', () => {
 
   it('deve retornar 403 para rota protegida por perfil incorreto', async () => {
     const { agent } = await registerAndLoginCandidato(app);
-    const response = await agent.get('/api/empresa/dashboard');
+    const response = await agent.get('/empresa/dashboard');
 
     expect(response.statusCode).toBe(403);
     expect(response.body).toMatchObject({
@@ -69,7 +69,7 @@ describe('Tratamento de erros da API', () => {
 
   it('deve retornar 404 para rota inexistente', async () => {
     const { agent } = await registerAndLoginCandidato(app);
-    const response = await agent.get('/api/rota-inexistente');
+    const response = await agent.get('/rota-inexistente');
 
     expect(response.statusCode).toBe(404);
     expect(response.body).toMatchObject({
@@ -78,9 +78,23 @@ describe('Tratamento de erros da API', () => {
     });
   });
 
+  it('deve retornar 404 para rotas antigas com prefixo /api sem exigir autenticação', async () => {
+    const paths = ['/api/me', '/api/vagas', '/api/docs.json'];
+
+    for (const path of paths) {
+      const response = await request(app).get(path);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toMatchObject({
+        status: 404,
+        message: 'Página não encontrada',
+      });
+    }
+  });
+
   it('deve converter CastError do Mongoose em resposta 400', async () => {
     const { agent } = await registerAndLoginCandidato(app);
-    const response = await agent.post('/api/candidato/vagas/id-invalido').send({});
+    const response = await agent.post('/candidato/vagas/id-invalido').send({});
 
     expect(response.statusCode).toBe(400);
     expect(response.body).toMatchObject({
@@ -91,13 +105,13 @@ describe('Tratamento de erros da API', () => {
 
   it('deve retornar 404 quando o perfil autenticado não existir mais no banco', async () => {
     const { agent, empresa } = await registerAndLoginEmpresa(app);
-    await agent.get('/api/logout');
+    await agent.get('/logout');
 
     const freshAgent = request.agent(app);
-    await freshAgent.post('/api/login').send({ email: empresa.email, senha: empresa.senha });
+    await freshAgent.post('/login').send({ email: empresa.email, senha: empresa.senha });
     await clearTestDatabase();
 
-    const response = await freshAgent.get('/api/empresa/dashboard');
+    const response = await freshAgent.get('/empresa/dashboard');
     expect(response.statusCode).toBe(404);
   });
 });

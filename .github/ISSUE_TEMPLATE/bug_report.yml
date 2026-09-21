@@ -74,3 +74,12 @@ body:
       placeholder: "Arraste e solte arquivos aqui..."
     validations:
       required: false
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "📎 Contexto adicional"
+      description: Informações adicionais que podem ser úteis para a implementação do bug fix.
+      placeholder: "Ex: Arquivos e componentes que poderão ser afetados:\n- backend/package.json\n- backend/src/routes/vagas.js\n- backend/src/controllers/vagasController.js"
+    validations:
+      required: false
