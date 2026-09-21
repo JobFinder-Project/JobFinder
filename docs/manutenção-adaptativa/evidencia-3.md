@@ -56,58 +56,43 @@ Adicionar aqui o link da evidência final após validação.
 
 ### Antes
 
-Registrar no Postman:
+https://github.com/user-attachments/assets/59d96d10-194d-487f-8938-e5ba836622b9
 
-1. `GET http://localhost:3000/api/me` respondendo no contrato antigo.
-2. `GET http://localhost:3000/me` retornando rota inexistente.
-3. `GET http://localhost:3000/api/vagas` respondendo no contrato antigo com sessão autenticada.
-4. `GET http://localhost:3000/vagas` retornando rota inexistente.
-5. Swagger apontando para base com `/api`.
+Local da definição do endpoint no código fonte:
+ 
+<img width="685" height="240" alt="Image" src="https://github.com/user-attachments/assets/66cd7eab-2bb5-43f7-adb0-748f7e173673" />
 
 ### Depois
 
-Registrar no Postman:
+**Sessão do candidato:**  
 
-1. `GET http://localhost:3000/me` respondendo no contrato novo.
-2. `GET http://localhost:3000/vagas` respondendo no contrato novo com sessão autenticada.
-3. `GET http://localhost:3000/docs` carregando o Swagger.
-4. `GET http://localhost:3000/docs.json` retornando o documento OpenAPI.
-5. Rotas antigas com `/api` retornando `404`, caso a política escolhida seja remoção sem alias.
+https://github.com/user-attachments/assets/677aab06-24c9-4cad-a7f7-2c4140bbbce1
+
+**Sessão da empresa:**  
+
+https://github.com/user-attachments/assets/3625d0da-4695-4211-8e09-ebb505944ffc
 
 ## Evidência Esperada - Autenticação em `/auth`
 
 ### Antes
 
-Registrar no Postman:
+https://github.com/user-attachments/assets/daf5e3ca-ba08-4359-bd9b-f224f4f0cff9
 
-1. `POST /login` ou `POST /api/login` funcionando no contrato antigo.
-2. `GET /me` ou `GET /api/me` funcionando no contrato antigo.
-3. `GET /logout` ou `GET /api/logout` funcionando no contrato antigo.
-4. `POST /auth/login` retornando rota inexistente.
-5. Swagger exibindo endpoints de autenticação fora do grupo `/auth`.
+Captura de tela das rotas no Swagger UI:
+
+<img width="1382" height="440" alt="Image" src="https://github.com/user-attachments/assets/6b8c120d-ade3-49bb-a9d8-958907cdc481" />
+
 
 ### Depois
 
-Registrar no Postman:
+**Sessão do candidato:**  
 
-1. `POST /auth/login` autenticando usuário.
-2. `GET /auth/me` retornando a sessão autenticada.
-3. `POST /auth/logout` encerrando a sessão.
-4. `POST /auth/recuperar-senha` disparando o fluxo de recuperação.
-5. `POST /auth/redefinir-senha/:token` redefinindo a senha com token válido.
-6. Swagger exibindo endpoints de autenticação agrupados em `/auth`.
+https://github.com/user-attachments/assets/677aab06-24c9-4cad-a7f7-2c4140bbbce1
 
-## Validações Esperadas
+**Sessão da empresa:**  
 
-- Frontend não depende mais de `API_BASE_URL = '/api'`.
-- Serviços frontend usam o novo contrato.
-- Swagger documenta a nova base.
-- Testes backend chamam as rotas novas.
-- Testes frontend validam URLs novas.
-- Sessão continua funcionando após login.
-- Logout realmente encerra a sessão.
-- Rotas protegidas continuam bloqueando usuários sem sessão.
-- Upload de vaga continua funcionando após a mudança de base.
+https://github.com/user-attachments/assets/3625d0da-4695-4211-8e09-ebb505944ffc
+
 
 ## Observação
 
