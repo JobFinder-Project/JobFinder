@@ -61,7 +61,11 @@ export const api = {
       body: body instanceof FormData ? body : JSON.stringify(body),
     }),
 
-  delete: (endpoint) => request(endpoint, { method: 'DELETE' }),
+  delete: (endpoint, body) =>
+    request(endpoint, {
+      method: 'DELETE',
+      ...(body !== undefined && { body: JSON.stringify(body) }),
+    }),
 };
 
 export default api;

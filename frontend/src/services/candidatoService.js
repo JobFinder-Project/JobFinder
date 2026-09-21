@@ -35,6 +35,10 @@ export const candidatoService = {
 	cancelarCandidatura: async (candidaturaId) => {
 		return api.delete(`/candidato/candidaturas/delete/${candidaturaId}`);
 	},
+
+	excluirConta: async (senha) => {
+		return api.delete("/candidato/conta", { senha });
+	},
 };
 
 export default candidatoService;

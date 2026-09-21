@@ -35,6 +35,16 @@ export const schemas = {
     },
   },
 
+  ExclusaoContaRequest: {
+    type: 'object',
+    required: ['senha'],
+    description:
+      'Confirmação da exclusão. A conta removida é sempre a da sessão autenticada; nenhum identificador é aceito.',
+    properties: {
+      senha: { type: 'string', description: 'Senha atual do usuário autenticado.' },
+    },
+  },
+
   CandidatoCadastroFormData: {
     type: 'object',
     required: ['nome', 'cpf', 'email', 'senha', 'telefone', 'educacao'],

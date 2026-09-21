@@ -5,6 +5,7 @@ import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { usuarioDaSessaoExiste } from '../middlewares/authMiddleware.js';
 import { toLoginResponseDTO, toAuthUserDTO } from '../dtos/index.js';
 
 const hashResetToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
@@ -52,6 +53,13 @@ class AuthController {
   static async getMe(req, res, next) {
     try {
       if (req.session && req.session.user) {
+        if (!(await usuarioDaSessaoExiste(req.session.user))) {
+          return req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.status(200).json({ authenticated: false });
+          });
+        }
+
         return res.status(200).json({
           authenticated: true,
           user: toAuthUserDTO(req.session.user),

@@ -7,6 +7,7 @@ import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import {
   toCandidatoPublicDTO,
   toCandidatoResumoDTO,
@@ -241,6 +242,35 @@ class EmpresaController {
         message: `Vaga ${status === 'Aberta' ? 'reaberta' : 'encerrada'} com sucesso`,
         vaga: toVagaDTO(vaga),
       });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async excluirConta(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+
+      const empresa = await Empresa.findById(empresaId);
+      if (!empresa) {
+        return next(new Error404('Empresa não encontrada.'));
+      }
+
+      const erroSenha = await validarSenhaDeConfirmacao(req.body?.senha, empresa.senha);
+      if (erroSenha) {
+        return next(erroSenha);
+      }
+
+      const vagasIds = await Vaga.distinct('_id', { empresa: empresa._id });
+      await Candidatura.deleteMany({
+        $or: [{ vaga: { $in: vagasIds } }, { empresa: empresa._id }],
+      });
+      await Vaga.deleteMany({ empresa: empresa._id });
+      await Empresa.deleteOne({ _id: empresa._id });
+
+      await encerrarSessao(req, res);
+      res.status(200).json({ success: true, message: 'Conta excluída com sucesso' });
     } catch (erro) {
       console.error(erro);
       next(erro);

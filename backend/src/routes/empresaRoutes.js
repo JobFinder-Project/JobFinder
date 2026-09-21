@@ -52,6 +52,7 @@ router.use(isAuthenticated, isEmpresa);
 
 router.get('/dashboard', EmpresaController.acessarDashboard);
 router.put('/editar', EmpresaController.editarPerfil);
+router.delete('/conta', EmpresaController.excluirConta);
 router.post('/vagas/criar', uploadImagemVaga, EmpresaController.criarVagas);
 router.patch('/vagas/:vagaId/status', EmpresaController.atualizarStatusVaga);
 router.get('/candidaturas', EmpresaController.buscarCandidaturas);

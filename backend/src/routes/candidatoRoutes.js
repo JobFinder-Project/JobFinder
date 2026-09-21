@@ -12,6 +12,7 @@ router.use(isAuthenticated, isCandidato);
 
 router.get('/dashboard', CandidatoController.acessarDashboard);
 router.put('/editar', upload.single('imagem'), CandidatoController.editarPerfil);
+router.delete('/conta', CandidatoController.excluirConta);
 router.get('/candidaturas', CandidatoController.listarCandidaturas);
 router.post('/vagas/:vagaId', CandidatoController.realizarCandidatura);
 router.delete('/candidaturas/delete/:candidaturaId', CandidatoController.deletarCandidatura);
