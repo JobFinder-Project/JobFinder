@@ -56,4 +56,14 @@ describe('Contrato Swagger de exposição de dados', () => {
         .schema.$ref
     ).toBe('#/components/schemas/VagaMutationResponse');
   });
+
+  it('documenta os aceites obrigatórios e o endpoint de consentimentos', () => {
+    expect(schemas.CandidatoCadastroFormData.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(schemas.EmpresaCadastroRequest.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(paths['/consentimentos/aceitar'].post.security).toEqual([{ sessionAuth: [] }]);
+  });
 });

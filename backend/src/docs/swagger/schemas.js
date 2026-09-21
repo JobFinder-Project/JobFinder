@@ -37,7 +37,16 @@ export const schemas = {
 
   CandidatoCadastroFormData: {
     type: 'object',
-    required: ['nome', 'cpf', 'email', 'senha', 'telefone', 'educacao'],
+    required: [
+      'nome',
+      'cpf',
+      'email',
+      'senha',
+      'telefone',
+      'educacao',
+      'aceiteTermosUso',
+      'aceitePoliticaPrivacidade',
+    ],
     properties: {
       imagem: { type: 'string', format: 'binary' },
       nome: { type: 'string' },
@@ -51,6 +60,16 @@ export const schemas = {
       descricao: { type: 'string' },
       habilidades: { type: 'string' },
       idiomas: { type: 'string' },
+      aceiteTermosUso: {
+        type: 'boolean',
+        description: 'Aceite obrigatório. A versão vigente é definida pelo servidor.',
+        example: true,
+      },
+      aceitePoliticaPrivacidade: {
+        type: 'boolean',
+        description: 'Aceite obrigatório. A versão vigente é definida pelo servidor.',
+        example: true,
+      },
     },
   },
 
@@ -72,7 +91,15 @@ export const schemas = {
 
   EmpresaCadastroRequest: {
     type: 'object',
-    required: ['nome', 'cnpj', 'email', 'senha', 'fone'],
+    required: [
+      'nome',
+      'cnpj',
+      'email',
+      'senha',
+      'fone',
+      'aceiteTermosUso',
+      'aceitePoliticaPrivacidade',
+    ],
     properties: {
       nome: { type: 'string' },
       cnpj: { type: 'string', example: '12345678000199' },
@@ -81,6 +108,25 @@ export const schemas = {
       fone: { type: 'string', example: '(92) 99999-9999' },
       bio: { type: 'string' },
       site: { type: 'string', example: 'https://empresa.com' },
+      aceiteTermosUso: {
+        type: 'boolean',
+        description: 'Aceite obrigatório. A versão vigente é definida pelo servidor.',
+        example: true,
+      },
+      aceitePoliticaPrivacidade: {
+        type: 'boolean',
+        description: 'Aceite obrigatório. A versão vigente é definida pelo servidor.',
+        example: true,
+      },
+    },
+  },
+
+  ConsentimentosAceiteRequest: {
+    type: 'object',
+    required: ['aceiteTermosUso', 'aceitePoliticaPrivacidade'],
+    properties: {
+      aceiteTermosUso: { type: 'boolean', example: true },
+      aceitePoliticaPrivacidade: { type: 'boolean', example: true },
     },
   },
 

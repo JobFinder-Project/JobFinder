@@ -5,6 +5,7 @@ import EscolherCargoModal from '../../features/auth/EscolherCargoModal/EscolherC
 import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './Home.module.css';
+import Footer from '../../components/Footer/Footer';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -110,6 +111,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <Footer />
 
         {isModalOpen && (
             <EscolherCargoModal onClose={() => setIsModalOpen(false)} />
