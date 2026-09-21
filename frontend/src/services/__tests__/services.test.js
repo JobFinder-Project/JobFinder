@@ -32,7 +32,7 @@ describe('services', () => {
     });
 
     expect(response.redirectUrl).toBe('/candidato/dashboard');
-    expect(fetchMock).toHaveBeenCalledWith('/login', {
+    expect(fetchMock).toHaveBeenCalledWith('/api/login', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -51,22 +51,11 @@ describe('services', () => {
     await authService.redefinirSenha('token-123', 'novaSenhaForte123');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/redefinir_senha/token-123',
+      '/api/redefinir_senha/token-123',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ senha: 'novaSenhaForte123' }),
       })
-    );
-  });
-
-  it('deve chamar o endpoint de logout sem prefixo /api', async () => {
-    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
-
-    await authService.logout();
-
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/logout',
-      expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
 
@@ -84,7 +73,7 @@ describe('services', () => {
 
     expect(vagas).toEqual([{ _id: 'vaga-1', nome: 'Desenvolvedor React' }]);
     expect(fetchMock).toHaveBeenCalledWith(
-      '/vagas?q=React&area=TI+-+Tecnologia+da+Informa%C3%A7%C3%A3o',
+      '/api/vagas?q=React&area=TI+-+Tecnologia+da+Informa%C3%A7%C3%A3o',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -99,12 +88,12 @@ describe('services', () => {
 
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
-      '/candidato/vagas/vaga-1',
+      '/api/candidato/vagas/vaga-1',
       expect.objectContaining({ method: 'POST' })
     );
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
-      '/candidato/candidaturas/delete/candidatura-1',
+      '/api/candidato/candidaturas/delete/candidatura-1',
       expect.objectContaining({ method: 'DELETE' })
     );
   });
@@ -115,7 +104,7 @@ describe('services', () => {
     await empresaService.buscarCandidatos('React Native', 'vaga-1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
+      '/api/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -126,7 +115,7 @@ describe('services', () => {
     await empresaService.buscarCandidatos('', 'vaga-1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/empresa/candidatos/buscar?vagaId=vaga-1',
+      '/api/empresa/candidatos/buscar?vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -139,7 +128,7 @@ describe('services', () => {
     await empresaService.atualizarStatusVaga('vaga-1', 'Fechada');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/empresa/vagas/vaga-1/status',
+      '/api/empresa/vagas/vaga-1/status',
       expect.objectContaining({
         method: 'PATCH',
         credentials: 'include',

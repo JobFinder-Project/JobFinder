@@ -4,7 +4,9 @@ import VagasController from '../controllers/vagasController.js';
 
 const router = express.Router();
 
-router.get('/vagas', isAuthenticated, VagasController.buscarVagas);
-router.get('/areas', isAuthenticated, VagasController.listarAreas);
+router.use(isAuthenticated);
+
+router.get('/vagas', VagasController.buscarVagas);
+router.get('/areas', VagasController.listarAreas);
 
 export default router;
