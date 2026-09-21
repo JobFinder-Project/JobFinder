@@ -7,7 +7,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
+      // Captura as rotas base do backend e redireciona para a API
+      '^/(vagas|candidato|empresa|login|registro|me|areas|docs|auth)': {
         target: 'http://localhost:3000',
         changeOrigin: true
       }

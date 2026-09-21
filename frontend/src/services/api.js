@@ -1,4 +1,5 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = '';
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
 
