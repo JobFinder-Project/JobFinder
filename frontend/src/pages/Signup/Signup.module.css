@@ -323,3 +323,40 @@
 .footerLink a:hover {
     color: #1d4ed8;
 }
+
+.consentBox {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.5rem;
+    background: #eff6ff;
+}
+
+.consentTitle {
+    margin: 0 0 0.75rem;
+    color: #0f172a;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.consentOption {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: #334155;
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.consentOption + .consentOption {
+    margin-top: 0.65rem;
+}
+
+.consentOption input {
+    margin-top: 0.2rem;
+}
+
+.consentOption a {
+    color: #1d4ed8;
+    font-weight: 600;
+}

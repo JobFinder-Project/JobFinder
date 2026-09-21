@@ -25,6 +25,7 @@ function renderWithRoutes(element, initialEntry = '/privada') {
         <Route path="/login" element={<LocationProbe />} />
         <Route path="/candidato/dashboard" element={<LocationProbe />} />
         <Route path="/empresa/dashboard" element={<LocationProbe />} />
+        <Route path="/consentimentos-pendentes" element={<LocationProbe />} />
         <Route
           path="/privada"
           element={
@@ -100,6 +101,22 @@ describe('ProtectedRoute', () => {
 
     expect(screen.getByTestId('location')).toHaveTextContent('/empresa/dashboard');
   });
+
+  it('deve bloquear rotas protegidas quando houver consentimentos pendentes', () => {
+    useAuth.mockReturnValue({
+      loading: false,
+      isAuthenticated: true,
+      user: { role: 'candidato', consentimentosPendentes: ['termosUso'] },
+    });
+
+    renderWithRoutes(
+      <ProtectedRoute allowedRole="candidato">
+        <div>Conteúdo protegido</div>
+      </ProtectedRoute>
+    );
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/consentimentos-pendentes');
+  });
 });
 
 describe('GuestRoute', () => {
@@ -145,5 +162,21 @@ describe('GuestRoute', () => {
     );
 
     expect(screen.getByTestId('location')).toHaveTextContent('/empresa/dashboard');
+  });
+
+  it('deve redirecionar usuário autenticado com pendência para consentimentos', () => {
+    useAuth.mockReturnValue({
+      loading: false,
+      isAuthenticated: true,
+      user: { role: 'empresa', consentimentosPendentes: ['politicaPrivacidade'] },
+    });
+
+    renderWithRoutes(
+      <GuestRoute>
+        <div>Login público</div>
+      </GuestRoute>
+    );
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/consentimentos-pendentes');
   });
 });

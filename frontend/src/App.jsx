@@ -20,6 +20,9 @@ import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
 import MinhasCandidaturasPage from './pages/MinhasCandidaturas/MinhasCandidaturasPage';
 import PerfilPage from './pages/Perfil/PerfilPage'
 import PaginaErro from './pages/PaginaErro/PaginaErroPage'
+import TermosUsoPage from './pages/TermosUso/TermosUsoPage'
+import PoliticaPrivacidadePage from './pages/PoliticaPrivacidade/PoliticaPrivacidadePage'
+import ConsentimentosPendentesPage from './pages/ConsentimentosPendentes/ConsentimentosPendentesPage'
 
 const queryClient = new QueryClient()
 
@@ -33,6 +36,14 @@ function App() {
               <Route path='/' element={<Home />} />
               <Route path='/home' element={<Home />} />
               <Route path='/suporte' element={<SuportePage />} />
+              <Route path='/termos-de-uso' element={<TermosUsoPage />} />
+              <Route path='/politica-de-privacidade' element={<PoliticaPrivacidadePage />} />
+
+              <Route path='/consentimentos-pendentes' element={
+                <ProtectedRoute allowPendingConsent>
+                  <ConsentimentosPendentesPage />
+                </ProtectedRoute>
+              } />
 
               <Route path='/login' element={
                 <GuestRoute>

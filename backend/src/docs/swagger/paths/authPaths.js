@@ -21,7 +21,10 @@ const meOperation = {
   tags: ['Auth'],
   summary: 'Retorna usuário autenticado',
   responses: {
-    200: { description: 'Estado de autenticação retornado com sucesso' },
+    200: {
+      description:
+        'Estado de autenticação e lista de consentimentos pendentes retornados com sucesso',
+    },
   },
 };
 
@@ -101,5 +104,28 @@ export const authPaths = {
   '/auth/redefinir-senha/{token}': {
     servers: rootServer,
     post: redefinirSenhaOperation,
+  },
+
+  '/consentimentos/aceitar': {
+    post: {
+      tags: ['Auth'],
+      summary: 'Registra os consentimentos vigentes do usuário autenticado',
+      description:
+        'O usuário é identificado exclusivamente pela sessão. As versões vigentes são definidas pelo servidor.',
+      security: [{ sessionAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ConsentimentosAceiteRequest' },
+          },
+        },
+      },
+      responses: {
+        200: { description: 'Consentimentos registrados com sucesso' },
+        400: { description: 'Aceite obrigatório não informado' },
+        401: { description: 'Não autenticado' },
+      },
+    },
   },
 };

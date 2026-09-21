@@ -73,6 +73,27 @@ describe('services', () => {
     );
   });
 
+  it('deve enviar consentimentos para o usuário autenticado', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await authService.aceitarConsentimentos({
+      aceiteTermosUso: true,
+      aceitePoliticaPrivacidade: true,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/consentimentos/aceitar',
+      expect.objectContaining({
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          aceiteTermosUso: true,
+          aceitePoliticaPrivacidade: true,
+        }),
+      })
+    );
+  });
+
   it('deve montar query de busca de vagas e retornar a lista normalizada', async () => {
     fetchMock.mockResolvedValueOnce(
       createJsonResponse({

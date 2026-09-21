@@ -70,4 +70,14 @@ describe('Contrato Swagger de exposição de dados', () => {
     expect(paths['/recuperar_senha']).toBeUndefined();
     expect(paths['/redefinir_senha/{token}']).toBeUndefined();
   });
+
+  it('documenta os aceites obrigatórios e o endpoint de consentimentos', () => {
+    expect(schemas.CandidatoCadastroFormData.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(schemas.EmpresaCadastroRequest.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(paths['/consentimentos/aceitar'].post.security).toEqual([{ sessionAuth: [] }]);
+  });
 });

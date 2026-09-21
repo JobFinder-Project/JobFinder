@@ -3,6 +3,7 @@ import authRoutes from './authRoutes.js';
 import vagasRoutes from './vagasRoutes.js';
 import candidatoRoutes from './candidatoRoutes.js';
 import empresaRoutes from './empresaRoutes.js';
+import consentimentoRoutes from './consentimentoRoutes.js';
 import { globalError, notFound } from '../middlewares/errorHandler.js';
 
 const routes = (app, basePath = '/api') => {
@@ -17,10 +18,11 @@ const routes = (app, basePath = '/api') => {
       `${basePath}/logout`,
       `${basePath}/recuperar_senha`,
       `${basePath}/redefinir_senha/:token`,
-      `${basePath}/auth/*`,
     ],
     notFound
   );
+  app.use(`${basePath}`, consentimentoRoutes);
+  app.use(`${basePath}/auth`, notFound);
   app.use(`${basePath}/candidato`, candidatoRoutes);
   app.use(`${basePath}/empresa`, empresaRoutes);
   app.use(`${basePath}`, vagasRoutes);

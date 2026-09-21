@@ -7,6 +7,10 @@ import Empresa from '../src/models/empresaModel.js';
 import { registerAndLoginCandidato, registerAndLoginEmpresa } from './helpers/auth.js';
 import { clearTestDatabase, startTestDatabase, stopTestDatabase } from './helpers/database.js';
 import { buildCandidato, buildEmpresa } from './helpers/factories.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../src/config/consentimentos.js';
 
 let mongoServer;
 let agent;
@@ -46,6 +50,10 @@ describe('Fluxo de autenticação', () => {
     expect(candidatoNoDb).not.toBeNull();
     expect(candidatoNoDb.nome).toBe(candidato.nome);
     expect(candidatoNoDb.senha).not.toBe(candidato.senha);
+    expect(candidatoNoDb.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(candidatoNoDb.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
+    expect(candidatoNoDb.termosUsoAceitoEm).toBeInstanceOf(Date);
+    expect(candidatoNoDb.politicaPrivacidadeAceitaEm).toBeInstanceOf(Date);
 
     const loginResponse = await agent
       .post('/auth/login')
@@ -77,6 +85,8 @@ describe('Fluxo de autenticação', () => {
     expect(empresaNoDb).not.toBeNull();
     expect(empresaNoDb.nome).toBe(empresa.nome);
     expect(empresaNoDb.senha).not.toBe(empresa.senha);
+    expect(empresaNoDb.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(empresaNoDb.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
 
     const loginResponse = await agent
       .post('/auth/login')
@@ -180,5 +190,64 @@ describe('Permissões por perfil', () => {
 
     const empresaResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
     expect(empresaResponse.statusCode).toBe(400);
+  });
+
+  it('deve rejeitar cadastros sem os aceites obrigatórios', async () => {
+    const candidato = buildCandidato({ aceiteTermosUso: false });
+    const empresa = buildEmpresa({ aceitePoliticaPrivacidade: false });
+
+    const candidatoResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
+    const empresaResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+
+    expect(candidatoResponse.statusCode).toBe(400);
+    expect(candidatoResponse.body.message).toMatch(/Termos de Uso/);
+    expect(empresaResponse.statusCode).toBe(400);
+    expect(empresaResponse.body.message).toMatch(/Política de Privacidade/);
+  });
+
+  it('deve bloquear usuário antigo até registrar os consentimentos vigentes', async () => {
+    const candidato = buildCandidato();
+    await agent.post('/api/candidato/cadastrar').send(candidato);
+    await Candidato.updateOne(
+      { email: candidato.email },
+      {
+        $unset: {
+          termosUsoAceitoEm: 1,
+          termosUsoVersao: 1,
+          politicaPrivacidadeAceitaEm: 1,
+          politicaPrivacidadeVersao: 1,
+        },
+      }
+    );
+
+    const loginResponse = await agent
+      .post('/auth/login')
+      .send({ email: candidato.email, senha: candidato.senha });
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body.redirectUrl).toBe('/consentimentos-pendentes');
+    expect(loginResponse.body.user.consentimentosPendentes).toEqual([
+      'termosUso',
+      'politicaPrivacidade',
+    ]);
+
+    const bloqueado = await agent.get('/api/candidato/dashboard');
+    expect(bloqueado.statusCode).toBe(428);
+    expect(bloqueado.body.codigo).toBe('CONSENTIMENTOS_PENDENTES');
+
+    const aceite = await agent.post('/api/consentimentos/aceitar').send({
+      aceiteTermosUso: true,
+      aceitePoliticaPrivacidade: true,
+      termosUsoVersao: 'versao-forjada',
+      candidatoId: 'id-forjado',
+    });
+    expect(aceite.statusCode).toBe(200);
+    expect(aceite.body.consentimentosPendentes).toEqual([]);
+
+    const atualizado = await Candidato.findOne({ email: candidato.email });
+    expect(atualizado.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(atualizado.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
+
+    const liberado = await agent.get('/api/candidato/dashboard');
+    expect(liberado.statusCode).toBe(200);
   });
 });
