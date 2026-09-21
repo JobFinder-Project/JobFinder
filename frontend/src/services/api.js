@@ -1,6 +1,16 @@
 const API_BASE_URL = '/api';
+const ROOT_ENDPOINT_PREFIXES = ['/auth'];
+
+const resolveUrl = (endpoint) => {
+  if (ROOT_ENDPOINT_PREFIXES.some((prefix) => endpoint.startsWith(prefix))) {
+    return endpoint;
+  }
+
+  return `${API_BASE_URL}${endpoint}`;
+};
+
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = resolveUrl(endpoint);
 
   const config = {
     ...options,
