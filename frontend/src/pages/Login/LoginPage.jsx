@@ -141,7 +141,7 @@ export default function Login() {
                       <input type="checkbox" className={styles.checkbox} />
                       <span>Lembrar-me</span>
                     </label>
-                    <Link to='/recuperar_senha' className={styles.forgotPassword}>
+                    <Link to='/recuperar-senha' className={styles.forgotPassword}>
                       Esqueceu a senha?
                     </Link>
                   </div>

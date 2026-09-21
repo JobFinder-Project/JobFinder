@@ -57,6 +57,20 @@ describe('Contrato Swagger de exposição de dados', () => {
     ).toBe('#/components/schemas/VagaMutationResponse');
   });
 
+  it('documenta autenticação agrupada em /auth sem expor endpoints antigos', () => {
+    expect(paths['/auth/login'].post).toBeDefined();
+    expect(paths['/auth/me'].get).toBeDefined();
+    expect(paths['/auth/logout'].post).toBeDefined();
+    expect(paths['/auth/recuperar-senha'].post).toBeDefined();
+    expect(paths['/auth/redefinir-senha/{token}'].post).toBeDefined();
+
+    expect(paths['/login']).toBeUndefined();
+    expect(paths['/me']).toBeUndefined();
+    expect(paths['/logout']).toBeUndefined();
+    expect(paths['/recuperar_senha']).toBeUndefined();
+    expect(paths['/redefinir_senha/{token}']).toBeUndefined();
+  });
+
   it('documenta os aceites obrigatórios e o endpoint de consentimentos', () => {
     expect(schemas.CandidatoCadastroFormData.required).toEqual(
       expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])

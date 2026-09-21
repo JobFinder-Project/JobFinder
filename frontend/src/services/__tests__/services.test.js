@@ -32,7 +32,7 @@ describe('services', () => {
     });
 
     expect(response.redirectUrl).toBe('/candidato/dashboard');
-    expect(fetchMock).toHaveBeenCalledWith('/api/login', {
+    expect(fetchMock).toHaveBeenCalledWith('/auth/login', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -51,10 +51,24 @@ describe('services', () => {
     await authService.redefinirSenha('token-123', 'novaSenhaForte123');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/redefinir_senha/token-123',
+      '/auth/redefinir-senha/token-123',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ senha: 'novaSenhaForte123' }),
+      })
+    );
+  });
+
+  it('deve encerrar sessão pelo endpoint de auth com método POST', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await authService.logout();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/auth/logout',
+      expect.objectContaining({
+        method: 'POST',
+        credentials: 'include',
       })
     );
   });

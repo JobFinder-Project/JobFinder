@@ -10,12 +10,24 @@ const routes = (app, basePath = '/api') => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  app.use(`${basePath}`, authRoutes);
+  app.use('/auth', authRoutes);
+  app.all(
+    [
+      `${basePath}/login`,
+      `${basePath}/me`,
+      `${basePath}/logout`,
+      `${basePath}/recuperar_senha`,
+      `${basePath}/redefinir_senha/:token`,
+    ],
+    notFound
+  );
   app.use(`${basePath}`, consentimentoRoutes);
+  app.use(`${basePath}/auth`, notFound);
   app.use(`${basePath}/candidato`, candidatoRoutes);
   app.use(`${basePath}/empresa`, empresaRoutes);
   app.use(`${basePath}`, vagasRoutes);
 
+  app.use('/auth', notFound);
   app.use(basePath, notFound);
   app.use(globalError);
 };

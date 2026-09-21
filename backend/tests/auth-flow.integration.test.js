@@ -33,7 +33,7 @@ afterAll(async () => {
 
 describe('Fluxo de autenticação', () => {
   it('deve informar sessão anônima quando não houver usuário autenticado', async () => {
-    const response = await agent.get('/api/me');
+    const response = await agent.get('/auth/me');
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ authenticated: false });
@@ -56,7 +56,7 @@ describe('Fluxo de autenticação', () => {
     expect(candidatoNoDb.politicaPrivacidadeAceitaEm).toBeInstanceOf(Date);
 
     const loginResponse = await agent
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -68,7 +68,7 @@ describe('Fluxo de autenticação', () => {
     });
     expect(loginResponse.body.user).not.toHaveProperty('id');
 
-    const meResponse = await agent.get('/api/me');
+    const meResponse = await agent.get('/auth/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(true);
     expect(meResponse.body.user.role).toBe('candidato');
@@ -89,7 +89,7 @@ describe('Fluxo de autenticação', () => {
     expect(empresaNoDb.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
 
     const loginResponse = await agent
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: empresa.email, senha: empresa.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -107,12 +107,12 @@ describe('Fluxo de autenticação', () => {
     await agent.post('/api/candidato/cadastrar').send(candidato);
 
     const senhaInvalida = await agent
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: 'senhaerrada123' });
     expect(senhaInvalida.statusCode).toBe(400);
 
     const emailInexistente = await agent
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: 'inexistente@teste.com', senha: candidato.senha });
     expect(emailInexistente.statusCode).toBe(400);
   });
@@ -120,16 +120,31 @@ describe('Fluxo de autenticação', () => {
   it('deve invalidar a sessão após logout', async () => {
     const { agent: candidatoAgent } = await registerAndLoginCandidato(app);
 
-    const logoutResponse = await candidatoAgent.get('/api/logout');
+    const logoutResponse = await candidatoAgent.post('/auth/logout');
     expect(logoutResponse.statusCode).toBe(200);
     expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await candidatoAgent.get('/api/me');
+    const meResponse = await candidatoAgent.get('/auth/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(false);
 
     const dashboardResponse = await candidatoAgent.get('/api/candidato/dashboard');
     expect(dashboardResponse.statusCode).toBe(401);
+  });
+
+  it('deve remover endpoints antigos de autenticação do contrato público', async () => {
+    const responses = await Promise.all([
+      request(app).post('/api/login').send({ email: 'ana@teste.com', senha: 'senha123' }),
+      request(app).get('/api/me'),
+      request(app).get('/api/logout'),
+      request(app).post('/api/recuperar_senha').send({ email: 'ana@teste.com' }),
+      request(app).post('/api/redefinir_senha/token-antigo').send({ senha: 'senha123' }),
+      request(app).post('/api/auth/login').send({ email: 'ana@teste.com', senha: 'senha123' }),
+    ]);
+
+    responses.forEach((response) => {
+      expect(response.statusCode).toBe(404);
+    });
   });
 });
 
@@ -206,7 +221,7 @@ describe('Permissões por perfil', () => {
     );
 
     const loginResponse = await agent
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
     expect(loginResponse.statusCode).toBe(200);
     expect(loginResponse.body.redirectUrl).toBe('/consentimentos-pendentes');
