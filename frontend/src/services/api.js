@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = '';
 const ROOT_ENDPOINT_PREFIXES = ['/auth'];
 
 const resolveUrl = (endpoint) => {

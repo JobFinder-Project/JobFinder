@@ -5,9 +5,9 @@ import { swaggerOptions } from './swagger/options.js';
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 export function setupSwagger(app) {
-  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
-  app.get('/api/docs.json', (req, res) => {
+  app.get('/docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
   });

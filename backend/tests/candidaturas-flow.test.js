@@ -43,7 +43,7 @@ const createCandidaturaForStatusUpdate = async () => {
   const { agent: candidateAgent } = await registerAndLoginCandidato(app);
   const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
-  const candidaturaResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+  const candidaturaResponse = await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
   expect(candidaturaResponse.statusCode).toBe(201);
   expect(candidaturaResponse.body?.candidatura?._id).toBeDefined();
 
@@ -61,7 +61,7 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { vagaId } = await createVagaAsEmpresa(app);
 
     const candidaturaResponse = await candidateAgent
-      .post(`/api/candidato/vagas/${vagaId}`)
+      .post(`/candidato/vagas/${vagaId}`)
       .send({});
 
     expect(candidaturaResponse.statusCode).toBe(201);
@@ -78,9 +78,9 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: outroCandidateAgent } = await registerAndLoginCandidato(app);
     const { vagaId } = await createVagaAsEmpresa(app);
 
-    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
 
-    const responseCandidato = await candidateAgent.get('/api/candidato/candidaturas');
+    const responseCandidato = await candidateAgent.get('/candidato/candidaturas');
     expect(responseCandidato.statusCode).toBe(200);
     expect(responseCandidato.body.candidaturas).toHaveLength(1);
     expect(String(responseCandidato.body.candidaturas[0].vaga._id)).toBe(String(vagaId));
@@ -91,7 +91,7 @@ describe('Fluxo de candidaturas do candidato', () => {
     expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('email');
     expect(responseCandidato.body.candidaturas[0].vaga.empresa).not.toHaveProperty('fone');
 
-    const responseOutroCandidato = await outroCandidateAgent.get('/api/candidato/candidaturas');
+    const responseOutroCandidato = await outroCandidateAgent.get('/candidato/candidaturas');
     expect(responseOutroCandidato.statusCode).toBe(200);
     expect(responseOutroCandidato.body.candidaturas).toHaveLength(0);
   });
@@ -100,10 +100,10 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
     const { vagaId } = await createVagaAsEmpresa(app);
 
-    const firstResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    const firstResponse = await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
     expect(firstResponse.statusCode).toBe(201);
 
-    const duplicateResponse = await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    const duplicateResponse = await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
     expect(duplicateResponse.statusCode).toBe(400);
   });
 
@@ -112,7 +112,7 @@ describe('Fluxo de candidaturas do candidato', () => {
     const vagaInexistenteId = new mongoose.Types.ObjectId();
 
     const response = await candidateAgent
-      .post(`/api/candidato/vagas/${vagaInexistenteId}`)
+      .post(`/candidato/vagas/${vagaInexistenteId}`)
       .send({});
 
     expect(response.statusCode).toBe(404);
@@ -122,11 +122,11 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
     const unauthenticatedResponse = await request(app)
-      .post(`/api/candidato/vagas/${vagaId}`)
+      .post(`/candidato/vagas/${vagaId}`)
       .send({});
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
-    const companyResponse = await companyAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    const companyResponse = await companyAgent.post(`/candidato/vagas/${vagaId}`).send({});
     expect(companyResponse.statusCode).toBe(403);
   });
 
@@ -134,19 +134,19 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
     const { vagaId } = await createVagaAsEmpresa(app);
 
-    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
 
-    const listBeforeDelete = await candidateAgent.get('/api/candidato/candidaturas');
+    const listBeforeDelete = await candidateAgent.get('/candidato/candidaturas');
     const candidaturaId = listBeforeDelete.body.candidaturas[0]._id;
 
     const deleteResponse = await candidateAgent.delete(
-      `/api/candidato/candidaturas/delete/${candidaturaId}`
+      `/candidato/candidaturas/delete/${candidaturaId}`
     );
 
     expect(deleteResponse.statusCode).toBe(200);
     expect(deleteResponse.body.success).toBe(true);
 
-    const listAfterDelete = await candidateAgent.get('/api/candidato/candidaturas');
+    const listAfterDelete = await candidateAgent.get('/candidato/candidaturas');
     expect(listAfterDelete.statusCode).toBe(200);
     expect(listAfterDelete.body.candidaturas).toHaveLength(0);
   });
@@ -158,9 +158,9 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
     await createVagaAsEmpresa(app);
 
-    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
 
-    const response = await companyAgent.get('/api/empresa/candidaturas');
+    const response = await companyAgent.get('/empresa/candidaturas');
 
     expect(response.statusCode).toBe(200);
     expect(response.body.candidaturas).toHaveLength(1);
@@ -183,9 +183,9 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     await registerAndLoginCandidato(app, { nome: 'Candidato Sem Candidatura' });
     const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
-    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
+    await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
 
-    const response = await companyAgent.get('/api/empresa/dashboard');
+    const response = await companyAgent.get('/empresa/dashboard');
 
     expect(response.statusCode).toBe(200);
     expect(response.body.totalCandidatos).toBe(1);
@@ -200,7 +200,7 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const { companyAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
 
     const response = await companyAgent
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .put(`/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Aceita' });
 
     expect(response.statusCode).toBe(200);
@@ -216,7 +216,7 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const { companyAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
 
     const response = await companyAgent
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .put(`/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Em análise' });
 
     expect(response.statusCode).toBe(400);
@@ -227,7 +227,7 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const candidaturaInexistenteId = new mongoose.Types.ObjectId();
 
     const response = await companyAgent
-      .put(`/api/empresa/candidatura/${candidaturaInexistenteId}`)
+      .put(`/empresa/candidatura/${candidaturaInexistenteId}`)
       .send({ status: 'Aceita' });
 
     expect(response.statusCode).toBe(404);
@@ -238,7 +238,7 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const { agent: outraEmpresaAgent } = await registerAndLoginEmpresa(app);
 
     const response = await outraEmpresaAgent
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .put(`/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Rejeitada' });
 
     expect(response.statusCode).toBe(400);
@@ -248,12 +248,12 @@ describe('Fluxo de gestão de candidaturas pela empresa', () => {
     const { candidateAgent, candidaturaId } = await createCandidaturaForStatusUpdate();
 
     const unauthenticatedResponse = await request(app)
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .put(`/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Aceita' });
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
     const candidateResponse = await candidateAgent
-      .put(`/api/empresa/candidatura/${candidaturaId}`)
+      .put(`/empresa/candidatura/${candidaturaId}`)
       .send({ status: 'Aceita' });
     expect(candidateResponse.statusCode).toBe(403);
   });

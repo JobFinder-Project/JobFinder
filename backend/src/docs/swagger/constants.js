@@ -19,7 +19,7 @@ export const swaggerInfo = {
 
 export const swaggerServers = [
   {
-    url: 'http://localhost:3000/api',
+    url: 'http://localhost:3000',
     description: 'Ambiente local',
   },
 ];

@@ -24,7 +24,7 @@ describe('Edição de perfil do candidato', () => {
     const { agent, candidato } = await registerAndLoginCandidato(app);
 
     const editResponse = await agent
-      .put('/api/candidato/editar')
+      .put('/candidato/editar')
       .field('nome', candidato.nome)
       .field('email', candidato.email)
       .field('telefone', candidato.telefone)
@@ -38,7 +38,7 @@ describe('Edição de perfil do candidato', () => {
     const candidatoNoDb = await Candidato.findOne({ email: candidato.email });
     expect(candidatoNoDb.qualificacao).toBe('Desenvolvedor Backend Sênior');
 
-    const dashboardResponse = await agent.get('/api/candidato/dashboard');
+    const dashboardResponse = await agent.get('/candidato/dashboard');
     expect(dashboardResponse.statusCode).toBe(200);
     expect(dashboardResponse.body.candidato).not.toHaveProperty('_id');
     expect(dashboardResponse.body.candidato.qualificacoes).toBe('Desenvolvedor Backend Sênior');
@@ -48,7 +48,7 @@ describe('Edição de perfil do candidato', () => {
     const { agent, candidato } = await registerAndLoginCandidato(app);
 
     await agent
-      .put('/api/candidato/editar')
+      .put('/candidato/editar')
       .field('nome', candidato.nome)
       .field('email', candidato.email)
       .field('qualificacoes', 'Engenheiro de Dados');
@@ -60,7 +60,7 @@ describe('Edição de perfil do candidato', () => {
       .send({ email: candidato.email, senha: candidato.senha });
     expect(loginResponse.statusCode).toBe(200);
 
-    const dashboardResponse = await agent.get('/api/candidato/dashboard');
+    const dashboardResponse = await agent.get('/candidato/dashboard');
     expect(dashboardResponse.body.candidato.qualificacoes).toBe('Engenheiro de Dados');
   });
 });
