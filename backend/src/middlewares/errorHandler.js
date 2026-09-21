@@ -8,6 +8,12 @@ import Error403 from '../errors/Error403.js';
 
 // eslint-disable-next-line no-unused-vars
 export const globalError = (erro, req, res, next) => {
+  // O Express 5 envia erros assíncronos não tratados automaticamente para cá.
+  // Este log garante que erros críticos e falhas de Promise fiquem visíveis no console.
+  if (process.env.NODE_ENV !== 'test' && !(erro instanceof Error404)) {
+    console.error('🚨 Erro capturado pelo Global Error Handler (Express 5):', erro);
+  }
+
   if (erro instanceof mongoose.Error.CastError) return new Error400().enviarResposta(res);
   if (erro instanceof mongoose.Error.ValidationError)
     return new ValidationError(erro).enviarResposta(res);
@@ -15,6 +21,7 @@ export const globalError = (erro, req, res, next) => {
   if (erro instanceof Error401) return erro.enviarResposta(res);
   if (erro instanceof Error403) return erro.enviarResposta(res);
   if (erro instanceof Error404) return erro.enviarResposta(res);
+  
   return new ErrorBase().enviarResposta(res);
 };
 

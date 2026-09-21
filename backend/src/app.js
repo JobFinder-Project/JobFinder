@@ -64,7 +64,9 @@ routes(app, '/api');
 
 if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendDistPath));
-  app.get('*', (req, res) => {
+  
+  // Compatibilidade com Express 5: Substituição do curinga '*' por '/(.*)'
+  app.get('/(.*)', (req, res) => {
     res.sendFile(frontendIndexPath);
   });
 }
