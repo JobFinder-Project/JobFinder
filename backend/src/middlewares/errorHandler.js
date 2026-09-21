@@ -21,7 +21,7 @@ export const globalError = (erro, req, res, next) => {
   if (erro instanceof Error401) return erro.enviarResposta(res);
   if (erro instanceof Error403) return erro.enviarResposta(res);
   if (erro instanceof Error404) return erro.enviarResposta(res);
-  
+
   return new ErrorBase().enviarResposta(res);
 };
 

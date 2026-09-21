@@ -64,9 +64,9 @@ routes(app, '/api');
 
 if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendDistPath));
-  
-  // Compatibilidade com Express 5: Substituição do curinga '*' por '/(.*)'
-  app.get('/(.*)', (req, res) => {
+
+  // Fallback SPA compatível com Express 5: usa middleware final ao invés de path matching
+  app.use((req, res, next) => {
     res.sendFile(frontendIndexPath);
   });
 }
