@@ -107,9 +107,9 @@ Essas tasks se caracterizam como manutenção adaptativa porque migram o contrat
 | [#220](https://github.com/JobFinder-Project/JobFinder/issues/220) | Atualizar toolchain de build e testes do frontend | Dependências | João Carlos (@JoaoCarlos22) | C3 / Medium | Closed |
 | [#221](https://github.com/JobFinder-Project/JobFinder/issues/221) | Atualizar frontend para React 19 | Dependências | Reyner Alegria (@reyneralegria13) | C3 / Medium | Closed |
 | [#222](https://github.com/JobFinder-Project/JobFinder/issues/222) | Atualizar dependências auxiliares do projeto | Dependências | Felipe William (@FelipeWilliam-dev) | C1 / Medium | Open |
-| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Atualizar regra para exclusão segura de conta | Regulamentação | Mayro Sá (@mayro5a) | C3 / High | Open / em validação |
-| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Atualizar Termos de Uso e aceite obrigatório no cadastro de usuários | Regulamentação | Reyner Alegria (@reyneralegria13) | C1 / High | Open |
-| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Atualizar rota de Política de Privacidade | Regulamentação | Reyner Alegria (@reyneralegria13) | Não informado | Open |
+| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Atualizar regra para exclusão segura de conta | Regulamentação | Mayro Sá (@mayro5a) | C3 / High | Aprovada |
+| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Atualizar Termos de Uso e aceite obrigatório no cadastro de usuários | Regulamentação | Reyner Alegria (@reyneralegria13) | C1 / High | Aprovada |
+| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Atualizar rota de Política de Privacidade | Regulamentação | Reyner Alegria (@reyneralegria13) | Não informado | Aprovada |
 | [#228](https://github.com/JobFinder-Project/JobFinder/issues/228) | Atualizar prefixo redundante `/api` das rotas | Contrato HTTP | Luis Rauber (@luisrauber) | Não informado / Urgent | Open / em validação |
 | [#229](https://github.com/JobFinder-Project/JobFinder/issues/229) | Atualizar endpoints de autenticação para `/auth` | Contrato HTTP | Felipe William (@FelipeWilliam-dev) | C2 / Urgent | Open / em validação |
 

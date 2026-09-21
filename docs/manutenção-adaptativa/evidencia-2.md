@@ -16,75 +16,51 @@ Esses pontos não impediam o uso básico da aplicação, mas dificultavam a adap
 
 ## Tasks Relacionadas
 
-| Issue | Task | Evidência anterior | Evidência depois da adaptação | Situação |
-| :-- | :-- | :-- | :-- | :-- |
-| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Exclusão segura de conta | Adicionar link da evidência inicial | Adicionar link da evidência final após validação | Em validação |
-| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Termos de Uso e aceite obrigatório | Adicionar link da evidência inicial | Adicionar link da evidência final após validação | Em validação |
-| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Política de Privacidade | Adicionar link da evidência inicial | Adicionar link da evidência final após validação | Em validação |
+| Issue | Task | Situação |
+| :-- | :-- | :-- |
+| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Exclusão segura de conta | Aprovada |
+| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Termos de Uso e aceite obrigatório | Aprovada |
+| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Política de Privacidade | Aprovada |
 
-## Evidência Esperada - Exclusão Segura de Conta
+## Vídeos de Evidência
 
-### Antes
+### #223 - Atualizar regra para exclusão segura de conta
 
-Registrar em vídeo:
+**Versão anterior / comportamento inicial:**
 
-1. Acessar o perfil do candidato.
-2. Mostrar que não existe opção para excluir a própria conta.
-3. Acessar o perfil da empresa.
-4. Mostrar que não existe opção para excluir a própria conta.
-5. No Postman, demonstrar que não havia endpoint próprio para exclusão segura da conta autenticada.
+https://github.com/user-attachments/assets/33009fba-9dbe-4652-9eb3-8fbacec9e499
 
-### Depois
+**Versão atualizada / comportamento após manutenção:**
 
-Registrar em vídeo:
+https://github.com/user-attachments/assets/2d26b362-e3f8-45f2-9005-1b081d83e09f
 
-1. Candidato autenticado acessando a área de perfil.
-2. Candidato acionando exclusão de conta com confirmação de senha.
-3. Backend encerrando a sessão após exclusão.
-4. Tentativa de acessar dashboard após exclusão retornando bloqueio.
-5. Empresa repetindo o mesmo fluxo.
-6. Tentativa indevida de informar ID de outro usuário sendo rejeitada ou não existindo no contrato.
+### #224 - Atualizar Termos de Uso e aceite obrigatório no cadastro de usuários
 
-## Evidência Esperada - Termos de Uso
+**Versão anterior / comportamento inicial:**
 
-### Antes
+https://private-user-images.githubusercontent.com/68167990/650851953-cd1a4237-f0a1-404e-ab7c-35d17920e57d.webm?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3OTAwMDcwNjEsIm5iZiI6MTc5MDAwNjc2MSwicGF0aCI6Ii82ODE2Nzk5MC82NTA4NTE5NTMtY2QxYTQyMzctZjBhMS00MDRlLWFiN2MtMzVkMTc5MjBlNTdkLndlYm0_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjYwOTIxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI2MDkyMVQxNjA2MDFaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NGI0NjNhN2I0ZTIyYjVlOGQwNGRjZGUxZTdlZmZiZjJjN2Q2ZTQyM2VmYTk2YTFmZTk4Yzk3ZTE0NGU0OGQyJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZyZXNwb25zZS1jb250ZW50LXR5cGU9dmlkZW8lMkZ3ZWJtIn0.kyLsN50VoSojAyNAKf51PeKHDHwnQVredqlKep6fcrg
 
-Registrar em vídeo:
+**Versão atualizada / cadastro de candidato:**
 
-1. Tela de login exibindo link sem destino real ou nomenclatura antiga.
-2. Cadastro de candidato sem aceite explícito de Termos de Uso.
-3. Cadastro de empresa sem aceite explícito de Termos de Uso.
-4. Banco sem campos de versão e data de aceite.
+https://github.com/user-attachments/assets/35a539ee-d59f-46c7-b97a-5da773fc624b
 
-### Depois
+**Versão atualizada / cadastro de empresa:**
 
-Registrar em vídeo:
+https://github.com/user-attachments/assets/6c85bd13-96bf-4227-8b05-32a7ce790351
 
-1. Página pública de Termos de Uso acessível.
-2. Cadastro exigindo aceite explícito.
-3. Registro de `termosAceitosEm` e `termosVersao` no candidato.
-4. Registro de `termosAceitosEm` e `termosVersao` na empresa.
-5. Usuário existente sendo bloqueado até aceitar a versão vigente.
+**Versão atualizada / login:**
 
-## Evidência Esperada - Política de Privacidade
+https://github.com/user-attachments/assets/11975c27-7926-4162-8706-4b7f67c3f9fe
 
-### Antes
+### #227 - Atualizar rota de Política de Privacidade
 
-Registrar em vídeo:
+**Tela de Termos de Uso e Política de Privacidade no login:**
 
-1. Link de Política de Privacidade sem página real.
-2. Cadastro sem aceite explícito da política.
-3. Ausência de registro de aceite no banco.
+https://github.com/user-attachments/assets/05f51823-f90d-44f3-b9a5-00037bd18f58
 
-### Depois
+**Testes automatizados:**
 
-Registrar em vídeo:
-
-1. Página pública de Política de Privacidade acessível.
-2. Cadastro exibindo link para a política.
-3. Registro de `politicaPrivacidadeAceitaEm` e `politicaPrivacidadeVersao` no candidato.
-4. Registro de `politicaPrivacidadeAceitaEm` e `politicaPrivacidadeVersao` na empresa.
-5. Usuário existente sendo bloqueado até aceitar a política vigente.
+https://github.com/user-attachments/assets/2e530f20-0941-4f9e-b4f3-e9cbb4a25aa3
 
 ## Validações Esperadas
 

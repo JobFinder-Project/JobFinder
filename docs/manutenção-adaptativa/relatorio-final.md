@@ -28,9 +28,9 @@ As adaptações foram distribuídas em três estratégias:
 | [#220](https://github.com/JobFinder-Project/JobFinder/issues/220) | Atualizar toolchain de build e testes do frontend | Dependências | João Carlos (@JoaoCarlos22) | Aprovada |
 | [#221](https://github.com/JobFinder-Project/JobFinder/issues/221) | Atualizar frontend para React 19 | Dependências | Reyner Alegria (@reyneralegria13) | Aprovada |
 | [#222](https://github.com/JobFinder-Project/JobFinder/issues/222) | Atualizar dependências auxiliares do projeto | Dependências | Felipe William (@FelipeWilliam-dev) | Aprovada |
-| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Atualizar regra para exclusão segura de conta | Regulamentação | Mayro Sá (@mayro5a) | Implementada / em validação |
-| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Atualizar Termos de Uso e aceite obrigatório no cadastro de usuários | Regulamentação | Reyner Alegria (@reyneralegria13) | Implementada / em validação |
-| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Atualizar rota de Política de Privacidade | Regulamentação | Reyner Alegria (@reyneralegria13) | Implementada / em validação |
+| [#223](https://github.com/JobFinder-Project/JobFinder/issues/223) | Atualizar regra para exclusão segura de conta | Regulamentação | Mayro Sá (@mayro5a) | Aprovada |
+| [#224](https://github.com/JobFinder-Project/JobFinder/issues/224) | Atualizar Termos de Uso e aceite obrigatório no cadastro de usuários | Regulamentação | Reyner Alegria (@reyneralegria13) | Aprovada |
+| [#227](https://github.com/JobFinder-Project/JobFinder/issues/227) | Atualizar rota de Política de Privacidade | Regulamentação | Reyner Alegria (@reyneralegria13) | Aprovada |
 | [#228](https://github.com/JobFinder-Project/JobFinder/issues/228) | Atualizar prefixo redundante `/api` das rotas | Contrato HTTP | Luis Rauber (@luisrauber) | Implementada / em validação |
 | [#229](https://github.com/JobFinder-Project/JobFinder/issues/229) | Atualizar endpoints de autenticação para `/auth` | Contrato HTTP | Felipe William (@FelipeWilliam-dev) | Implementada / em validação |
 
