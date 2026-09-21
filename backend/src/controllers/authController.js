@@ -5,8 +5,9 @@ import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
-import { usuarioDaSessaoExiste } from '../middlewares/authMiddleware.js';
 import { toLoginResponseDTO, toAuthUserDTO } from '../dtos/index.js';
+import { obterConsentimentosPendentes } from '../config/consentimentos.js';
+import { buscarUsuarioDaSessao } from '../middlewares/consentimentoMiddleware.js';
 
 const hashResetToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
@@ -43,7 +44,8 @@ class AuthController {
         role: role,
       };
 
-      res.status(200).json(toLoginResponseDTO({ user, role }));
+      const consentimentosPendentes = obterConsentimentosPendentes(user);
+      res.status(200).json(toLoginResponseDTO({ user, role, consentimentosPendentes }));
     } catch (erro) {
       console.error('Erro no login:', erro);
       next(erro);
@@ -53,16 +55,18 @@ class AuthController {
   static async getMe(req, res, next) {
     try {
       if (req.session && req.session.user) {
-        if (!(await usuarioDaSessaoExiste(req.session.user))) {
+        const usuario = await buscarUsuarioDaSessao(req);
+        if (!usuario) {
           return req.session.destroy(() => {
             res.clearCookie('connect.sid');
             res.status(200).json({ authenticated: false });
           });
         }
 
+        const consentimentosPendentes = obterConsentimentosPendentes(usuario);
         return res.status(200).json({
           authenticated: true,
-          user: toAuthUserDTO(req.session.user),
+          user: toAuthUserDTO({ ...req.session.user, consentimentosPendentes }),
         });
       }
       return res.status(200).json({ authenticated: false });

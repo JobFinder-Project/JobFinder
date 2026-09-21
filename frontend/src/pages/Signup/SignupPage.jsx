@@ -31,7 +31,9 @@ export default function SignupPage() {
         cnpj: '',
         fone: '',
         bio: '',
-        site: ''
+        site: '',
+        aceiteTermosUso: false,
+        aceitePoliticaPrivacidade: false,
     });
 
     const stepsCandidate = [
@@ -75,7 +77,7 @@ export default function SignupPage() {
     };
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
+        const { name, value, files, type, checked } = e.target;
 
         if (files) {
             setFormData(prev => ({ ...prev, [name]: files[0] }));
@@ -83,7 +85,7 @@ export default function SignupPage() {
             return;
         }
 
-        let formattedValue = value;
+        let formattedValue = type === 'checkbox' ? checked : value;
         if (name === 'cpf') formattedValue = formatCPF(value);
         if (name === 'cnpj') formattedValue = formatCNPJ(value);
         if (name === 'telefone' || name === 'fone') formattedValue = formatPhone(value);
@@ -117,7 +119,9 @@ export default function SignupPage() {
                     cnpj: formData.cnpj,
                     fone: formData.fone,
                     bio: formData.bio,
-                    site: formData.site
+                    site: formData.site,
+                    aceiteTermosUso: formData.aceiteTermosUso,
+                    aceitePoliticaPrivacidade: formData.aceitePoliticaPrivacidade,
                 });
             } else {
                 const payload = new FormData();
@@ -245,6 +249,10 @@ export default function SignupPage() {
         }
     };
 
+    const isLastStep = currentStep === totalSteps;
+    const consentimentosAceitos =
+        formData.aceiteTermosUso && formData.aceitePoliticaPrivacidade;
+
     return (
         <div className={styles.pageWrapper}>
             <header className={styles.header}>
@@ -297,7 +305,35 @@ export default function SignupPage() {
                             {errorMsg && <div className={styles.errorAlert}>{errorMsg}</div>}
 
                             <form onSubmit={handleNext} className={styles.form}>
-                                {renderStepContent()}
+                                <div key={currentStep}>{renderStepContent()}</div>
+
+                                {isLastStep && (
+                                    <div className={styles.consentBox}>
+                                        <p className={styles.consentTitle}>Consentimentos obrigatórios</p>
+                                        <label className={styles.consentOption}>
+                                            <input
+                                                type="checkbox"
+                                                name="aceiteTermosUso"
+                                                checked={formData.aceiteTermosUso}
+                                                onChange={handleChange}
+                                            />
+                                            <span>
+                                                Li e aceito os <Link to="/termos-de-uso" target="_blank" rel="noopener noreferrer">Termos de Uso</Link>.
+                                            </span>
+                                        </label>
+                                        <label className={styles.consentOption}>
+                                            <input
+                                                type="checkbox"
+                                                name="aceitePoliticaPrivacidade"
+                                                checked={formData.aceitePoliticaPrivacidade}
+                                                onChange={handleChange}
+                                            />
+                                            <span>
+                                                Li e aceito a <Link to="/politica-de-privacidade" target="_blank" rel="noopener noreferrer">Política de Privacidade</Link>.
+                                            </span>
+                                        </label>
+                                    </div>
+                                )}
 
                                 <div className={styles.formFooter}>
                                     {currentStep > 1 ? (
@@ -308,7 +344,11 @@ export default function SignupPage() {
                                         <div></div>
                                     )}
 
-                                    <button type="submit" className={styles.btnPrimary} disabled={loading}>
+                                    <button
+                                        type="submit"
+                                        className={styles.btnPrimary}
+                                        disabled={loading || (isLastStep && !consentimentosAceitos)}
+                                    >
                                         {loading ? 'Processando...' : (currentStep === totalSteps ? 'Finalizar Cadastro' : 'Próximo Passo')}
                                     </button>
                                 </div>

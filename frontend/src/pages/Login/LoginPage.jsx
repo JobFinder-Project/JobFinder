@@ -162,7 +162,7 @@ export default function Login() {
             </div>
 
             <p className={styles.legalText}>
-              Ao entrar, você concorda com nossos <a href="#">Termos de Serviço</a> e <a href="#">Política de Privacidade</a>
+              Ao entrar, você concorda com nossos <Link to="/termos-de-uso">Termos de Uso</Link> e <Link to="/politica-de-privacidade">Política de Privacidade</Link>
             </p>
           </div>
         </div>

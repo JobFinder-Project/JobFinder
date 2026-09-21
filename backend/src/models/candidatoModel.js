@@ -95,6 +95,18 @@ const candidatoSchema = mongoose.Schema({
   resetTokenExpiration: {
     type: Date,
   },
+  termosUsoAceitoEm: {
+    type: Date,
+  },
+  termosUsoVersao: {
+    type: String,
+  },
+  politicaPrivacidadeAceitaEm: {
+    type: Date,
+  },
+  politicaPrivacidadeVersao: {
+    type: String,
+  },
 });
 
 export default mongoose.model('Candidato', candidatoSchema);

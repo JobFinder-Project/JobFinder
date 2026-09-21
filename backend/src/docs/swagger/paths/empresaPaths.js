@@ -34,6 +34,7 @@ export const empresaPaths = {
         },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },
+        428: { description: 'Consentimentos vigentes pendentes' },
       },
     },
   },

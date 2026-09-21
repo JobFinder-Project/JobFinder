@@ -12,6 +12,10 @@ import {
   toCandidatoDTO,
   toVagaPublicDTO,
 } from '../dtos/index.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../config/consentimentos.js';
 
 class CandidatoController {
   static async cadastrarCandidato(req, res, next) {
@@ -25,6 +29,17 @@ class CandidatoController {
 
       if (typeof senha !== 'string') {
         return next(new Error400('Campo senha deve ser uma string'));
+      }
+
+      if (req.body.aceiteTermosUso !== true && req.body.aceiteTermosUso !== 'true') {
+        return next(new Error400('É obrigatório aceitar os Termos de Uso.'));
+      }
+
+      if (
+        req.body.aceitePoliticaPrivacidade !== true &&
+        req.body.aceitePoliticaPrivacidade !== 'true'
+      ) {
+        return next(new Error400('É obrigatório aceitar a Política de Privacidade.'));
       }
 
       const salt = await bcrypt.genSalt(12);
@@ -42,6 +57,10 @@ class CandidatoController {
         descricao: req.body.descricao,
         habilidadesTecnicas: req.body.habilidades,
         idiomas: req.body.idiomas,
+        termosUsoAceitoEm: new Date(),
+        termosUsoVersao: TERMOS_USO_VERSAO_ATUAL,
+        politicaPrivacidadeAceitaEm: new Date(),
+        politicaPrivacidadeVersao: POLITICA_PRIVACIDADE_VERSAO_ATUAL,
         imagem: req.file
           ? {
               data: req.file.buffer,

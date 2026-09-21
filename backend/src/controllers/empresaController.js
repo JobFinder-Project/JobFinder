@@ -16,6 +16,10 @@ import {
   toCandidaturaDTO,
   toCandidaturaEmpresaDTO,
 } from '../dtos/index.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../config/consentimentos.js';
 
 const allowedImageExtensionsByMimeType = {
   'image/svg+xml': ['.svg'],
@@ -77,6 +81,14 @@ class EmpresaController {
         return next(new Error400('O campo senha deve ser texto.'));
       }
 
+      if (req.body.aceiteTermosUso !== true) {
+        return next(new Error400('É obrigatório aceitar os Termos de Uso.'));
+      }
+
+      if (req.body.aceitePoliticaPrivacidade !== true) {
+        return next(new Error400('É obrigatório aceitar a Política de Privacidade.'));
+      }
+
       const salt = await bcrypt.genSalt(12);
       const senhaHash = await bcrypt.hash(senha, salt);
 
@@ -88,6 +100,10 @@ class EmpresaController {
         fone: req.body.fone,
         bio: req.body.bio || '',
         site: req.body.site || '',
+        termosUsoAceitoEm: new Date(),
+        termosUsoVersao: TERMOS_USO_VERSAO_ATUAL,
+        politicaPrivacidadeAceitaEm: new Date(),
+        politicaPrivacidadeVersao: POLITICA_PRIVACIDADE_VERSAO_ATUAL,
       });
 
       await novaEmpresa.save();

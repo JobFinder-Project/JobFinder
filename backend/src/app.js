@@ -17,7 +17,7 @@ const frontendIndexPath = path.join(frontendDistPath, 'index.html');
 app.use(
   cors({
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
@@ -64,7 +64,9 @@ routes(app, '/api');
 
 if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendDistPath));
-  app.get('*', (req, res) => {
+
+  // Fallback SPA compatível com Express 5: usa middleware final ao invés de path matching
+  app.use((req, res, next) => {
     res.sendFile(frontendIndexPath);
   });
 }

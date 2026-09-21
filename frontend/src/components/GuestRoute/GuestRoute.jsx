@@ -10,6 +10,9 @@ export default function GuestRoute({ children }) {
   }
 
   if (isAuthenticated) {
+    if (user?.consentimentosPendentes?.length > 0) {
+      return <Navigate to="/consentimentos-pendentes" replace />;
+    }
     const dashboard = user?.role === 'candidato' ? '/candidato/dashboard' : '/empresa/dashboard';
     return <Navigate to={dashboard} replace />;
   }
