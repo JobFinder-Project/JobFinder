@@ -5,6 +5,7 @@ import { MongoClient } from 'mongodb';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import request from 'supertest';
+import { mongoMemoryOptions } from './helpers/mongoMemoryOptions.js';
 
 let app;
 let client;
@@ -12,11 +13,7 @@ let mongoServer;
 let sessionStore;
 
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create({
-    instance: {
-      ip: '127.0.0.1',
-    },
-  });
+  mongoServer = await MongoMemoryServer.create(mongoMemoryOptions);
 
   const mongoUrl = mongoServer.getUri();
   client = new MongoClient(mongoUrl);
