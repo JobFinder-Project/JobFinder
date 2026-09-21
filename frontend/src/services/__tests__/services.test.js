@@ -82,7 +82,7 @@ describe('services', () => {
     });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/consentimentos/aceitar',
+      '/consentimentos/aceitar',
       expect.objectContaining({
         method: 'POST',
         credentials: 'include',
@@ -173,8 +173,8 @@ describe('services', () => {
   });
 
   it.each([
-    ['candidato', candidatoService, '/api/candidato/conta'],
-    ['empresa', empresaService, '/api/empresa/conta'],
+    ['candidato', candidatoService, '/candidato/conta'],
+    ['empresa', empresaService, '/empresa/conta'],
   ])(
     'deve solicitar a exclusão da própria conta de %s enviando apenas a senha',
     async (_perfil, service, endpoint) => {
