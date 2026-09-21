@@ -47,10 +47,10 @@ afterAll(async () => {
 describe('Recuperação de senha', () => {
   it('deve enviar email de recuperação e armazenar apenas hash do token temporário', async () => {
     const candidato = buildCandidato();
-    await request(app).post('/candidato/cadastrar').send(candidato);
+    await request(app).post('/api/candidato/cadastrar').send(candidato);
 
     const response = await request(app)
-      .post('/recuperar_senha')
+      .post('/api/recuperar_senha')
       .set('Origin', 'https://app.example.com')
       .send({ email: candidato.email });
 
@@ -86,7 +86,7 @@ describe('Recuperação de senha', () => {
 
   it('deve retornar 404 quando email não existir', async () => {
     const response = await request(app)
-      .post('/recuperar_senha')
+      .post('/api/recuperar_senha')
       .send({ email: 'ausente@teste.com' });
 
     expect(response.statusCode).toBe(404);
@@ -95,14 +95,14 @@ describe('Recuperação de senha', () => {
 
   it('deve redefinir senha com token válido e limpar dados temporários', async () => {
     const candidato = buildCandidato();
-    await request(app).post('/candidato/cadastrar').send(candidato);
-    await request(app).post('/recuperar_senha').send({ email: candidato.email });
+    await request(app).post('/api/candidato/cadastrar').send(candidato);
+    await request(app).post('/api/recuperar_senha').send({ email: candidato.email });
 
     const rawToken = extractTokenFromResetEmail(sendMailMock.mock.calls[0][0].html);
     const novaSenha = 'novaSenhaForte123';
 
     const response = await request(app)
-      .post(`/redefinir_senha/${rawToken}`)
+      .post(`/api/redefinir_senha/${rawToken}`)
       .send({ senha: novaSenha });
 
     expect(response.statusCode).toBe(200);
@@ -124,12 +124,12 @@ describe('Recuperação de senha', () => {
     await candidato.save();
 
     const expiredResponse = await request(app)
-      .post(`/redefinir_senha/${expiredRawToken}`)
+      .post(`/api/redefinir_senha/${expiredRawToken}`)
       .send({ senha: 'novaSenhaForte123' });
     expect(expiredResponse.statusCode).toBe(404);
 
     const missingResponse = await request(app)
-      .post('/redefinir_senha/token-inexistente')
+      .post('/api/redefinir_senha/token-inexistente')
       .send({ senha: 'novaSenhaForte123' });
     expect(missingResponse.statusCode).toBe(404);
   });
