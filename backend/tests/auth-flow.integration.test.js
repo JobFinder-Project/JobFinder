@@ -107,18 +107,21 @@ describe('Fluxo de autenticação', () => {
     expect(emailInexistente.statusCode).toBe(400);
   });
 
-  it('deve invalidar a sessão após logout', async () => {
-    const { agent: candidatoAgent } = await registerAndLoginCandidato(app);
+  it.each([
+    ['candidato', registerAndLoginCandidato, '/candidato/dashboard'],
+    ['empresa', registerAndLoginEmpresa, '/empresa/dashboard'],
+  ])('deve invalidar a sessão após logout de %s', async (_role, registerAndLogin, dashboardPath) => {
+    const { agent } = await registerAndLogin(app);
 
-    const logoutResponse = await candidatoAgent.get('/logout');
+    const logoutResponse = await agent.get('/logout');
     expect(logoutResponse.statusCode).toBe(200);
     expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await candidatoAgent.get('/me');
+    const meResponse = await agent.get('/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(false);
 
-    const dashboardResponse = await candidatoAgent.get('/candidato/dashboard');
+    const dashboardResponse = await agent.get(dashboardPath);
     expect(dashboardResponse.statusCode).toBe(401);
   });
 });

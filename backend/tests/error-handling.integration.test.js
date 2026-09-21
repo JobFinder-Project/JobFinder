@@ -78,6 +78,20 @@ describe('Tratamento de erros da API', () => {
     });
   });
 
+  it('deve retornar 404 para rotas antigas com prefixo /api sem exigir autenticação', async () => {
+    const paths = ['/api/me', '/api/vagas', '/api/docs.json'];
+
+    for (const path of paths) {
+      const response = await request(app).get(path);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toMatchObject({
+        status: 404,
+        message: 'Página não encontrada',
+      });
+    }
+  });
+
   it('deve converter CastError do Mongoose em resposta 400', async () => {
     const { agent } = await registerAndLoginCandidato(app);
     const response = await agent.post('/candidato/vagas/id-invalido').send({});

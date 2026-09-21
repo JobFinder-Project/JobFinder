@@ -59,6 +59,17 @@ describe('services', () => {
     );
   });
 
+  it('deve chamar o endpoint de logout sem prefixo /api', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await authService.logout();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/logout',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
   it('deve montar query de busca de vagas e retornar a lista normalizada', async () => {
     fetchMock.mockResolvedValueOnce(
       createJsonResponse({
