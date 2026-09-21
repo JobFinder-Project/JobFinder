@@ -18,6 +18,10 @@ export const authService = {
     }
   },
 
+  aceitarConsentimentos: async (consentimentos) => {
+    return api.post('/consentimentos/aceitar', consentimentos);
+  },
+
   recuperarSenha: async (email) => {
     return api.post('/recuperar_senha', { email });
   },

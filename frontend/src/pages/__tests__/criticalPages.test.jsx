@@ -226,6 +226,10 @@ describe('páginas críticas', () => {
     await userEvent.click(screen.getByRole('button', { name: /próximo passo/i }));
 
     await userEvent.type(screen.getByPlaceholderText(/React, Node.js, Excel/i), 'React, Node.js');
+    await userEvent.click(screen.getByRole('checkbox', { name: /li e aceito os termos de uso/i }));
+    await userEvent.click(
+      screen.getByRole('checkbox', { name: /li e aceito a política de privacidade/i })
+    );
     await userEvent.click(screen.getByRole('button', { name: /finalizar cadastro/i }));
 
     await waitFor(() => expect(candidatoService.cadastrar).toHaveBeenCalledTimes(1));
@@ -247,6 +251,10 @@ describe('páginas críticas', () => {
     await userEvent.click(screen.getByRole('button', { name: /próximo passo/i }));
 
     await userEvent.type(screen.getByPlaceholderText(/www.suaempresa.com.br/i), 'https://empresa.com.br');
+    await userEvent.click(screen.getByRole('checkbox', { name: /li e aceito os termos de uso/i }));
+    await userEvent.click(
+      screen.getByRole('checkbox', { name: /li e aceito a política de privacidade/i })
+    );
     await userEvent.click(screen.getByRole('button', { name: /finalizar cadastro/i }));
 
     await waitFor(() =>
@@ -256,6 +264,8 @@ describe('páginas críticas', () => {
           email: 'empresa@teste.com',
           cnpj: '12.345.678/0001-99',
           fone: '(92) 99999-9999',
+          aceiteTermosUso: true,
+          aceitePoliticaPrivacidade: true,
         })
       )
     );

@@ -1,0 +1,138 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(145deg, #eff6ff, #f8fafc 50%, #eef2ff);
+}
+
+.header {
+  padding: 1rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.brand {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.brand svg {
+  color: #2563eb;
+  font-size: 1.75rem;
+}
+
+.main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.card {
+  width: min(100%, 560px);
+  box-sizing: border-box;
+  padding: 2.25rem;
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 1rem;
+  box-shadow: 0 20px 45px rgba(30, 64, 175, 0.1);
+}
+
+.icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 1.75rem;
+}
+
+.card h1 {
+  margin: 1.25rem 0 0.5rem;
+  color: #0f172a;
+}
+
+.description {
+  margin: 0 0 1.5rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.option {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.option input {
+  margin-top: 0.25rem;
+}
+
+.option a {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.error {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.actions button {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary {
+  background: #fff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.primary {
+  background: #2563eb;
+  color: #fff;
+  border: 1px solid #2563eb;
+}
+
+.actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (max-width: 520px) {
+  .card {
+    padding: 1.5rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+}
