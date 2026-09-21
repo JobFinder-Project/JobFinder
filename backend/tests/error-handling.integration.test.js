@@ -36,7 +36,7 @@ afterAll(async () => {
 describe('Tratamento de erros da API', () => {
   it('deve retornar 400 para dados inválidos', async () => {
     const response = await request(app)
-      .post('/api/login')
+      .post('/auth/login')
       .send({ email: 'nao-existe@teste.com', senha: 'senhaerrada123' });
 
     expect(response.statusCode).toBe(400);
@@ -91,10 +91,10 @@ describe('Tratamento de erros da API', () => {
 
   it('deve retornar 404 quando o perfil autenticado não existir mais no banco', async () => {
     const { agent, empresa } = await registerAndLoginEmpresa(app);
-    await agent.get('/api/logout');
+    await agent.post('/auth/logout');
 
     const freshAgent = request.agent(app);
-    await freshAgent.post('/api/login').send({ email: empresa.email, senha: empresa.senha });
+    await freshAgent.post('/auth/login').send({ email: empresa.email, senha: empresa.senha });
     await clearTestDatabase();
 
     const response = await freshAgent.get('/api/empresa/dashboard');
