@@ -53,10 +53,10 @@ describe('Edição de perfil do candidato', () => {
       .field('email', candidato.email)
       .field('qualificacoes', 'Engenheiro de Dados');
 
-    await agent.get('/logout');
+    await agent.post('/auth/logout');
 
     const loginResponse = await agent
-      .post('/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
     expect(loginResponse.statusCode).toBe(200);
 

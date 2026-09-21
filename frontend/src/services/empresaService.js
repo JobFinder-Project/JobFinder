@@ -34,6 +34,9 @@ export const empresaService = {
 	atualizarStatusCandidatura: async (candidaturaId, status) => {
 		return api.put(`/empresa/candidatura/${candidaturaId}`, { status });
 	},
+	excluirConta: async (senha) => {
+		return api.delete("/empresa/conta", { senha });
+	},
 };
 
 export default empresaService;

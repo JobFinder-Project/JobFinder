@@ -38,6 +38,24 @@ describe('Contrato Swagger de exposição de dados', () => {
     expect(operation.responses[404]).toBeDefined();
   });
 
+  it('documenta a exclusão da própria conta sem identificadores e com confirmação de senha', () => {
+    const operations = [paths['/candidato/conta'].delete, paths['/empresa/conta'].delete];
+
+    operations.forEach((operation) => {
+      expect(operation.security).toEqual([{ sessionAuth: [] }]);
+      expect(operation.parameters).toBeUndefined();
+      expect(operation.requestBody.content['application/json'].schema.$ref).toBe(
+        '#/components/schemas/ExclusaoContaRequest'
+      );
+      expect(operation.responses[400]).toBeDefined();
+      expect(operation.responses[401]).toBeDefined();
+      expect(operation.responses[403]).toBeDefined();
+    });
+
+    expect(schemas.ExclusaoContaRequest.required).toEqual(['senha']);
+    expect(Object.keys(schemas.ExclusaoContaRequest.properties)).toEqual(['senha']);
+  });
+
   it('referencia DTOs específicos nas listagens de vagas e candidaturas', () => {
     expect(paths['/vagas'].get.responses[200].content['application/json'].schema.$ref).toBe(
       '#/components/schemas/VagasResponse'
@@ -55,5 +73,29 @@ describe('Contrato Swagger de exposição de dados', () => {
       paths['/empresa/vagas/{vagaId}/status'].patch.responses[200].content['application/json']
         .schema.$ref
     ).toBe('#/components/schemas/VagaMutationResponse');
+  });
+
+  it('documenta autenticação agrupada em /auth sem expor endpoints antigos', () => {
+    expect(paths['/auth/login'].post).toBeDefined();
+    expect(paths['/auth/me'].get).toBeDefined();
+    expect(paths['/auth/logout'].post).toBeDefined();
+    expect(paths['/auth/recuperar-senha'].post).toBeDefined();
+    expect(paths['/auth/redefinir-senha/{token}'].post).toBeDefined();
+
+    expect(paths['/login']).toBeUndefined();
+    expect(paths['/me']).toBeUndefined();
+    expect(paths['/logout']).toBeUndefined();
+    expect(paths['/recuperar_senha']).toBeUndefined();
+    expect(paths['/redefinir_senha/{token}']).toBeUndefined();
+  });
+
+  it('documenta os aceites obrigatórios e o endpoint de consentimentos', () => {
+    expect(schemas.CandidatoCadastroFormData.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(schemas.EmpresaCadastroRequest.required).toEqual(
+      expect.arrayContaining(['aceiteTermosUso', 'aceitePoliticaPrivacidade'])
+    );
+    expect(paths['/consentimentos/aceitar'].post.security).toEqual([{ sessionAuth: [] }]);
   });
 });

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { isAuthenticated, isEmpresa } from '../middlewares/authMiddleware.js';
 import EmpresaController from '../controllers/empresaController.js';
 import Error400 from '../errors/Error400.js';
+import { exigirConsentimentosVigentes } from '../middlewares/consentimentoMiddleware.js';
 
 const allowedImageExtensionsByMimeType = {
   'image/svg+xml': ['.svg'],
@@ -48,10 +49,11 @@ const router = express.Router();
 
 router.post('/cadastrar', EmpresaController.cadastrarEmpresa);
 
-router.use(isAuthenticated, isEmpresa);
+router.use(isAuthenticated, isEmpresa, exigirConsentimentosVigentes);
 
 router.get('/dashboard', EmpresaController.acessarDashboard);
 router.put('/editar', EmpresaController.editarPerfil);
+router.delete('/conta', EmpresaController.excluirConta);
 router.post('/vagas/criar', uploadImagemVaga, EmpresaController.criarVagas);
 router.patch('/vagas/:vagaId/status', EmpresaController.atualizarStatusVaga);
 router.get('/candidaturas', EmpresaController.buscarCandidaturas);

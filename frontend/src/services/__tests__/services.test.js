@@ -32,7 +32,7 @@ describe('services', () => {
     });
 
     expect(response.redirectUrl).toBe('/candidato/dashboard');
-    expect(fetchMock).toHaveBeenCalledWith('/login', {
+    expect(fetchMock).toHaveBeenCalledWith('/auth/login', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -51,7 +51,7 @@ describe('services', () => {
     await authService.redefinirSenha('token-123', 'novaSenhaForte123');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/redefinir_senha/token-123',
+      '/auth/redefinir-senha/token-123',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ senha: 'novaSenhaForte123' }),
@@ -59,14 +59,38 @@ describe('services', () => {
     );
   });
 
-  it('deve chamar o endpoint de logout sem prefixo /api', async () => {
+  it('deve encerrar sessão pelo endpoint de auth com método POST', async () => {
     fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
 
     await authService.logout();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/logout',
-      expect.objectContaining({ method: 'GET', credentials: 'include' })
+      '/auth/logout',
+      expect.objectContaining({
+        method: 'POST',
+        credentials: 'include',
+      })
+    );
+  });
+
+  it('deve enviar consentimentos para o usuário autenticado', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await authService.aceitarConsentimentos({
+      aceiteTermosUso: true,
+      aceitePoliticaPrivacidade: true,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/api/consentimentos/aceitar',
+      expect.objectContaining({
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          aceiteTermosUso: true,
+          aceitePoliticaPrivacidade: true,
+        }),
+      })
     );
   });
 
@@ -146,6 +170,35 @@ describe('services', () => {
         body: JSON.stringify({ status: 'Fechada' }),
       })
     );
+  });
+
+  it.each([
+    ['candidato', candidatoService, '/api/candidato/conta'],
+    ['empresa', empresaService, '/api/empresa/conta'],
+  ])(
+    'deve solicitar a exclusão da própria conta de %s enviando apenas a senha',
+    async (_perfil, service, endpoint) => {
+      fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+      await service.excluirConta('senhaForte123');
+
+      expect(fetchMock).toHaveBeenCalledWith(endpoint, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha: 'senhaForte123' }),
+      });
+    }
+  );
+
+  it('deve manter DELETE sem corpo quando nenhum payload for informado', async () => {
+    fetchMock.mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await candidatoService.cancelarCandidatura('candidatura-1');
+
+    const [, config] = fetchMock.mock.calls[0];
+    expect(config.method).toBe('DELETE');
+    expect(config).not.toHaveProperty('body');
   });
 
   it('deve propagar status e payload quando a API retornar erro', async () => {

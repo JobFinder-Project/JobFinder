@@ -7,6 +7,7 @@ import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import {
   toCandidatoPublicDTO,
   toCandidatoResumoDTO,
@@ -15,6 +16,10 @@ import {
   toCandidaturaDTO,
   toCandidaturaEmpresaDTO,
 } from '../dtos/index.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../config/consentimentos.js';
 
 const allowedImageExtensionsByMimeType = {
   'image/svg+xml': ['.svg'],
@@ -76,6 +81,14 @@ class EmpresaController {
         return next(new Error400('O campo senha deve ser texto.'));
       }
 
+      if (req.body.aceiteTermosUso !== true) {
+        return next(new Error400('É obrigatório aceitar os Termos de Uso.'));
+      }
+
+      if (req.body.aceitePoliticaPrivacidade !== true) {
+        return next(new Error400('É obrigatório aceitar a Política de Privacidade.'));
+      }
+
       const salt = await bcrypt.genSalt(12);
       const senhaHash = await bcrypt.hash(senha, salt);
 
@@ -87,6 +100,10 @@ class EmpresaController {
         fone: req.body.fone,
         bio: req.body.bio || '',
         site: req.body.site || '',
+        termosUsoAceitoEm: new Date(),
+        termosUsoVersao: TERMOS_USO_VERSAO_ATUAL,
+        politicaPrivacidadeAceitaEm: new Date(),
+        politicaPrivacidadeVersao: POLITICA_PRIVACIDADE_VERSAO_ATUAL,
       });
 
       await novaEmpresa.save();
@@ -241,6 +258,35 @@ class EmpresaController {
         message: `Vaga ${status === 'Aberta' ? 'reaberta' : 'encerrada'} com sucesso`,
         vaga: toVagaDTO(vaga),
       });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async excluirConta(req, res, next) {
+    try {
+      const empresaId = req.session.user.id;
+
+      const empresa = await Empresa.findById(empresaId);
+      if (!empresa) {
+        return next(new Error404('Empresa não encontrada.'));
+      }
+
+      const erroSenha = await validarSenhaDeConfirmacao(req.body?.senha, empresa.senha);
+      if (erroSenha) {
+        return next(erroSenha);
+      }
+
+      const vagasIds = await Vaga.distinct('_id', { empresa: empresa._id });
+      await Candidatura.deleteMany({
+        $or: [{ vaga: { $in: vagasIds } }, { empresa: empresa._id }],
+      });
+      await Vaga.deleteMany({ empresa: empresa._id });
+      await Empresa.deleteOne({ _id: empresa._id });
+
+      await encerrarSessao(req, res);
+      res.status(200).json({ success: true, message: 'Conta excluída com sucesso' });
     } catch (erro) {
       console.error(erro);
       next(erro);

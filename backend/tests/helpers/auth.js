@@ -11,7 +11,7 @@ export const registerAndLoginCandidato = async (app, overrides = {}) => {
   expect(cadastroResponse.statusCode).toBe(201);
 
   const loginResponse = await agent
-    .post('/login')
+    .post('/auth/login')
     .send({ email: candidato.email, senha: candidato.senha });
   expect(loginResponse.statusCode).toBe(200);
 
@@ -26,7 +26,7 @@ export const registerAndLoginEmpresa = async (app, overrides = {}) => {
   expect(cadastroResponse.statusCode).toBe(201);
 
   const loginResponse = await agent
-    .post('/login')
+    .post('/auth/login')
     .send({ email: empresa.email, senha: empresa.senha });
   expect(loginResponse.statusCode).toBe(200);
 

@@ -7,6 +7,10 @@ import Empresa from '../src/models/empresaModel.js';
 import { registerAndLoginCandidato, registerAndLoginEmpresa } from './helpers/auth.js';
 import { clearTestDatabase, startTestDatabase, stopTestDatabase } from './helpers/database.js';
 import { buildCandidato, buildEmpresa } from './helpers/factories.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../src/config/consentimentos.js';
 
 let mongoServer;
 let agent;
@@ -29,7 +33,7 @@ afterAll(async () => {
 
 describe('Fluxo de autenticação', () => {
   it('deve informar sessão anônima quando não houver usuário autenticado', async () => {
-    const response = await agent.get('/me');
+    const response = await agent.get('/auth/me');
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ authenticated: false });
@@ -46,9 +50,13 @@ describe('Fluxo de autenticação', () => {
     expect(candidatoNoDb).not.toBeNull();
     expect(candidatoNoDb.nome).toBe(candidato.nome);
     expect(candidatoNoDb.senha).not.toBe(candidato.senha);
+    expect(candidatoNoDb.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(candidatoNoDb.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
+    expect(candidatoNoDb.termosUsoAceitoEm).toBeInstanceOf(Date);
+    expect(candidatoNoDb.politicaPrivacidadeAceitaEm).toBeInstanceOf(Date);
 
     const loginResponse = await agent
-      .post('/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: candidato.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -60,7 +68,7 @@ describe('Fluxo de autenticação', () => {
     });
     expect(loginResponse.body.user).not.toHaveProperty('id');
 
-    const meResponse = await agent.get('/me');
+    const meResponse = await agent.get('/auth/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(true);
     expect(meResponse.body.user.role).toBe('candidato');
@@ -77,9 +85,11 @@ describe('Fluxo de autenticação', () => {
     expect(empresaNoDb).not.toBeNull();
     expect(empresaNoDb.nome).toBe(empresa.nome);
     expect(empresaNoDb.senha).not.toBe(empresa.senha);
+    expect(empresaNoDb.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(empresaNoDb.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
 
     const loginResponse = await agent
-      .post('/login')
+      .post('/auth/login')
       .send({ email: empresa.email, senha: empresa.senha });
 
     expect(loginResponse.statusCode).toBe(200);
@@ -97,12 +107,12 @@ describe('Fluxo de autenticação', () => {
     await agent.post('/candidato/cadastrar').send(candidato);
 
     const senhaInvalida = await agent
-      .post('/login')
+      .post('/auth/login')
       .send({ email: candidato.email, senha: 'senhaerrada123' });
     expect(senhaInvalida.statusCode).toBe(400);
 
     const emailInexistente = await agent
-      .post('/login')
+      .post('/auth/login')
       .send({ email: 'inexistente@teste.com', senha: candidato.senha });
     expect(emailInexistente.statusCode).toBe(400);
   });
@@ -113,16 +123,31 @@ describe('Fluxo de autenticação', () => {
   ])('deve invalidar a sessão após logout de %s', async (_role, registerAndLogin, dashboardPath) => {
     const { agent } = await registerAndLogin(app);
 
-    const logoutResponse = await agent.get('/logout');
+    const logoutResponse = await candidatoAgent.post('/auth/logout');
     expect(logoutResponse.statusCode).toBe(200);
     expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await agent.get('/me');
+    const meResponse = await candidatoAgent.get('/auth/me');
     expect(meResponse.statusCode).toBe(200);
     expect(meResponse.body.authenticated).toBe(false);
 
     const dashboardResponse = await agent.get(dashboardPath);
     expect(dashboardResponse.statusCode).toBe(401);
+  });
+
+  it('deve remover endpoints antigos de autenticação do contrato público', async () => {
+    const responses = await Promise.all([
+      request(app).post('/api/login').send({ email: 'ana@teste.com', senha: 'senha123' }),
+      request(app).get('/api/me'),
+      request(app).get('/api/logout'),
+      request(app).post('/api/recuperar_senha').send({ email: 'ana@teste.com' }),
+      request(app).post('/api/redefinir_senha/token-antigo').send({ senha: 'senha123' }),
+      request(app).post('/api/auth/login').send({ email: 'ana@teste.com', senha: 'senha123' }),
+    ]);
+
+    responses.forEach((response) => {
+      expect(response.statusCode).toBe(404);
+    });
   });
 });
 
@@ -168,5 +193,64 @@ describe('Permissões por perfil', () => {
 
     const empresaResponse = await agent.post('/empresa/cadastrar').send(empresa);
     expect(empresaResponse.statusCode).toBe(400);
+  });
+
+  it('deve rejeitar cadastros sem os aceites obrigatórios', async () => {
+    const candidato = buildCandidato({ aceiteTermosUso: false });
+    const empresa = buildEmpresa({ aceitePoliticaPrivacidade: false });
+
+    const candidatoResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
+    const empresaResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+
+    expect(candidatoResponse.statusCode).toBe(400);
+    expect(candidatoResponse.body.message).toMatch(/Termos de Uso/);
+    expect(empresaResponse.statusCode).toBe(400);
+    expect(empresaResponse.body.message).toMatch(/Política de Privacidade/);
+  });
+
+  it('deve bloquear usuário antigo até registrar os consentimentos vigentes', async () => {
+    const candidato = buildCandidato();
+    await agent.post('/api/candidato/cadastrar').send(candidato);
+    await Candidato.updateOne(
+      { email: candidato.email },
+      {
+        $unset: {
+          termosUsoAceitoEm: 1,
+          termosUsoVersao: 1,
+          politicaPrivacidadeAceitaEm: 1,
+          politicaPrivacidadeVersao: 1,
+        },
+      }
+    );
+
+    const loginResponse = await agent
+      .post('/auth/login')
+      .send({ email: candidato.email, senha: candidato.senha });
+    expect(loginResponse.statusCode).toBe(200);
+    expect(loginResponse.body.redirectUrl).toBe('/consentimentos-pendentes');
+    expect(loginResponse.body.user.consentimentosPendentes).toEqual([
+      'termosUso',
+      'politicaPrivacidade',
+    ]);
+
+    const bloqueado = await agent.get('/api/candidato/dashboard');
+    expect(bloqueado.statusCode).toBe(428);
+    expect(bloqueado.body.codigo).toBe('CONSENTIMENTOS_PENDENTES');
+
+    const aceite = await agent.post('/api/consentimentos/aceitar').send({
+      aceiteTermosUso: true,
+      aceitePoliticaPrivacidade: true,
+      termosUsoVersao: 'versao-forjada',
+      candidatoId: 'id-forjado',
+    });
+    expect(aceite.statusCode).toBe(200);
+    expect(aceite.body.consentimentosPendentes).toEqual([]);
+
+    const atualizado = await Candidato.findOne({ email: candidato.email });
+    expect(atualizado.termosUsoVersao).toBe(TERMOS_USO_VERSAO_ATUAL);
+    expect(atualizado.politicaPrivacidadeVersao).toBe(POLITICA_PRIVACIDADE_VERSAO_ATUAL);
+
+    const liberado = await agent.get('/api/candidato/dashboard');
+    expect(liberado.statusCode).toBe(200);
   });
 });

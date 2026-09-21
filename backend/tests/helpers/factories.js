@@ -40,6 +40,8 @@ export const buildCandidato = (overrides = {}) => {
     habilidadesTecnicas: ['React', 'Node.js', 'MongoDB'],
     habilidades: ['React', 'Node.js', 'MongoDB'],
     idiomas: ['Português', 'Inglês'],
+    aceiteTermosUso: true,
+    aceitePoliticaPrivacidade: true,
     ...overrides,
   };
 };
@@ -55,6 +57,8 @@ export const buildEmpresa = (overrides = {}) => {
     fone: '(92) 99999-9999',
     bio: 'Empresa de tecnologia focada em soluções digitais.',
     site: 'https://empresa.com.br',
+    aceiteTermosUso: true,
+    aceitePoliticaPrivacidade: true,
     ...overrides,
   };
 };

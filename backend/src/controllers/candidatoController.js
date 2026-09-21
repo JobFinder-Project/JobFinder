@@ -5,12 +5,17 @@ import Candidatura from '../models/candidaturaModel.js';
 import Empresa from '../models/empresaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
+import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import {
   toCandidaturaDTO,
   toCandidaturaCandidatoDTO,
   toCandidatoDTO,
   toVagaPublicDTO,
 } from '../dtos/index.js';
+import {
+  POLITICA_PRIVACIDADE_VERSAO_ATUAL,
+  TERMOS_USO_VERSAO_ATUAL,
+} from '../config/consentimentos.js';
 
 class CandidatoController {
   static async cadastrarCandidato(req, res, next) {
@@ -24,6 +29,17 @@ class CandidatoController {
 
       if (typeof senha !== 'string') {
         return next(new Error400('Campo senha deve ser uma string'));
+      }
+
+      if (req.body.aceiteTermosUso !== true && req.body.aceiteTermosUso !== 'true') {
+        return next(new Error400('É obrigatório aceitar os Termos de Uso.'));
+      }
+
+      if (
+        req.body.aceitePoliticaPrivacidade !== true &&
+        req.body.aceitePoliticaPrivacidade !== 'true'
+      ) {
+        return next(new Error400('É obrigatório aceitar a Política de Privacidade.'));
       }
 
       const salt = await bcrypt.genSalt(12);
@@ -41,6 +57,10 @@ class CandidatoController {
         descricao: req.body.descricao,
         habilidadesTecnicas: req.body.habilidades,
         idiomas: req.body.idiomas,
+        termosUsoAceitoEm: new Date(),
+        termosUsoVersao: TERMOS_USO_VERSAO_ATUAL,
+        politicaPrivacidadeAceitaEm: new Date(),
+        politicaPrivacidadeVersao: POLITICA_PRIVACIDADE_VERSAO_ATUAL,
         imagem: req.file
           ? {
               data: req.file.buffer,
@@ -195,6 +215,31 @@ class CandidatoController {
       res.status(200).json({
         candidaturas: candidaturas.map(toCandidaturaCandidatoDTO),
       });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async excluirConta(req, res, next) {
+    try {
+      const candidatoId = req.session.user.id;
+
+      const candidato = await Candidato.findById(candidatoId);
+      if (!candidato) {
+        return next(new Error404('Candidato não encontrado'));
+      }
+
+      const erroSenha = await validarSenhaDeConfirmacao(req.body?.senha, candidato.senha);
+      if (erroSenha) {
+        return next(erroSenha);
+      }
+
+      await Candidatura.deleteMany({ candidato: candidato._id });
+      await Candidato.deleteOne({ _id: candidato._id });
+
+      await encerrarSessao(req, res);
+      res.status(200).json({ success: true, message: 'Conta excluída com sucesso' });
     } catch (erro) {
       console.error(erro);
       next(erro);

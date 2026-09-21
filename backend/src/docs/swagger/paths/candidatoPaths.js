@@ -34,6 +34,7 @@ export const candidatoPaths = {
         },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },
+        428: { description: 'Consentimentos vigentes pendentes' },
       },
     },
   },
@@ -53,6 +54,30 @@ export const candidatoPaths = {
       },
       responses: {
         200: { description: 'Perfil atualizado com sucesso' },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+      },
+    },
+  },
+
+  '/candidato/conta': {
+    delete: {
+      tags: ['Candidato'],
+      summary: 'Excluir a própria conta de candidato',
+      description:
+        'Remove a conta do candidato autenticado e suas candidaturas, exigindo confirmação de senha. Não recebe identificadores: a conta é sempre a da sessão. A sessão é encerrada e o cookie removido.',
+      security: [{ sessionAuth: [] }],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: { $ref: '#/components/schemas/ExclusaoContaRequest' },
+          },
+        },
+      },
+      responses: {
+        200: { description: 'Conta excluída e sessão encerrada' },
+        400: { description: 'Senha ausente ou incorreta' },
         401: { description: 'Não autenticado' },
         403: { description: 'Acesso negado' },
       },
