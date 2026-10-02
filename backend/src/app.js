@@ -60,11 +60,11 @@ if (process.env.NODE_ENV === 'test') {
 setupSwagger(app);
 
 // Configuração das rotas
-routes(app, '');
+routes(app, '/api');
 
 if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendDistPath));
-  app.get('/(.*)', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(frontendIndexPath);
   });
 }

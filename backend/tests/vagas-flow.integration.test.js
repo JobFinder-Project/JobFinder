@@ -33,7 +33,7 @@ describe('Fluxo de vagas', () => {
       area: 'Administrativa',
     });
 
-    const createResponse = await companyAgent.post('/empresa/vagas/criar').send(vagaPayload);
+    const createResponse = await companyAgent.post('/api/empresa/vagas/criar').send(vagaPayload);
 
     expect(createResponse.statusCode).toBe(201);
     expect(createResponse.body.success).toBe(true);
@@ -48,7 +48,7 @@ describe('Fluxo de vagas', () => {
     const vagaNoDb = await Vaga.findById(createResponse.body.vaga._id);
     expect(vagaNoDb).not.toBeNull();
 
-    const dashboardResponse = await companyAgent.get('/empresa/dashboard');
+    const dashboardResponse = await companyAgent.get('/api/empresa/dashboard');
     expect(dashboardResponse.statusCode).toBe(200);
     expect(dashboardResponse.body.empresa).not.toHaveProperty('_id');
     expect(dashboardResponse.body.vagas).toHaveLength(1);
@@ -60,18 +60,18 @@ describe('Fluxo de vagas', () => {
     const { agent: otherCompanyAgent } = await registerAndLoginEmpresa(app);
 
     const forbiddenResponse = await otherCompanyAgent
-      .patch(`/empresa/vagas/${vagaId}/status`)
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
       .send({ status: 'Fechada' });
     expect(forbiddenResponse.statusCode).toBe(404);
 
     const closeResponse = await companyAgent
-      .patch(`/empresa/vagas/${vagaId}/status`)
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
       .send({ status: 'Fechada' });
     expect(closeResponse.statusCode).toBe(200);
     expect(closeResponse.body.vaga.status).toBe('Fechada');
 
     const reopenResponse = await companyAgent
-      .patch(`/empresa/vagas/${vagaId}/status`)
+      .patch(`/api/empresa/vagas/${vagaId}/status`)
       .send({ status: 'Aberta' });
     expect(reopenResponse.statusCode).toBe(200);
     expect(reopenResponse.body.vaga.status).toBe('Aberta');
@@ -81,12 +81,12 @@ describe('Fluxo de vagas', () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
 
     const unauthenticatedResponse = await request(app)
-      .post('/empresa/vagas/criar')
+      .post('/api/empresa/vagas/criar')
       .send(buildVaga());
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
     const candidateResponse = await candidateAgent
-      .post('/empresa/vagas/criar')
+      .post('/api/empresa/vagas/criar')
       .send(buildVaga());
     expect(candidateResponse.statusCode).toBe(403);
   });
@@ -99,7 +99,7 @@ describe('Fluxo de vagas', () => {
       },
     });
 
-    await companyAgent.post('/empresa/vagas/criar').send(
+    await companyAgent.post('/api/empresa/vagas/criar').send(
       buildVaga(undefined, {
         nome: 'Auxiliar Administrativo',
         area: 'Administrativa',
@@ -108,7 +108,7 @@ describe('Fluxo de vagas', () => {
 
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
 
-    const keywordResponse = await candidateAgent.get('/vagas?q=React');
+    const keywordResponse = await candidateAgent.get('/api/vagas?q=React');
     expect(keywordResponse.statusCode).toBe(200);
     expect(keywordResponse.body.vagas).toHaveLength(1);
     expect(keywordResponse.body.vagas[0].nome).toBe('Desenvolvedor React');
@@ -120,7 +120,7 @@ describe('Fluxo de vagas', () => {
     expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('email');
     expect(keywordResponse.body.vagas[0].empresa).not.toHaveProperty('fone');
 
-    const areaResponse = await candidateAgent.get('/vagas?area=Administrativa');
+    const areaResponse = await candidateAgent.get('/api/vagas?area=Administrativa');
     expect(areaResponse.statusCode).toBe(200);
     expect(areaResponse.body.vagas).toHaveLength(1);
     expect(areaResponse.body.vagas[0].area).toBe('Administrativa');
@@ -135,7 +135,7 @@ describe('Fluxo de vagas', () => {
       nome: 'Empresa Consultante',
     });
 
-    const response = await outraEmpresaAgent.get('/vagas?q=Vaga%20Pública%20Segura');
+    const response = await outraEmpresaAgent.get('/api/vagas?q=Vaga%20Pública%20Segura');
 
     expect(response.statusCode).toBe(200);
     expect(response.body.vagas).toHaveLength(1);
@@ -156,13 +156,13 @@ describe('Fluxo de vagas', () => {
       vagaOverrides: { area: 'Administrativa' },
     });
 
-    await companyAgent.post('/empresa/vagas/criar').send(
+    await companyAgent.post('/api/empresa/vagas/criar').send(
       buildVaga(undefined, {
         nome: 'Assistente Administrativo',
         area: 'Administrativa',
       })
     );
-    await companyAgent.post('/empresa/vagas/criar').send(
+    await companyAgent.post('/api/empresa/vagas/criar').send(
       buildVaga(undefined, {
         nome: 'Vendedor Interno',
         area: 'Comercial/Vendas',
@@ -170,7 +170,7 @@ describe('Fluxo de vagas', () => {
     );
 
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
-    const response = await candidateAgent.get('/areas');
+    const response = await candidateAgent.get('/api/areas');
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(expect.arrayContaining(['Administrativa', 'Comercial/Vendas']));
@@ -187,9 +187,9 @@ describe('Busca de candidatos pela empresa', () => {
       educacao: 'Ensino Superior Completo',
     });
 
-    await request(app).post('/candidato/cadastrar').send(candidato);
+    await request(app).post('/api/candidato/cadastrar').send(candidato);
 
-    const byNameResponse = await companyAgent.get('/empresa/candidatos/buscar?q=Marina');
+    const byNameResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=Marina');
     expect(byNameResponse.statusCode).toBe(200);
     expect(byNameResponse.body.candidatos).toHaveLength(1);
     expect(byNameResponse.body.candidatos[0].nome).toBe(candidato.nome);
@@ -199,22 +199,22 @@ describe('Busca de candidatos pela empresa', () => {
     expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('email');
     expect(byNameResponse.body.candidatos[0]).not.toHaveProperty('telefone');
 
-    const byEducationResponse = await companyAgent.get('/empresa/candidatos/buscar?q=Superior');
+    const byEducationResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=Superior');
     expect(byEducationResponse.statusCode).toBe(200);
     expect(byEducationResponse.body.candidatos).toHaveLength(1);
   });
 
   it('deve rejeitar busca global vazia ou com termo curto', async () => {
     const { agent: companyAgent } = await registerAndLoginEmpresa(app);
-    await request(app).post('/candidato/cadastrar').send(buildCandidato());
+    await request(app).post('/api/candidato/cadastrar').send(buildCandidato());
 
-    const emptyResponse = await companyAgent.get('/empresa/candidatos/buscar');
+    const emptyResponse = await companyAgent.get('/api/empresa/candidatos/buscar');
     expect(emptyResponse.statusCode).toBe(400);
 
-    const whitespaceResponse = await companyAgent.get('/empresa/candidatos/buscar?q=%20%20');
+    const whitespaceResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=%20%20');
     expect(whitespaceResponse.statusCode).toBe(400);
 
-    const shortResponse = await companyAgent.get('/empresa/candidatos/buscar?q=a');
+    const shortResponse = await companyAgent.get('/api/empresa/candidatos/buscar?q=a');
     expect(shortResponse.statusCode).toBe(400);
   });
 
@@ -225,9 +225,9 @@ describe('Busca de candidatos pela empresa', () => {
     await registerAndLoginCandidato(app, { nome: 'Candidato Sem Vínculo' });
     const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
-    await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
+    await candidateAgent.post(`/api/candidato/vagas/${vagaId}`).send({});
 
-    const response = await companyAgent.get(`/empresa/candidatos/buscar?vagaId=${vagaId}`);
+    const response = await companyAgent.get(`/api/empresa/candidatos/buscar?vagaId=${vagaId}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.candidatos).toHaveLength(1);
@@ -241,7 +241,7 @@ describe('Busca de candidatos pela empresa', () => {
     const { vagaId } = await createVagaAsEmpresa(app);
     const { agent: otherCompanyAgent } = await registerAndLoginEmpresa(app);
 
-    const response = await otherCompanyAgent.get(`/empresa/candidatos/buscar?vagaId=${vagaId}`);
+    const response = await otherCompanyAgent.get(`/api/empresa/candidatos/buscar?vagaId=${vagaId}`);
 
     expect(response.statusCode).toBe(404);
   });
@@ -249,10 +249,10 @@ describe('Busca de candidatos pela empresa', () => {
   it('deve bloquear busca de candidatos para candidato ou usuário anônimo', async () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
 
-    const unauthenticatedResponse = await request(app).get('/empresa/candidatos/buscar?q=dev');
+    const unauthenticatedResponse = await request(app).get('/api/empresa/candidatos/buscar?q=dev');
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
-    const candidateResponse = await candidateAgent.get('/empresa/candidatos/buscar?q=dev');
+    const candidateResponse = await candidateAgent.get('/api/empresa/candidatos/buscar?q=dev');
     expect(candidateResponse.statusCode).toBe(403);
   });
 });
