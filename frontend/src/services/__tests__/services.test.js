@@ -82,7 +82,7 @@ describe('services', () => {
     });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/consentimentos/aceitar',
+      '/consentimentos/aceitar',
       expect.objectContaining({
         method: 'POST',
         credentials: 'include',
@@ -108,7 +108,7 @@ describe('services', () => {
 
     expect(vagas).toEqual([{ _id: 'vaga-1', nome: 'Desenvolvedor React' }]);
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/vagas?q=React&area=TI+-+Tecnologia+da+Informa%C3%A7%C3%A3o',
+      '/vagas?q=React&area=TI+-+Tecnologia+da+Informa%C3%A7%C3%A3o',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -123,12 +123,12 @@ describe('services', () => {
 
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
-      '/api/candidato/vagas/vaga-1',
+      '/candidato/vagas/vaga-1',
       expect.objectContaining({ method: 'POST' })
     );
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
-      '/api/candidato/candidaturas/delete/candidatura-1',
+      '/candidato/candidaturas/delete/candidatura-1',
       expect.objectContaining({ method: 'DELETE' })
     );
   });
@@ -139,7 +139,7 @@ describe('services', () => {
     await empresaService.buscarCandidatos('React Native', 'vaga-1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
+      '/empresa/candidatos/buscar?q=React%20Native&vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -150,7 +150,7 @@ describe('services', () => {
     await empresaService.buscarCandidatos('', 'vaga-1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/empresa/candidatos/buscar?vagaId=vaga-1',
+      '/empresa/candidatos/buscar?vagaId=vaga-1',
       expect.objectContaining({ method: 'GET', credentials: 'include' })
     );
   });
@@ -163,7 +163,7 @@ describe('services', () => {
     await empresaService.atualizarStatusVaga('vaga-1', 'Fechada');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/empresa/vagas/vaga-1/status',
+      '/empresa/vagas/vaga-1/status',
       expect.objectContaining({
         method: 'PATCH',
         credentials: 'include',
@@ -173,8 +173,8 @@ describe('services', () => {
   });
 
   it.each([
-    ['candidato', candidatoService, '/api/candidato/conta'],
-    ['empresa', empresaService, '/api/empresa/conta'],
+    ['candidato', candidatoService, '/candidato/conta'],
+    ['empresa', empresaService, '/empresa/conta'],
   ])(
     'deve solicitar a exclusão da própria conta de %s enviando apenas a senha',
     async (_perfil, service, endpoint) => {

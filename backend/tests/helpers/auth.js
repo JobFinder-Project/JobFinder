@@ -7,7 +7,7 @@ export const registerAndLoginCandidato = async (app, overrides = {}) => {
   const agent = request.agent(app);
   const candidato = buildCandidato(overrides);
 
-  const cadastroResponse = await agent.post('/api/candidato/cadastrar').send(candidato);
+  const cadastroResponse = await agent.post('/candidato/cadastrar').send(candidato);
   expect(cadastroResponse.statusCode).toBe(201);
 
   const loginResponse = await agent
@@ -22,7 +22,7 @@ export const registerAndLoginEmpresa = async (app, overrides = {}) => {
   const agent = request.agent(app);
   const empresa = buildEmpresa(overrides);
 
-  const cadastroResponse = await agent.post('/api/empresa/cadastrar').send(empresa);
+  const cadastroResponse = await agent.post('/empresa/cadastrar').send(empresa);
   expect(cadastroResponse.statusCode).toBe(201);
 
   const loginResponse = await agent
@@ -40,7 +40,7 @@ export const createVagaAsEmpresa = async (
   const { agent, empresa } = await registerAndLoginEmpresa(app, empresaOverrides);
 
   const createVagaResponse = await agent
-    .post('/api/empresa/vagas/criar')
+    .post('/empresa/vagas/criar')
     .send(buildVaga(undefined, vagaOverrides));
 
   expect(createVagaResponse.statusCode).toBe(201);

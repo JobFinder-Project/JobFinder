@@ -47,7 +47,7 @@ afterAll(async () => {
 describe('Recuperação de senha', () => {
   it('deve enviar email de recuperação e armazenar apenas hash do token temporário', async () => {
     const candidato = buildCandidato();
-    await request(app).post('/api/candidato/cadastrar').send(candidato);
+    await request(app).post('/candidato/cadastrar').send(candidato);
 
     const response = await request(app)
       .post('/auth/recuperar-senha')
@@ -95,7 +95,7 @@ describe('Recuperação de senha', () => {
 
   it('deve redefinir senha com token válido e limpar dados temporários', async () => {
     const candidato = buildCandidato();
-    await request(app).post('/api/candidato/cadastrar').send(candidato);
+    await request(app).post('/candidato/cadastrar').send(candidato);
     await request(app).post('/auth/recuperar-senha').send({ email: candidato.email });
 
     const rawToken = extractTokenFromResetEmail(sendMailMock.mock.calls[0][0].html);
