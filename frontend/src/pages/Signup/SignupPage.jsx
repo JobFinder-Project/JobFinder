@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { BiBriefcase, BiArrowBack, BiCheckCircle } from 'react-icons/bi';
 import { candidatoService } from '../../services/candidatoService';
 import { empresaService } from '../../services/empresaService';
+import TagInput from '../../components/ui/TagInput/TagInput';
 import styles from './Signup.module.css';
 
 export default function SignupPage() {
@@ -230,19 +231,38 @@ export default function SignupPage() {
         }
 
         if (currentStep === 4 && !isEmployer) {
+            const handleTagChange = (field) => (newValue) => {
+                setFormData(prev => ({ ...prev, [field]: newValue }));
+                setErrorMsg('');
+            };
             return (
                 <div className={styles.stepContent}>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Habilidades Técnicas</label>
-                        <input type="text" name="habilidades" value={formData.habilidades} onChange={handleChange} className={styles.input} placeholder="Ex: React, Node.js, Excel (Separados por vírgula)" />
+                        <label className={styles.label} htmlFor="habilidades">Habilidades Técnicas</label>
+                        <TagInput
+                            id="habilidades"
+                            value={formData.habilidades}
+                            onChange={handleTagChange('habilidades')}
+                            placeholder="Ex: React, Node.js... (Enter para adicionar)"
+                        />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Idiomas</label>
-                        <input type="text" name="idiomas" value={formData.idiomas} onChange={handleChange} className={styles.input} placeholder="Ex: Inglês Avançado, Espanhol Básico" />
+                        <label className={styles.label} htmlFor="idiomas">Idiomas</label>
+                        <TagInput
+                            id="idiomas"
+                            value={formData.idiomas}
+                            onChange={handleTagChange('idiomas')}
+                            placeholder="Ex: Inglês Avançado... (Enter para adicionar)"
+                        />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Cursos Extracurriculares</label>
-                        <input type="text" name="cursos" value={formData.cursos} onChange={handleChange} className={styles.input} placeholder="Ex: Curso de Lógica, Certificação Scrum" />
+                        <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
+                        <TagInput
+                            id="cursos"
+                            value={formData.cursos}
+                            onChange={handleTagChange('cursos')}
+                            placeholder="Ex: Certificação Scrum... (Enter para adicionar)"
+                        />
                     </div>
                 </div>
             );

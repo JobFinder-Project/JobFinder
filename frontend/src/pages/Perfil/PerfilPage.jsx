@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiUser, BiCamera, BiSave, BiCheckCircle, BiTrash, BiArrowBack, BiErrorCircle } from 'react-icons/bi';
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout';
 import ExcluirContaModal from '../../features/conta/ExcluirContaModal/ExcluirContaModal';
+import TagInput from '../../components/ui/TagInput/TagInput';
 import { useAuth } from '../../contexts/AuthContext';
 import { candidatoService } from '../../services/candidatoService';
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
@@ -261,16 +262,31 @@ export default function PerfilPage() {
                       <input type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Ex: Desenvolvedor Front-end" />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Cursos Extracurriculares (Separados por vírgula)</label>
-                      <input type="text" name="cursos" value={formData.cursos} onChange={handleChange} className={styles.input} placeholder="Ex: React Avançado, UI/UX Design" />
+                      <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
+                      <TagInput
+                        id="cursos"
+                        value={formData.cursos}
+                        onChange={(v) => setFormData(prev => ({ ...prev, cursos: v }))}
+                        placeholder="Ex: React Avançado... (Enter para adicionar)"
+                      />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Habilidades Técnicas</label>
-                      <input type="text" name="habilidadesTecnicas" value={formData.habilidadesTecnicas} onChange={handleChange} className={styles.input} placeholder="Ex: JavaScript, Node.js, Figma" />
+                      <label className={styles.label} htmlFor="habilidadesTecnicas">Habilidades Técnicas</label>
+                      <TagInput
+                        id="habilidadesTecnicas"
+                        value={formData.habilidadesTecnicas}
+                        onChange={(v) => setFormData(prev => ({ ...prev, habilidadesTecnicas: v }))}
+                        placeholder="Ex: JavaScript, Node.js... (Enter para adicionar)"
+                      />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Idiomas</label>
-                      <input type="text" name="idiomas" value={formData.idiomas} onChange={handleChange} className={styles.input} placeholder="Ex: Inglês Intermediário, Espanhol Básico" />
+                      <label className={styles.label} htmlFor="idiomas">Idiomas</label>
+                      <TagInput
+                        id="idiomas"
+                        value={formData.idiomas}
+                        onChange={(v) => setFormData(prev => ({ ...prev, idiomas: v }))}
+                        placeholder="Ex: Inglês Intermediário... (Enter para adicionar)"
+                      />
                     </div>
                   </div>
                 </div>
