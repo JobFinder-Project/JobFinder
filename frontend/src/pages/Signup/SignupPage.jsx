@@ -142,8 +142,21 @@ export default function SignupPage() {
         }
     };
 
+    const calcularForcaSenha = (senha) => {
+        if (!senha) return { score: 0, label: '', key: '' };
+        const temMinimo = senha.length >= 8;
+        const temNumero = /\d/.test(senha);
+        const temMaiuscula = /[A-Z]/.test(senha);
+        const temSimbolo = /[^A-Za-z0-9]/.test(senha);
+        const criterios = [temMinimo, temNumero || temMaiuscula, temSimbolo].filter(Boolean).length;
+        if (criterios <= 1) return { score: 1, label: 'Fraca', key: 'weak' };
+        if (criterios === 2) return { score: 2, label: 'Média', key: 'fair' };
+        return { score: 3, label: 'Forte', key: 'strong' };
+    };
+
     const renderStepContent = () => {
         if (currentStep === 1) {
+            const senhaForca = calcularForcaSenha(formData.senha);
             return (
                 <div className={styles.stepContent}>
                     <div className={styles.inputGroup}>
@@ -157,7 +170,21 @@ export default function SignupPage() {
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Senha *</label>
                         <input type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
-                        <span className={styles.hint}>Use letras, números e símbolos.</span>
+                        {formData.senha && (
+                            <div className={styles.passwordStrength}>
+                                <div className={styles.strengthBar}>
+                                    {[1, 2, 3].map(level => (
+                                        <div
+                                            key={level}
+                                            className={`${styles.strengthSegment} ${senhaForca.score >= level ? `${styles.active} ${styles[senhaForca.key]}` : ''}`}
+                                        />
+                                    ))}
+                                </div>
+                                <span className={`${styles.strengthLabel} ${styles[senhaForca.key]}`}>
+                                    {senhaForca.label}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             );
