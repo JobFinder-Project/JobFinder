@@ -54,10 +54,12 @@ export default function PerfilPage() {
           telefone: candidato.telefone || '',
           educacao: candidato.educacao || '',
           qualificacoes: candidato.qualificacoes || '',
-          cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
+          cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : (candidato.cursos || ''),
           descricao: candidato.descricao || '',
-          habilidadesTecnicas: candidato.habilidadesTecnicas || '',
-          idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : candidato.idiomas || '',
+          habilidadesTecnicas: Array.isArray(candidato.habilidadesTecnicas)
+            ? candidato.habilidadesTecnicas.join(', ')
+            : (candidato.habilidadesTecnicas || ''),
+          idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : (candidato.idiomas || ''),
           imagem: null // A imagem original não vai pro formData a menos que mude
         });
 

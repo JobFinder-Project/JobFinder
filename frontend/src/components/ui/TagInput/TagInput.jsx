@@ -15,9 +15,31 @@ export default function TagInput({ value = '', onChange, placeholder = 'Digite e
     const [inputValue, setInputValue] = useState('');
     const inputRef = useRef(null);
 
-    const tags = value
-        ? value.split(',').map(t => t.trim()).filter(t => t !== '')
-        : [];
+    const normalizeTags = (rawValue) => {
+        if (Array.isArray(rawValue)) {
+            return rawValue
+                .map(item => String(item).trim())
+                .filter(item => item !== '');
+        }
+
+        if (typeof rawValue === 'string') {
+            return rawValue
+                .split(',')
+                .map(item => item.trim())
+                .filter(item => item !== '');
+        }
+
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+            return [];
+        }
+
+        return String(rawValue)
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item !== '');
+    };
+
+    const tags = normalizeTags(value);
 
     const addTag = (raw) => {
         const tag = raw.trim();

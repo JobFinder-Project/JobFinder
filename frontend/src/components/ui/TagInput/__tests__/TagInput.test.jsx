@@ -26,6 +26,13 @@ describe('TagInput', () => {
         expect(screen.getByText('TypeScript')).toBeInTheDocument();
     });
 
+    it('exibe as tags quando o value chega em array', () => {
+        renderTagInput({ value: ['React', 'Node.js', 'TypeScript'] });
+        expect(screen.getByText('React')).toBeInTheDocument();
+        expect(screen.getByText('Node.js')).toBeInTheDocument();
+        expect(screen.getByText('TypeScript')).toBeInTheDocument();
+    });
+
     it('adiciona uma tag ao pressionar Enter e chama onChange com string separada por vírgula', async () => {
         const onChange = vi.fn();
         renderTagInput({ onChange });
