@@ -153,7 +153,7 @@ export default function MinhasCandidaturasPage() {
                     </span>
                                     )}
                                     <span className={styles.metaItem}>
-                      <BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura)}
+                      <BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura || app.createdAt)}
                     </span>
                                 </div>
 
