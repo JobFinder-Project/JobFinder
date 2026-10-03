@@ -225,7 +225,7 @@ describe('páginas críticas', () => {
     await userEvent.type(screen.getByPlaceholderText(/sua principal ocupação/i), 'Frontend');
     await userEvent.click(screen.getByRole('button', { name: /próximo passo/i }));
 
-    await userEvent.type(screen.getByPlaceholderText(/React, Node.js, Excel/i), 'React, Node.js');
+    await userEvent.type(screen.getByPlaceholderText(/Ex: React, Node\.js\.\.\./i), 'React{Enter}');
     await userEvent.click(screen.getByRole('checkbox', { name: /li e aceito os termos de uso/i }));
     await userEvent.click(
       screen.getByRole('checkbox', { name: /li e aceito a política de privacidade/i })

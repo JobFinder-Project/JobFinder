@@ -5,6 +5,7 @@ import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLa
 import CriarVagaModal from '../../features/vagas/CriarVagaModal/CriarVagaModal'
 import VagaEmpresaDetalhesModal from '../../features/vagas/VagaEmpresaDetalhesModal/VagaEmpresaDetalhesModal'
 import { empresaService } from '../../services/empresaService'
+import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen'
 import styles from './GerenciarVagas.module.css'
 
 export default function GerenciarVagas() {
@@ -51,6 +52,8 @@ export default function GerenciarVagas() {
 
         return matchBusca && matchStatus
     })
+
+    if (loading) return <LoadingScreen />;
 
     return (
         <DashboardLayout userType="employer">
@@ -115,9 +118,7 @@ export default function GerenciarVagas() {
                 </div>
 
                 <div className={styles.jobsList}>
-                    {loading ? (
-                        <div className={styles.emptyState}>Carregando vagas...</div>
-                    ) : vagasFiltradas.length > 0 ? (
+                    {vagasFiltradas.length > 0 ? (
                         vagasFiltradas.map((vaga) => (
                             <div key={vaga._id} className={styles.jobCard}>
 

@@ -306,3 +306,36 @@
   background-color: #dc2626;
   color: #ffffff;
 }
+
+.errorAlert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #fecaca;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0;
+  margin-bottom: 0.75rem;
+  transition: color 0.2s;
+}
+
+.backButton:hover {
+  color: #0f172a;
+}

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BiUser, BiCamera, BiSave, BiCheckCircle, BiTrash } from 'react-icons/bi';
+import { BiUser, BiCamera, BiSave, BiCheckCircle, BiTrash, BiArrowBack, BiErrorCircle } from 'react-icons/bi';
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout';
 import ExcluirContaModal from '../../features/conta/ExcluirContaModal/ExcluirContaModal';
+import TagInput from '../../components/ui/TagInput/TagInput';
 import { useAuth } from '../../contexts/AuthContext';
 import { candidatoService } from '../../services/candidatoService';
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
@@ -17,6 +18,7 @@ export default function PerfilPage() {
   const [showExcluirConta, setShowExcluirConta] = useState(false);
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -52,10 +54,12 @@ export default function PerfilPage() {
           telefone: candidato.telefone || '',
           educacao: candidato.educacao || '',
           qualificacoes: candidato.qualificacoes || '',
-          cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : candidato.cursos || '',
+          cursos: Array.isArray(candidato.cursos) ? candidato.cursos.join(', ') : (candidato.cursos || ''),
           descricao: candidato.descricao || '',
-          habilidadesTecnicas: candidato.habilidadesTecnicas || '',
-          idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : candidato.idiomas || '',
+          habilidadesTecnicas: Array.isArray(candidato.habilidadesTecnicas)
+            ? candidato.habilidadesTecnicas.join(', ')
+            : (candidato.habilidadesTecnicas || ''),
+          idiomas: Array.isArray(candidato.idiomas) ? candidato.idiomas.join(', ') : (candidato.idiomas || ''),
           imagem: null // A imagem original não vai pro formData a menos que mude
         });
 
@@ -104,12 +108,15 @@ export default function PerfilPage() {
       await candidatoService.atualizarPerfil(dataToSend);
 
       setSuccessMsg('Perfil atualizado com sucesso!');
+      setErrorMsg('');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
-      alert('Erro ao atualizar o perfil. Verifique os dados e tente novamente.');
+      setErrorMsg('Erro ao atualizar o perfil. Verifique os dados e tente novamente.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => setErrorMsg(''), 5000);
     } finally {
       setSaving(false);
     }
@@ -128,6 +135,13 @@ export default function PerfilPage() {
         <div className={styles.container}>
 
           <div className={styles.header}>
+            <button
+                type="button"
+                className={styles.backButton}
+                onClick={() => navigate('/candidato/dashboard')}
+            >
+              <BiArrowBack size={18} /> Voltar ao Dashboard
+            </button>
             <h1 className={styles.title}>Meu Perfil</h1>
             <p className={styles.subtitle}>Gerencie suas informações pessoais e profissionais.</p>
           </div>
@@ -136,6 +150,13 @@ export default function PerfilPage() {
               <div className={styles.successAlert}>
                 <BiCheckCircle size={24} />
                 {successMsg}
+              </div>
+          )}
+
+          {errorMsg && (
+              <div className={styles.errorAlert}>
+                <BiErrorCircle size={24} />
+                {errorMsg}
               </div>
           )}
 
@@ -229,23 +250,45 @@ export default function PerfilPage() {
                   <div className={styles.inputGrid}>
                     <div className={styles.inputGroup}>
                       <label className={styles.label}>Educação (Grau de Escolaridade)</label>
-                      <input type="text" name="educacao" value={formData.educacao} onChange={handleChange} className={styles.input} placeholder="Ex: Ensino Superior Completo" />
+                      <select name="educacao" value={formData.educacao} onChange={handleChange} className={styles.input}>
+                        <option value="">Selecione seu grau de instrução</option>
+                        <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
+                        <option value="Ensino Médio Completo">Ensino Médio Completo</option>
+                        <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
+                        <option value="Ensino Superior Completo">Ensino Superior Completo</option>
+                        <option value="Pós-graduação/Mestrado">Pós-graduação / Mestrado</option>
+                      </select>
                     </div>
                     <div className={styles.inputGroup}>
                       <label className={styles.label}>Cargo / Qualificação Principal</label>
                       <input type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Ex: Desenvolvedor Front-end" />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Cursos Extracurriculares (Separados por vírgula)</label>
-                      <input type="text" name="cursos" value={formData.cursos} onChange={handleChange} className={styles.input} placeholder="Ex: React Avançado, UI/UX Design" />
+                      <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
+                      <TagInput
+                        id="cursos"
+                        value={formData.cursos}
+                        onChange={(v) => setFormData(prev => ({ ...prev, cursos: v }))}
+                        placeholder="Ex: React Avançado... (Enter para adicionar)"
+                      />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Habilidades Técnicas</label>
-                      <input type="text" name="habilidadesTecnicas" value={formData.habilidadesTecnicas} onChange={handleChange} className={styles.input} placeholder="Ex: JavaScript, Node.js, Figma" />
+                      <label className={styles.label} htmlFor="habilidadesTecnicas">Habilidades Técnicas</label>
+                      <TagInput
+                        id="habilidadesTecnicas"
+                        value={formData.habilidadesTecnicas}
+                        onChange={(v) => setFormData(prev => ({ ...prev, habilidadesTecnicas: v }))}
+                        placeholder="Ex: JavaScript, Node.js... (Enter para adicionar)"
+                      />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
-                      <label className={styles.label}>Idiomas</label>
-                      <input type="text" name="idiomas" value={formData.idiomas} onChange={handleChange} className={styles.input} placeholder="Ex: Inglês Intermediário, Espanhol Básico" />
+                      <label className={styles.label} htmlFor="idiomas">Idiomas</label>
+                      <TagInput
+                        id="idiomas"
+                        value={formData.idiomas}
+                        onChange={(v) => setFormData(prev => ({ ...prev, idiomas: v }))}
+                        placeholder="Ex: Inglês Intermediário... (Enter para adicionar)"
+                      />
                     </div>
                   </div>
                 </div>
