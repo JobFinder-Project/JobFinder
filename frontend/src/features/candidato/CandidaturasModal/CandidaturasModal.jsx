@@ -80,7 +80,7 @@ export default function CandidaturasModal({ onClose }) {
                     <h3>{candidatura.vaga?.nome}</h3>
                     <p><strong>Empresa:</strong> {candidatura.vaga?.empresa?.nome}</p>
                     <p><strong>Status:</strong> {candidatura.status}</p>
-                    <p><strong>Data:</strong> {formatDate(candidatura.dataCandidatura)}</p>
+                    <p><strong>Data:</strong> {formatDate(candidatura.dataCandidatura || candidatura.createdAt)}</p>
                   </li>
                 ))}
               </ul>
@@ -95,7 +95,7 @@ export default function CandidaturasModal({ onClose }) {
             <p><strong>Status:</strong> {selectedCandidatura.status}</p>
             <p><strong>Área:</strong> {selectedCandidatura.vaga?.area}</p>
             <p><strong>Requisitos:</strong> {selectedCandidatura.vaga?.requisitos}</p>
-            <p><strong>Data:</strong> {formatDate(selectedCandidatura.dataCandidatura)}</p>
+            <p><strong>Data:</strong> {formatDate(selectedCandidatura.dataCandidatura || selectedCandidatura.createdAt)}</p>
             <hr />
             <div className={styles.detalheActions}>
               <button className={styles.btnVoltar} onClick={handleVoltar}>
