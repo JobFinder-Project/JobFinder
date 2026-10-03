@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { BiBriefcase, BiShow, BiHide, BiErrorCircle } from 'react-icons/bi';
+import { BiBriefcase, BiShow, BiHide, BiErrorCircle, BiCheckCircle } from 'react-icons/bi';
 import { useAuth } from '../../contexts/AuthContext';
 import styles from './Login.module.css';
 
@@ -14,10 +14,11 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [cadastroSucesso, setCadastroSucesso] = useState(false);
 
   useEffect(() => {
     if (searchParams.get('cadastro') === 'sucesso') {
-      alert('Cadastro realizado com sucesso! Faça login para acessar sua conta.');
+      setCadastroSucesso(true);
       navigate('/login', { replace: true });
     }
   }, [searchParams, navigate]);
@@ -85,6 +86,13 @@ export default function Login() {
 
               <div className={styles.cardContent}>
 
+                {cadastroSucesso && (
+                    <div className={styles.successAlert}>
+                      <BiCheckCircle size={20} className={styles.successIcon} />
+                      <span>Cadastro realizado com sucesso! Faça login para acessar sua conta.</span>
+                    </div>
+                )}
+
                 {errorMsg && (
                     <div className={styles.errorAlert}>
                       <BiErrorCircle size={20} className={styles.errorIcon} />
@@ -137,10 +145,6 @@ export default function Login() {
                   </div>
 
                   <div className={styles.optionsGroup}>
-                    <label className={styles.rememberMe}>
-                      <input type="checkbox" className={styles.checkbox} />
-                      <span>Lembrar-me</span>
-                    </label>
                     <Link to='/recuperar-senha' className={styles.forgotPassword}>
                       Esqueceu a senha?
                     </Link>

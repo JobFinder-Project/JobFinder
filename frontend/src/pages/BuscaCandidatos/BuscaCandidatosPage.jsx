@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { BiSearch, BiFilterAlt } from 'react-icons/bi'
+import { BiSearch } from 'react-icons/bi'
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout'
 import CandidateCard from '../../features/candidato/CandidateCard'
 import { empresaService } from '../../services/empresaService'
@@ -105,10 +105,6 @@ export default function BuscaCandidatos() {
                             </button>
                         </div>
 
-                        <button type="button" className={styles.filterBtn}>
-                            <BiFilterAlt size={20} />
-                            <span>Filtros</span>
-                        </button>
                     </form>
                     <p id="candidate-search-help" className={styles.emptyText}>
                         Use ao menos 2 caracteres. Dados de contato aparecem somente na gestão de candidaturas.
@@ -129,8 +125,7 @@ export default function BuscaCandidatos() {
                 <div className={styles.candidatesGrid}>
                     {loading ? (
                         <div className={styles.loadingState}>
-                            <div className={styles.spinner}></div>
-                            <p>Carregando talentos...</p>
+                            <p>Buscando candidatos...</p>
                         </div>
                     ) : candidatos.length > 0 ? (
                         candidatos.map((candidato, index) => <CandidateCard key={`${candidato.nome}-${index}`} candidato={candidato} />)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BiMap, BiCalendar, BiBuilding, BiCheckCircle, BiFile } from 'react-icons/bi';
+import { BiMap, BiCalendar, BiBuilding, BiCheckCircle, BiFile, BiErrorCircle } from 'react-icons/bi';
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout';
 import { candidatoService } from '../../services/candidatoService';
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
@@ -16,6 +16,7 @@ export default function MinhasCandidaturasPage() {
     const [candidaturaToCancel, setCandidaturaToCancel] = useState(null);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [isCanceling, setIsCanceling] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     useEffect(() => {
         fetchCandidaturas();
@@ -65,7 +66,8 @@ export default function MinhasCandidaturasPage() {
             fetchCandidaturas();
         } catch (error) {
             console.error('Erro ao cancelar:', error);
-            alert('Erro ao cancelar candidatura. Tente novamente.');
+            setErrorMsg('Erro ao cancelar candidatura. Tente novamente.');
+            setTimeout(() => setErrorMsg(''), 5000);
         } finally {
             setIsCanceling(false);
         }
@@ -93,6 +95,13 @@ export default function MinhasCandidaturasPage() {
                     <h1 className={styles.title}>Minhas Candidaturas</h1>
                     <p className={styles.subtitle}>Acompanhe o status dos seus processos seletivos.</p>
                 </div>
+
+                {errorMsg && (
+                    <div className={styles.errorAlert}>
+                        <BiErrorCircle size={20} />
+                        <span>{errorMsg}</span>
+                    </div>
+                )}
 
                 <div className={styles.statsGrid}>
                     <div className={styles.statCard}>
@@ -144,8 +153,8 @@ export default function MinhasCandidaturasPage() {
                     </span>
                                     )}
                                     <span className={styles.metaItem}>
-                    {/*<BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura)}*/}
-                  </span>
+                      <BiCalendar size={16} /> Candidatou-se em {formatDate(app.dataCandidatura)}
+                    </span>
                                 </div>
 
                                 <div className={styles.cardFooter}>
