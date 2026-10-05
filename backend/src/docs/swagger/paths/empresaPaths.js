@@ -215,6 +215,88 @@ export const empresaPaths = {
     },
   },
 
+  '/empresa/candidatos/favoritos': {
+    get: {
+      tags: ['Empresa'],
+      summary: 'Listar candidatos favoritos da empresa',
+      description:
+        'Retorna a shortlist da empresa autenticada. A consulta é sempre limitada à empresa da sessão.',
+      security: [{ sessionAuth: [] }],
+      responses: {
+        200: {
+          description: 'Candidatos favoritos da empresa autenticada',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidatosFavoritosResponse' },
+            },
+          },
+        },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+      },
+    },
+  },
+
+  '/empresa/candidatos/{candidatoId}/favorito': {
+    post: {
+      tags: ['Empresa'],
+      summary: 'Favoritar candidato',
+      description:
+        'Adiciona o candidato à shortlist da empresa autenticada. A operação é idempotente e não duplica favoritos.',
+      security: [{ sessionAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'candidatoId',
+          required: true,
+          schema: { type: 'string' },
+        },
+      ],
+      responses: {
+        200: {
+          description: 'Candidato favoritado',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidatoFavoritoMutationResponse' },
+            },
+          },
+        },
+        400: { description: 'Identificador inválido' },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+        404: { description: 'Candidato não encontrado' },
+      },
+    },
+    delete: {
+      tags: ['Empresa'],
+      summary: 'Remover candidato dos favoritos',
+      description:
+        'Remove o candidato da shortlist da empresa autenticada. A operação é idempotente mesmo quando o favorito não existe.',
+      security: [{ sessionAuth: [] }],
+      parameters: [
+        {
+          in: 'path',
+          name: 'candidatoId',
+          required: true,
+          schema: { type: 'string' },
+        },
+      ],
+      responses: {
+        200: {
+          description: 'Candidato removido dos favoritos',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/CandidatoFavoritoMutationResponse' },
+            },
+          },
+        },
+        400: { description: 'Identificador inválido' },
+        401: { description: 'Não autenticado' },
+        403: { description: 'Acesso negado' },
+      },
+    },
+  },
+
   '/empresa/candidatos/buscar': {
     get: {
       tags: ['Empresa'],
@@ -241,7 +323,8 @@ export const empresaPaths = {
       ],
       responses: {
         200: {
-          description: 'Lista de perfis profissionais sem contato ou identificadores internos',
+          description:
+            'Lista de perfis profissionais sem contato. Inclui id operacional apenas para ações autenticadas de favoritos.',
           content: {
             'application/json': {
               schema: { $ref: '#/components/schemas/BuscaCandidatosResponse' },

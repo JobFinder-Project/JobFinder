@@ -4,6 +4,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import Candidato from '../../src/models/candidatoModel.js';
 import Candidatura from '../../src/models/candidaturaModel.js';
 import Empresa from '../../src/models/empresaModel.js';
+import FavoritoCandidato from '../../src/models/favoritoCandidatoModel.js';
 import Vaga from '../../src/models/vagasModel.js';
 import { mongoMemoryOptions } from './mongoMemoryOptions.js';
 
@@ -11,7 +12,13 @@ export const startTestDatabase = async () => {
   const mongoServer = await MongoMemoryServer.create(mongoMemoryOptions);
   await mongoose.connect(mongoServer.getUri());
 
-  await Promise.all([Candidato.init(), Empresa.init(), Vaga.init(), Candidatura.init()]);
+  await Promise.all([
+    Candidato.init(),
+    Empresa.init(),
+    Vaga.init(),
+    Candidatura.init(),
+    FavoritoCandidato.init(),
+  ]);
 
   return mongoServer;
 };

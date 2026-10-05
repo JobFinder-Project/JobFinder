@@ -234,6 +234,24 @@ export const schemas = {
     ],
   },
 
+  CandidatoEmpresa: {
+    allOf: [
+      { $ref: '#/components/schemas/CandidatoPublico' },
+      {
+        type: 'object',
+        description:
+          'Perfil profissional em contexto autenticado de empresa, com identificador necessário para ações de favoritos.',
+        properties: {
+          id: {
+            type: 'string',
+            description: 'Identificador usado apenas para ações autenticadas.',
+          },
+          favoritado: { type: 'boolean' },
+        },
+      },
+    ],
+  },
+
   EmpresaPerfil: {
     type: 'object',
     description: 'Dados visíveis à própria empresa autenticada.',
@@ -355,7 +373,14 @@ export const schemas = {
   BuscaCandidatosResponse: {
     type: 'object',
     properties: {
-      candidatos: { type: 'array', items: { $ref: '#/components/schemas/CandidatoPublico' } },
+      candidatos: { type: 'array', items: { $ref: '#/components/schemas/CandidatoEmpresa' } },
+    },
+  },
+
+  CandidatosFavoritosResponse: {
+    type: 'object',
+    properties: {
+      candidatos: { type: 'array', items: { $ref: '#/components/schemas/CandidatoEmpresa' } },
     },
   },
 
@@ -401,6 +426,17 @@ export const schemas = {
       success: { type: 'boolean', example: true },
       message: { type: 'string' },
       candidatura: { $ref: '#/components/schemas/CandidaturaBase' },
+    },
+  },
+
+  CandidatoFavoritoMutationResponse: {
+    type: 'object',
+    properties: {
+      success: { type: 'boolean', example: true },
+      message: { type: 'string' },
+      candidato: { $ref: '#/components/schemas/CandidatoEmpresa' },
+      candidatoId: { type: 'string' },
+      favoritado: { type: 'boolean' },
     },
   },
 };
