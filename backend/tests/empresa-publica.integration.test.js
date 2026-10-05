@@ -3,7 +3,9 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from '@jest/glob
 
 import app from '../src/app.js';
 import Empresa from '../src/models/empresaModel.js';
+import Vaga from '../src/models/vagasModel.js';
 import { registerAndLoginEmpresa } from './helpers/auth.js';
+import { buildVaga } from './helpers/factories.js';
 import { clearTestDatabase, startTestDatabase, stopTestDatabase } from './helpers/database.js';
 
 let mongoServer;
@@ -147,6 +149,44 @@ describe('Perfil público de empresa', () => {
       valores: ['Inclusão', 'Qualidade'],
       beneficios: ['Bolsa de estudos', 'Horário flexível'],
     });
+  });
+
+  it('deve listar vagas abertas e vagas legadas sem status no perfil público', async () => {
+    const { agent } = await registerAndLoginEmpresa(app, {
+      nome: 'Empresa Com Vagas Legadas',
+    });
+
+    await agent.post('/empresa/vagas/criar').send(
+      buildVaga(undefined, {
+        nome: 'Vaga Aberta Atual',
+      })
+    );
+
+    const legacyResponse = await agent.post('/empresa/vagas/criar').send(
+      buildVaga(undefined, {
+        nome: 'Vaga Legada Sem Status',
+      })
+    );
+    await Vaga.updateOne({ _id: legacyResponse.body.vaga._id }, { $unset: { status: '' } });
+
+    const closedResponse = await agent.post('/empresa/vagas/criar').send(
+      buildVaga(undefined, {
+        nome: 'Vaga Fechada',
+      })
+    );
+    await agent.patch(`/empresa/vagas/${closedResponse.body.vaga._id}/status`).send({
+      status: 'Fechada',
+    });
+
+    const dashboardResponse = await agent.get('/empresa/dashboard');
+    const publicResponse = await request(app).get(`/empresa/publica/${dashboardResponse.body.empresa.slug}`);
+
+    expect(publicResponse.statusCode).toBe(200);
+    expect(publicResponse.body.vagas.map((vaga) => vaga.nome)).toEqual(
+      expect.arrayContaining(['Vaga Aberta Atual', 'Vaga Legada Sem Status'])
+    );
+    expect(publicResponse.body.vagas.map((vaga) => vaga.nome)).not.toContain('Vaga Fechada');
+    expect(publicResponse.body.vagas).toHaveLength(2);
   });
 
   it('deve retornar 404 para perfil público inexistente', async () => {

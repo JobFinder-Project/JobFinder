@@ -67,6 +67,9 @@ const isAllowedVagaImageContent = (file) => {
 };
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const publicOpenVagaStatusFilter = {
+  $or: [{ status: 'Aberta' }, { status: { $exists: false } }, { status: null }],
+};
 
 const slugifyEmpresaNome = (nome) => {
   const slug = String(nome || '')
@@ -288,9 +291,10 @@ class EmpresaController {
         return next(new Error404('Empresa não encontrada.'));
       }
 
-      const vagas = await Vaga.find({ empresa: empresa._id, status: 'Aberta' }).sort({
-        createdAt: -1,
-      });
+      const vagas = await Vaga.find({
+        empresa: empresa._id,
+        ...publicOpenVagaStatusFilter,
+      }).sort({ createdAt: -1 });
 
       res.status(200).json({
         empresa: toEmpresaPublicProfileDTO(empresa),
