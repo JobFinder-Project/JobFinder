@@ -214,7 +214,8 @@
 
 .input:focus,
 .textarea:focus {
-  outline: none;
+  outline: 2px solid #075a9e;
+    outline-offset: 2px;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }

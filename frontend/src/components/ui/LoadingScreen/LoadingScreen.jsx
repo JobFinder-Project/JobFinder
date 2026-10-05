@@ -2,7 +2,7 @@ import { OrbitProgress } from 'react-loading-indicators';
 
 export default function LoadingScreen() {
     return (
-        <div style={{
+        <div role="status" aria-label="Carregando..." style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

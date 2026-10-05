@@ -60,6 +60,8 @@ export default function Sidebar({
             <button
                 className={`${styles.mobileOpenBtn} ${isExpanded ? styles.hidden : ''}`}
                 onClick={() => setIsExpanded(true)}
+                aria-label="Abrir menu"
+                aria-expanded={isExpanded}
             >
                 <BiMenu size={28} />
             </button>
@@ -77,6 +79,8 @@ export default function Sidebar({
                     <button
                         className={`${styles.desktopToggleBtn} ${isExpanded ? styles.rotated : ''}`}
                         onClick={() => setIsExpanded(!isExpanded)}
+                        aria-label={isExpanded ? 'Recolher menu' : 'Expandir menu'}
+                        aria-expanded={isExpanded}
                     >
                         <BiChevronRight size={24} />
                     </button>
@@ -87,7 +91,7 @@ export default function Sidebar({
                     <span className={styles.logoText}>JobFinder</span>
                 </Link>
 
-                <nav className={styles.nav}>
+                <nav className={styles.nav} aria-label="Menu principal">
                     {links.map((link) => {
                         const Icon = link.icon;
                         const isLinkActive = isActive(link.path);
@@ -111,6 +115,7 @@ export default function Sidebar({
                                 key={link.label}
                                 to={link.path}
                                 className={`${styles.navItem} ${isLinkActive ? styles.active : ''}`}
+                                aria-current={isLinkActive ? 'page' : undefined}
                                 title={!isExpanded ? link.label : undefined}
                             >
                                 <Icon size={24} className={styles.navIcon} />

@@ -141,7 +141,8 @@
     background-color: #ffffff;
     color: #0f172a;
     font-size: 0.95rem;
-    outline: none;
+    outline: 2px solid #075a9e;
+    outline-offset: 2px;
     transition: all 0.2s;
 }
 .input {

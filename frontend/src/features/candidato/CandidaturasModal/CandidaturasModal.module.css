@@ -52,7 +52,7 @@
 
 .closeButton {
   color: #aaa;
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: bold;
   cursor: pointer;
 }
@@ -96,7 +96,7 @@
 .candidaturaItem p {
   margin: 0 0 5px;
   color: #666;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .noData {

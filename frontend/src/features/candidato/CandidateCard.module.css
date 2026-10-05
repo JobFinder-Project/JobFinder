@@ -82,7 +82,7 @@
 }
 
 .icon {
-  color: #94a3b8;
+  color: #64748b;
   flex-shrink: 0;
 }
 
@@ -137,7 +137,7 @@
 
 .skillsEmpty {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: #64748b;
   font-style: italic;
 }
 
@@ -282,7 +282,7 @@
 .emptyText {
   margin: 0;
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #64748b;
   font-style: italic;
 }
 

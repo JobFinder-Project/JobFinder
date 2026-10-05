@@ -160,16 +160,16 @@ export default function SignupPage() {
             return (
                 <div className={styles.stepContent}>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Nome {isEmployer ? 'da Empresa' : 'Completo'} *</label>
-                        <input type="text" name="nome" value={formData.nome} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "Razão Social ou Nome Fantasia" : "Seu nome completo"} />
+                        <label className={styles.label} htmlFor="signup-field-1">Nome {isEmployer ? 'da Empresa' : 'Completo'} *</label>
+                        <input id="signup-field-1" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="nome" value={formData.nome} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "Razão Social ou Nome Fantasia" : "Seu nome completo"} />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>E-mail *</label>
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="seu@email.com" />
+                        <label className={styles.label} htmlFor="signup-field-2">E-mail *</label>
+                        <input id="signup-field-2" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="seu@email.com" />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Senha *</label>
-                        <input type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
+                        <label className={styles.label} htmlFor="signup-field-3">Senha *</label>
+                        <input id="signup-field-3" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
                         {formData.senha && (
                             <div className={styles.passwordStrength}>
                                 <div className={styles.strengthBar}>
@@ -196,8 +196,8 @@ export default function SignupPage() {
 
                     {!isEmployer && (
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Foto de Perfil (Opcional)</label>
-                            <input
+                            <label className={styles.label} htmlFor="signup-field-4">Foto de Perfil (Opcional)</label>
+                            <input id="signup-field-4" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)}
                                 type="file"
                                 name="imagem"
                                 accept="image/*"
@@ -208,12 +208,12 @@ export default function SignupPage() {
                     )}
 
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>{isEmployer ? 'CNPJ *' : 'CPF *'}</label>
-                        <input type="text" name={isEmployer ? "cnpj" : "cpf"} value={isEmployer ? formData.cnpj : formData.cpf} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "00.000.000/0000-00" : "000.000.000-00"} />
+                        <label className={styles.label} htmlFor="signup-field-5">{isEmployer ? 'CNPJ *' : 'CPF *'}</label>
+                        <input id="signup-field-5" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name={isEmployer ? "cnpj" : "cpf"} value={isEmployer ? formData.cnpj : formData.cpf} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "00.000.000/0000-00" : "000.000.000-00"} />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Telefone *</label>
-                        <input type="text" name={isEmployer ? "fone" : "telefone"} value={isEmployer ? formData.fone : formData.telefone} onChange={handleChange} required className={styles.input} placeholder="(00) 00000-0000" />
+                        <label className={styles.label} htmlFor="signup-field-6">Telefone *</label>
+                        <input id="signup-field-6" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name={isEmployer ? "fone" : "telefone"} value={isEmployer ? formData.fone : formData.telefone} onChange={handleChange} required className={styles.input} placeholder="(00) 00000-0000" />
                     </div>
                 </div>
             );
@@ -224,13 +224,13 @@ export default function SignupPage() {
                 return (
                     <div className={styles.stepContent}>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Site da Empresa</label>
+                            <label className={styles.label} htmlFor="signup-field-7">Site da Empresa</label>
                             {/* CAMPO CORRIGIDO: TYPE="TEXT" NO LUGAR DE "URL" */}
-                            <input type="text" name="site" value={formData.site} onChange={handleChange} className={styles.input} placeholder="www.suaempresa.com.br" />
+                            <input id="signup-field-7" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="site" value={formData.site} onChange={handleChange} className={styles.input} placeholder="www.suaempresa.com.br" />
                         </div>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Sobre a Empresa (Bio)</label>
-                            <textarea name="bio" value={formData.bio} onChange={handleChange} className={styles.textarea} placeholder="Conte um pouco sobre o que vocês fazem..." maxLength={500} rows={4} />
+                            <label className={styles.label} htmlFor="signup-field-bio">Sobre a Empresa (Bio)</label>
+                            <textarea id="signup-field-bio" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="bio" value={formData.bio} onChange={handleChange} className={styles.textarea} placeholder="Conte um pouco sobre o que vocês fazem..." maxLength={500} rows={4} />
                         </div>
                     </div>
                 );
@@ -238,8 +238,8 @@ export default function SignupPage() {
                 return (
                     <div className={styles.stepContent}>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Escolaridade *</label>
-                            <select name="educacao" value={formData.educacao} onChange={handleChange} required className={styles.input}>
+                            <label className={styles.label} htmlFor="signup-field-8">Escolaridade *</label>
+                            <select id="signup-field-8" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="educacao" value={formData.educacao} onChange={handleChange} required className={styles.input}>
                                 <option value="" disabled>Selecione seu grau de instrução</option>
                                 <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
                                 <option value="Ensino Médio Completo">Ensino Médio Completo</option>
@@ -249,8 +249,8 @@ export default function SignupPage() {
                             </select>
                         </div>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Cargo / Qualificação</label>
-                            <input type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Sua principal ocupação" />
+                            <label className={styles.label} htmlFor="signup-field-9">Cargo / Qualificação</label>
+                            <input id="signup-field-9" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Sua principal ocupação" />
                         </div>
                     </div>
                 );
@@ -314,7 +314,7 @@ export default function SignupPage() {
                 </div>
             </header>
 
-            <div className={styles.contentWrapper}>
+            <main id="main-content" tabIndex={-1} className={styles.contentWrapper}>
                 <div className={styles.formContainer}>
 
                     <div className={styles.textCenter}>
@@ -349,7 +349,8 @@ export default function SignupPage() {
                         </div>
 
                         <div className={styles.cardContent}>
-                            {errorMsg && <div className={styles.errorAlert}>{errorMsg}</div>}
+                            <div aria-live="polite" className="sr-only">Etapa {currentStep} de {totalSteps}: {steps[currentStep - 1].title}</div>
+                            {errorMsg && <div id="signup-error" role="alert" className={styles.errorAlert}>{errorMsg}</div>}
 
                             <form onSubmit={handleNext} className={styles.form}>
                                 <div key={currentStep}>{renderStepContent()}</div>
@@ -408,7 +409,7 @@ export default function SignupPage() {
                     </div>
 
                 </div>
-            </div>
+            </main>
         </div>
     );
 }

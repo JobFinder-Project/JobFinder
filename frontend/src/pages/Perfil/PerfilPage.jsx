@@ -91,6 +91,7 @@ export default function PerfilPage() {
     e.preventDefault();
     setSaving(true);
     setSuccessMsg('');
+    setErrorMsg('');
 
     try {
       const dataToSend = new FormData();
@@ -147,14 +148,14 @@ export default function PerfilPage() {
           </div>
 
           {successMsg && (
-              <div className={styles.successAlert}>
+              <div role="status" className={styles.successAlert}>
                 <BiCheckCircle size={24} />
                 {successMsg}
               </div>
           )}
 
           {errorMsg && (
-              <div className={styles.errorAlert}>
+              <div id="perfil-error" role="alert" className={styles.errorAlert}>
                 <BiErrorCircle size={24} />
                 {errorMsg}
               </div>
@@ -176,12 +177,14 @@ export default function PerfilPage() {
                           type="button"
                           className={styles.avatarEditBtn}
                           onClick={() => fileInputRef.current?.click()}
+                          aria-label="Alterar foto de perfil"
                           title="Alterar foto"
                       >
                         <BiCamera size={20} />
                       </button>
                     </div>
-                    <input
+                    <label className="sr-only" htmlFor="perfil-imagem">Foto de perfil</label>
+                    <input id="perfil-imagem"
                         type="file"
                         accept="image/*"
                         ref={fileInputRef}
@@ -204,20 +207,20 @@ export default function PerfilPage() {
                 <div className={styles.cardContent}>
                   <div className={styles.inputGrid}>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Nome Completo</label>
-                      <input type="text" name="nome" value={formData.nome} onChange={handleChange} className={styles.input} required />
+                      <label className={styles.label} htmlFor="perfil-field-1">Nome Completo</label>
+                      <input id="perfil-field-1" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="nome" value={formData.nome} onChange={handleChange} className={styles.input} required />
                     </div>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>CPF</label>
-                      <input type="text" name="cpf" value={formData.cpf} onChange={handleChange} className={styles.input} disabled title="O CPF não pode ser alterado" />
+                      <label className={styles.label} htmlFor="perfil-field-2">CPF</label>
+                      <input id="perfil-field-2" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="cpf" value={formData.cpf} onChange={handleChange} className={styles.input} disabled title="O CPF não pode ser alterado" />
                     </div>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>E-mail</label>
-                      <input type="email" name="email" value={formData.email} onChange={handleChange} className={styles.input} required />
+                      <label className={styles.label} htmlFor="perfil-field-3">E-mail</label>
+                      <input id="perfil-field-3" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)} type="email" name="email" value={formData.email} onChange={handleChange} className={styles.input} required />
                     </div>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Telefone</label>
-                      <input type="text" name="telefone" value={formData.telefone} onChange={handleChange} className={styles.input} placeholder="(11) 99999-9999" />
+                      <label className={styles.label} htmlFor="perfil-field-4">Telefone</label>
+                      <input id="perfil-field-4" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="telefone" value={formData.telefone} onChange={handleChange} className={styles.input} placeholder="(11) 99999-9999" />
                     </div>
                   </div>
                 </div>
@@ -229,8 +232,8 @@ export default function PerfilPage() {
                 </div>
                 <div className={styles.cardContent}>
                   <div className={styles.inputGroup}>
-                    <label className={styles.label}>Descrição (Sobre você)</label>
-                    <textarea
+                    <label className={styles.label} htmlFor="perfil-field-5">Descrição (Sobre você)</label>
+                    <textarea id="perfil-field-5" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                         name="descricao"
                         value={formData.descricao}
                         onChange={handleChange}
@@ -249,8 +252,8 @@ export default function PerfilPage() {
                 <div className={styles.cardContent}>
                   <div className={styles.inputGrid}>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Educação (Grau de Escolaridade)</label>
-                      <select name="educacao" value={formData.educacao} onChange={handleChange} className={styles.input}>
+                      <label className={styles.label} htmlFor="perfil-field-6">Educação (Grau de Escolaridade)</label>
+                      <select id="perfil-field-6" name="educacao" value={formData.educacao} onChange={handleChange} className={styles.input}>
                         <option value="">Selecione seu grau de instrução</option>
                         <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
                         <option value="Ensino Médio Completo">Ensino Médio Completo</option>
@@ -260,8 +263,8 @@ export default function PerfilPage() {
                       </select>
                     </div>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Cargo / Qualificação Principal</label>
-                      <input type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Ex: Desenvolvedor Front-end" />
+                      <label className={styles.label} htmlFor="perfil-field-7">Cargo / Qualificação Principal</label>
+                      <input id="perfil-field-7" aria-describedby={errorMsg ? "perfil-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Ex: Desenvolvedor Front-end" />
                     </div>
                     <div className={`${styles.inputGroup} ${styles.colSpan2}`}>
                       <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>

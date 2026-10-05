@@ -41,6 +41,7 @@ export default function CategoryFilter({ areas, selectedCategory, onCategoryClic
         className={`${styles.categoryArrow} ${styles.left} ${!canScrollLeft ? styles.disabled : ''}`}
         onClick={scrollLeft}
         disabled={!canScrollLeft}
+        aria-label="Rolar categorias para a esquerda"
       >
         <BiChevronLeft size={18} />
       </button>
@@ -55,6 +56,7 @@ export default function CategoryFilter({ areas, selectedCategory, onCategoryClic
             key={area}
             className={`${styles.categoryChip} ${selectedCategory === area ? styles.active : ''}`}
             onClick={() => onCategoryClick(area)}
+            aria-pressed={selectedCategory === area}
           >
             {area}
           </button>
@@ -65,6 +67,7 @@ export default function CategoryFilter({ areas, selectedCategory, onCategoryClic
         className={`${styles.categoryArrow} ${styles.right} ${!canScrollRight ? styles.disabled : ''}`}
         onClick={scrollRight}
         disabled={!canScrollRight}
+        aria-label="Rolar categorias para a direita"
       >
         <BiChevronRight size={18} />
       </button>

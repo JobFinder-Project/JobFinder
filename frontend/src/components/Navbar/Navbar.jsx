@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
       <>
-        <nav className={styles.nav}>
+        <nav className={styles.nav} aria-label="Barra de navegação">
           <div className={styles.navContainer}>
             <Link to="/" className={styles.logoGroup}>
               <BiBriefcase className={styles.logoIcon} />

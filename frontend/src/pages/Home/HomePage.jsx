@@ -38,6 +38,8 @@ export default function Home() {
 
         <Navbar />
 
+        <main id="main-content" tabIndex={-1}>
+
         <section id="cadastro" className={styles.heroSection}>
           <div className={styles.heroContainer}>
             <h1 className={styles.heroTitle}>
@@ -112,6 +114,7 @@ export default function Home() {
           </div>
         </section>
 
+        </main>
         <Footer />
 
         {isModalOpen && (

@@ -35,7 +35,6 @@ describe('CategoryFilter', () => {
       />
     );
 
-    const arrowButtons = screen.getAllByRole('button', { name: '' });
-    expect(arrowButtons[0]).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Rolar categorias para a esquerda' })).toBeDisabled();
   });
 });

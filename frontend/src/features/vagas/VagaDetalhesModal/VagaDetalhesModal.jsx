@@ -7,6 +7,7 @@ import styles from './VagaDetalhesModal.module.css';
 export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancelRequest }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [confirmingCancel, setConfirmingCancel] = useState(false);
 
   const [localCandidatura, setLocalCandidatura] = useState(candidatura || null);
   const [checkingStatus, setCheckingStatus] = useState(!candidatura);
@@ -54,17 +55,20 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
     if (onCancelRequest) {
       onCancelRequest(localCandidatura);
     } else {
-      if (window.confirm('Tem certeza que deseja cancelar sua candidatura para esta vaga?')) {
-        setLoading(true);
-        try {
-          await candidatoService.cancelarCandidatura(localCandidatura._id);
-          setLocalCandidatura(null); // O botão volta a ser "Candidatar-se"
-        } catch (err) {
-          setError('Erro ao cancelar candidatura.');
-        } finally {
-          setLoading(false);
-        }
-      }
+      setConfirmingCancel(true);
+    }
+  };
+
+  const confirmCancelLocal = async () => {
+    setLoading(true);
+    try {
+      await candidatoService.cancelarCandidatura(localCandidatura._id);
+      setLocalCandidatura(null);
+      setConfirmingCancel(false);
+    } catch {
+      setError('Erro ao cancelar candidatura.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,6 +85,8 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
   const isPending = localCandidatura?.status?.toLowerCase().includes('pendente');
 
   return (
+    <>
+      <div inert={confirmingCancel}>
       <Modal title="Detalhes da Vaga" onClose={onClose} size="lg">
         <Modal.Body>
           <div className={styles.container}>
@@ -91,7 +97,7 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
                   {imageSrc ? (
                       <img src={imageSrc} alt={vaga.nome} className={styles.jobImage} />
                   ) : (
-                      <div className={styles.placeholderImage}>
+                      <div className={styles.placeholderImage} aria-hidden="true">
                         <BiBuilding size={40} />
                       </div>
                   )}
@@ -108,7 +114,7 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
               </div>
 
               <div className={styles.actionContainer}>
-                {error && <p className={styles.errorText}>{error}</p>}
+                {error && <p role="alert" className={styles.errorText}>{error}</p>}
 
                 {checkingStatus ? (
                     <button className={styles.btnApply} disabled>
@@ -190,5 +196,14 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
           </div>
         </Modal.Body>
       </Modal>
+      </div>
+      {confirmingCancel && (
+        <Modal title="Confirmar cancelamento" onClose={() => setConfirmingCancel(false)}>
+          <p>Tem certeza que deseja cancelar sua candidatura para esta vaga?</p>
+          <button type="button" onClick={() => setConfirmingCancel(false)}>Manter candidatura</button>
+          <button type="button" onClick={confirmCancelLocal} disabled={loading}>Sim, cancelar</button>
+        </Modal>
+      )}
+    </>
   );
 }

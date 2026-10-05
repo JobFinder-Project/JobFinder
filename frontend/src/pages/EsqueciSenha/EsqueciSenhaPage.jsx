@@ -37,7 +37,7 @@ export default function EsqueciSenha() {
           </div>
         </header>
 
-        <div className={styles.contentWrapper}>
+        <main id="main-content" tabIndex={-1} className={styles.contentWrapper}>
           <div className={styles.formContainer}>
 
             <div className={styles.textCenter}>
@@ -99,7 +99,7 @@ export default function EsqueciSenha() {
             </div>
 
           </div>
-        </div>
+        </main>
       </div>
   )
 }

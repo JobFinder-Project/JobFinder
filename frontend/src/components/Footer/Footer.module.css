@@ -38,7 +38,7 @@
 .footerCopy {
   flex: 1;
   text-align: left;
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: #e0e0e0;
   padding-left: 30px;
 }
@@ -55,7 +55,7 @@
 .footerLinks a {
   color: #e0e0e0;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 1rem;
   transition: color 0.2s;
 }
 

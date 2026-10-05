@@ -91,6 +91,8 @@ export default function MinhasCandidaturasPage() {
         <DashboardLayout userType="candidate">
             <div className={styles.container}>
 
+                {errorMsg && <p role="alert">{errorMsg}</p>}
+
                 <div className={styles.header}>
                     <h1 className={styles.title}>Minhas Candidaturas</h1>
                     <p className={styles.subtitle}>Acompanhe o status dos seus processos seletivos.</p>
@@ -133,7 +135,7 @@ export default function MinhasCandidaturasPage() {
                 {filteredCandidaturas.length > 0 ? (
                     <div className={styles.grid}>
                         {filteredCandidaturas.map((app) => (
-                            <div key={app._id} className={styles.appCard}>
+                            <div key={app._id} className={styles.appCard} role="button" tabIndex={0} aria-label={`Ver detalhes da vaga ${app.vaga?.nome || ''}`} onClick={() => setSelectedCandidatura(app)} onKeyDown={event => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); setSelectedCandidatura(app) } }}>
                                 <div className={styles.cardHeader}>
                                     <div className={styles.jobInfo}>
                                         <h3 className={styles.jobTitle}>{app.vaga?.nome}</h3>
@@ -160,7 +162,7 @@ export default function MinhasCandidaturasPage() {
                                 <div className={styles.cardFooter}>
                                     <button
                                         className={styles.btnOutline}
-                                        onClick={() => setSelectedCandidatura(app)}
+                                        onClick={event => { event.stopPropagation(); setSelectedCandidatura(app) }}
                                     >
                                         Ver Detalhes da Vaga
                                     </button>
@@ -168,7 +170,7 @@ export default function MinhasCandidaturasPage() {
                                     {isPending(app.status) && (
                                         <button
                                             className={styles.btnCancelText}
-                                            onClick={() => handleRequestCancel(app)}
+                                            onClick={event => { event.stopPropagation(); handleRequestCancel(app) }}
                                         >
                                             Cancelar Candidatura
                                         </button>
