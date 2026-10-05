@@ -155,6 +155,33 @@ describe('services', () => {
     );
   });
 
+  it('deve chamar endpoints de favoritos de candidatos da empresa', async () => {
+    fetchMock
+      .mockResolvedValueOnce(createJsonResponse({ candidatos: [] }))
+      .mockResolvedValueOnce(createJsonResponse({ success: true }))
+      .mockResolvedValueOnce(createJsonResponse({ success: true }));
+
+    await empresaService.listarCandidatosFavoritos();
+    await empresaService.favoritarCandidato('candidato-1');
+    await empresaService.desfavoritarCandidato('candidato-1');
+
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
+      '/empresa/candidatos/favoritos',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      '/empresa/candidatos/candidato-1/favorito',
+      expect.objectContaining({ method: 'POST', credentials: 'include' })
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      '/empresa/candidatos/candidato-1/favorito',
+      expect.objectContaining({ method: 'DELETE', credentials: 'include' })
+    );
+  });
+
   it('deve atualizar o status de uma vaga pelo endpoint da empresa', async () => {
     fetchMock.mockResolvedValueOnce(
       createJsonResponse({ success: true, vaga: { _id: 'vaga-1', status: 'Fechada' } })
