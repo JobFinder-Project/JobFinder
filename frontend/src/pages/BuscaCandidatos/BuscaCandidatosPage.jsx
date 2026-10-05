@@ -18,6 +18,7 @@ export default function BuscaCandidatos() {
     const [candidatos, setCandidatos] = useState([])
     const [loading, setLoading] = useState(false)
     const [searchError, setSearchError] = useState('')
+    const [favoriteLoadingId, setFavoriteLoadingId] = useState('')
 
     useEffect(() => {
         const termo = query.trim()
@@ -75,6 +76,36 @@ export default function BuscaCandidatos() {
         setSearchParams(params)
     }
 
+    const handleToggleFavorito = async (candidato) => {
+        if (!candidato?.id || favoriteLoadingId) return
+
+        const nextFavoritado = !candidato.favoritado
+        setFavoriteLoadingId(candidato.id)
+        setSearchError('')
+        setCandidatos((current) =>
+            current.map((item) =>
+                item.id === candidato.id ? { ...item, favoritado: nextFavoritado } : item
+            )
+        )
+
+        try {
+            if (nextFavoritado) {
+                await empresaService.favoritarCandidato(candidato.id)
+            } else {
+                await empresaService.desfavoritarCandidato(candidato.id)
+            }
+        } catch (error) {
+            setCandidatos((current) =>
+                current.map((item) =>
+                    item.id === candidato.id ? { ...item, favoritado: candidato.favoritado } : item
+                )
+            )
+            setSearchError(error.message || 'Não foi possível atualizar os favoritos.')
+        } finally {
+            setFavoriteLoadingId('')
+        }
+    }
+
     const hasSearchCriteria = Boolean(vagaId || query.trim().length >= MIN_SEARCH_LENGTH)
 
     return (
@@ -128,7 +159,14 @@ export default function BuscaCandidatos() {
                             <p>Buscando candidatos...</p>
                         </div>
                     ) : candidatos.length > 0 ? (
-                        candidatos.map((candidato, index) => <CandidateCard key={`${candidato.nome}-${index}`} candidato={candidato} />)
+                        candidatos.map((candidato, index) => (
+                            <CandidateCard
+                                key={candidato.id || `${candidato.nome}-${index}`}
+                                candidato={candidato}
+                                onToggleFavorito={handleToggleFavorito}
+                                favoriteLoading={favoriteLoadingId === candidato.id}
+                            />
+                        ))
                     ) : (
                         <div className={styles.emptyState}>
                             <div className={styles.emptyIconWrapper}>

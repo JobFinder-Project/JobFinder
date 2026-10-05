@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import {
     BiUser, BiBriefcase,
-    BiBookOpen, BiCertification, BiCodeAlt, BiGlobe
+    BiBookOpen, BiCertification, BiCodeAlt, BiGlobe, BiHeart
 } from 'react-icons/bi'
 import Modal from '../../components/ui/Modal/Modal.jsx'
 import styles from './CandidateCard.module.css'
 
-export default function CandidateCard({ candidato }) {
+export default function CandidateCard({
+    candidato,
+    onToggleFavorito,
+    favoriteLoading = false,
+    showFavoriteAction = Boolean(candidato?.id),
+}) {
     const [showModal, setShowModal] = useState(false)
 
     const getImagemSrc = (imagem) => {
@@ -39,10 +44,30 @@ export default function CandidateCard({ candidato }) {
     const cursos = parseList(candidato.cursos);
     const idiomas = parseList(candidato.idiomas);
     const descricao = parseList(candidato.descricao).join('\n'); // Junta caso seja um array com vários parágrafos válidos
+    const isFavoritado = Boolean(candidato.favoritado)
+
+    const handleToggleFavorito = () => {
+        if (!onToggleFavorito || !candidato.id || favoriteLoading) return
+        onToggleFavorito(candidato)
+    }
 
     return (
         <>
             <div className={styles.card}>
+                {showFavoriteAction && candidato.id && (
+                    <button
+                        type="button"
+                        className={`${styles.favoriteButton} ${isFavoritado ? styles.favoriteButtonActive : ''}`}
+                        onClick={handleToggleFavorito}
+                        disabled={favoriteLoading}
+                        aria-pressed={isFavoritado}
+                        aria-label={isFavoritado ? `Remover ${candidato.nome} dos favoritos` : `Adicionar ${candidato.nome} aos favoritos`}
+                        title={isFavoritado ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+                    >
+                        <BiHeart size={22} />
+                    </button>
+                )}
+
                 <div className={styles.header}>
                     <div className={styles.avatarWrapper}>
                         {imgSrc ? (

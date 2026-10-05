@@ -22,6 +22,18 @@ export const empresaService = {
 		return api.get(`/empresa/candidatos/buscar${queryString ? `?${queryString}` : ''}`);
 	},
 
+	listarCandidatosFavoritos: async () => {
+		return api.get('/empresa/candidatos/favoritos');
+	},
+
+	favoritarCandidato: async (candidatoId) => {
+		return api.post(`/empresa/candidatos/${encodeURIComponent(candidatoId)}/favorito`);
+	},
+
+	desfavoritarCandidato: async (candidatoId) => {
+		return api.delete(`/empresa/candidatos/${encodeURIComponent(candidatoId)}/favorito`);
+	},
+
 	criarVaga: async (formData) => {
 		return api.post(`/empresa/vagas/criar`, formData);
 	},

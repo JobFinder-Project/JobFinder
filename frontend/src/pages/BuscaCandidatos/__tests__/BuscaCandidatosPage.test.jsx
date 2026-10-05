@@ -11,12 +11,21 @@ vi.mock('../../../components/Layout/DashboardLayout/DashboardLayout', () => ({
 }));
 
 vi.mock('../../../features/candidato/CandidateCard', () => ({
-  default: ({ candidato }) => <article>{candidato.nome}</article>,
+  default: ({ candidato, onToggleFavorito }) => (
+    <article>
+      <span>{candidato.nome}</span>
+      <button type="button" onClick={() => onToggleFavorito?.(candidato)}>
+        {candidato.favoritado ? 'Desfavoritar' : 'Favoritar'}
+      </button>
+    </article>
+  ),
 }));
 
 vi.mock('../../../services/empresaService', () => ({
   empresaService: {
     buscarCandidatos: vi.fn(),
+    favoritarCandidato: vi.fn(),
+    desfavoritarCandidato: vi.fn(),
   },
 }));
 
@@ -31,8 +40,10 @@ describe('BuscaCandidatosPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     empresaService.buscarCandidatos.mockResolvedValue({
-      candidatos: [{ nome: 'Marina Souza', qualificacoes: 'UX Researcher' }],
+      candidatos: [{ id: 'candidato-1', nome: 'Marina Souza', qualificacoes: 'UX Researcher', favoritado: false }],
     });
+    empresaService.favoritarCandidato.mockResolvedValue({ success: true });
+    empresaService.desfavoritarCandidato.mockResolvedValue({ success: true });
   });
 
   it('não consulta todos os perfis quando não há critério de busca', () => {
@@ -68,6 +79,19 @@ describe('BuscaCandidatosPage', () => {
     renderPage('/empresa/candidatos/buscar?vagaId=vaga-1');
 
     await waitFor(() => expect(empresaService.buscarCandidatos).toHaveBeenCalledWith('', 'vaga-1'));
+  });
+
+  it('permite favoritar candidato a partir do resultado da busca', async () => {
+    renderPage();
+    const input = screen.getByPlaceholderText(/buscar por nome/i);
+
+    await userEvent.type(input, 'Marina');
+    await userEvent.click(screen.getByRole('button', { name: 'Buscar' }));
+    await screen.findByText('Marina Souza');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Favoritar' }));
+
+    expect(empresaService.favoritarCandidato).toHaveBeenCalledWith('candidato-1');
   });
 
   it('H5.4: não exibe o botão "Filtros" (affordance falsa removida)', () => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
     BiBriefcase, BiHomeAlt, BiSearch, BiFile, BiLogOut,
-    BiPlus, BiGroup, BiMenu, BiChevronRight,
+    BiPlus, BiGroup, BiMenu, BiChevronRight, BiHeart,
 } from 'react-icons/bi';
 import { BsHeadphones } from "react-icons/bs";
 import { useAuth } from '../../contexts/AuthContext';
@@ -42,6 +42,7 @@ export default function Sidebar({
         { action: onOpenCriarVaga, modalQuery: 'criarVaga', label: 'Publicar Vaga', icon: BiPlus },
         { path: '/empresa/vagas', label: 'Minhas Vagas', icon: BiBriefcase },
         { path: '/empresa/candidatos/buscar', label: 'Candidatos', icon: BiGroup },
+        { path: '/empresa/candidatos/favoritos', label: 'Favoritos', icon: BiHeart },
         { path: '/suporte', label: 'Suporte', icon: BsHeadphones },
     ];
 
