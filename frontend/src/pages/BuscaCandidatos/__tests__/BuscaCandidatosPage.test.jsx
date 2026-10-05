@@ -69,4 +69,9 @@ describe('BuscaCandidatosPage', () => {
 
     await waitFor(() => expect(empresaService.buscarCandidatos).toHaveBeenCalledWith('', 'vaga-1'));
   });
+
+  it('H5.4: não exibe o botão "Filtros" (affordance falsa removida)', () => {
+    renderPage();
+    expect(screen.queryByRole('button', { name: /filtros/i })).not.toBeInTheDocument();
+  });
 });

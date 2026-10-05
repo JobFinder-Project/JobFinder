@@ -360,3 +360,36 @@
     color: #1d4ed8;
     font-weight: 600;
 }
+
+/* Indicador de força de senha */
+.passwordStrength {
+    margin-top: 0.5rem;
+}
+
+.strengthBar {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.strengthSegment {
+    flex: 1;
+    height: 4px;
+    border-radius: 9999px;
+    background-color: #e2e8f0;
+    transition: background-color 0.3s;
+}
+
+.strengthSegment.active.weak   { background-color: #ef4444; }
+.strengthSegment.active.fair   { background-color: #f59e0b; }
+.strengthSegment.active.strong { background-color: #22c55e; }
+
+.strengthLabel {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+.strengthLabel.weak   { color: #ef4444; }
+.strengthLabel.fair   { color: #f59e0b; }
+.strengthLabel.strong { color: #22c55e; }

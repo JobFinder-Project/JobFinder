@@ -3,10 +3,11 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
     BiTime, BiCheckCircle, BiXCircle, BiArrowBack, BiUser,
     BiChevronUp, BiChevronDown, BiEnvelope, BiPhone,
-    BiBookOpen, BiCodeAlt, BiGlobe, BiCertification
+    BiBookOpen, BiCodeAlt, BiGlobe, BiCertification, BiErrorCircle
 } from 'react-icons/bi';
 import DashboardLayout from '../../components/Layout/DashboardLayout/DashboardLayout';
 import Modal from '../../components/ui/Modal/Modal';
+import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
 import { empresaService } from '../../services/empresaService';
 import styles from './GestaoCandidaturas.module.css';
 
@@ -17,6 +18,7 @@ export default function GestaoCandidaturas() {
 
     const [candidaturas, setCandidaturas] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [errorMsg, setErrorMsg] = useState('');
 
     // Controle das seções expansíveis (Acordeão)
     const [openSections, setOpenSections] = useState({
@@ -53,7 +55,8 @@ export default function GestaoCandidaturas() {
             await empresaService.atualizarStatusCandidatura(candidaturaId, novoStatus);
         } catch (error) {
             console.error('Erro ao atualizar status:', error);
-            alert('Falha ao atualizar o status. Tente novamente.');
+            setErrorMsg('Falha ao atualizar o status. Tente novamente.');
+            setTimeout(() => setErrorMsg(''), 5000);
             fetchCandidaturas();
         }
     };
@@ -170,6 +173,8 @@ export default function GestaoCandidaturas() {
         }
     }
 
+    if (loading) return <LoadingScreen />;
+
     return (
         <DashboardLayout userType="employer">
             <div className={styles.container}>
@@ -185,10 +190,14 @@ export default function GestaoCandidaturas() {
                     </p>
                 </div>
 
-                {loading ? (
-                    <div className={styles.loadingState}>Carregando candidaturas...</div>
-                ) : (
-                    <div className={styles.sectionsContainer}>
+                {errorMsg && (
+                    <div className={styles.errorAlert}>
+                        <BiErrorCircle size={20} />
+                        <span>{errorMsg}</span>
+                    </div>
+                )}
+
+                <div className={styles.sectionsContainer}>
 
                         {/* CAIXA: PENDENTES */}
                         <div className={`${styles.sectionBox} ${styles.boxPendente}`}>
@@ -241,7 +250,7 @@ export default function GestaoCandidaturas() {
                             )}
                         </div>
 
-                    </div>)}
+                </div>
             </div>
 
             {/* MODAL DE PERFIL DO CANDIDATO */}

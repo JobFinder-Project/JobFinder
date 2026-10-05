@@ -64,7 +64,7 @@ routes(app, '');
 
 if (process.env.NODE_ENV !== 'test' && fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendDistPath));
-  app.get('/(.*)', (req, res) => {
+  app.get(/^(?!\/api).*$/, (req, res) => {
     res.sendFile(frontendIndexPath);
   });
 }

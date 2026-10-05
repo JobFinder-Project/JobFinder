@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { BiBriefcase, BiArrowBack, BiCheckCircle } from 'react-icons/bi';
 import { candidatoService } from '../../services/candidatoService';
 import { empresaService } from '../../services/empresaService';
+import TagInput from '../../components/ui/TagInput/TagInput';
 import styles from './Signup.module.css';
 
 export default function SignupPage() {
@@ -141,8 +142,21 @@ export default function SignupPage() {
         }
     };
 
+    const calcularForcaSenha = (senha) => {
+        if (!senha) return { score: 0, label: '', key: '' };
+        const temMinimo = senha.length >= 8;
+        const temNumero = /\d/.test(senha);
+        const temMaiuscula = /[A-Z]/.test(senha);
+        const temSimbolo = /[^A-Za-z0-9]/.test(senha);
+        const criterios = [temMinimo, temNumero || temMaiuscula, temSimbolo].filter(Boolean).length;
+        if (criterios <= 1) return { score: 1, label: 'Fraca', key: 'weak' };
+        if (criterios === 2) return { score: 2, label: 'Média', key: 'fair' };
+        return { score: 3, label: 'Forte', key: 'strong' };
+    };
+
     const renderStepContent = () => {
         if (currentStep === 1) {
+            const senhaForca = calcularForcaSenha(formData.senha);
             return (
                 <div className={styles.stepContent}>
                     <div className={styles.inputGroup}>
@@ -156,7 +170,21 @@ export default function SignupPage() {
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Senha *</label>
                         <input type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
-                        <span className={styles.hint}>Use letras, números e símbolos.</span>
+                        {formData.senha && (
+                            <div className={styles.passwordStrength}>
+                                <div className={styles.strengthBar}>
+                                    {[1, 2, 3].map(level => (
+                                        <div
+                                            key={level}
+                                            className={`${styles.strengthSegment} ${senhaForca.score >= level ? `${styles.active} ${styles[senhaForca.key]}` : ''}`}
+                                        />
+                                    ))}
+                                </div>
+                                <span className={`${styles.strengthLabel} ${styles[senhaForca.key]}`}>
+                                    {senhaForca.label}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             );
@@ -230,19 +258,38 @@ export default function SignupPage() {
         }
 
         if (currentStep === 4 && !isEmployer) {
+            const handleTagChange = (field) => (newValue) => {
+                setFormData(prev => ({ ...prev, [field]: newValue }));
+                setErrorMsg('');
+            };
             return (
                 <div className={styles.stepContent}>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Habilidades Técnicas</label>
-                        <input type="text" name="habilidades" value={formData.habilidades} onChange={handleChange} className={styles.input} placeholder="Ex: React, Node.js, Excel (Separados por vírgula)" />
+                        <label className={styles.label} htmlFor="habilidades">Habilidades Técnicas</label>
+                        <TagInput
+                            id="habilidades"
+                            value={formData.habilidades}
+                            onChange={handleTagChange('habilidades')}
+                            placeholder="Ex: React, Node.js... (Enter para adicionar)"
+                        />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Idiomas</label>
-                        <input type="text" name="idiomas" value={formData.idiomas} onChange={handleChange} className={styles.input} placeholder="Ex: Inglês Avançado, Espanhol Básico" />
+                        <label className={styles.label} htmlFor="idiomas">Idiomas</label>
+                        <TagInput
+                            id="idiomas"
+                            value={formData.idiomas}
+                            onChange={handleTagChange('idiomas')}
+                            placeholder="Ex: Inglês Avançado... (Enter para adicionar)"
+                        />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label className={styles.label}>Cursos Extracurriculares</label>
-                        <input type="text" name="cursos" value={formData.cursos} onChange={handleChange} className={styles.input} placeholder="Ex: Curso de Lógica, Certificação Scrum" />
+                        <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
+                        <TagInput
+                            id="cursos"
+                            value={formData.cursos}
+                            onChange={handleTagChange('cursos')}
+                            placeholder="Ex: Certificação Scrum... (Enter para adicionar)"
+                        />
                     </div>
                 </div>
             );
