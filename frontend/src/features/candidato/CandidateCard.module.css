@@ -5,6 +5,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  position: relative;
   transition: all 0.2s ease-in-out;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   height: 100%;
@@ -15,6 +16,49 @@
   transform: translateY(-4px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
   border-color: #cbd5e1;
+}
+
+.favoriteButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.favoriteButton:hover:not(:disabled),
+.favoriteButton:focus-visible {
+  border-color: #dc2626;
+  color: #dc2626;
+  background-color: #fff1f2;
+  outline: 2px solid #fecdd3;
+  outline-offset: 2px;
+}
+
+.favoriteButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.favoriteButtonActive {
+  border-color: #dc2626;
+  color: #ffffff;
+  background-color: #dc2626;
+}
+
+.favoriteButtonActive:hover:not(:disabled),
+.favoriteButtonActive:focus-visible {
+  color: #ffffff;
+  background-color: #b91c1c;
 }
 
 .header {

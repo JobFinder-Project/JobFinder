@@ -60,6 +60,9 @@ router.post('/vagas/criar', uploadImagemVaga, EmpresaController.criarVagas);
 router.patch('/vagas/:vagaId/status', EmpresaController.atualizarStatusVaga);
 router.get('/candidaturas', EmpresaController.buscarCandidaturas);
 router.put('/candidatura/:candidaturaId', EmpresaController.atualizarStatusCandidatura);
+router.get('/candidatos/favoritos', EmpresaController.listarCandidatosFavoritos);
+router.post('/candidatos/:candidatoId/favorito', EmpresaController.favoritarCandidato);
+router.delete('/candidatos/:candidatoId/favorito', EmpresaController.desfavoritarCandidato);
 router.get('/candidatos/buscar', EmpresaController.buscarCandidatos);
 
 export default router;

@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import CandidateCard from '../CandidateCard';
 
@@ -49,5 +49,28 @@ describe('CandidateCard', () => {
     expect(screen.getByText('Carlos Lima')).toBeInTheDocument();
     expect(screen.getByText('Profissional')).toBeInTheDocument();
     expect(screen.getByText('Sem habilidades listadas')).toBeInTheDocument();
+  });
+
+  it('deve acionar callback de favorito e refletir estado visual do coração', async () => {
+    const onToggleFavorito = vi.fn();
+
+    render(
+      <CandidateCard
+        candidato={{ ...candidato, id: 'candidato-1', favoritado: true }}
+        onToggleFavorito={onToggleFavorito}
+      />
+    );
+
+    const favoriteButton = screen.getByRole('button', {
+      name: /remover marina souza dos favoritos/i,
+    });
+
+    expect(favoriteButton).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(favoriteButton);
+
+    expect(onToggleFavorito).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'candidato-1', favoritado: true })
+    );
   });
 });

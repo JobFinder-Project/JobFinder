@@ -19,6 +19,7 @@ import EsqueciSenha from './pages/EsqueciSenha/EsqueciSenhaPage'
 import RedefinirSenha from './pages/RedefinirSenha/RedefinirSenhaPage'
 import BuscaVagas from './pages/BuscaVagas/BuscaVagasPage'
 import BuscaCandidatos from './pages/BuscaCandidatos/BuscaCandidatosPage'
+import CandidatosFavoritosPage from './pages/CandidatosFavoritos/CandidatosFavoritosPage'
 import MinhasCandidaturasPage from './pages/MinhasCandidaturas/MinhasCandidaturasPage';
 import PerfilPage from './pages/Perfil/PerfilPage'
 import PaginaErro from './pages/PaginaErro/PaginaErroPage'
@@ -110,6 +111,11 @@ function App() {
               <Route path='/empresa/candidatos/buscar' element={
                 <ProtectedRoute allowedRole='empresa'>
                   <BuscaCandidatos />
+                </ProtectedRoute>
+              } />
+              <Route path='/empresa/candidatos/favoritos' element={
+                <ProtectedRoute allowedRole='empresa'>
+                  <CandidatosFavoritosPage />
                 </ProtectedRoute>
               } />
               <Route path="/empresa/candidaturas" element={

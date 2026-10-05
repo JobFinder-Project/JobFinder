@@ -61,3 +61,14 @@ export const toCandidatoContatoDTO = (candidatoDoc) => {
     telefone: c.telefone,
   });
 };
+
+export const toCandidatoEmpresaDTO = (candidatoDoc, options = {}) => {
+  const c = toPlainObject(candidatoDoc);
+  if (!c) return null;
+
+  return pickDefined({
+    id: c._id?.toString(),
+    ...toCandidatoPublicDTO(c),
+    favoritado: options.favoritado,
+  });
+};

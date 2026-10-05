@@ -55,6 +55,24 @@ describe('Contrato Swagger de exposição de dados', () => {
     expect(operation.responses[404]).toBeDefined();
   });
 
+  it('documenta os endpoints autenticados de favoritos de candidatos', () => {
+    const listOperation = paths['/empresa/candidatos/favoritos'].get;
+    const favoriteOperations = paths['/empresa/candidatos/{candidatoId}/favorito'];
+
+    expect(listOperation.security).toEqual([{ sessionAuth: [] }]);
+    expect(listOperation.responses[200].content['application/json'].schema.$ref).toBe(
+      '#/components/schemas/CandidatosFavoritosResponse'
+    );
+    expect(favoriteOperations.post.security).toEqual([{ sessionAuth: [] }]);
+    expect(favoriteOperations.delete.security).toEqual([{ sessionAuth: [] }]);
+    expect(favoriteOperations.post.responses[200].content['application/json'].schema.$ref).toBe(
+      '#/components/schemas/CandidatoFavoritoMutationResponse'
+    );
+    expect(favoriteOperations.delete.responses[200].content['application/json'].schema.$ref).toBe(
+      '#/components/schemas/CandidatoFavoritoMutationResponse'
+    );
+  });
+
   it('documenta a exclusão da própria conta sem identificadores e com confirmação de senha', () => {
     const operations = [paths['/candidato/conta'].delete, paths['/empresa/conta'].delete];
 
