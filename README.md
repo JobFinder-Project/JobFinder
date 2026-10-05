@@ -294,6 +294,14 @@ Para trabalhar diretamente na documentação:
 git switch documents
 ```
 
+## Demonstração de acessibilidade (issues #244 e #245)
+
+No frontend, execute `npm install` e `npm run dev`. Abra `http://localhost:5173` em um navegador. O botão de acessibilidade aparece no canto inferior direito em todas as rotas. Teste Tab, Enter, Espaço e Escape; ajuste o texto, contraste e demais preferências, recarregue a página e use **Resetar tudo** para limpar as escolhas salvas.
+
+Para demonstrar a leitura, clique primeiro em **Testar voz** no painel. O seletor **Voz** começa em **Automática (priorizar português)** e permite escolher outra voz disponível; a escolha é salva. Depois ative **Ler ao passar o mouse**, feche o painel e passe o cursor sobre um texto. A leitura começa após um breve instante e continua até terminar a frase; passar sobre outro texto inicia a nova frase. Também é possível selecionar um trecho, abrir o painel e clicar em **Ler seleção**. O painel informa erros de voz ou saída de áudio retornados pelo navegador. A implementação usa `speechSynthesis` do navegador, sem chave ou cobrança de Google Cloud. A voz em português depende das vozes instaladas ou disponíveis no navegador e no sistema operacional. A fonte OpenDyslexic é servida localmente e carregada apenas quando ativada; a licença está em `frontend/public/fonts/OFL.txt`.
+
+Os modos daltônicos oferecem paletas alternativas para links e controles. Eles não simulam nem corrigem clinicamente a percepção de cores; estados e ações continuam identificados por texto e indicadores visuais. Para executar os testes, use `cd frontend` e `npm test`. O CI já executa essa suíte, incluindo verificações com `jest-axe`.
+
 ## Fluxo de Trabalho
 
 O projeto segue um processo inspirado em GitFlow:

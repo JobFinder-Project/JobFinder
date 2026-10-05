@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AuthProvider from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import GuestRoute from './components/GuestRoute/GuestRoute'
+import { AccessibilityProvider } from './contexts/AccessibilityContext'
+import AccessibilityPanel from './components/AccessibilityPanel/AccessibilityPanel'
 
 import SignupPage from './pages/Signup/SignupPage';
 import GestaoCandidaturasPage from './pages/GestaoCandidaturas/GestaoCandidaturasPage';
@@ -31,7 +33,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthProvider>
+            <AccessibilityProvider>
             <a className="skip-link" href="#main-content">Pular para o conteúdo principal</a>
+            <div id="application-content">
             <Routes>
               {/* Rotas Públicas */}
               <Route path='/' element={<Home />} />
@@ -113,6 +117,9 @@ function App() {
               {/* 404 */}
               <Route path='*' element={<PaginaErro />} />
             </Routes>
+            </div>
+            <AccessibilityPanel />
+            </AccessibilityProvider>
           </AuthProvider>
         </Router>
       </QueryClientProvider>

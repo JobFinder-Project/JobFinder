@@ -30,7 +30,7 @@
   position: absolute;
   top: 20px;
   right: 40px;
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: bold;
   cursor: pointer;
   color: #666;
@@ -125,7 +125,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.875rem;
   transition: background-color 0.2s;
 }
 
@@ -170,7 +170,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.875rem;
   transition: background-color 0.2s;
 }
 

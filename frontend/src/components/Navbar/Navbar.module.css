@@ -67,3 +67,26 @@
 .btnPrimary:hover {
   background-color: #1d4ed8;
 }
+
+@media (max-width: 48rem) {
+  .navContainer {
+    height: auto;
+    min-height: 4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-block: 0.75rem;
+  }
+
+  .navLinks {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .navLink,
+  .btnPrimary {
+    white-space: nowrap;
+  }
+}

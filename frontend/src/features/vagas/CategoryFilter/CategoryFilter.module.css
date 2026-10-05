@@ -73,7 +73,7 @@
   border-radius: 20px;
   padding: 8px 18px;
   margin: 4px 6px 4px 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;

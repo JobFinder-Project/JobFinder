@@ -93,7 +93,7 @@
 }
 
 .heroSubtitle {
-  font-size: 16px;
+  font-size: 1rem;
   color: #475569;
   margin-bottom: 3rem;
   max-width: 42rem;
@@ -168,14 +168,14 @@
 }
 
 .sectionTitle {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #0f172a;
   margin-bottom: 1rem;
 }
 
 .sectionSubtitle {
-  font-size: 16px;
+  font-size: 1rem;
   color: #475569;
   max-width: 42rem;
   margin-inline: auto;
@@ -216,7 +216,7 @@
 }
 
 .featureTitle {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 700;
   color: #0f172a;
   margin-bottom: 0.75rem;
@@ -225,7 +225,7 @@
 .featureText {
   color: #475569;
   line-height: 1.5;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .heroActionButtons {
