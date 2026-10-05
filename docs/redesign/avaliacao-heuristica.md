@@ -166,6 +166,7 @@ O campo "Escolaridade" era implementado como um `<select>` com opções predefin
 https://github.com/user-attachments/assets/52f5cd83-dab6-4e7c-8cae-630c24939a4b
 
 #### **Correção aplicada:**
+
 Substituição do campo de texto livre por `<select>` com as mesmas opções do formulário de cadastro, garantindo consistência e normalização dos dados armazenados.
 
 ---
@@ -226,6 +227,8 @@ https://github.com/user-attachments/assets/a7cf7c40-2509-4a9a-a350-b2d94c8602e8
 
 #### **Correção aplicada:**
 Remoção do checkbox "Lembrar-me" até que a funcionalidade de persistência de sessão seja implementada no backend, eliminando a falsa affordance.
+
+<img width="2557" height="1410" alt="h5-3-versao-sem-botao-lembre-me" src="https://github.com/user-attachments/assets/24ce9323-174b-45f3-88aa-8f9a0415b341" />
 
 ---
 
