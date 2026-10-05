@@ -144,6 +144,39 @@ describe('services', () => {
     );
   });
 
+  it('deve buscar perfil público da empresa pelo slug', async () => {
+    fetchMock.mockResolvedValueOnce(
+      createJsonResponse({
+        empresa: { nome: 'Empresa Pública', slug: 'empresa-publica' },
+        vagas: [],
+      })
+    );
+
+    const response = await empresaService.getPerfilPublico('empresa pública');
+
+    expect(response.empresa.nome).toBe('Empresa Pública');
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/empresa/publica/empresa%20p%C3%BAblica',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
+  it('deve listar perfis públicos de empresas', async () => {
+    fetchMock.mockResolvedValueOnce(
+      createJsonResponse({
+        empresas: [{ nome: 'Empresa Pública', slug: 'empresa-publica' }],
+      })
+    );
+
+    const response = await empresaService.listarPerfisPublicos();
+
+    expect(response.empresas).toHaveLength(1);
+    expect(fetchMock).toHaveBeenCalledWith(
+      '/empresas/publicas',
+      expect.objectContaining({ method: 'GET', credentials: 'include' })
+    );
+  });
+
   it('deve omitir o parâmetro q vazio ao filtrar candidatos por vaga', async () => {
     fetchMock.mockResolvedValueOnce(createJsonResponse({ candidatos: [] }));
 

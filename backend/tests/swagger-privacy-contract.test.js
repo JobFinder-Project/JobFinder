@@ -21,10 +21,27 @@ describe('Contrato Swagger de exposição de dados', () => {
     const properties = schemas.EmpresaPublica.properties;
 
     expect(properties).toHaveProperty('nome');
+    expect(properties).toHaveProperty('slug');
     expect(properties).not.toHaveProperty('_id');
     expect(properties).not.toHaveProperty('cnpj');
     expect(properties).not.toHaveProperty('email');
     expect(properties).not.toHaveProperty('fone');
+  });
+
+  it('documenta o perfil público ampliado da empresa sem autenticação obrigatória', () => {
+    const listOperation = paths['/empresas/publicas'].get;
+    const operation = paths['/empresa/publica/{slug}'].get;
+
+    expect(listOperation.security).toBeUndefined();
+    expect(listOperation.responses[200].content['application/json'].schema.$ref).toBe(
+      '#/components/schemas/EmpresasPublicasResponse'
+    );
+    expect(operation.security).toBeUndefined();
+    expect(operation.parameters[0]).toMatchObject({ name: 'slug', in: 'path', required: true });
+    expect(operation.responses[200].content['application/json'].schema.$ref).toBe(
+      '#/components/schemas/EmpresaPublicaResponse'
+    );
+    expect(schemas.EmpresaPublicaDetalhada.allOf).toBeDefined();
   });
 
   it('documenta os critérios mínimos e o filtro por vínculo da busca de candidatos', () => {
