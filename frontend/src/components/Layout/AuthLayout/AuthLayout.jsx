@@ -35,7 +35,7 @@ export default function AuthLayout({
         </div>
       </header>
 
-      <main className={styles.mainContent}>
+      <main id="main-content" tabIndex={-1} className={styles.mainContent}>
         {children}
       </main>
     </div>

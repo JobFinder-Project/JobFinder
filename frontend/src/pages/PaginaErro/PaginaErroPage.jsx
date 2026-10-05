@@ -14,7 +14,7 @@ export default function PaginaErro({
   }
 
   return (
-    <div className={styles.page}>
+    <main id="main-content" tabIndex={-1} className={styles.page}>
       <div className={styles.errorContainer}>
         <h1 className={styles.errorStatus}>{status}</h1>
         <h2 className={styles.errorTitle}>{title}</h2>
@@ -31,6 +31,6 @@ export default function PaginaErro({
           Voltar para a página anterior
         </button>
       </div>
-    </div>
+    </main>
   )
 }

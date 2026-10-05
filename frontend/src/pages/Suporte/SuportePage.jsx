@@ -156,9 +156,9 @@ export default function SuportePage() {
     return (
         <div className={styles.publicPageWrapper}>
             <Navbar />
-            <div className={styles.publicContentWrapper}>
+            <main id="main-content" tabIndex={-1} className={styles.publicContentWrapper}>
                 {pageContent}
-            </div>
+            </main>
             {modalComponent}
         </div>
     );

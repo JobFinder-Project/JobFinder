@@ -27,9 +27,11 @@ export default function EscolherCargoModal({ onClose }) {
                     <div className={styles.optionsGrid}>
 
                         {/* Opção: Candidato */}
-                        <div
+                        <div role="button" tabIndex={0}
                             className={`${styles.optionCard} ${selected === 'candidate' ? styles.selected : ''}`}
                             onClick={() => setSelected('candidate')}
+                            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected('candidate') } }}
+                            aria-pressed={selected === 'candidate'}
                         >
                             <div className={styles.radioWrapper}>
                                 <div className={`${styles.radioOuter} ${selected === 'candidate' ? styles.radioOuterSelected : ''}`}>
@@ -45,9 +47,11 @@ export default function EscolherCargoModal({ onClose }) {
                             </div>
                         </div>
 
-                        <div
+                        <div role="button" tabIndex={0}
                             className={`${styles.optionCard} ${selected === 'employer' ? styles.selected : ''}`}
                             onClick={() => setSelected('employer')}
+                            onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelected('employer') } }}
+                            aria-pressed={selected === 'employer'}
                         >
                             <div className={styles.radioWrapper}>
                                 <div className={`${styles.radioOuter} ${selected === 'employer' ? styles.radioOuterSelected : ''}`}>

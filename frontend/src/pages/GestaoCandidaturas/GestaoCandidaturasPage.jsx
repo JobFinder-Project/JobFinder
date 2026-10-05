@@ -178,6 +178,7 @@ export default function GestaoCandidaturas() {
     return (
         <DashboardLayout userType="employer">
             <div className={styles.container}>
+                {errorMsg && <p role="alert">{errorMsg}</p>}
                 <div className={styles.pageHeader}>
                     {vagaIdFilter && (
                         <button className={styles.backButton} onClick={() => navigate('/empresa/vagas')}>
@@ -201,7 +202,7 @@ export default function GestaoCandidaturas() {
 
                         {/* CAIXA: PENDENTES */}
                         <div className={`${styles.sectionBox} ${styles.boxPendente}`}>
-                            <div className={styles.sectionHeader} onClick={() => toggleSection('pendentes')}>
+                            <div className={styles.sectionHeader} role="button" tabIndex={0} aria-expanded={openSections.pendentes} onClick={() => toggleSection('pendentes')} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleSection('pendentes') } }}>
                                 {openSections.pendentes ? <BiChevronUp size={24} className={styles.chevronIcon} /> : <BiChevronDown size={24} className={styles.chevronIcon} />}
                                 <div className={styles.headerTitleGroup}>
                                     <BiTime size={22} className={styles.iconPendente} />
@@ -218,7 +219,7 @@ export default function GestaoCandidaturas() {
 
                         {/* CAIXA: APROVADOS */}
                         <div className={`${styles.sectionBox} ${styles.boxAceita}`}>
-                            <div className={styles.sectionHeader} onClick={() => toggleSection('aceitas')}>
+                            <div className={styles.sectionHeader} role="button" tabIndex={0} aria-expanded={openSections.aceitas} onClick={() => toggleSection('aceitas')} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleSection('aceitas') } }}>
                                 {openSections.aceitas ? <BiChevronUp size={24} className={styles.chevronIcon} /> : <BiChevronDown size={24} className={styles.chevronIcon} />}
                                 <div className={styles.headerTitleGroup}>
                                     <BiCheckCircle size={22} className={styles.iconAceita} />
@@ -235,7 +236,7 @@ export default function GestaoCandidaturas() {
 
                         {/* CAIXA: REJEITADOS */}
                         <div className={`${styles.sectionBox} ${styles.boxRejeitada}`}>
-                            <div className={styles.sectionHeader} onClick={() => toggleSection('rejeitadas')}>
+                            <div className={styles.sectionHeader} role="button" tabIndex={0} aria-expanded={openSections.rejeitadas} onClick={() => toggleSection('rejeitadas')} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleSection('rejeitadas') } }}>
                                 {openSections.rejeitadas ? <BiChevronUp size={24} className={styles.chevronIcon} /> : <BiChevronDown size={24} className={styles.chevronIcon} />}
                                 <div className={styles.headerTitleGroup}>
                                     <BiXCircle size={22} className={styles.iconRejeitada} />

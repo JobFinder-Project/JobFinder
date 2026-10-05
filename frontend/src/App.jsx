@@ -31,6 +31,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <AuthProvider>
+            <a className="skip-link" href="#main-content">Pular para o conteúdo principal</a>
             <Routes>
               {/* Rotas Públicas */}
               <Route path='/' element={<Home />} />

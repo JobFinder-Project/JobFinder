@@ -156,7 +156,7 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                 </p>
 
                 {errorMsg && (
-                    <div className={styles.alertError}>
+                    <div id="empresa-perfil-error" role="alert" className={styles.alertError}>
                       <span>{errorMsg}</span>
                     </div>
                 )}
@@ -166,8 +166,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
 
                   <div className={styles.grid2Col}>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Nome da Empresa *</label>
-                      <input
+                      <label className={styles.label} htmlFor="empresa-field-1">Nome da Empresa *</label>
+                      <input id="empresa-field-1" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                           type="text"
                           name="nome"
                           value={formData.nome}
@@ -178,8 +178,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                     </div>
 
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>CNPJ *</label>
-                      <input
+                      <label className={styles.label} htmlFor="empresa-field-2">CNPJ *</label>
+                      <input id="empresa-field-2" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                           type="text"
                           name="cnpj"
                           value={formData.cnpj}
@@ -199,8 +199,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
 
                   <div className={styles.grid2Col}>
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Email *</label>
-                      <input
+                      <label className={styles.label} htmlFor="empresa-field-3">Email *</label>
+                      <input id="empresa-field-3" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                           type="email"
                           name="email"
                           value={formData.email}
@@ -211,8 +211,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                     </div>
 
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Telefone Comercial *</label>
-                      <input
+                      <label className={styles.label} htmlFor="empresa-field-4">Telefone Comercial *</label>
+                      <input id="empresa-field-4" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                           type="tel"
                           name="fone"
                           value={formData.fone}
@@ -224,8 +224,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                     </div>
 
                     <div className={styles.inputGroup}>
-                      <label className={styles.label}>Site da Empresa</label>
-                      <input
+                      <label className={styles.label} htmlFor="empresa-field-5">Site da Empresa</label>
+                      <input id="empresa-field-5" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                           type="url"
                           name="site"
                           value={formData.site}
@@ -242,8 +242,8 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                 <div className={styles.formSection}>
                   <h3 className={styles.sectionTitle}>Apresentação</h3>
                   <div className={styles.inputGroup}>
-                    <label className={styles.label}>Biografia (Até 500 caracteres)</label>
-                    <textarea
+                    <label className={styles.label} htmlFor="empresa-field-6">Biografia (Até 500 caracteres)</label>
+                    <textarea id="empresa-field-6" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
                         name="bio"
                         value={formData.bio}
                         onChange={handleChange}

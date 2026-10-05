@@ -80,7 +80,7 @@ export default function CandidatoDashboard() {
           </div>
 
           <div className={styles.statsGrid}>
-            <div className={styles.statCard} onClick={() => setShowCandidaturasModal(true)} role="button">
+            <div className={styles.statCard} onClick={() => setShowCandidaturasModal(true)} role="button" tabIndex={0} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setShowCandidaturasModal(true) } }}>
               <div className={styles.statContent}>
                 <div>
                   <p className={styles.statLabel}>Acompanhar Processos</p>
@@ -92,7 +92,7 @@ export default function CandidatoDashboard() {
               </div>
             </div>
 
-            <div className={styles.statCard} onClick={() => navigate('/candidato/perfil')} role="button">
+            <div className={styles.statCard} onClick={() => navigate('/candidato/perfil')} role="button" tabIndex={0} onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); navigate('/candidato/perfil') } }}>
               <div className={styles.statContent}>
                 <div>
                   <p className={styles.statLabel}>Atualizar Currículo</p>

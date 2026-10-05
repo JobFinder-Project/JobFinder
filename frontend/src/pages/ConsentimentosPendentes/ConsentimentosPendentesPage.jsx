@@ -49,7 +49,7 @@ export default function ConsentimentosPendentesPage() {
           <BiBriefcase /> JobFinder
         </Link>
       </header>
-      <main className={styles.main}>
+      <main id="main-content" tabIndex={-1} className={styles.main}>
         <form className={styles.card} onSubmit={aceitar}>
           <div className={styles.icon}><BiShieldQuarter /></div>
           <h1>Consentimentos pendentes</h1>

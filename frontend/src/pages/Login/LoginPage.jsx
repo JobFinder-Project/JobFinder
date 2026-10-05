@@ -25,7 +25,7 @@ export default function Login() {
 
   if (isAuthenticated && user) {
     return (
-        <div className={styles.alreadyLogged}>
+        <main id="main-content" tabIndex={-1} className={styles.alreadyLogged}>
           <div className={styles.card}>
             <h2>Você já está logado como {user.nome || 'Usuário'}</h2>
             <Link
@@ -35,7 +35,7 @@ export default function Login() {
               Ir para o Painel
             </Link>
           </div>
-        </div>
+        </main>
     );
   }
 
@@ -71,7 +71,7 @@ export default function Login() {
           </div>
         </header>
 
-        <div className={styles.contentWrapper}>
+        <main id="main-content" tabIndex={-1} className={styles.contentWrapper}>
           <div className={styles.formContainer}>
             <div className={styles.textCenter}>
               <h1 className={styles.pageTitle}>Bem-vindo de volta</h1>
@@ -87,14 +87,14 @@ export default function Login() {
               <div className={styles.cardContent}>
 
                 {cadastroSucesso && (
-                    <div className={styles.successAlert}>
+                    <div role="status" className={styles.successAlert}>
                       <BiCheckCircle size={20} className={styles.successIcon} />
                       <span>Cadastro realizado com sucesso! Faça login para acessar sua conta.</span>
                     </div>
                 )}
 
                 {errorMsg && (
-                    <div className={styles.errorAlert}>
+                    <div id="login-error" role="alert" className={styles.errorAlert}>
                       <BiErrorCircle size={20} className={styles.errorIcon} />
                       <span>{errorMsg}</span>
                     </div>
@@ -106,6 +106,8 @@ export default function Login() {
                     <label htmlFor="email" className={styles.label}>E-mail</label>
                     <input
                         id="email"
+                        aria-describedby={errorMsg ? 'login-error' : undefined}
+                        aria-invalid={Boolean(errorMsg)}
                         type="email"
                         placeholder="seu@email.com"
                         value={email}
@@ -123,6 +125,8 @@ export default function Login() {
                     <div className={styles.passwordWrapper}>
                       <input
                           id="senha"
+                          aria-describedby={errorMsg ? 'login-error' : undefined}
+                          aria-invalid={Boolean(errorMsg)}
                           type={showPassword ? "text" : "password"}
                           placeholder="Digite sua senha"
                           value={senha}
@@ -169,7 +173,7 @@ export default function Login() {
               Ao entrar, você concorda com nossos <Link to="/termos-de-uso">Termos de Uso</Link> e <Link to="/politica-de-privacidade">Política de Privacidade</Link>
             </p>
           </div>
-        </div>
+        </main>
       </div>
   );
 }

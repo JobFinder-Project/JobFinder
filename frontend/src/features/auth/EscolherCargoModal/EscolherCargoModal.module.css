@@ -20,6 +20,9 @@
 }
 
 .optionCard {
+    width: 100%;
+    text-align: left;
+    color: inherit;
     display: flex;
     align-items: center;
     gap: 1.25rem;

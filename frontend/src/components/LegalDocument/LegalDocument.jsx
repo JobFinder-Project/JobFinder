@@ -18,7 +18,7 @@ export default function LegalDocument({ title, version, intro, children }) {
         </div>
       </header>
 
-      <main className={styles.main}>
+      <main id="main-content" tabIndex={-1} className={styles.main}>
         <article className={styles.document}>
           <div className={styles.heading}>
             <p className={styles.eyebrow}>Documento legal</p>

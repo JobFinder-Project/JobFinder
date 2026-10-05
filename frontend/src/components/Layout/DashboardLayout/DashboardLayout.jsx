@@ -16,9 +16,9 @@ export default function DashboardLayout({
                 onOpenVagas={onOpenVagas}
             />
 
-            <div className={styles.mainContent}>
+            <main id="main-content" tabIndex={-1} className={styles.mainContent}>
                 {children}
-            </div>
+            </main>
         </div>
     )
 }
