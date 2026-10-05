@@ -60,9 +60,7 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
     const { vagaId } = await createVagaAsEmpresa(app);
 
-    const candidaturaResponse = await candidateAgent
-      .post(`/candidato/vagas/${vagaId}`)
-      .send({});
+    const candidaturaResponse = await candidateAgent.post(`/candidato/vagas/${vagaId}`).send({});
 
     expect(candidaturaResponse.statusCode).toBe(201);
     expect(candidaturaResponse.body.success).toBe(true);
@@ -111,9 +109,7 @@ describe('Fluxo de candidaturas do candidato', () => {
     const { agent: candidateAgent } = await registerAndLoginCandidato(app);
     const vagaInexistenteId = new mongoose.Types.ObjectId();
 
-    const response = await candidateAgent
-      .post(`/candidato/vagas/${vagaInexistenteId}`)
-      .send({});
+    const response = await candidateAgent.post(`/candidato/vagas/${vagaInexistenteId}`).send({});
 
     expect(response.statusCode).toBe(404);
   });
@@ -121,9 +117,7 @@ describe('Fluxo de candidaturas do candidato', () => {
   it('deve bloquear candidatura sem autenticação ou feita por empresa', async () => {
     const { agent: companyAgent, vagaId } = await createVagaAsEmpresa(app);
 
-    const unauthenticatedResponse = await request(app)
-      .post(`/candidato/vagas/${vagaId}`)
-      .send({});
+    const unauthenticatedResponse = await request(app).post(`/candidato/vagas/${vagaId}`).send({});
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
     const companyResponse = await companyAgent.post(`/candidato/vagas/${vagaId}`).send({});
