@@ -1,8 +1,19 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { BiMailSend, BiPhone, BiGlobe, BiEditAlt, BiTrash } from 'react-icons/bi'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  BiBriefcase,
+  BiBuildings,
+  BiCalendar,
+  BiEditAlt,
+  BiGlobe,
+  BiMailSend,
+  BiMap,
+  BiPhone,
+  BiTrash,
+} from 'react-icons/bi'
 import Modal from '../../../components/ui/Modal/Modal'
 import ExcluirContaModal from '../../conta/ExcluirContaModal/ExcluirContaModal'
+import TagInput from '../../../components/ui/TagInput/TagInput'
 import { useAuth } from '../../../contexts/AuthContext'
 import { empresaService } from '../../../services/empresaService'
 import styles from './PerfilEmpresaModal.module.css'
@@ -20,6 +31,15 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
     fone: empresa?.fone || '',
     bio: empresa?.bio || '',
     site: empresa?.site || '',
+    segmento: empresa?.segmento || '',
+    localizacao: empresa?.localizacao || '',
+    tamanhoEmpresa: empresa?.tamanhoEmpresa || '',
+    anoFundacao: empresa?.anoFundacao || '',
+    missao: empresa?.missao || '',
+    valores: Array.isArray(empresa?.valores) ? empresa.valores.join(', ') : empresa?.valores || '',
+    beneficios: Array.isArray(empresa?.beneficios)
+      ? empresa.beneficios.join(', ')
+      : empresa?.beneficios || '',
   })
 
   const [loading, setLoading] = useState(false)
@@ -41,6 +61,10 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }))
     }
+  }
+
+  const handleTagChange = (field) => (newValue) => {
+    setFormData((prev) => ({ ...prev, [field]: newValue }))
   }
 
   const handleSubmit = async (e) => {
@@ -113,6 +137,38 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                   </span>
                     </div>
                   </div>
+
+                  <div className={styles.infoCard}>
+                    <BiBriefcase className={styles.infoIcon} />
+                    <div className={styles.infoContent}>
+                      <span className={styles.infoLabel}>Segmento</span>
+                      <span className={styles.infoValue}>{empresa?.segmento || 'Não informado'}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.infoCard}>
+                    <BiMap className={styles.infoIcon} />
+                    <div className={styles.infoContent}>
+                      <span className={styles.infoLabel}>Localização</span>
+                      <span className={styles.infoValue}>{empresa?.localizacao || 'Não informada'}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.infoCard}>
+                    <BiBuildings className={styles.infoIcon} />
+                    <div className={styles.infoContent}>
+                      <span className={styles.infoLabel}>Porte</span>
+                      <span className={styles.infoValue}>{empresa?.tamanhoEmpresa || 'Não informado'}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.infoCard}>
+                    <BiCalendar className={styles.infoIcon} />
+                    <div className={styles.infoContent}>
+                      <span className={styles.infoLabel}>Fundação</span>
+                      <span className={styles.infoValue}>{empresa?.anoFundacao || 'Não informada'}</span>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles.bioSection}>
@@ -121,6 +177,53 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                     {empresa?.bio || 'Nenhuma descrição fornecida ainda. Edite seu perfil para contar mais sobre sua empresa!'}
                   </p>
                 </div>
+
+                <div className={styles.bioSection}>
+                  <h3 className={styles.sectionTitle}>Missão</h3>
+                  <p className={styles.bioText}>
+                    {empresa?.missao || 'Missão institucional ainda não preenchida.'}
+                  </p>
+                </div>
+
+                <div className={styles.publicListsGrid}>
+                  <div className={styles.bioSection}>
+                    <h3 className={styles.sectionTitle}>Valores</h3>
+                    {empresa?.valores?.length ? (
+                        <div className={styles.chipList}>
+                          {empresa.valores.map((valor) => (
+                              <span key={valor} className={styles.chip}>{valor}</span>
+                          ))}
+                        </div>
+                    ) : (
+                        <p className={styles.bioText}>Valores ainda não informados.</p>
+                    )}
+                  </div>
+
+                  <div className={styles.bioSection}>
+                    <h3 className={styles.sectionTitle}>Benefícios</h3>
+                    {empresa?.beneficios?.length ? (
+                        <div className={styles.chipList}>
+                          {empresa.beneficios.map((beneficio) => (
+                              <span key={beneficio} className={styles.chip}>{beneficio}</span>
+                          ))}
+                        </div>
+                    ) : (
+                        <p className={styles.bioText}>Benefícios ainda não informados.</p>
+                    )}
+                  </div>
+                </div>
+
+                {empresa?.slug && (
+                    <div className={styles.publicProfileBox}>
+                      <div>
+                        <h3 className={styles.sectionTitle}>Perfil público</h3>
+                        <p className={styles.bioText}>Confira como candidatos visualizam sua empresa.</p>
+                      </div>
+                      <Link to={`/empresas/${empresa.slug}`} className={styles.btnPublicProfile}>
+                        Abrir perfil público
+                      </Link>
+                    </div>
+                )}
 
                 <div className={styles.dangerZone}>
                   <div>
@@ -241,6 +344,62 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
 
                 <div className={styles.formSection}>
                   <h3 className={styles.sectionTitle}>Apresentação</h3>
+                  <div className={styles.grid2Col}>
+                    <div className={styles.inputGroup}>
+                      <label className={styles.label}>Segmento</label>
+                      <input
+                          type="text"
+                          name="segmento"
+                          value={formData.segmento}
+                          onChange={handleChange}
+                          className={styles.input}
+                          placeholder="Ex: Tecnologia"
+                      />
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                      <label className={styles.label}>Localização</label>
+                      <input
+                          type="text"
+                          name="localizacao"
+                          value={formData.localizacao}
+                          onChange={handleChange}
+                          className={styles.input}
+                          placeholder="Cidade, UF"
+                      />
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                      <label className={styles.label}>Tamanho da Empresa</label>
+                      <select
+                          name="tamanhoEmpresa"
+                          value={formData.tamanhoEmpresa}
+                          onChange={handleChange}
+                          className={styles.input}
+                      >
+                        <option value="">Selecione uma faixa</option>
+                        <option value="1-10 colaboradores">1-10 colaboradores</option>
+                        <option value="11-50 colaboradores">11-50 colaboradores</option>
+                        <option value="51-200 colaboradores">51-200 colaboradores</option>
+                        <option value="201-500 colaboradores">201-500 colaboradores</option>
+                        <option value="501+ colaboradores">501+ colaboradores</option>
+                      </select>
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                      <label className={styles.label}>Ano de Fundação</label>
+                      <input
+                          type="number"
+                          name="anoFundacao"
+                          value={formData.anoFundacao}
+                          onChange={handleChange}
+                          className={styles.input}
+                          min="1800"
+                          max={new Date().getFullYear()}
+                      />
+                    </div>
+                  </div>
+
                   <div className={styles.inputGroup}>
                     <label className={styles.label} htmlFor="empresa-field-6">Biografia (Até 500 caracteres)</label>
                     <textarea id="empresa-field-6" aria-describedby={errorMsg ? "empresa-perfil-error" : undefined} aria-invalid={Boolean(errorMsg)}
@@ -251,6 +410,39 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
                         placeholder="Conte um pouco sobre a história e os valores da sua empresa..."
                         rows={4}
                         maxLength={500}
+                      />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.label}>Missão (Até 600 caracteres)</label>
+                    <textarea
+                        name="missao"
+                        value={formData.missao}
+                        onChange={handleChange}
+                        className={styles.textarea}
+                        placeholder="Explique o propósito da empresa para os candidatos..."
+                        rows={3}
+                        maxLength={600}
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="empresa-valores">Valores</label>
+                    <TagInput
+                        id="empresa-valores"
+                        value={formData.valores}
+                        onChange={handleTagChange('valores')}
+                        placeholder="Ex: Transparência, Colaboração... (Enter para adicionar)"
+                    />
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="empresa-beneficios">Benefícios</label>
+                    <TagInput
+                        id="empresa-beneficios"
+                        value={formData.beneficios}
+                        onChange={handleTagChange('beneficios')}
+                        placeholder="Ex: Plano de saúde, Home office... (Enter para adicionar)"
                     />
                   </div>
                 </div>

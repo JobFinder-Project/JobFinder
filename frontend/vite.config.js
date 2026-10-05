@@ -1,16 +1,22 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const shouldServeReactRoute = (req) => req.headers.accept?.includes('text/html')
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
     proxy: {
-      // Captura as rotas base do backend e redireciona para a API
-      '^/(vagas|candidato|empresa|login|registro|me|logout|recuperar_senha|redefinir_senha|areas|docs|auth)': {
+      // Encaminha chamadas de API para o backend, mas deixa recarregamentos de páginas
+      // públicas/protegidas serem atendidos pelo React Router no dev server.
+      '^/(vagas|candidato|empresa|empresas/publicas|areas|docs|auth|consentimentos)(/|$)': {
         target: 'http://localhost:3000',
-        changeOrigin: true
+        changeOrigin: true,
+        bypass: (req) => {
+          if (shouldServeReactRoute(req)) return req.url
+        }
       }
     }
   },

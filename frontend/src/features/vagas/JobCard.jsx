@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { BiRightArrowAlt, BiMap, BiBuilding } from 'react-icons/bi';
 import styles from './JobCard.module.css';
 
@@ -40,7 +41,17 @@ export default function JobCard({ vaga, onViewDetails }) {
                         <h3 className={styles.title} title={vaga.nome}>
                             {vaga.nome}
                         </h3>
-                        <p className={styles.company}>{vaga.empresa?.nome || 'Empresa confidencial'}</p>
+                        {vaga.empresa?.slug ? (
+                            <Link
+                                to={`/empresas/${vaga.empresa.slug}`}
+                                className={styles.companyLink}
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                {vaga.empresa.nome}
+                            </Link>
+                        ) : (
+                            <p className={styles.company}>{vaga.empresa?.nome || 'Empresa confidencial'}</p>
+                        )}
                     </div>
 
                     <div className={styles.badges}>

@@ -237,6 +237,21 @@
   margin-top: 2rem;
 }
 
+.publicCompaniesLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.publicCompaniesLink:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
 @media (min-width: 640px) {
   .heroActionButtons {
     flex-direction: row;

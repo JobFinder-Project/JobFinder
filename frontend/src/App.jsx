@@ -25,6 +25,8 @@ import PaginaErro from './pages/PaginaErro/PaginaErroPage'
 import TermosUsoPage from './pages/TermosUso/TermosUsoPage'
 import PoliticaPrivacidadePage from './pages/PoliticaPrivacidade/PoliticaPrivacidadePage'
 import ConsentimentosPendentesPage from './pages/ConsentimentosPendentes/ConsentimentosPendentesPage'
+import EmpresaPublicaPage from './pages/EmpresaPublica/EmpresaPublicaPage'
+import EmpresasPublicasPage from './pages/EmpresasPublicas/EmpresasPublicasPage'
 
 const queryClient = new QueryClient()
 
@@ -43,6 +45,8 @@ function App() {
               <Route path='/suporte' element={<SuportePage />} />
               <Route path='/termos-de-uso' element={<TermosUsoPage />} />
               <Route path='/politica-de-privacidade' element={<PoliticaPrivacidadePage />} />
+              <Route path='/empresas' element={<EmpresasPublicasPage />} />
+              <Route path='/empresas/:slug' element={<EmpresaPublicaPage />} />
 
               <Route path='/consentimentos-pendentes' element={
                 <ProtectedRoute allowPendingConsent>
