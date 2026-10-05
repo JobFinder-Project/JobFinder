@@ -179,7 +179,9 @@ describe('Perfil público de empresa', () => {
     });
 
     const dashboardResponse = await agent.get('/empresa/dashboard');
-    const publicResponse = await request(app).get(`/empresa/publica/${dashboardResponse.body.empresa.slug}`);
+    const publicResponse = await request(app).get(
+      `/empresa/publica/${dashboardResponse.body.empresa.slug}`
+    );
 
     expect(publicResponse.statusCode).toBe(200);
     expect(publicResponse.body.vagas.map((vaga) => vaga.nome)).toEqual(
