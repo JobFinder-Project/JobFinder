@@ -5,6 +5,7 @@ import candidatoRoutes from './candidatoRoutes.js';
 import empresaRoutes from './empresaRoutes.js';
 import consentimentoRoutes from './consentimentoRoutes.js';
 import { globalError, notFound } from '../middlewares/errorHandler.js';
+import EmpresaController from '../controllers/empresaController.js';
 
 const routes = (app, basePath = '') => {
   app.use(express.json());
@@ -14,6 +15,7 @@ const routes = (app, basePath = '') => {
   app.use('/auth', authRoutes);
   app.use(`${basePath}`, consentimentoRoutes);
   app.use(`${basePath}/auth`, notFound);
+  app.get(`${basePath}/empresas/publicas`, EmpresaController.listarPerfisPublicos);
   app.use(`${basePath}/candidato`, candidatoRoutes);
   app.use(`${basePath}/empresa`, empresaRoutes);
   app.use(`${basePath}/`, vagasRoutes);

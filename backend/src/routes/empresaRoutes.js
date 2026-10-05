@@ -48,6 +48,8 @@ const uploadImagemVaga = (req, res, next) => {
 const router = express.Router();
 
 router.post('/cadastrar', EmpresaController.cadastrarEmpresa);
+router.get('/publica', EmpresaController.listarPerfisPublicos);
+router.get('/publica/:slug', EmpresaController.buscarPerfilPublico);
 
 router.use(isAuthenticated, isEmpresa, exigirConsentimentosVigentes);
 

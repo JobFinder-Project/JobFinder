@@ -12,6 +12,7 @@ import {
   toCandidatoPublicDTO,
   toCandidatoResumoDTO,
   toEmpresaDTO,
+  toEmpresaPublicProfileDTO,
   toVagaDTO,
   toCandidaturaDTO,
   toCandidaturaEmpresaDTO,
@@ -67,6 +68,55 @@ const isAllowedVagaImageContent = (file) => {
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const slugifyEmpresaNome = (nome) => {
+  const slug = String(nome || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+
+  return slug || 'empresa';
+};
+
+const gerarSlugUnicoEmpresa = async (nome, empresaId) => {
+  const baseSlug = slugifyEmpresaNome(nome);
+  let slug = baseSlug;
+  let tentativa = 1;
+  const query = { slug };
+
+  if (empresaId) {
+    query._id = { $ne: empresaId };
+  }
+
+  while (await Empresa.exists(query)) {
+    tentativa += 1;
+    slug = `${baseSlug}-${tentativa}`;
+    query.slug = slug;
+  }
+
+  return slug;
+};
+
+const normalizeListField = (value) => {
+  if (value === undefined) return undefined;
+
+  const rawItems = Array.isArray(value) ? value : String(value).split(',');
+
+  return rawItems
+    .map((item) => String(item).trim())
+    .filter(Boolean)
+    .slice(0, 12);
+};
+
+const normalizeAnoFundacao = (value) => {
+  if (value === undefined || value === null || value === '') return undefined;
+
+  const parsedValue = Number(value);
+  return Number.isNaN(parsedValue) ? value : parsedValue;
+};
+
 class EmpresaController {
   static async cadastrarEmpresa(req, res, next) {
     try {
@@ -91,15 +141,24 @@ class EmpresaController {
 
       const salt = await bcrypt.genSalt(12);
       const senhaHash = await bcrypt.hash(senha, salt);
+      const slug = await gerarSlugUnicoEmpresa(req.body.nome);
 
       const novaEmpresa = new Empresa({
         nome: req.body.nome,
+        slug,
         email: email,
         cnpj: req.body.cnpj,
         senha: senhaHash,
         fone: req.body.fone,
         bio: req.body.bio || '',
         site: req.body.site || '',
+        segmento: req.body.segmento || '',
+        localizacao: req.body.localizacao || '',
+        tamanhoEmpresa: req.body.tamanhoEmpresa || '',
+        anoFundacao: normalizeAnoFundacao(req.body.anoFundacao),
+        missao: req.body.missao || '',
+        valores: normalizeListField(req.body.valores) || [],
+        beneficios: normalizeListField(req.body.beneficios) || [],
         termosUsoAceitoEm: new Date(),
         termosUsoVersao: TERMOS_USO_VERSAO_ATUAL,
         politicaPrivacidadeAceitaEm: new Date(),
@@ -120,6 +179,11 @@ class EmpresaController {
 
       if (!empresa) {
         return next(new Error404('Perfil de empresa não encontrado.'));
+      }
+
+      if (!empresa.slug) {
+        empresa.slug = await gerarSlugUnicoEmpresa(empresa.nome, empresa._id);
+        await empresa.save();
       }
 
       const vagas = await Vaga.find({ empresa: empresa._id });
@@ -158,18 +222,44 @@ class EmpresaController {
   static async editarPerfil(req, res, next) {
     try {
       const empresaId = req.session.user.id;
-      const { nome, email, fone, bio, site } = req.body;
+      const {
+        nome,
+        email,
+        fone,
+        bio,
+        site,
+        segmento,
+        localizacao,
+        tamanhoEmpresa,
+        anoFundacao,
+        missao,
+        valores,
+        beneficios,
+      } = req.body;
 
       const empresa = await Empresa.findById(empresaId);
       if (!empresa) {
         return next(new Error404('Empresa não encontrada.'));
       }
 
-      if (nome !== undefined) empresa.nome = nome;
+      if (nome !== undefined) {
+        empresa.nome = nome;
+        empresa.slug = await gerarSlugUnicoEmpresa(nome, empresa._id);
+      } else if (!empresa.slug) {
+        empresa.slug = await gerarSlugUnicoEmpresa(empresa.nome, empresa._id);
+      }
+
       if (email !== undefined) empresa.email = email;
       if (fone !== undefined) empresa.fone = fone;
       if (bio !== undefined) empresa.bio = bio;
       if (site !== undefined) empresa.site = site;
+      if (segmento !== undefined) empresa.segmento = segmento;
+      if (localizacao !== undefined) empresa.localizacao = localizacao;
+      if (tamanhoEmpresa !== undefined) empresa.tamanhoEmpresa = tamanhoEmpresa;
+      if (anoFundacao !== undefined) empresa.anoFundacao = normalizeAnoFundacao(anoFundacao);
+      if (missao !== undefined) empresa.missao = missao;
+      if (valores !== undefined) empresa.valores = normalizeListField(valores);
+      if (beneficios !== undefined) empresa.beneficios = normalizeListField(beneficios);
 
       await empresa.save();
 
@@ -177,6 +267,54 @@ class EmpresaController {
         success: true,
         message: 'Perfil atualizado com sucesso',
         empresa: toEmpresaDTO(empresa),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async buscarPerfilPublico(req, res, next) {
+    try {
+      const { slug } = req.params;
+
+      if (!slug || slug.length > 120) {
+        return next(new Error400('Perfil de empresa inválido.'));
+      }
+
+      const empresa = await Empresa.findOne({ slug });
+
+      if (!empresa) {
+        return next(new Error404('Empresa não encontrada.'));
+      }
+
+      const vagas = await Vaga.find({ empresa: empresa._id, status: 'Aberta' }).sort({
+        createdAt: -1,
+      });
+
+      res.status(200).json({
+        empresa: toEmpresaPublicProfileDTO(empresa),
+        vagas: vagas.map(toVagaDTO),
+      });
+    } catch (erro) {
+      console.error(erro);
+      next(erro);
+    }
+  }
+
+  static async listarPerfisPublicos(req, res, next) {
+    try {
+      const empresas = await Empresa.find({}).sort({ nome: 1 }).limit(60);
+
+      for (const empresa of empresas) {
+        if (!empresa.slug) {
+          empresa.slug = await gerarSlugUnicoEmpresa(empresa.nome, empresa._id);
+          await empresa.save();
+        }
+      }
+
+      res.status(200).json({
+        empresas: empresas.map(toEmpresaPublicProfileDTO),
       });
     } catch (erro) {
       console.error(erro);
