@@ -85,9 +85,7 @@ describe('Fluxo de vagas', () => {
       .send(buildVaga());
     expect(unauthenticatedResponse.statusCode).toBe(401);
 
-    const candidateResponse = await candidateAgent
-      .post('/empresa/vagas/criar')
-      .send(buildVaga());
+    const candidateResponse = await candidateAgent.post('/empresa/vagas/criar').send(buildVaga());
     expect(candidateResponse.statusCode).toBe(403);
   });
 

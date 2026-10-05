@@ -118,6 +118,22 @@ export const schemas = {
       fone: { type: 'string', example: '(92) 99999-9999' },
       bio: { type: 'string' },
       site: { type: 'string', example: 'https://empresa.com' },
+      segmento: { type: 'string', example: 'Tecnologia' },
+      localizacao: { type: 'string', example: 'Manaus, AM' },
+      tamanhoEmpresa: {
+        type: 'string',
+        enum: [
+          '1-10 colaboradores',
+          '11-50 colaboradores',
+          '51-200 colaboradores',
+          '201-500 colaboradores',
+          '501+ colaboradores',
+        ],
+      },
+      anoFundacao: { type: 'number', example: 2018 },
+      missao: { type: 'string' },
+      valores: { type: 'string', description: 'Lista separada por vírgulas.' },
+      beneficios: { type: 'string', description: 'Lista separada por vírgulas.' },
       aceiteTermosUso: {
         type: 'boolean',
         description: 'Aceite obrigatório. A versão vigente é definida pelo servidor.',
@@ -148,6 +164,28 @@ export const schemas = {
       fone: { type: 'string', example: '(92) 99999-9999' },
       bio: { type: 'string' },
       site: { type: 'string', example: 'https://empresa.com' },
+      segmento: { type: 'string' },
+      localizacao: { type: 'string' },
+      tamanhoEmpresa: {
+        type: 'string',
+        enum: [
+          '1-10 colaboradores',
+          '11-50 colaboradores',
+          '51-200 colaboradores',
+          '201-500 colaboradores',
+          '501+ colaboradores',
+        ],
+      },
+      anoFundacao: { type: 'number' },
+      missao: { type: 'string' },
+      valores: {
+        type: 'string',
+        description: 'Lista separada por vírgulas ou array de strings.',
+      },
+      beneficios: {
+        type: 'string',
+        description: 'Lista separada por vírgulas ou array de strings.',
+      },
     },
   },
 
@@ -239,11 +277,19 @@ export const schemas = {
     description: 'Dados visíveis à própria empresa autenticada.',
     properties: {
       nome: { type: 'string' },
+      slug: { type: 'string' },
       cnpj: { type: 'string' },
       email: { type: 'string', format: 'email' },
       fone: { type: 'string' },
       bio: { type: 'string' },
       site: { type: 'string', format: 'uri' },
+      segmento: { type: 'string' },
+      localizacao: { type: 'string' },
+      tamanhoEmpresa: { type: 'string' },
+      anoFundacao: { type: 'number' },
+      missao: { type: 'string' },
+      valores: { type: 'array', items: { type: 'string' } },
+      beneficios: { type: 'array', items: { type: 'string' } },
       imagem: { type: 'string', nullable: true, description: 'Data URL da imagem do perfil.' },
     },
   },
@@ -253,10 +299,31 @@ export const schemas = {
     description: 'Dados públicos da empresa, sem identificador interno, CNPJ, e-mail ou telefone.',
     properties: {
       nome: { type: 'string' },
+      slug: { type: 'string' },
       bio: { type: 'string' },
       site: { type: 'string', format: 'uri' },
       imagem: { type: 'string', nullable: true, description: 'Data URL da imagem do perfil.' },
     },
+  },
+
+  EmpresaPublicaDetalhada: {
+    allOf: [
+      { $ref: '#/components/schemas/EmpresaPublica' },
+      {
+        type: 'object',
+        description:
+          'Perfil público ampliado, sem identificadores internos, CNPJ, e-mail ou telefone.',
+        properties: {
+          segmento: { type: 'string' },
+          localizacao: { type: 'string' },
+          tamanhoEmpresa: { type: 'string' },
+          anoFundacao: { type: 'number' },
+          missao: { type: 'string' },
+          valores: { type: 'array', items: { type: 'string' } },
+          beneficios: { type: 'array', items: { type: 'string' } },
+        },
+      },
+    ],
   },
 
   VagaEmpresa: {
@@ -340,6 +407,24 @@ export const schemas = {
         items: { $ref: '#/components/schemas/CandidatoResumo' },
       },
       totalCandidatos: { type: 'integer', minimum: 0 },
+    },
+  },
+
+  EmpresaPublicaResponse: {
+    type: 'object',
+    properties: {
+      empresa: { $ref: '#/components/schemas/EmpresaPublicaDetalhada' },
+      vagas: { type: 'array', items: { $ref: '#/components/schemas/VagaEmpresa' } },
+    },
+  },
+
+  EmpresasPublicasResponse: {
+    type: 'object',
+    properties: {
+      empresas: {
+        type: 'array',
+        items: { $ref: '#/components/schemas/EmpresaPublicaDetalhada' },
+      },
     },
   },
 

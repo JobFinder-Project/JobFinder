@@ -81,6 +81,24 @@
   text-overflow: ellipsis;
 }
 
+.companyLink {
+  display: inline-block;
+  max-width: 100%;
+  font-size: 0.95rem;
+  color: #475569;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.companyLink:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
 .badges {
   display: flex;
   flex-wrap: wrap;

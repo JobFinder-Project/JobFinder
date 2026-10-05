@@ -18,6 +18,55 @@ export const empresaPaths = {
     },
   },
 
+  '/empresas/publicas': {
+    get: {
+      tags: ['Empresa'],
+      summary: 'Listar perfis públicos de empresas',
+      description:
+        'Retorna uma vitrine pública de empresas com dados institucionais permitidos. Não expõe CNPJ, e-mail, telefone, senha ou identificadores internos.',
+      responses: {
+        200: {
+          description: 'Perfis públicos encontrados',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/EmpresasPublicasResponse' },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  '/empresa/publica/{slug}': {
+    get: {
+      tags: ['Empresa'],
+      summary: 'Buscar perfil público de uma empresa',
+      description:
+        'Retorna somente dados institucionais permitidos para visualização pública. Não expõe CNPJ, e-mail, telefone, senha ou identificadores internos.',
+      parameters: [
+        {
+          in: 'path',
+          name: 'slug',
+          required: true,
+          schema: { type: 'string' },
+          description: 'Identificador público da empresa.',
+        },
+      ],
+      responses: {
+        200: {
+          description: 'Perfil público da empresa encontrado',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/EmpresaPublicaResponse' },
+            },
+          },
+        },
+        400: { description: 'Slug inválido' },
+        404: { description: 'Empresa não encontrada' },
+      },
+    },
+  },
+
   '/empresa/dashboard': {
     get: {
       tags: ['Empresa'],

@@ -9,6 +9,14 @@ export const empresaService = {
 		return api.get("/empresa/dashboard");
 	},
 
+	getPerfilPublico: async (slug) => {
+		return api.get(`/empresa/publica/${encodeURIComponent(slug)}`);
+	},
+
+	listarPerfisPublicos: async () => {
+		return api.get("/empresas/publicas");
+	},
+
 	atualizarPerfil: async (dados) => {
 		return api.put(`/empresa/editar`, dados);
 	},

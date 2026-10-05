@@ -96,9 +96,7 @@ describe('Exclusão da própria conta de candidato', () => {
   });
 
   it('deve exigir autenticação', async () => {
-    const response = await request(app)
-      .delete('/candidato/conta')
-      .send({ senha: 'qualquer123' });
+    const response = await request(app).delete('/candidato/conta').send({ senha: 'qualquer123' });
 
     expect(response.statusCode).toBe(401);
   });

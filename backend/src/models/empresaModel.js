@@ -13,6 +13,15 @@ const EmpresaSchema = mongoose.Schema({
       message: 'Nome inválido',
     },
   },
+  slug: {
+    type: String,
+    required: false,
+    trim: true,
+    lowercase: true,
+    unique: true,
+    sparse: true,
+    maxlength: [120, 'Slug deve ter no máximo 120 caracteres'],
+  },
   cnpj: {
     type: String,
     required: [true, 'O CNPJ é obrigatório'],
@@ -60,6 +69,54 @@ const EmpresaSchema = mongoose.Schema({
       validator: validators.isUrlOptional,
       message: 'Site inválido',
     },
+  },
+  segmento: {
+    type: String,
+    required: false,
+    trim: true,
+    maxlength: [120, 'Segmento deve ter no máximo 120 caracteres'],
+  },
+  localizacao: {
+    type: String,
+    required: false,
+    trim: true,
+    maxlength: [120, 'Localização deve ter no máximo 120 caracteres'],
+  },
+  tamanhoEmpresa: {
+    type: String,
+    required: false,
+    trim: true,
+    enum: {
+      values: [
+        '',
+        '1-10 colaboradores',
+        '11-50 colaboradores',
+        '51-200 colaboradores',
+        '201-500 colaboradores',
+        '501+ colaboradores',
+      ],
+      message: 'Tamanho de empresa inválido',
+    },
+  },
+  anoFundacao: {
+    type: Number,
+    required: false,
+    min: [1800, 'Ano de fundação inválido'],
+    max: [new Date().getFullYear(), 'Ano de fundação não pode ser futuro'],
+  },
+  missao: {
+    type: String,
+    required: false,
+    trim: true,
+    maxlength: [600, 'Missão deve ter no máximo 600 caracteres'],
+  },
+  valores: {
+    type: [String],
+    default: [],
+  },
+  beneficios: {
+    type: [String],
+    default: [],
   },
   resetToken: {
     type: String,

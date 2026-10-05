@@ -67,6 +67,10 @@ export default function Home() {
                 Quero contratar
               </button>
             </div>
+
+            <Link to="/empresas" className={styles.publicCompaniesLink}>
+              Conhecer empresas no JobFinder
+            </Link>
           </div>
         </section>
 

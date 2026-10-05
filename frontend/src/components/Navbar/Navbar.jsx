@@ -32,6 +32,7 @@ export default function Navbar() {
 
             <div className={styles.navLinks}>
               <Link to="/" className={styles.navLink}>Início</Link>
+              <Link to="/empresas" className={styles.navLink}>Empresas</Link>
               <Link to="/suporte" className={styles.navLink}>Suporte</Link>
 
               <a href="/login" onClick={handleLoginClick} className={styles.navLink}>

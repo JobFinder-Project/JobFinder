@@ -120,20 +120,23 @@ describe('Fluxo de autenticação', () => {
   it.each([
     ['candidato', registerAndLoginCandidato, '/candidato/dashboard'],
     ['empresa', registerAndLoginEmpresa, '/empresa/dashboard'],
-  ])('deve invalidar a sessão após logout de %s', async (_role, registerAndLogin, dashboardPath) => {
-    const { agent } = await registerAndLogin(app);
+  ])(
+    'deve invalidar a sessão após logout de %s',
+    async (_role, registerAndLogin, dashboardPath) => {
+      const { agent } = await registerAndLogin(app);
 
-    const logoutResponse = await agent.post('/auth/logout');
-    expect(logoutResponse.statusCode).toBe(200);
-    expect(logoutResponse.body.success).toBe(true);
+      const logoutResponse = await agent.post('/auth/logout');
+      expect(logoutResponse.statusCode).toBe(200);
+      expect(logoutResponse.body.success).toBe(true);
 
-    const meResponse = await agent.get('/auth/me');
-    expect(meResponse.statusCode).toBe(200);
-    expect(meResponse.body.authenticated).toBe(false);
+      const meResponse = await agent.get('/auth/me');
+      expect(meResponse.statusCode).toBe(200);
+      expect(meResponse.body.authenticated).toBe(false);
 
-    const dashboardResponse = await agent.get(dashboardPath);
-    expect(dashboardResponse.statusCode).toBe(401);
-  });
+      const dashboardResponse = await agent.get(dashboardPath);
+      expect(dashboardResponse.statusCode).toBe(401);
+    }
+  );
 
   it('deve remover endpoints antigos de autenticação do contrato público', async () => {
     const responses = await Promise.all([
