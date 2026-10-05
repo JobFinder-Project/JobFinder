@@ -59,9 +59,13 @@
 }
 
 .input:focus {
-  outline: none;
   border-color: #dc2626;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.input:focus-visible {
+  outline: 3px solid #b91c1c;
+  outline-offset: 2px;
 }
 
 .input:disabled {
