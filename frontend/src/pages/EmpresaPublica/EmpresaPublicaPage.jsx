@@ -71,8 +71,8 @@ export default function EmpresaPublicaPage() {
           <div className={styles.errorCard}>
             <h1>Empresa não encontrada</h1>
             <p>{errorMsg}</p>
-            <Link to="/candidato/vagas" className={styles.primaryLink}>
-              Ver vagas disponíveis
+            <Link to="/empresas" className={styles.primaryLink}>
+              Ver empresas
             </Link>
           </div>
         </main>
@@ -88,9 +88,9 @@ export default function EmpresaPublicaPage() {
       <Navbar />
       <main className={styles.main}>
         <div className={styles.container}>
-          <Link to="/candidato/vagas" className={styles.backLink}>
+          <Link to="/empresas" className={styles.backLink}>
             <BiArrowBack size={18} />
-            Voltar para vagas
+            Voltar para empresas
           </Link>
 
           <section className={styles.hero}>

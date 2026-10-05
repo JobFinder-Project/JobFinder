@@ -74,6 +74,10 @@ describe('EmpresaPublicaPage', () => {
     expect(screen.getByText('Transparência')).toBeInTheDocument();
     expect(screen.getByText('Plano de saúde')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Desenvolvedor Frontend' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /voltar para empresas/i })).toHaveAttribute(
+      'href',
+      '/empresas'
+    );
 
     expect(screen.queryByText(/cnpj/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/contato@/i)).not.toBeInTheDocument();
