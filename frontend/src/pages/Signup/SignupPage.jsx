@@ -92,37 +92,43 @@ export default function SignupPage() {
         setCurrentStep(prev => Math.max(prev - 1, 1));
     };
 
+    const montarPayloadEmpresa = (formData) => ({
+        nome: formData.nome,
+        email: formData.email,
+        senha: formData.senha,
+        cnpj: formData.cnpj,
+        fone: formData.fone,
+        bio: formData.bio,
+        site: formData.site,
+        segmento: formData.segmento,
+        localizacao: formData.localizacao,
+        tamanhoEmpresa: formData.tamanhoEmpresa,
+        anoFundacao: formData.anoFundacao,
+        missao: formData.missao,
+        valores: formData.valores,
+        beneficios: formData.beneficios,
+        aceiteTermosUso: formData.aceiteTermosUso,
+        aceitePoliticaPrivacidade: formData.aceitePoliticaPrivacidade,
+    });
+
+    const montarFormDataCandidato = (formData) => {
+        const payload = new FormData();
+        Object.keys(formData).forEach(key => {
+            if (formData[key] !== null && formData[key] !== '') {
+                payload.append(key, formData[key]);
+            }
+        });
+        return payload;
+    };
+
     const submitForm = async () => {
         setLoading(true);
         setErrorMsg('');
         try {
             if (isEmployer) {
-                await empresaService.cadastrar({
-                    nome: formData.nome,
-                    email: formData.email,
-                    senha: formData.senha,
-                    cnpj: formData.cnpj,
-                    fone: formData.fone,
-                    bio: formData.bio,
-                    site: formData.site,
-                    segmento: formData.segmento,
-                    localizacao: formData.localizacao,
-                    tamanhoEmpresa: formData.tamanhoEmpresa,
-                    anoFundacao: formData.anoFundacao,
-                    missao: formData.missao,
-                    valores: formData.valores,
-                    beneficios: formData.beneficios,
-                    aceiteTermosUso: formData.aceiteTermosUso,
-                    aceitePoliticaPrivacidade: formData.aceitePoliticaPrivacidade,
-                });
+                await empresaService.cadastrar(montarPayloadEmpresa(formData));
             } else {
-                const payload = new FormData();
-                Object.keys(formData).forEach(key => {
-                    if (formData[key] !== null && formData[key] !== '') {
-                        payload.append(key, formData[key]);
-                    }
-                });
-                await candidatoService.cadastrar(payload);
+                await candidatoService.cadastrar(montarFormDataCandidato(formData));
             }
             navigate('/login?cadastro=sucesso');
         } catch (error) {
@@ -145,196 +151,206 @@ export default function SignupPage() {
         return { score: 3, label: 'Forte', key: 'strong' };
     };
 
-    const renderStepContent = () => {
-        if (currentStep === 1) {
-            const senhaForca = calcularForcaSenha(formData.senha);
-            return (
-                <div className={styles.stepContent}>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="signup-field-1">Nome {isEmployer ? 'da Empresa' : 'Completo'} *</label>
-                        <input id="signup-field-1" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="nome" value={formData.nome} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "Razão Social ou Nome Fantasia" : "Seu nome completo"} />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="signup-field-2">E-mail *</label>
-                        <input id="signup-field-2" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="seu@email.com" />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="signup-field-3">Senha *</label>
-                        <input id="signup-field-3" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
-                        {formData.senha && (
-                            <div className={styles.passwordStrength}>
-                                <div className={styles.strengthBar}>
-                                    {[1, 2, 3].map(level => (
-                                        <div
-                                            key={level}
-                                            className={`${styles.strengthSegment} ${senhaForca.score >= level ? `${styles.active} ${styles[senhaForca.key]}` : ''}`}
-                                        />
-                                    ))}
-                                </div>
-                                <span className={`${styles.strengthLabel} ${styles[senhaForca.key]}`}>
-                                    {senhaForca.label}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+    const renderPassoConta = () => {
+        const senhaForca = calcularForcaSenha(formData.senha);
+        return (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-1">Nome {isEmployer ? 'da Empresa' : 'Completo'} *</label>
+                    <input id="signup-field-1" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="nome" value={formData.nome} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "Razão Social ou Nome Fantasia" : "Seu nome completo"} />
                 </div>
-            );
-        }
-
-        if (currentStep === 2) {
-            return (
-                <div className={styles.stepContent}>
-
-                    {!isEmployer && (
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-4">Foto de Perfil (Opcional)</label>
-                            <input id="signup-field-4" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)}
-                                type="file"
-                                name="imagem"
-                                accept="image/*"
-                                onChange={handleChange}
-                                className={styles.fileInput}
-                            />
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-2">E-mail *</label>
+                    <input id="signup-field-2" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="email" name="email" value={formData.email} onChange={handleChange} required className={styles.input} placeholder="seu@email.com" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-3">Senha *</label>
+                    <input id="signup-field-3" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="password" name="senha" value={formData.senha} onChange={handleChange} required minLength={8} className={styles.input} placeholder="Mínimo de 8 caracteres" />
+                    {formData.senha && (
+                        <div className={styles.passwordStrength}>
+                            <div className={styles.strengthBar}>
+                                {[1, 2, 3].map(level => (
+                                    <div
+                                        key={level}
+                                        className={`${styles.strengthSegment} ${senhaForca.score >= level ? `${styles.active} ${styles[senhaForca.key]}` : ''}`}
+                                    />
+                                ))}
+                            </div>
+                            <span className={`${styles.strengthLabel} ${styles[senhaForca.key]}`}>
+                                {senhaForca.label}
+                            </span>
                         </div>
                     )}
-
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="signup-field-5">{isEmployer ? 'CNPJ *' : 'CPF *'}</label>
-                        <input id="signup-field-5" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name={isEmployer ? "cnpj" : "cpf"} value={isEmployer ? formData.cnpj : formData.cpf} onChange={handleChange} required className={styles.input} placeholder={isEmployer ? "00.000.000/0000-00" : "000.000.000-00"} />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="signup-field-6">Telefone *</label>
-                        <input id="signup-field-6" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name={isEmployer ? "fone" : "telefone"} value={isEmployer ? formData.fone : formData.telefone} onChange={handleChange} required className={styles.input} placeholder="(00) 00000-0000" />
-                    </div>
                 </div>
-            );
-        }
+            </div>
+        );
+    };
 
-        if (currentStep === 3) {
-            if (isEmployer) {
-                const handleTagChange = (field) => (newValue) => {
-                    setFormData(prev => ({ ...prev, [field]: newValue }));
-                    setErrorMsg('');
-                };
-
-                return (
-                    <div className={styles.stepContent}>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-7">Site da Empresa</label>
-                            {/* CAMPO CORRIGIDO: TYPE="TEXT" NO LUGAR DE "URL" */}
-                            <input id="signup-field-7" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="site" value={formData.site} onChange={handleChange} className={styles.input} placeholder="www.suaempresa.com.br" />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-segmento">Segmento</label>
-                            <input id="signup-field-segmento" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="segmento" value={formData.segmento} onChange={handleChange} className={styles.input} placeholder="Ex: Tecnologia, Educação, Saúde" />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-localizacao">Localização</label>
-                            <input id="signup-field-localizacao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="localizacao" value={formData.localizacao} onChange={handleChange} className={styles.input} placeholder="Cidade, UF" />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-tamanho">Tamanho da Empresa</label>
-                            <select id="signup-field-tamanho" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="tamanhoEmpresa" value={formData.tamanhoEmpresa} onChange={handleChange} className={styles.input}>
-                                <option value="">Selecione uma faixa</option>
-                                <option value="1-10 colaboradores">1-10 colaboradores</option>
-                                <option value="11-50 colaboradores">11-50 colaboradores</option>
-                                <option value="51-200 colaboradores">51-200 colaboradores</option>
-                                <option value="201-500 colaboradores">201-500 colaboradores</option>
-                                <option value="501+ colaboradores">501+ colaboradores</option>
-                            </select>
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-ano-fundacao">Ano de Fundação</label>
-                            <input id="signup-field-ano-fundacao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="number" name="anoFundacao" value={formData.anoFundacao} onChange={handleChange} className={styles.input} min="1800" max={new Date().getFullYear()} placeholder="Ex: 2018" />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-bio">Sobre a Empresa (Bio)</label>
-                            <textarea id="signup-field-bio" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="bio" value={formData.bio} onChange={handleChange} className={styles.textarea} placeholder="Conte um pouco sobre o que vocês fazem..." maxLength={500} rows={4} />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-missao">Missão</label>
-                            <textarea id="signup-field-missao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="missao" value={formData.missao} onChange={handleChange} className={styles.textarea} placeholder="Descreva o propósito e a missão da empresa." maxLength={600} rows={3} />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="valores">Valores</label>
-                            <TagInput
-                                id="valores"
-                                value={formData.valores}
-                                onChange={handleTagChange('valores')}
-                                placeholder="Ex: Transparência, Inovação... (Enter para adicionar)"
-                            />
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="beneficios">Benefícios</label>
-                            <TagInput
-                                id="beneficios"
-                                value={formData.beneficios}
-                                onChange={handleTagChange('beneficios')}
-                                placeholder="Ex: Plano de saúde, Home office... (Enter para adicionar)"
-                            />
-                        </div>
-                    </div>
-                );
-            } else {
-                return (
-                    <div className={styles.stepContent}>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-8">Escolaridade *</label>
-                            <select id="signup-field-8" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="educacao" value={formData.educacao} onChange={handleChange} required className={styles.input}>
-                                <option value="" disabled>Selecione seu grau de instrução</option>
-                                <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
-                                <option value="Ensino Médio Completo">Ensino Médio Completo</option>
-                                <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
-                                <option value="Ensino Superior Completo">Ensino Superior Completo</option>
-                                <option value="Pós-graduação/Mestrado">Pós-graduação / Mestrado</option>
-                            </select>
-                        </div>
-                        <div className={styles.inputGroup}>
-                            <label className={styles.label} htmlFor="signup-field-9">Cargo / Qualificação</label>
-                            <input id="signup-field-9" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Sua principal ocupação" />
-                        </div>
-                    </div>
-                );
-            }
-        }
-
-        if (currentStep === 4 && !isEmployer) {
-            const handleTagChange = (field) => (newValue) => {
-                setFormData(prev => ({ ...prev, [field]: newValue }));
-                setErrorMsg('');
-            };
-            return (
-                <div className={styles.stepContent}>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="habilidades">Habilidades Técnicas</label>
-                        <TagInput
-                            id="habilidades"
-                            value={formData.habilidades}
-                            onChange={handleTagChange('habilidades')}
-                            placeholder="Ex: React, Node.js... (Enter para adicionar)"
-                        />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="idiomas">Idiomas</label>
-                        <TagInput
-                            id="idiomas"
-                            value={formData.idiomas}
-                            onChange={handleTagChange('idiomas')}
-                            placeholder="Ex: Inglês Avançado... (Enter para adicionar)"
-                        />
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
-                        <TagInput
-                            id="cursos"
-                            value={formData.cursos}
-                            onChange={handleTagChange('cursos')}
-                            placeholder="Ex: Certificação Scrum... (Enter para adicionar)"
-                        />
-                    </div>
+    const renderPassoPessoal = () => (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-4">Foto de Perfil (Opcional)</label>
+                    <input id="signup-field-4" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)}
+                        type="file"
+                        name="imagem"
+                        accept="image/*"
+                        onChange={handleChange}
+                        className={styles.fileInput}
+                    />
                 </div>
-            );
-        }
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-5">CPF *</label>
+                    <input id="signup-field-5" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="cpf" value={formData.cpf} onChange={handleChange} required className={styles.input} placeholder="000.000.000-00" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-6">Telefone *</label>
+                    <input id="signup-field-6" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="telefone" value={formData.telefone} onChange={handleChange} required className={styles.input} placeholder="(00) 00000-0000" />
+                </div>
+            </div>
+    );
+
+    const renderPassoProfissional = () => (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-8">Escolaridade *</label>
+                    <select id="signup-field-8" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="educacao" value={formData.educacao} onChange={handleChange} required className={styles.input}>
+                        <option value="" disabled>Selecione seu grau de instrução</option>
+                        <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
+                        <option value="Ensino Médio Completo">Ensino Médio Completo</option>
+                        <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
+                        <option value="Ensino Superior Completo">Ensino Superior Completo</option>
+                        <option value="Pós-graduação/Mestrado">Pós-graduação / Mestrado</option>
+                    </select>
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-9">Cargo / Qualificação</label>
+                    <input id="signup-field-9" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="qualificacoes" value={formData.qualificacoes} onChange={handleChange} className={styles.input} placeholder="Sua principal ocupação" />
+                </div>
+            </div>
+    );
+
+    const renderPassoExtra = () => {
+        const handleTagChange = (field) => (newValue) => {
+            setFormData(prev => ({ ...prev, [field]: newValue }));
+            setErrorMsg('');
+        };
+        return (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="habilidades">Habilidades Técnicas</label>
+                    <TagInput
+                        id="habilidades"
+                        value={formData.habilidades}
+                        onChange={handleTagChange('habilidades')}
+                        placeholder="Ex: React, Node.js... (Enter para adicionar)"
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="idiomas">Idiomas</label>
+                    <TagInput
+                        id="idiomas"
+                        value={formData.idiomas}
+                        onChange={handleTagChange('idiomas')}
+                        placeholder="Ex: Inglês Avançado... (Enter para adicionar)"
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="cursos">Cursos Extracurriculares</label>
+                    <TagInput
+                        id="cursos"
+                        value={formData.cursos}
+                        onChange={handleTagChange('cursos')}
+                        placeholder="Ex: Certificação Scrum... (Enter para adicionar)"
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const renderPassoNegocio = () => (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-5">CNPJ *</label>
+                    <input id="signup-field-5" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="cnpj" value={formData.cnpj} onChange={handleChange} required className={styles.input} placeholder="00.000.000/0000-00" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-6">Telefone *</label>
+                    <input id="signup-field-6" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="fone" value={formData.fone} onChange={handleChange} required className={styles.input} placeholder="(00) 00000-0000" />
+                </div>
+            </div>
+    );
+
+    const renderPassoPerfilEmpresa = () => {
+        const handleTagChange = (field) => (newValue) => {
+            setFormData(prev => ({ ...prev, [field]: newValue }));
+            setErrorMsg('');
+        };
+        return (
+            <div className={styles.stepContent}>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-7">Site da Empresa</label>
+                    {/* CAMPO CORRIGIDO: TYPE="TEXT" NO LUGAR DE "URL" */}
+                    <input id="signup-field-7" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="site" value={formData.site} onChange={handleChange} className={styles.input} placeholder="www.suaempresa.com.br" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-segmento">Segmento</label>
+                    <input id="signup-field-segmento" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="segmento" value={formData.segmento} onChange={handleChange} className={styles.input} placeholder="Ex: Tecnologia, Educação, Saúde" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-localizacao">Localização</label>
+                    <input id="signup-field-localizacao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="text" name="localizacao" value={formData.localizacao} onChange={handleChange} className={styles.input} placeholder="Cidade, UF" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-tamanho">Tamanho da Empresa</label>
+                    <select id="signup-field-tamanho" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="tamanhoEmpresa" value={formData.tamanhoEmpresa} onChange={handleChange} className={styles.input}>
+                        <option value="">Selecione uma faixa</option>
+                        <option value="1-10 colaboradores">1-10 colaboradores</option>
+                        <option value="11-50 colaboradores">11-50 colaboradores</option>
+                        <option value="51-200 colaboradores">51-200 colaboradores</option>
+                        <option value="201-500 colaboradores">201-500 colaboradores</option>
+                        <option value="501+ colaboradores">501+ colaboradores</option>
+                    </select>
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-ano-fundacao">Ano de Fundação</label>
+                    <input id="signup-field-ano-fundacao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} type="number" name="anoFundacao" value={formData.anoFundacao} onChange={handleChange} className={styles.input} min="1800" max={new Date().getFullYear()} placeholder="Ex: 2018" />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-bio">Sobre a Empresa (Bio)</label>
+                    <textarea id="signup-field-bio" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="bio" value={formData.bio} onChange={handleChange} className={styles.textarea} placeholder="Conte um pouco sobre o que vocês fazem..." maxLength={500} rows={4} />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="signup-field-missao">Missão</label>
+                    <textarea id="signup-field-missao" aria-describedby={errorMsg ? "signup-error" : undefined} aria-invalid={Boolean(errorMsg)} name="missao" value={formData.missao} onChange={handleChange} className={styles.textarea} placeholder="Descreva o propósito e a missão da empresa." maxLength={600} rows={3} />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="valores">Valores</label>
+                    <TagInput
+                        id="valores"
+                        value={formData.valores}
+                        onChange={handleTagChange('valores')}
+                        placeholder="Ex: Transparência, Inovação... (Enter para adicionar)"
+                    />
+                </div>
+                <div className={styles.inputGroup}>
+                    <label className={styles.label} htmlFor="beneficios">Benefícios</label>
+                    <TagInput
+                        id="beneficios"
+                        value={formData.beneficios}
+                        onChange={handleTagChange('beneficios')}
+                        placeholder="Ex: Plano de saúde, Home office... (Enter para adicionar)"
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const renderStepContent = () => {
+        const passosCandidato = [renderPassoConta, renderPassoPessoal, renderPassoProfissional, renderPassoExtra];
+        const passosEmpresa = [renderPassoConta, renderPassoNegocio, renderPassoPerfilEmpresa];
+
+        const renderPasso = (isEmployer ? passosEmpresa : passosCandidato)[currentStep - 1];
+        return renderPasso ? renderPasso() : null;
     };
 
     const isLastStep = currentStep === totalSteps;
