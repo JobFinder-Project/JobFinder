@@ -3,6 +3,7 @@ import { BiBuilding, BiMap, BiMoney, BiBriefcase } from 'react-icons/bi';
 import Modal from '../../../components/ui/Modal/Modal';
 import { candidatoService } from '../../../services/candidatoService';
 import styles from './VagaDetalhesModal.module.css';
+import { getImagemSrc } from '../../../utils/imagem';
 
 export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancelRequest }) {
   const [loading, setLoading] = useState(false);
@@ -70,15 +71,6 @@ export default function VagaDetalhesModal({ vaga, onClose, candidatura, onCancel
     } finally {
       setLoading(false);
     }
-  };
-
-  const getImagemSrc = (imagem) => {
-    if (!imagem) return null;
-    if (typeof imagem === 'string') return imagem;
-    if (imagem.data && imagem.contentType) {
-      return `data:${imagem.contentType};base64,${imagem.data}`;
-    }
-    return null;
   };
 
   const imageSrc = getImagemSrc(vaga.imagem);

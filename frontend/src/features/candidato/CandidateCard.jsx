@@ -5,6 +5,8 @@ import {
 } from 'react-icons/bi'
 import Modal from '../../components/ui/Modal/Modal.jsx'
 import styles from './CandidateCard.module.css'
+import { getImagemSrc } from '../../utils/imagem'
+import { parseList } from '../../utils/listas'
 
 export default function CandidateCard({
     candidato,
@@ -14,23 +16,7 @@ export default function CandidateCard({
 }) {
     const [showModal, setShowModal] = useState(false)
 
-    const getImagemSrc = (imagem) => {
-        if (!imagem) return null;
-        if (typeof imagem === 'string') return imagem;
-        if (imagem.data && imagem.contentType) {
-            return `data:${imagem.contentType};base64,${imagem.data}`;
-        }
-        return null;
-    }
-
     const imgSrc = getImagemSrc(candidato.imagem);
-
-    const parseList = (data) => {
-        if (!data) return [];
-        if (Array.isArray(data)) return data.filter(item => item && typeof item === 'string' && item.trim() !== '');
-        if (typeof data === 'string') return data.split(',').map(i => i.trim()).filter(i => i !== '');
-        return [];
-    }
 
     const habilidadesArray = parseList(candidato.habilidadesTecnicas || candidato.habilidades);
     const topHabilidades = habilidadesArray.slice(0, 3);

@@ -6,6 +6,7 @@ import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
 import VagaDetalhesModal from '../../features/vagas/VagaDetalhesModal/VagaDetalhesModal';
 import Modal from '../../components/ui/Modal/Modal';
 import styles from './MinhasCandidaturas.module.css';
+import { isApproved, isPending, isRejected } from '../../utils/candidaturaStatus';
 
 export default function MinhasCandidaturasPage() {
     const [candidaturas, setCandidaturas] = useState([]);
@@ -32,10 +33,6 @@ export default function MinhasCandidaturasPage() {
             setLoading(false);
         }
     };
-
-    const isApproved = (s) => ['aceito', 'aceita', 'aprovado', 'aprovada'].includes(s?.toLowerCase());
-    const isPending = (s) => s?.toLowerCase().includes('pendente');
-    const isRejected = (s) => ['rejeitado', 'rejeitada', 'cancelado', 'cancelada'].includes(s?.toLowerCase());
 
     const filteredCandidaturas = candidaturas.filter(app => {
         if (activeTab === 'Todas') return true;

@@ -10,6 +10,8 @@ import Modal from '../../components/ui/Modal/Modal';
 import LoadingScreen from '../../components/ui/LoadingScreen/LoadingScreen';
 import { empresaService } from '../../services/empresaService';
 import styles from './GestaoCandidaturas.module.css';
+import { getImagemSrc } from '../../utils/imagem';
+import { parseList } from '../../utils/listas';
 
 export default function GestaoCandidaturas() {
     const [searchParams] = useSearchParams();
@@ -72,21 +74,6 @@ export default function GestaoCandidaturas() {
     const pendentes = candidaturasFiltradas.filter(c => c.status === 'Pendente');
     const aceitas = candidaturasFiltradas.filter(c => c.status === 'Aceita');
     const rejeitadas = candidaturasFiltradas.filter(c => c.status === 'Rejeitada');
-
-    // Funções de formatação para o Modal
-    const getImagemSrc = (imagem) => {
-        if (!imagem) return null;
-        if (typeof imagem === 'string') return imagem;
-        if (imagem.data && imagem.contentType) return `data:${imagem.contentType};base64,${imagem.data}`;
-        return null;
-    };
-
-    const parseList = (data) => {
-        if (!data) return [];
-        if (Array.isArray(data)) return data.filter(item => item && typeof item === 'string' && item.trim() !== '');
-        if (typeof data === 'string') return data.split(',').map(i => i.trim()).filter(i => i !== '');
-        return [];
-    };
 
     const renderCard = (candidatura) => {
         const candidato = candidatura.candidato;
