@@ -1,24 +1,10 @@
 import express from 'express';
 import multer from 'multer';
-import path from 'node:path';
 import { isAuthenticated, isEmpresa } from '../middlewares/authMiddleware.js';
 import EmpresaController from '../controllers/empresaController.js';
+import { isAllowedVagaImageMetadata } from '../utils/imagemVaga.js';
 import Error400 from '../errors/Error400.js';
 import { exigirConsentimentosVigentes } from '../middlewares/consentimentoMiddleware.js';
-
-const allowedImageExtensionsByMimeType = {
-  'image/svg+xml': ['.svg'],
-  'image/png': ['.png'],
-  'image/jpeg': ['.jpg', '.jpeg'],
-  'image/jpg': ['.jpg', '.jpeg'],
-};
-
-const isAllowedVagaImageMetadata = (file) => {
-  const allowedExtensions = allowedImageExtensionsByMimeType[file.mimetype];
-  const fileExtension = path.extname(file.originalname || '').toLowerCase();
-
-  return Boolean(allowedExtensions?.includes(fileExtension));
-};
 
 const upload = multer({
   limits: {
