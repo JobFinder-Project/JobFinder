@@ -4,6 +4,7 @@ import { BiBriefcase, BiArrowBack, BiCheckCircle } from 'react-icons/bi';
 import { candidatoService } from '../../services/candidatoService';
 import { empresaService } from '../../services/empresaService';
 import TagInput from '../../components/ui/TagInput/TagInput';
+import { formatCPF, formatCNPJ, formatPhone } from '../../utils/formatters';
 import styles from './Signup.module.css';
 
 export default function SignupPage() {
@@ -59,30 +60,6 @@ export default function SignupPage() {
 
     const steps = isEmployer ? stepsEmployer : stepsCandidate;
     const totalSteps = steps.length;
-
-    const formatCPF = (val) => {
-        return val.replace(/\D/g, '')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-            .slice(0, 14);
-    };
-
-    const formatCNPJ = (val) => {
-        return val.replace(/\D/g, '')
-            .replace(/(\d{2})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1/$2')
-            .replace(/(\d{4})(\d{1,2})$/, '$1-$2')
-            .slice(0, 18);
-    };
-
-    const formatPhone = (val) => {
-        return val.replace(/\D/g, '')
-            .replace(/(\d{2})(\d)/, '($1) $2')
-            .replace(/(\d{5})(\d)/, '$1-$2')
-            .replace(/(-\d{4})\d+?$/, '$1');
-    };
 
     const handleChange = (e) => {
         const { name, value, files, type, checked } = e.target;
