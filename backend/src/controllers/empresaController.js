@@ -9,6 +9,7 @@ import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
 import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import { isAllowedVagaImageMetadata, isAllowedVagaImageContent } from '../utils/imagemVaga.js';
+import { escapeRegex, normalizeListField, normalizeAnoFundacao } from '../utils/normalizacao.js';
 import {
   toCandidatoEmpresaDTO,
   toCandidatoResumoDTO,
@@ -23,7 +24,6 @@ import {
   TERMOS_USO_VERSAO_ATUAL,
 } from '../config/consentimentos.js';
 
-const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const publicOpenVagaStatusFilter = {
   $or: [{ status: 'Aberta' }, { status: { $exists: false } }, { status: null }],
 };
@@ -57,24 +57,6 @@ const gerarSlugUnicoEmpresa = async (nome, empresaId) => {
   }
 
   return slug;
-};
-
-const normalizeListField = (value) => {
-  if (value === undefined) return undefined;
-
-  const rawItems = Array.isArray(value) ? value : String(value).split(',');
-
-  return rawItems
-    .map((item) => String(item).trim())
-    .filter(Boolean)
-    .slice(0, 12);
-};
-
-const normalizeAnoFundacao = (value) => {
-  if (value === undefined || value === null || value === '') return undefined;
-
-  const parsedValue = Number(value);
-  return Number.isNaN(parsedValue) ? value : parsedValue;
 };
 
 const mapCandidatosComFavoritos = async (empresaId, candidatos) => {
