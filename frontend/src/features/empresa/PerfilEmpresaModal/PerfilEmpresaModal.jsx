@@ -16,6 +16,7 @@ import ExcluirContaModal from '../../conta/ExcluirContaModal/ExcluirContaModal'
 import TagInput from '../../../components/ui/TagInput/TagInput'
 import { useAuth } from '../../../contexts/AuthContext'
 import { empresaService } from '../../../services/empresaService'
+import { formatPhone } from '../../../utils/formatters'
 import styles from './PerfilEmpresaModal.module.css'
 
 export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
@@ -44,14 +45,6 @@ export default function PerfilEmpresaModal({ empresa, onClose, onUpdate }) {
 
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
-
-  const formatPhone = (value) => {
-    const numbers = value.replace(/\D/g, '')
-    return numbers
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d)/, '$1-$2')
-        .replace(/(-\d{4})\d+?$/, '$1')
-  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
