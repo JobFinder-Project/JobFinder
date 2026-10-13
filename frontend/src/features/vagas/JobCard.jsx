@@ -2,18 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BiRightArrowAlt, BiMap, BiBuilding } from 'react-icons/bi';
 import styles from './JobCard.module.css';
+import { getImagemSrc } from '../../utils/imagem';
 
 export default function JobCard({ vaga, onViewDetails }) {
     if (!vaga) return null;
-
-    const getImagemSrc = (imagem) => {
-        if (!imagem) return null;
-        if (typeof imagem === 'string') return imagem;
-        if (imagem.data && imagem.contentType) {
-            return `data:${imagem.contentType};base64,${imagem.data}`;
-        }
-        return null;
-    };
 
     const imageSrc = getImagemSrc(vaga.imagem);
 
