@@ -14,11 +14,13 @@ frontend/src/
 │   └── ui/              # Componentes de UI genéricos
 │       └── Modal/       # Modal genérico reutilizável
 │
-├── hooks/               # Custom React hooks
-│   ├── useAuth.js       # Hook de autenticação
-│   ├── useCandidato.js  # Hook de operações do candidato
-│   ├── useEmpresa.js    # Hook de operações da empresa
-│   └── useVagas.js      # Hook de busca de vagas
+├── contexts/            # React contexts
+│   ├── AuthContext.jsx          # Provider de autenticação + hook useAuth
+│   └── AccessibilityContext.jsx # Preferências de acessibilidade
+│
+├── features/            # Componentes e hooks por domínio
+│   └── vagas/
+│       └── useVagasQuery.js # Hook React Query de busca de vagas
 │
 ├── pages/               # Páginas da aplicação
 │   ├── [PageName]/
@@ -53,7 +55,8 @@ frontend/src/
 
 ### Imports
 - Imports diretos para arquivos `.jsx` (sem barrel exports)
-- Services e hooks usam barrel exports via `index.js`
+- Services usam barrel exports via `index.js`
+- Hooks são importados direto do arquivo onde são definidos
 
 ```jsx
 // Componentes - import direto
@@ -62,8 +65,8 @@ import Modal from '../../components/ui/Modal/Modal'
 // Services - via barrel export
 import { candidatoService, authService } from '../../services'
 
-// Hooks - via barrel export
-import { useAuth, useCandidato } from '../../hooks'
+// Hooks - import direto
+import { useAuth } from '../../contexts/AuthContext'
 ```
 
 ### Estrutura de Componente
