@@ -1,18 +1,21 @@
 import bcrypt from 'bcrypt';
-import mongoose from 'mongoose';
 import Candidato from '../models/candidatoModel.js';
 import Empresa from '../models/empresaModel.js';
-import FavoritoCandidato from '../models/favoritoCandidatoModel.js';
 import Vaga from '../models/vagasModel.js';
 import Candidatura from '../models/candidaturaModel.js';
 import Error400 from '../errors/Error400.js';
 import Error404 from '../errors/Error404.js';
 import { encerrarSessao, validarSenhaDeConfirmacao } from '../utils/conta.js';
 import { isAllowedVagaImageMetadata, isAllowedVagaImageContent } from '../utils/imagemVaga.js';
-import { gerarSlugUnicoEmpresa } from '../services/slugEmpresa.js';
-import { escapeRegex, normalizeListField, normalizeAnoFundacao } from '../utils/normalizacao.js';
 import {
-  toCandidatoEmpresaDTO,
+  buscarCandidatos,
+  listarFavoritos,
+  favoritar,
+  desfavoritar,
+} from '../services/candidatosEmpresa.js';
+import { gerarSlugUnicoEmpresa } from '../services/slugEmpresa.js';
+import { normalizeListField, normalizeAnoFundacao } from '../utils/normalizacao.js';
+import {
   toCandidatoResumoDTO,
   toEmpresaDTO,
   toEmpresaPublicProfileDTO,
@@ -27,21 +30,6 @@ import {
 
 const publicOpenVagaStatusFilter = {
   $or: [{ status: 'Aberta' }, { status: { $exists: false } }, { status: null }],
-};
-
-const mapCandidatosComFavoritos = async (empresaId, candidatos) => {
-  const candidatosIds = candidatos.map((candidato) => candidato._id);
-  const favoritos = await FavoritoCandidato.find({
-    empresa: empresaId,
-    candidato: { $in: candidatosIds },
-  }).select('candidato');
-  const favoritosIds = new Set(favoritos.map((favorito) => favorito.candidato.toString()));
-
-  return candidatos.map((candidato) =>
-    toCandidatoEmpresaDTO(candidato, {
-      favoritado: favoritosIds.has(candidato._id.toString()),
-    })
-  );
 };
 
 class EmpresaController {
@@ -412,135 +400,46 @@ class EmpresaController {
 
   static async buscarCandidatos(req, res, next) {
     try {
-      const empresaId = req.session.user.id;
       const { q, vagaId } = req.query;
+      const candidatos = await buscarCandidatos(req.session.user.id, { q, vagaId });
 
-      if ((q !== undefined && typeof q !== 'string') || (vagaId && typeof vagaId !== 'string')) {
-        return next(new Error400('Parâmetros de busca inválidos.'));
-      }
-
-      const termo = q?.trim() || '';
-
-      if (!vagaId && termo.length < 2) {
-        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
-      }
-
-      if (termo && termo.length < 2) {
-        return next(new Error400('Informe ao menos 2 caracteres para buscar candidatos.'));
-      }
-
-      if (termo.length > 80) {
-        return next(new Error400('O termo de busca deve ter no máximo 80 caracteres.'));
-      }
-
-      const query = {};
-
-      if (termo) {
-        const termoSeguro = escapeRegex(termo);
-        query.$or = [
-          { qualificacao: { $regex: termoSeguro, $options: 'i' } },
-          { educacao: { $regex: termoSeguro, $options: 'i' } },
-          { nome: { $regex: termoSeguro, $options: 'i' } },
-          { habilidadesTecnicas: { $regex: termoSeguro, $options: 'i' } },
-        ];
-      }
-
-      if (vagaId) {
-        if (!mongoose.isValidObjectId(vagaId)) {
-          return next(new Error400('Identificador de vaga inválido.'));
-        }
-
-        const vaga = await Vaga.findOne({ _id: vagaId, empresa: empresaId }).select('_id');
-        if (!vaga) {
-          return next(new Error404('Vaga não encontrada.'));
-        }
-
-        const candidatosIds = await Candidatura.find({ vaga: vaga._id }).distinct('candidato');
-        query._id = { $in: candidatosIds };
-      }
-
-      const candidatos = await Candidato.find(query).select(
-        'nome educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
-      );
-
-      res.status(200).json({
-        candidatos: await mapCandidatosComFavoritos(empresaId, candidatos),
-      });
+      res.status(200).json({ candidatos });
     } catch (erro) {
-      console.error(erro);
+      if (!erro.status) console.error(erro);
       next(erro);
     }
   }
 
   static async listarCandidatosFavoritos(req, res, next) {
     try {
-      const empresaId = req.session.user.id;
-      const favoritos = await FavoritoCandidato.find({ empresa: empresaId })
-        .sort({ updatedAt: -1 })
-        .populate(
-          'candidato',
-          'nome educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
-        );
+      const candidatos = await listarFavoritos(req.session.user.id);
 
-      res.status(200).json({
-        candidatos: favoritos
-          .filter((favorito) => favorito.candidato)
-          .map((favorito) =>
-            toCandidatoEmpresaDTO(favorito.candidato, {
-              favoritado: true,
-            })
-          ),
-      });
+      res.status(200).json({ candidatos });
     } catch (erro) {
-      console.error(erro);
+      if (!erro.status) console.error(erro);
       next(erro);
     }
   }
 
   static async favoritarCandidato(req, res, next) {
     try {
-      const empresaId = req.session.user.id;
-      const { candidatoId } = req.params;
-
-      if (!mongoose.isValidObjectId(candidatoId)) {
-        return next(new Error400('Identificador de candidato inválido.'));
-      }
-
-      const candidato = await Candidato.findById(candidatoId).select(
-        'nome educacao qualificacao cursos descricao habilidadesTecnicas idiomas imagem'
-      );
-
-      if (!candidato) {
-        return next(new Error404('Candidato não encontrado.'));
-      }
-
-      await FavoritoCandidato.updateOne(
-        { empresa: empresaId, candidato: candidato._id },
-        { $setOnInsert: { empresa: empresaId, candidato: candidato._id } },
-        { upsert: true }
-      );
+      const candidato = await favoritar(req.session.user.id, req.params.candidatoId);
 
       res.status(200).json({
         success: true,
         message: 'Candidato adicionado aos favoritos.',
-        candidato: toCandidatoEmpresaDTO(candidato, { favoritado: true }),
+        candidato,
       });
     } catch (erro) {
-      console.error(erro);
+      if (!erro.status) console.error(erro);
       next(erro);
     }
   }
 
   static async desfavoritarCandidato(req, res, next) {
     try {
-      const empresaId = req.session.user.id;
       const { candidatoId } = req.params;
-
-      if (!mongoose.isValidObjectId(candidatoId)) {
-        return next(new Error400('Identificador de candidato inválido.'));
-      }
-
-      await FavoritoCandidato.deleteOne({ empresa: empresaId, candidato: candidatoId });
+      await desfavoritar(req.session.user.id, candidatoId);
 
       res.status(200).json({
         success: true,
@@ -549,7 +448,7 @@ class EmpresaController {
         favoritado: false,
       });
     } catch (erro) {
-      console.error(erro);
+      if (!erro.status) console.error(erro);
       next(erro);
     }
   }
