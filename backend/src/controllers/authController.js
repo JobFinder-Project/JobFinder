@@ -11,19 +11,6 @@ import { buscarUsuarioDaSessao } from '../middlewares/consentimentoMiddleware.js
 
 const hashResetToken = (token) => crypto.createHash('sha256').update(token).digest('hex');
 
-const montarEmailRecuperacao = (destinatario, linkReset) => ({
-  from: process.env.APP_EMAIL,
-  to: destinatario,
-  subject: 'Recuperar senha - App JobFinder',
-  html: `
-                <h1>Recuperar Senha</h1>
-                <p>Para recuperar sua senha, acesse o link abaixo:</p>
-                <a href='${linkReset}'>${linkReset}</a>
-                <p>Este link expira em 15 minutos.</p>
-                <p>Se você não solicitou isso, ignore este e-mail.</p>
-                `,
-});
-
 class AuthController {
   static async login(req, res, next) {
     const { email, senha } = req.body;
@@ -128,7 +115,18 @@ class AuthController {
       const frontendUrl = req.get('origin') || `${req.protocol}://${req.get('host')}`;
       const linkReset = `${frontendUrl.replace(/\/$/, '')}/redefinir-senha/${token}`;
 
-      const mailOptions = montarEmailRecuperacao(req.body.email, linkReset);
+      const mailOptions = {
+        from: process.env.APP_EMAIL,
+        to: req.body.email,
+        subject: 'Recuperar senha - App JobFinder',
+        html: `
+                <h1>Recuperar Senha</h1>
+                <p>Para recuperar sua senha, acesse o link abaixo:</p>
+                <a href='${linkReset}'>${linkReset}</a>
+                <p>Este link expira em 15 minutos.</p>
+                <p>Se você não solicitou isso, ignore este e-mail.</p>
+                `,
+      };
 
       await transporter.sendMail(mailOptions);
 
